@@ -7,7 +7,10 @@ namespace ILIAS\UI\examples\Layout\Alignment\Horizontal\EvenlyDistributed;
 /**
  * ---
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   ILIAS shows three colored text-blocks.
+ *   The blocks are equal in size and distributed evenly across the available width.
+ *   When space gets really scarce (shrink the browser's window), the blocks
+ *   are displayed under each other.
  * ---
  */
 function base()

@@ -10,8 +10,7 @@ namespace ILIAS\UI\examples\Card\Standard;
  *   Example for rendering a base card.
  *
  * expected output: >
- *   ILIAS shows a ILIAS-Logo. The size of the logo depends on the browser/desktop size and will change accordingly.
- *   A title will be displayed below the logo.
+ *   ILIAS shows a ILIAS-Logo with a title below. The size of the logo depends on the browser/desktop size and will change accordingly.
  * ---
  */
 function base()

@@ -11,10 +11,8 @@ namespace ILIAS\UI\examples\Modal\LightboxImagePage;
  *
  * expected output: >
  *   ILIAS shows a button titled "Show Image".
- *   A click onto the button greys out ILIAS, opens a modal titled "Mountains" including an "X" glyph on the right top,
+ *   A click onto the button greys out ILIAS, opens a modal titled "Mountains",
  *   an image and a Copyright note above the image. The modal's background is dark with a light font color.
- *   You can close the modal by hitting the ESC key, clicking onto the greyed out ILIAS in the background outside of the
- *   modal or by clicking the "X" glyph.
  * ---
  */
 function show_a_single_image()

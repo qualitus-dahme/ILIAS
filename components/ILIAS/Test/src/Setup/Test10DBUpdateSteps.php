@@ -392,4 +392,9 @@ class Test10DBUpdateSteps implements \ilDatabaseUpdateSteps
             );
         }
     }
+
+    public function step_9(): void
+    {
+        $this->db->manipulate('DELETE FROM rbac_operations WHERE operation = "tst_statistics"');
+    }
 }

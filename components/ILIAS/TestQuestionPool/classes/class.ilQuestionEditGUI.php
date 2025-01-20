@@ -167,7 +167,6 @@ class ilQuestionEditGUI
                 }
 
                 return (string) $question_gui->editQuestion();
-                break;
         }
     }
 

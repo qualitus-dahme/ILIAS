@@ -13,7 +13,6 @@
  * us at:
  * https://www.ilias.de
  * https://github.com/ILIAS-eLearning
- *
  *********************************************************************/
 
 use ILIAS\Badge\ilBadgeImage;
@@ -106,19 +105,33 @@ class ilBadgeManagementGUI
         $badge_id = null;
 
         if ($splittable_user_ids !== []) {
-            foreach ($splittable_user_ids as $row) {
-                if (str_contains($row, '_')) {
-                    $split = explode('_', $row);
+            if ($splittable_user_ids === ['ALL_OBJECTS']) {
+                $parent_obj_id = $this->parent_obj_id;
+                if (!$parent_obj_id && $this->parent_ref_id) {
+                    $parent_obj_id = ilObject::_lookupObjId($this->parent_ref_id);
+                }
 
-                    if ($badge_id === null && $split[0] !== '') {
-                        $badge_id = (int) $split[0];
-                    }
+                if ($this->parent_ref_id) {
+                    $user_ids = ilBadgeHandler::getInstance()->getUserIds($this->parent_ref_id, $parent_obj_id);
+                }
 
-                    if ($split[1] !== '') {
-                        $user_ids[] = (int) $split[1];
+                $badge_id = $this->http->wrapper()->query()->retrieve('bid', $this->refinery->kindlyTo()->int());
+                return [$user_ids, $badge_id];
+            } else {
+                foreach ($splittable_user_ids as $row) {
+                    if (str_contains($row, '_')) {
+                        $split = explode('_', $row);
+
+                        if ($badge_id === null && $split[0] !== '') {
+                            $badge_id = (int) $split[0];
+                        }
+
+                        if ($split[1] !== '') {
+                            $user_ids[] = (int) $split[1];
+                        }
+                    } else {
+                        return [$user_ids, 0];
                     }
-                } else {
-                    return [$user_ids, 0];
                 }
             }
         }
@@ -236,7 +249,6 @@ class ilBadgeManagementGUI
         $ilToolbar = $this->toolbar;
         $lng = $this->lng;
         $ilCtrl = $this->ctrl;
-        $tpl = $this->tpl;
 
         $this->setTabs('badges');
 
@@ -292,7 +304,7 @@ class ilBadgeManagementGUI
             }
         }
 
-        $table = new ilBadgeTableGUI($this->parent_obj_id, $this->parent_obj_type);
+        $table = new ilBadgeTableGUI($this->parent_obj_id, $this->parent_obj_type, $this->hasWrite());
         $table->renderTable();
     }
 
@@ -577,10 +589,10 @@ class ilBadgeManagementGUI
                 $this->badge_image_service->processImageUpload($badge);
             }
 
-            $badge->update();
             if ($custom) {
                 $badge->setConfiguration($custom->getConfigFromForm($form));
             }
+            $badge->update();
 
             $tmpl_id = $form->getInput('tmpl');
             if ($tmpl_id !== '') {
@@ -650,15 +662,13 @@ class ilBadgeManagementGUI
 
         if (count($badge_ids) > 0) {
             foreach ($badge_ids as $badge_id) {
-                $badge = new ilBadge($badge_id);
+                $badge = new ilBadge((int) $badge_id);
                 $badge->delete();
             }
             $this->tpl->setOnScreenMessage('success', $lng->txt('settings_saved'), true);
         } else {
             $this->tpl->setOnScreenMessage('failure', $lng->txt('badge_select_one'), true);
         }
-
-
 
         $ilCtrl->redirect($this, 'listBadges');
     }
@@ -694,7 +704,7 @@ class ilBadgeManagementGUI
         $clip_ids = array_unique(
             array_merge($clip_ids, $badge_ids)
         );
-        $this->session_repo->setBadgeIds($clip_ids);
+        $this->session_repo->setBadgeIds(array_map(intval(...), $clip_ids));
 
         $ilCtrl->redirect($this, 'listBadges');
     }
@@ -805,8 +815,8 @@ class ilBadgeManagementGUI
                 $drop->setOptions($manual);
                 $ilToolbar->addInputItem($drop, true);
 
-                $ilToolbar->setFormAction($ilCtrl->getFormAction($this, 'awardBadgeUserSelection'));
-                $ilToolbar->addFormButton($lng->txt('badge_award_badge'), 'awardBadgeUserSelection');
+                $ilToolbar->setFormAction($ilCtrl->getFormAction($this, 'selectBadgeForAwardingOrRevoking'));
+                $ilToolbar->addFormButton($lng->txt('badge_award_badge'), 'selectBadgeForAwardingOrRevoking');
             }
         }
 
@@ -814,19 +824,26 @@ class ilBadgeManagementGUI
         $tbl->renderTable();
     }
 
+    private function selectBadgeForAwardingOrRevoking(): never
+    {
+        $this->ctrl->setParameter(
+            $this,
+            'bid',
+            $this->http->wrapper()->post()->retrieve('bid', $this->refinery->kindlyTo()->int())
+        );
+        $this->ctrl->redirect($this, 'awardBadgeUserSelection');
+    }
+
     protected function awardBadgeUserSelection(): void
     {
-        $ilCtrl = $this->ctrl;
-        $ilTabs = $this->tabs;
-        $lng = $this->lng;
-
         $badge_ids = $this->request->getMultiActionBadgeIdsFromUrl();
         $bid = null;
 
         if ($badge_ids === []) {
-            $post = $this->http->wrapper()->post();
-            if ($post->has('bid')) {
-                $bid = $post->retrieve('bid', $this->refinery->kindlyTo()->int());
+            if ($this->http->wrapper()->post()->has('bid')) {
+                $bid = $this->http->wrapper()->post()->retrieve('bid', $this->refinery->kindlyTo()->int());
+            } elseif ($this->http->wrapper()->query()->has('bid')) {
+                $bid = $this->http->wrapper()->query()->retrieve('bid', $this->refinery->kindlyTo()->int());
             }
         } elseif (count($badge_ids) === 1) {
             $bid = (int) $badge_ids[0];
@@ -834,7 +851,7 @@ class ilBadgeManagementGUI
 
         if (!$bid ||
             !$this->hasWrite()) {
-            $ilCtrl->redirect($this, 'listUsers');
+            $this->ctrl->redirect($this, 'listUsers');
         }
 
         $manual = array_keys(
@@ -842,22 +859,22 @@ class ilBadgeManagementGUI
         );
 
         if (!in_array($bid, $manual, true)) {
-            $ilCtrl->redirect($this, 'listUsers');
+            $this->ctrl->redirect($this, 'listUsers');
         }
 
         $back_target = 'listUsers';
         if ($this->request->getTgt() === 'bdgl') {
-            $ilCtrl->saveParameter($this, 'tgt');
+            $this->ctrl->saveParameter($this, 'tgt');
             $back_target = 'listBadges';
         }
 
-        $ilTabs->clearTargets();
-        $ilTabs->setBackTarget(
-            $lng->txt('back'),
-            $ilCtrl->getLinkTarget($this, $back_target)
+        $this->tabs->clearTargets();
+        $this->tabs->setBackTarget(
+            $this->lng->txt('back'),
+            $this->ctrl->getLinkTarget($this, $back_target)
         );
 
-        $ilCtrl->setParameter($this, 'bid', $bid);
+        $this->ctrl->setParameter($this, 'bid', $bid);
 
         $badge = new ilBadge($bid);
 
@@ -966,7 +983,7 @@ class ilBadgeManagementGUI
         }
 
         foreach ($user_ids as $user_id) {
-            $ass = new ilBadgeAssignment($badge_id, (int) $user_id);
+            $ass = new ilBadgeAssignment((int) $badge_id, (int) $user_id);
             $ass->delete();
         }
 

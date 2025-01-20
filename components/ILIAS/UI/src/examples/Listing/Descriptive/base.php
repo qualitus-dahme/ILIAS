@@ -10,14 +10,7 @@ namespace ILIAS\UI\examples\Listing\Descriptive;
  *   Example for rendering a descriptive list.
  *
  * expected output: >
- *   ILIAS shows a list in the following format:
- *
- *   Title 1
- *   Description 1
- *   Title 2
- *   Description 2
- *   Title 3
- *   Description 3
+ *   ILIAS shows a list with titles and despriptions one below the other.
  * ---
  */
 function base()

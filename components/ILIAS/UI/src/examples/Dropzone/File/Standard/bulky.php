@@ -7,7 +7,7 @@ namespace ILIAS\UI\examples\Dropzone\File\Standard;
 /**
  * ---
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   ILIAS shows a base file upload field with a larger height.
  * ---
  */
 function bulky()

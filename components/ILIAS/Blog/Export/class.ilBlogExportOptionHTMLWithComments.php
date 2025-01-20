@@ -21,8 +21,9 @@ declare(strict_types=1);
 use ILIAS\Export\ExportHandler\Consumer\ExportOption\BasicLegacyHandler as ilBasicLegacyExportOption;
 use ILIAS\Export\ExportHandler\I\Consumer\Context\HandlerInterface as ilExportHandlerConsumerContextInterface;
 use ILIAS\DI\Container;
+use ILIAS\Data\ObjectId;
 
-class ilBlogExportOptionHTML extends ilBasicLegacyExportOption
+class ilBlogExportOptionHTMLWithComments extends ilBasicLegacyExportOption
 {
     protected ilLanguage $lng;
 
@@ -33,19 +34,20 @@ class ilBlogExportOptionHTML extends ilBasicLegacyExportOption
         parent::init($DIC);
     }
 
-    public function isPublicAccessPossible(): bool
-    {
-        return true;
+    public function isObjectSupported(
+        ObjectId $object_id
+    ): bool {
+        return ilObjBlogAccess::isCommentsExportPossible($object_id->toInt());
     }
 
     public function getExportType(): string
     {
-        return 'html';
+        return 'html_comments';
     }
 
     public function getExportOptionId(): string
     {
-        return 'blog_exp_option_html';
+        return 'blog_exp_option_html_with_comments';
     }
 
     public function getSupportedRepositoryObjectTypes(): array
@@ -56,12 +58,12 @@ class ilBlogExportOptionHTML extends ilBasicLegacyExportOption
     public function getLabel(): string
     {
         $this->lng->loadLanguageModule('exp');
-        return $this->lng->txt("exp_html");
+        return $this->lng->txt("exp_format_dropdown-html") . " (" . $this->lng->txt("blog_incl_comments") . ")";
     }
 
     public function onExportOptionSelected(
         ilExportHandlerConsumerContextInterface $context
     ): void {
-        $this->ctrl->redirectByClass(ilObjBlogGUI::class, "createExportFile");
+        $this->ctrl->redirectByClass(ilObjBlogGUI::class, "createExportFileWithComments");
     }
 }

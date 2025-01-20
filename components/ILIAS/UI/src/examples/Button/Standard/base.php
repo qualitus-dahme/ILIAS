@@ -10,7 +10,7 @@ namespace ILIAS\UI\examples\Button\Standard;
  *   Example for rendering a standard button.
  *
  * expected output: >
- *   ILIAS shows a colored, active button titled "Goto ILIAS". Clicking the button opens the website www.ilias.de
+ *   ILIAS shows a colored, active button with a title. Clicking the button opens the website www.ilias.de
  *   in the same browser window.
  * ---
  */

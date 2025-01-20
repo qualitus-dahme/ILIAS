@@ -17,8 +17,6 @@ namespace ILIAS\UI\examples\Modal\LightboxImagePage;
  *   All contents consist of a titled each.
  *   In the lower part of the modal a circle glyph is centered about which you can see that you can look at
  *   three contents within the modal.
- *   You can close the modal by hitting the ESC key or by clicking onto the greyed out ILIAS in the background outside
- *   of the modal or clicking the "X" glyph.
  * ---
  */
 function show_multiple_images()

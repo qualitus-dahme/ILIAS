@@ -18,7 +18,7 @@
 
 declare(strict_types=1);
 
-namespace ILIAS\Exercise\IRSS;
+namespace ILIAS\Repository\IRSS;
 
 class ResourceInformation
 {

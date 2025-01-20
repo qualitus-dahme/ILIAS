@@ -11,11 +11,7 @@ namespace ILIAS\UI\examples\Popover\Standard;
  *
  * expected output: >
  *   ILIAS shows a button titled "Show Card".
- *   A click onto the button opens a card popover with...
- *   - a popover title: Card
- *   - a card image: ILIAS-Logo
- *   - a card title: Title
- *   - a card description: Hello World, I'm a card
+ *   A click onto the button opens a card popover.
  *   The popover can be closed by clicking onto the ILIAS background outside of the popover.
  * ---
  */

@@ -184,7 +184,15 @@ class ilImageMapEditorGUI
 
     public function showImageMap(): void
     {
-        $item = new ilMediaItem($this->request->getItemId());
+        $item = $this->makeMapWorkCopy(
+            $this->request->getOutEditProperty(),
+            $this->request->getOutAreaNr(),
+            $this->request->getOutOutputNewArea(),
+            $this->request->getOutAreaType(),
+            $this->request->getOutCoords()
+        );
+
+        //$item = new ilMediaItem($this->request->getItemId());
         $item->outputMapWorkCopy();
     }
 
@@ -400,19 +408,18 @@ class ilImageMapEditorGUI
             $this->tpl->setVariable("FORM", $form->getHTML());
         }
 
-        $this->makeMapWorkCopy(
-            $a_edit_property,
-            $a_area_nr,
-            $a_output_new_area,
-            $area_type,
-            $coords
-        );
+        $ilCtrl->setParameter($this, "out_edit_property", $a_edit_property);
+        $ilCtrl->setParameter($this, "out_area_nr", $a_area_nr);
+        $ilCtrl->setParameter($this, "out_output_new_area", (int) $a_output_new_area);
+        $ilCtrl->setParameter($this, "out_area_type", $area_type);
+        $ilCtrl->setParameter($this, "out_coords", $coords);
 
         $edit_mode = ($a_get_next_coordinate)
             ? "get_coords"
             : (($a_output_new_area)
                 ? "new_area"
                 : "");
+
         $output = $this->getImageMapOutput($edit_mode);
         $this->tpl->setVariable("IMAGE_MAP", $output);
 
@@ -512,7 +519,7 @@ class ilImageMapEditorGUI
         bool $a_output_new_area = false,
         string $a_area_type = "",
         string $a_coords = ""
-    ): void {
+    ): ilMediaItem {
         // create/update imagemap work copy
         $st_item = $this->media_object->getMediaItem("Standard");
 
@@ -525,6 +532,8 @@ class ilImageMapEditorGUI
         if ($a_output_new_area) {
             $st_item->addAreaToMapWorkCopy($a_area_type, $a_coords);
         }
+
+        return $st_item;
     }
 
     /**

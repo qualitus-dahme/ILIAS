@@ -11,7 +11,7 @@ namespace ILIAS\UI\examples\Chart\ProgressMeter\Mini;
  *
  *
  * expected output: >
- *   ILIAS shows a rounded progress meter with a red dot. The dot displays that no progress was reached until now.
+ *   ILIAS shows a base progress meter with a red dot. The dot displays that no progress was reached until now.
  * ---
  */
 function no_score_yet()

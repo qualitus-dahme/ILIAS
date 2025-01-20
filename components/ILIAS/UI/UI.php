@@ -102,6 +102,8 @@ class UI implements Component\Component
             new Component\Resource\NodeModule("chart.js/dist/chart.umd.js");
         $contribute[Component\Resource\PublicAsset::class] = fn() =>
             new Component\Resource\ComponentJS($this, "js/Progress/dist/progress.min.js");
+        $contribute[Component\Resource\PublicAsset::class] = fn() =>
+            new Component\Resource\ComponentJS($this, "js/MainControls/dist/footer.min.js");
         /*
         those are contributed by MediaObjects
         $contribute[Component\Resource\PublicAsset::class] = fn() =>

@@ -23,6 +23,7 @@
  */
 class ilMediaItem
 {
+    protected \ILIAS\MediaObjects\MediaObjectManager $mob_manager;
     protected string $tried_thumb = "";
     protected string $text_representation = "";
     protected ilDBInterface $db;
@@ -68,6 +69,7 @@ class ilMediaItem
             $this->setId($a_id);
             $this->read();
         }
+        $this->mob_manager = $DIC->mediaObjects()->internal()->domain()->mediaObject();
     }
 
     /**
@@ -610,15 +612,8 @@ class ilMediaItem
 
     public function getOriginalSize(): ?array
     {
-        $mob_dir = ilObjMediaObject::_getDirectory($this->getMobId());
-
         if (ilUtil::deducibleSize($this->getFormat())) {
-            if ($this->getLocationType() == "LocalFile") {
-                $loc = $mob_dir . "/" . $this->getLocation();
-            } else {
-                $loc = $this->getLocation();
-            }
-
+            $loc = $this->getOriginalSource();
             $size = ilMediaImageUtil::getImageSize($loc);
             if ($size[0] > 0 && $size[1] > 0) {
                 return array("width" => $size[0], "height" => $size[1]);
@@ -725,28 +720,6 @@ class ilMediaItem
     }
 
     /**
-     * get work directory for image map editing
-     */
-    public function getWorkDirectory(): string
-    {
-        return ilFileUtils::getDataDir() . "/map_workfiles/item_" . $this->getId();
-    }
-
-    /**
-     * create work directory for image map editing
-     */
-    public function createWorkDirectory(): void
-    {
-        if (!is_dir(ilFileUtils::getDataDir() . "/map_workfiles")) {
-            ilFileUtils::createDirectory(ilFileUtils::getDataDir() . "/map_workfiles");
-        }
-        $work_dir = $this->getWorkDirectory();
-        if (!is_dir($work_dir)) {
-            ilFileUtils::createDirectory($work_dir);
-        }
-    }
-
-    /**
      * get location suffix
      */
     public function getSuffix(): string
@@ -762,26 +735,6 @@ class ilMediaItem
     public function getMapWorkCopyType(): string
     {
         return self::getGDSupportedImageType($this->getSuffix());
-    }
-
-    /**
-     * Get name of image map work copy file
-     * @param bool $a_reference_copy get name for copy of external referenced image
-     */
-    public function getMapWorkCopyName(
-        bool $a_reference_copy = false
-    ): string {
-        $file_arr = explode("/", $this->getLocation());
-        $o_file = $file_arr[count($file_arr) - 1];
-        $file_arr = explode(".", $o_file);
-        unset($file_arr[count($file_arr) - 1]);
-        $file = implode(".", $file_arr);
-
-        if (!$a_reference_copy) {
-            return $this->getWorkDirectory() . "/" . $file . "." . $this->getMapWorkCopyType();
-        } else {
-            return $this->getWorkDirectory() . "/l_copy_" . $o_file;
-        }
     }
 
     /**
@@ -833,7 +786,7 @@ class ilMediaItem
                 if (is_file($med_file)) {
                     $mob = new ilObjMediaObject($this->getMobId());
                     $mob->makeThumbnail($this->getLocation(), $this->getPurpose() . "." . $format, $format, "80");
-                    $mob->makeThumbnail($this->getLocation(), $this->getPurpose() . "_small." . $format, $format, "40");
+                    //$mob->makeThumbnail($this->getLocation(), $this->getPurpose() . "_small." . $format, $format, "40");
                 }
             }
             if ($this->getFormat() === "image/svg+xml") {
@@ -857,51 +810,15 @@ class ilMediaItem
         return "";
     }
 
-    /**
-     * Copy the original file for map editing
-     * to the working directory
-     * @throws ilMapEditingException
-     */
-    public function copyOriginal(): void
+    public function getOriginalSource() : string
     {
-        $lng = $this->lng;
-        $this->createWorkDirectory();
-
         if ($this->getLocationType() !== "Reference") {
-            $this->image_converter->convertToFormat(
-                $this->getDirectory() . "/" . $this->getLocation(),
-                $this->getMapWorkCopyName(),
-                $this->getMapWorkCopyType(),
-                $this->getWidth() === '' ? null : $this->getWidth(),
-                $this->getHeight() === '' ? null : $this->getHeight()
-            );
-        } else {
-            // first copy the external file, if necessary
-            if (!is_file($this->getMapWorkCopyName(true)) || (filesize($this->getMapWorkCopyName(true)) == 0)) {
-                $handle = fopen($this->getLocation(), "r");
-                $lcopy = fopen($this->getMapWorkCopyName(true), "w");
-                if ($handle && $lcopy) {
-                    while (!feof($handle)) {
-                        $content = fread($handle, 4096);
-                        fwrite($lcopy, $content);
-                    }
-                }
-                fclose($lcopy);
-                fclose($handle);
-            }
-
-            // now, create working copy
-            $this->image_converter->convertToFormat(
-                $this->getMapWorkCopyName(true),
-                $this->getMapWorkCopyName(),
-                $this->getMapWorkCopyType(),
-                $this->getWidth() === '' ? null : $this->getWidth(),
-                $this->getHeight() === '' ? null : $this->getHeight()
+            return $this->mob_manager->getLocalSrc(
+                $this->getMobId(),
+                $this->getLocation()
             );
         }
-        if (!is_file($this->getMapWorkCopyName())) {
-            throw new ilMapEditingException($lng->txt("cont_map_file_not_generated"));
-        }
+        return $this->getLocation();
     }
 
     /**
@@ -913,13 +830,10 @@ class ilMediaItem
         int $a_area_nr = 0,
         bool $a_exclude = false
     ): void {
-        $lng = $this->lng;
-
-        $this->copyOriginal();
         $this->buildMapWorkImage();
 
         // determine ratios
-        $size = getimagesize($this->getMapWorkCopyName());
+        $size = getimagesize($this->getOriginalSource());
         $x_ratio = 1;
         if ($size[0] > 0 && $this->getWidth() > 0) {
             $x_ratio = $this->getWidth() / $size[0];
@@ -946,8 +860,6 @@ class ilMediaItem
                 );
             }
         }
-
-        $this->saveMapWorkImage();
     }
 
     /**
@@ -959,10 +871,10 @@ class ilMediaItem
         string $a_shape,
         string $a_coords
     ): void {
-        $this->buildMapWorkImage();
+//        $this->buildMapWorkImage();
 
         // determine ratios
-        $size = getimagesize($this->getMapWorkCopyName());
+        $size = getimagesize($this->getOriginalSource());
         $x_ratio = 1;
         if ($size[0] > 0 && $this->getWidth() > 0) {
             $x_ratio = $this->getWidth() / $size[0];
@@ -984,8 +896,6 @@ class ilMediaItem
             $x_ratio,
             $y_ratio
         );
-
-        $this->saveMapWorkImage();
     }
 
     /**
@@ -997,7 +907,7 @@ class ilMediaItem
             header("Pragma: no-cache");
             header("Expires: 0");
             header("Content-type: image/" . strtolower($this->getMapWorkCopyType()));
-            readfile($this->getMapWorkCopyName());
+            $this->outputWorkImage();
         }
         exit;
     }
@@ -1011,16 +921,16 @@ class ilMediaItem
 
         switch ($im_type) {
             case "gif":
-                $this->map_image = imagecreatefromgif($this->getMapWorkCopyName());
+                $this->map_image = imagecreatefromgif($this->getOriginalSource());
                 break;
 
             case "jpg":
             case "jpeg":
-                $this->map_image = imagecreatefromjpeg($this->getMapWorkCopyName());
+                $this->map_image = imagecreatefromjpeg($this->getOriginalSource());
                 break;
 
             case "png":
-                $this->map_image = imagecreatefrompng($this->getMapWorkCopyName());
+                $this->map_image = imagecreatefrompng($this->getOriginalSource());
                 break;
         }
 
@@ -1034,30 +944,25 @@ class ilMediaItem
         }
     }
 
-    /**
-     * save image map work image as file
-     */
-    public function saveMapWorkImage(): void
+    public function outputWorkImage(): void
     {
         $im_type = strtolower($this->getMapWorkCopyType());
 
         // save image work-copy and free memory
         switch ($im_type) {
             case "gif":
-                imagegif($this->map_image, $this->getMapWorkCopyName());
+                imagegif($this->map_image);
                 break;
 
             case "jpg":
             case "jpeg":
-                imagejpeg($this->map_image, $this->getMapWorkCopyName());
+                imagejpeg($this->map_image);
                 break;
 
             case "png":
-                imagepng($this->map_image, $this->getMapWorkCopyName());
+                imagepng($this->map_image);
                 break;
         }
-
-        imagedestroy($this->map_image);
     }
 
     /**

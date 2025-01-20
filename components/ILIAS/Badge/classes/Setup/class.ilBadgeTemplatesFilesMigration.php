@@ -45,9 +45,6 @@ class ilBadgeTemplatesFilesMigration implements Migration
 
     public function prepare(Environment $environment): void
     {
-        ilContext::init(ilContext::CONTEXT_CRON);
-        ilInitialisation::initILIAS();
-
         $this->helper = new ilResourceStorageMigrationHelper(
             new ilBadgeFileStakeholder(),
             $environment
@@ -58,7 +55,7 @@ class ilBadgeTemplatesFilesMigration implements Migration
     {
         $this->helper->getDatabase()->setLimit(1);
         $res = $this->helper->getDatabase()->query(
-            "SELECT id, image, image_rid FROM " . self::TABLE_NAME . " WHERE image_rid IS NULL OR image_rid = ''"
+            'SELECT id, image, image_rid FROM ' . self::TABLE_NAME . " WHERE image_rid IS NULL OR image_rid = ''"
         );
         $row = $this->helper->getDatabase()->fetchObject($res);
         if (!($row instanceof stdClass)) {
@@ -69,28 +66,18 @@ class ilBadgeTemplatesFilesMigration implements Migration
         $image = $row->image;
 
         if ($image !== '' && $image !== null) {
-            $save_collection_id = '-';
-            $image = $this->getImagePath($id, $image);
-            $base_path = dirname($image);
-            $pattern = '/(.+)/m';
-
-            if (is_dir($base_path) && file_exists($image) && count(scandir($base_path)) > 2) {
-                $collection_id = $this->helper->moveFilesOfPatternToCollection(
-                    $base_path,
-                    $pattern,
-                    ResourceCollection::NO_SPECIFIC_OWNER,
-                    ResourceCollection::NO_SPECIFIC_OWNER,
-                    null,
-                    $this->getRevisionNameCallback()
-                );
-
-                $save_collection_id = $collection_id === null ? '-' : $collection_id->serialize();
+            $image_path = $this->getImagePath($id, $image);
+            $identification = $this->helper->movePathToStorage($image_path, ResourceCollection::NO_SPECIFIC_OWNER);
+            if ($identification === null) {
+                $identification = '-';
+            } else {
+                $identification = $identification->serialize();
             }
 
             $this->helper->getDatabase()->update(
                 self::TABLE_NAME,
                 [
-                    'image_rid' => [ilDBConstants::T_TEXT, $save_collection_id],
+                    'image_rid' => [ilDBConstants::T_TEXT, $identification],
                     'image' => [ilDBConstants::T_TEXT, null]
                 ],
                 ['id' => [ilDBConstants::T_INTEGER, $id]]
@@ -98,61 +85,48 @@ class ilBadgeTemplatesFilesMigration implements Migration
         }
     }
 
-    private function getImagePath(
-        int $id,
-        string $image,
-        bool $a_full_path = true
-    ): string {
-        if ($id) {
-            $exp = explode('.', $image);
-            $suffix = strtolower(array_pop($exp));
+    private function getImagePath(int $id, string $image): string
+    {
+        $exp = explode('.', $image);
+        $suffix = strtolower(array_pop($exp));
 
-            if ($a_full_path) {
-                return $this->getFilePath($id) . 'img' . $id . '.' . $suffix;
-            }
-
-            return 'img' . $id . '.' . $suffix;
-        }
-
-        return '';
+        return $this->getFilePath($id) . '/img' . $id . '.' . $suffix;
     }
 
-    private function getFilePath(
-        int $a_id,
-        string $a_subdir = null
-    ): string {
-        $storage = new ilFSStorageBadgeImageTemplate($a_id);
-        $storage->create();
-        $path = $storage->getAbsolutePath() . '/';
+    private function getFilePath(int $a_id): string
+    {
+        return ILIAS_ABSOLUTE_PATH . '/' . ILIAS_WEB_DIR . '/' . CLIENT_ID . '/sec/ilBadge/' . $this->createLegacyPathSegmentForBadgeTemplateId($a_id);
+    }
 
-        if ($a_subdir) {
-            $path .= $a_subdir . '/';
-
-            if (!is_dir($path)) {
-                mkdir($path);
+    private function createLegacyPathSegmentForBadgeTemplateId(int $id): string
+    {
+        $path = [];
+        $found = false;
+        $num = $id;
+        $path_string = '';
+        for ($i = 3; $i > 0; $i--) {
+            $factor = 100 ** $i;
+            if (($tmp = (int) ($num / $factor)) || $found) {
+                $path[] = $tmp;
+                $num %= $factor;
+                $found = true;
             }
         }
 
-        return $path;
+        if (count($path)) {
+            $path_string = (implode('/', $path) . '/');
+        }
+
+        return $path_string . 'badgetmpl_' . $id;
     }
 
     public function getRemainingAmountOfSteps(): int
     {
         $res = $this->helper->getDatabase()->query(
-            "SELECT COUNT(id) as amount FROM " . self::TABLE_NAME . " WHERE image_rid IS NULL OR image_rid = ''"
+            'SELECT COUNT(id) as amount FROM ' . self::TABLE_NAME . " WHERE image_rid IS NULL OR image_rid = ''"
         );
         $row = $this->helper->getDatabase()->fetchObject($res);
 
         return (int) ($row->amount ?? 0);
-    }
-
-    /**
-     * @return Closure(string): string
-     */
-    public function getRevisionNameCallback(): Closure
-    {
-        return static function (string $file_name): string {
-            return md5($file_name);
-        };
     }
 }

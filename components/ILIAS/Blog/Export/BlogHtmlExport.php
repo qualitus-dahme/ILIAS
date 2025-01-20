@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -18,24 +16,23 @@ declare(strict_types=1);
  *
  *********************************************************************/
 
+declare(strict_types=1);
+
 namespace ILIAS\Blog\Export;
 
 use ilFileUtils;
+use ILIAS\components\Export\HTML\Util;
 
-/**
- * Blog HTML export
- *
- * @author Alexander Killing <killing@leifos.de>
- */
 class BlogHtmlExport
 {
+    protected \ILIAS\components\Export\HTML\ExportCollector $collector;
     protected \ilObjBlog $blog;
     protected \ilObjBlogGUI $blog_gui;
     protected string $export_dir;
     protected string $sub_dir;
     protected string $target_dir;
     protected \ILIAS\GlobalScreen\Services $global_screen;
-    protected \ILIAS\components\Export\HTML\Util $export_util;
+    protected Util $export_util;
     protected \ilCOPageHTMLExport $co_page_html_export;
     protected \ilLanguage $lng;
     protected \ilTabsGUI $tabs;
@@ -58,14 +55,17 @@ class BlogHtmlExport
         $this->blog_gui = $blog_gui;
         /** @var \ilObjBlog $blog */
         $blog = $blog_gui->getObject();
+        $this->collector = $DIC->export()->domain()->html()->collector($blog->getId());
+        $this->collector->init();
+
         $this->blog = $blog;
         $this->export_dir = $exp_dir;
         $this->sub_dir = $sub_dir;
         $this->target_dir = $exp_dir . "/" . $sub_dir;
 
         $this->global_screen = $DIC->globalScreen();
-        $this->export_util = new \ILIAS\components\Export\HTML\Util($exp_dir, $sub_dir);
-        $this->co_page_html_export = new \ilCOPageHTMLExport($this->target_dir);
+        $this->export_util = new Util("", "", $this->collector);
+        $this->co_page_html_export = new \ilCOPageHTMLExport($this->target_dir, null, 0, $this->collector);
         $this->tabs = $DIC->tabs();
         $this->lng = $DIC->language();
 
@@ -116,24 +116,26 @@ class BlogHtmlExport
     public function exportHTML(): string
     {
         $this->initDirectories();
+
         $this->export_util->exportSystemStyle();
+
         $this->export_util->exportCOPageFiles(
             $this->content_style_domain->getEffectiveStyleId(),
             "blog"
         );
-
+/*
         \ilObjUser::copyProfilePicturesToDirectory($this->blog->getOwner(), $this->target_dir);
-
+*/
         // export pages
         if ($this->print_version) {
             $this->exportHTMLPagesPrint();
         } else {
             $this->exportHTMLPages();
         }
-
+/*
         // export comments user images
         $this->exportUserImages();
-
+*/
         $this->export_util->exportResourceFiles();
         $this->co_page_html_export->exportPageElements();
 
@@ -205,10 +207,12 @@ class BlogHtmlExport
             $file = self::buildExportLink($a_link_template, "list", $month, $this->keywords);
             $file = $this->writeExportFile($file, $tpl, $list, $nav);
 
+/*
             if (!$has_index) {
                 copy($file, $this->target_dir . "/" . $a_index_name);
                 $has_index = true;
             }
+*/
         }
 
         // keywords
@@ -354,7 +358,7 @@ class BlogHtmlExport
         $location_stylesheet = \ilUtil::getStyleSheetLocation();
         $this->global_screen->layout()->meta()->addCss($location_stylesheet);
         $this->global_screen->layout()->meta()->addCss(
-            \ilObjStyleSheet::getContentStylePath($this->content_style_domain->getEffectiveStyleId())
+            \ilObjStyleSheet::getExportContentStylePath()
         );
         \ilPCQuestion::resetInitialState();
 
@@ -386,10 +390,6 @@ class BlogHtmlExport
         string $comments = ""
     ): string {
         $file = $this->target_dir . "/" . $a_file;
-        // return if file is already existing
-        if (is_file($file)) {
-            return "";
-        }
 
         // export template: page content
         $ep_tpl = new \ilTemplate(
@@ -415,7 +415,9 @@ class BlogHtmlExport
         $content = $a_tpl->printToString();
 
         // open file
-        file_put_contents($file, $content);
+//        file_put_contents($file, $content);
+        $this->collector->addString($content, $a_file);
+
 
         return $file;
     }

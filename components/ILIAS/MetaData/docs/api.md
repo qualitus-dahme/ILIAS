@@ -572,8 +572,9 @@ are:
 - **Creation:** When the target is an ILIAS object and title, description
 and language are given as the source, a new LOM set is created for the
 object containing the given data. Note that description and language are
-optional, but title is not. Any previous LOM of the target object
-is deleted before copying.
+optional, but title is not: if an empty title is given, it is replaced by
+a placeholder. Any previous LOM of the target object is deleted before
+copying.
 - **Copying:** When both source and target are ILIAS objects, the `Derivator` creates
 a LOM set for the target by copying the LOM of the source. Any previous
 LOM of the target object is deleted before copying.

@@ -58,6 +58,7 @@ class ilTestEvaluationFactory
                     qpl_questions.title questiontitle,
                     qpl_questions.points qpl_maxpoints,
 
+                    tst_active.active_id,
                     tst_active.submitted,
                     tst_active.last_finished_pass,
                     tst_pass_result.*,
@@ -70,15 +71,15 @@ class ilTestEvaluationFactory
 
         FROM        tst_active
 
-        LEFT JOIN tst_test_result ON tst_active.active_id = tst_test_result.active_fi
         LEFT JOIN tst_pass_result ON tst_active.active_id = tst_pass_result.active_fi
+        LEFT JOIN tst_test_result ON tst_active.active_id = tst_test_result.active_fi AND tst_test_result.pass = tst_pass_result.pass
         LEFT JOIN qpl_questions ON qpl_questions.question_id = tst_test_result.question_fi
         LEFT JOIN usr_data ON tst_active.user_fi = usr_data.usr_id
 
         WHERE       tst_active.test_fi = %s
         AND         %s
 
-        ORDER BY    tst_active.active_id ASC, tst_test_result.pass ASC, tst_test_result.tstamp DESC
+        ORDER BY    tst_active.active_id ASC, tst_pass_result.pass ASC, tst_test_result.tstamp DESC
         ';
 
         $ret = [];
@@ -103,14 +104,14 @@ class ilTestEvaluationFactory
         $current_attempt = null;
 
         foreach ($eval_data_rows as $row) {
-            if ($current_user !== $row['active_fi']) {
-                $current_user = $row['active_fi'];
+            if ($current_user !== $row['active_id']) {
+                $current_user = $row['active_id'];
                 $current_attempt = null;
 
                 $user_eval_data = new ilTestEvaluationUserData($scoring_settings);
 
                 $user_eval_data->setName(
-                    $this->test_obj->buildName($row['usr_id'], $row['firstname'], $row['lastname'], $row['title'])
+                    $this->test_obj->buildName($row['usr_id'], $row['firstname'], $row['lastname'], $row['title'] ?? '')
                 );
 
                 if ($row['login'] !== null) {
@@ -123,19 +124,20 @@ class ilTestEvaluationFactory
                 $user_eval_data->setLastFinishedPass($row['last_finished_pass']);
 
 
-                $visiting_time = $this->test_obj->getVisitingTimeOfParticipant($row['active_fi']);
+                $visiting_time = $this->test_obj->getVisitingTimeOfParticipant($row['active_id']);
                 $user_eval_data->setFirstVisit($visiting_time["first_access"]);
                 $user_eval_data->setLastVisit($visiting_time["last_access"]);
             }
 
-            if ($current_attempt !== $row['pass']) {
+            if ($row['pass'] !== null && $current_attempt !== $row['pass']) {
+                $current_attempt = $row['pass'];
                 $attempt = new \ilTestEvaluationPassData();
                 $attempt->setPass($row['pass']);
                 $attempt->setReachedPoints($row['points']);
 
                 if ($row['questioncount'] == 0) {
                     list($count, $points) = array_values(
-                        $this->test_obj->getQuestionCountAndPointsForPassOfParticipant($row['active_fi'], $row['pass'])
+                        $this->test_obj->getQuestionCountAndPointsForPassOfParticipant($row['active_id'], $row['pass'])
                     );
                     $attempt->setMaxPoints($points);
                     $attempt->setQuestionCount($count);
@@ -146,6 +148,10 @@ class ilTestEvaluationFactory
 
                 $attempt->setNrOfAnsweredQuestions($row['answeredquestions']);
                 $attempt->setWorkingTime($row['workingtime']);
+                $start_time = $this->getFirstVisitForActiveIdAndAttempt($row['active_id'], $row['pass']);
+                if ($start_time !== null) {
+                    $attempt->setStartTime($start_time);
+                }
                 $attempt->setExamId((string) $row['exam_id']);
                 $attempt->setRequestedHintsCount($row['hint_count']);
                 $attempt->setDeductedHintPoints($row['hint_points']);
@@ -162,9 +168,11 @@ class ilTestEvaluationFactory
                 );
             }
 
-            $user_eval_data->addPass($row['pass'], $attempt);
+            if (isset($attempt)) {
+                $user_eval_data->addPass($row['pass'], $attempt);
+            }
 
-            $participants[$row['active_fi']] = $user_eval_data;
+            $participants[$row['active_id']] = $user_eval_data;
         }
 
         $evaluation_data = $this->addQuestionsToParticipantPasses(new ilTestEvaluationData($participants));
@@ -306,22 +314,27 @@ class ilTestEvaluationFactory
         foreach ($evaluation_data->getParticipantIds() as $active_id) {
             $user_eval_data = $evaluation_data->getParticipant($active_id);
 
-            $percentage = $user_eval_data->getReachedPointsInPercent();
-            $mark = $mark_schema->getMatchingMark($percentage);
+            $mark = $mark_schema->getMatchingMark(
+                $user_eval_data->getReachedPointsInPercent()
+            );
 
-            if ($mark !== null) {
-                $user_eval_data->setMark($mark);
-                for ($i = 0;$i < $user_eval_data->getPassCount();$i++) {
-                    $pass_data = $user_eval_data->getPass($i);
-                    $mark = $mark_schema->getMatchingMark(
-                        $pass_data->getReachedPointsInPercent()
-                    );
-                    if ($mark !== null) {
-                        $pass_data->setMark($mark);
-                    }
-                }
+            if ($mark === null) {
+                continue;
             }
 
+            $user_eval_data->setMark($mark);
+            for ($i = 0; $i < $user_eval_data->getPassCount(); $i++) {
+                $pass_data = $user_eval_data->getPass($i);
+                if ($pass_data === null) {
+                    continue;
+                }
+                $mark = $mark_schema->getMatchingMark(
+                    $pass_data->getReachedPointsInPercent()
+                );
+                if ($mark !== null) {
+                    $pass_data->setMark($mark);
+                }
+            }
         }
 
         return $evaluation_data;
@@ -349,5 +362,19 @@ class ilTestEvaluationFactory
         }
 
         return $passes;
+    }
+
+    public function getFirstVisitForActiveIdAndAttempt(int $active_id, int $attempt): ?string
+    {
+        $times = $this->db->fetchAssoc(
+            $this->db->queryF(
+                'SELECT MIN(started) AS first_access '
+                    . 'FROM tst_times WHERE active_fi = %s AND pass = %s',
+                ['integer', 'integer'],
+                [$active_id, $attempt]
+            )
+        );
+
+        return $times['first_access'];
     }
 }

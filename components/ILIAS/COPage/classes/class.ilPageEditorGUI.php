@@ -282,7 +282,7 @@ class ilPageEditorGUI
             }
             $pc_id = $this->requested_pc_id;
             $hier_id = $this->requested_hier_id;
-            if (!in_array($cmd, ["insert", "create"])) {
+            if (!in_array($cmd, ["insert", "create", "upload"])) {
                 $cont_obj = $this->page->getContentObject($hier_id, $pc_id);
             }
         }

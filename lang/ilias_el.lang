@@ -5831,8 +5831,6 @@ common#:#tst_history_read#:#View History###26 08 2024 new variable
 common#:#tst_new#:#Νέα εξέταση
 common#:#tst_results#:#Test Results###10 11 2018 new variable
 common#:#tst_run#:#Εκτέλεση
-common#:#tst_statistical_evaluation#:#Στατιστικά
-common#:#tst_statistics#:#Access to Test Statistics
 common#:#tst_user_not_invited#:#Δεν πρέπει να συμμετέχετε σε αυτό το διαγώνισμα.
 common#:#tst_warning_test_not_complete#:#Το διαγώνισμα δεν είναι ολοκληρωμένο!
 common#:#tutors#:#Tutors###28 10 2009 new variable
@@ -14788,7 +14786,6 @@ rbac#:#tst_edit_permission#:#Αλλαγή ρυθμίσεων άδειας
 rbac#:#tst_read#:#Πρόσβαση ανάγνωσης στην εξέταση
 rbac#:#tst_read_learning_progress#:#User can view learning progress of other users###26 09 2014 new variable
 rbac#:#tst_tst_results#:#User has access to test results###10 11 2018 new variable
-rbac#:#tst_tst_statistics#:#Access to Test Statistics###18 01 2012 new variable
 rbac#:#tst_visible#:#Το διαγώνισμα είναι ορατό
 rbac#:#tst_write#:#Επεξεργασία διαγωνίσματος
 rbac#:#upload_blacklisted_files#:#Bypass blacklist###07 02 2020 new variable

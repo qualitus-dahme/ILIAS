@@ -17,7 +17,7 @@ namespace ILIAS\UI\examples\Button\Standard;
  *   as shown below.
  *
  * expected output: >
- *   ILIAS shows an active button titled "Do Something". The color of the button will change after clicking the button
+ *   ILIAS shows an active button with a title. The color of the button will change after clicking the button
  *   and the word "Working" will appear, which is referencing to the loading status. After a while the button's content
  *   will change to "Done".
  * ---

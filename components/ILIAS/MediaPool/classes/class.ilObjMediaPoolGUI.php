@@ -437,6 +437,7 @@ class ilObjMediaPoolGUI extends ilObject2GUI
                 $this->checkPermission("write");
                 $this->prepareOutput();
                 $this->addHeaderAction();
+                $this->setSettingsSubTabs("settings");
                 $ilTabs->activateTab("settings");
                 $gui = $this->gui->settings()->settingsGUI(
                     $this->object->getId()

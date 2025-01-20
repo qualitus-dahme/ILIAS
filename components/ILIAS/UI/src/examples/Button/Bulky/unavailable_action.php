@@ -10,7 +10,8 @@ namespace ILIAS\UI\examples\Button\Bulky;
  *   This example provides the given button with an unavailable action.
  *
  * expected output: >
- *   ILIAS shows a button with a glyph and the title "Unavailable". Clicking the button won't activate any actions.
+ *   ILIAS shows a button with a glyph and the title "Unavailable". The button's background is grayed out.
+ *   Clicking the button won't activate any actions.
  *
  * note: >
  *   The disabled attribute is set in the DOM.

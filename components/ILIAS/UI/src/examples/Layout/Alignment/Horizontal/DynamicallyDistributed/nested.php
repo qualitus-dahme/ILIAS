@@ -7,7 +7,13 @@ namespace ILIAS\UI\examples\Layout\Alignment\Horizontal\DynamicallyDistributed;
 /**
  * ---
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   ILIAS shows colored text-blocks labeld A to F.
+ *   The blocks are distributed across the available width and differ in size.
+ *   Because A, B and C form a "virtual" block in itself, D, E and F will
+ *   consecutively break into a new row first when shrinking the browser's window.
+ *   Then, A, B and C will break "internally", resulting in three rows
+ *   of A/B, C and D/E/F, respectively in four rows of A, B, C and D/E/F.
+ *   Finally (with really! little space), all blocks are shown vertically under each other.
  * ---
  */
 function nested()

@@ -5830,8 +5830,6 @@ common#:#tst_history_read#:#View History###26 08 2024 new variable
 common#:#tst_new#:#Skapa nytt test
 common#:#tst_results#:#Testresultat
 common#:#tst_run#:#Utför
-common#:#tst_statistical_evaluation#:#Statistik
-common#:#tst_statistics#:#Statistik
 common#:#tst_user_not_invited#:#Du får inte göra detta onlineprov.
 common#:#tst_warning_test_not_complete#:#Testet är inte slutfört!
 common#:#tutors#:#Tutorer
@@ -14787,7 +14785,6 @@ rbac#:#tst_edit_permission#:#Redigera inställningar för rättigheter
 rbac#:#tst_read#:#Ta ett test
 rbac#:#tst_read_learning_progress#:#Användaren kan se andra användares inlärningsframsteg
 rbac#:#tst_tst_results#:#Tillgång till testresultat
-rbac#:#tst_tst_statistics#:#Tillgång till teststatistik
 rbac#:#tst_visible#:#Testet är synligt
 rbac#:#tst_write#:#Montera test och redigera inställningar
 rbac#:#upload_blacklisted_files#:#Bypass svart lista

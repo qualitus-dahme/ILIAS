@@ -652,6 +652,10 @@ class ilCourseObjectiveQuestion
 
         $res = $this->db->query($query);
         while ($row = $res->fetchRow(ilDBConstants::FETCHMODE_OBJECT)) {
+            if (!array_key_exists((int) $row->ref_id, $this->tests)) {
+                $this->__deleteTest((int) $row->ref_id);
+                continue;
+            }
             if (!$this->tree->isInTree((int) $row->ref_id) || !$this->tree->isGrandChild(
                 $container_ref_id,
                 (int) $row->ref_id

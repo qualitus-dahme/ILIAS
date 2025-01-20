@@ -10,13 +10,8 @@ namespace ILIAS\UI\examples\Modal\InterruptiveItem\Standard;
  *   Example for rendering a standard interruptive item modal.
  *
  * expected output: >
- *   ILIAS shows a button titled "Show some key-value interruptive Items".
- *   A click onto the button will grey out ILIAS, open a modal titled "My Title" and the content "Here you see some
- *   key-value interruptive items:". Three values will be displayed (First Key, Second Key, Third Key).
- *   Two buttons "Delete" and "Cancel" are also rendered.
- *   A click onto the "Delete" button will relaod the page.
- *   A click onto the "Cancel" button will hide the modal.
- *   You can also leave the modal by clicking onto the greyed out ILIAS in the background outside of the modal.
+ *   ILIAS shows a button titled "Show some standard interruptive Items".
+ *   A click onto the button will grey out ILIAS, open a modal with content (e.g. "Title of the Item").
  * ---
  */
 function base()

@@ -446,8 +446,10 @@ il.TestPlayerQuestionEditControl = new function() {
             navUrl = href;
 
             if (config.questionLocked) {
-              e.target.name = 'cmd[nextQuestion]';
-              e.target.form.requestSubmit(e.target);
+              const submit = document.querySelector('.ilTstNavigationBtn_Next > button');
+              const form = document.querySelector(FORM_SELECTOR);
+              submit.name = 'cmd[nextQuestion]';
+              form.requestSubmit(submit);
               e.preventDefault();
               return false;
             }

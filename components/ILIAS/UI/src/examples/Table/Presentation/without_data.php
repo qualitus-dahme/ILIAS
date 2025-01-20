@@ -14,7 +14,8 @@ use ILIAS\UI\Factory;
  *   will automatically display an according message.
  *
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   Instead of several rows with expander glyphs, ILIAS shows a message "No records".
+ *   Viewcontrols are still there but have no effect.
  * ---
  */
 function without_data(): string

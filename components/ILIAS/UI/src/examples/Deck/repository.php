@@ -10,7 +10,7 @@ namespace ILIAS\UI\examples\Deck;
  *   Example for rendering a repository card
  *
  * expected output: >
- *   ILIAS shows nine cards with a title and text each. Additionally every single card includes outlined icons, certificate
+ *   ILIAS shows nine base cards. Additionally every single card includes outlined icons, certificate
  *   glyphs and action menus. You can open the menus via click.
  * ---
  */

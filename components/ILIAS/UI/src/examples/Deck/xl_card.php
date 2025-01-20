@@ -10,7 +10,7 @@ namespace ILIAS\UI\examples\Deck;
  *   Example for rendering a XL card
  *
  * expected output: >
- *   ILIAS shows three "Cards" with a title and text each. The number of cards displayed in each line will change according
+ *   ILIAS shows three huge cards with a title and text each. The number of cards displayed in each line will change according
  *   the size of the browser window/desktop.
  * ---
  */

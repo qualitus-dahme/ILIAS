@@ -310,6 +310,7 @@ export default class PageUI {
   hideAllAddDropdowns() {
     document.querySelectorAll("[data-copg-ed-type='add-area'] ul.dropdown-menu").forEach((el) => {
       el.style.display = 'none';
+      el.dataset.copgDDShown = '0';
     });
   }
 

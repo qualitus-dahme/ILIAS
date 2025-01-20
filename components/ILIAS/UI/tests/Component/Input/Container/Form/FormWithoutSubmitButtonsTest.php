@@ -94,7 +94,7 @@ class FormWithoutSubmitButtonsTest extends \ILIAS_UI_TestBase
         );
 
         $expected_html =
-            "<form id=\"id_1\" role=\"form\" class=\"c-form c-form--horizontal\" enctype=\"multipart/form-data\" action=\"$post_url\" method=\"post\">" .
+            "<form id=\"id_1\" class=\"c-form c-form--horizontal\" enctype=\"multipart/form-data\" action=\"$post_url\" method=\"post\">" .
             $dummy_input->getCanonicalName() .
             "</form>";
 
@@ -124,7 +124,7 @@ class FormWithoutSubmitButtonsTest extends \ILIAS_UI_TestBase
         );
 
         $expected_html =
-            "<form id=\"id_1\" role=\"form\" class=\"c-form c-form--horizontal\" enctype=\"multipart/form-data\" action=\"$post_url\" method=\"post\">" .
+            "<form id=\"id_1\" class=\"c-form c-form--horizontal\" enctype=\"multipart/form-data\" action=\"$post_url\" method=\"post\">" .
             $dummy_input->getCanonicalName()
             . "<div class=\"c-form__footer\">"
             . "<div class=\"c-form__required\"><span class=\"asterisk\">*</span><span class=\"small\"> $required_lang_var</span></div>"
@@ -173,8 +173,8 @@ class FormWithoutSubmitButtonsTest extends \ILIAS_UI_TestBase
         $data = $form->getData();
 
         $expected_html = <<<EOT
-<form id="id_2" role="form" class="c-form c-form--horizontal" enctype="multipart/form-data" describedby="id_1" action="$post_url" method="post">
-    <div class="c-form__error-msg alert alert-danger" id="id_1"><span class="sr-only">$error_lang_var:</span>$error_lang_var_in_group
+<form id="id_1" class="c-form c-form--horizontal" enctype="multipart/form-data" action="$post_url" method="post">
+    <div class="c-form__error-msg alert alert-danger"><span class="sr-only">$error_lang_var:</span>$error_lang_var_in_group
     </div>{$dummy_input->getCanonicalName()}
 </form>
 EOT;

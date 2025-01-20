@@ -18,17 +18,29 @@
 
 declare(strict_types=1);
 
-class ilDclEditViewDefinitionConfig extends ilPageConfig
+namespace ILIAS\Repository\IRSS;
+
+class DataService
 {
-    /**
-     * Init
-     */
-    public function init(): void
+    public function __construct()
     {
-        // config
-        $this->setPreventHTMLUnmasking(true);
-        $this->setEnableInternalLinks(false);
-        $this->setEnableWikiLinks(false);
-        $this->setEnableActivation(false);
+    }
+
+    public function resourceInformation(
+        string $rid,
+        string $title,
+        int $size,
+        int $creation_timestamp,
+        string $mime_type,
+        string $src
+    ): ResourceInformation {
+        return new ResourceInformation(
+            $rid,
+            $title,
+            $size,
+            $creation_timestamp,
+            $mime_type,
+            $src
+        );
     }
 }

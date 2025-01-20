@@ -10,7 +10,7 @@ namespace ILIAS\UI\examples\MessageBox\Info;
  *   Example for rendering a info message box.
  *
  * expected output: >
- *   ILIAS shows a blue box with a dummy text ("Lorem ipsum...") and two buttons "Action" and "Cancel".
+ *   ILIAS shows a blue box with a dummy text and two buttons.
  *   Clicking the buttons will not activate any actions.
  *   Below you can see a white box with two links which also do not have got any actions.
  * ---

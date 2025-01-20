@@ -13,7 +13,8 @@ use ILIAS\UI\Component\MainControls\ModeInfo;
  *   example use the example of the UI-Component Layout\Page\Standard.
  *
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   ILIAS shows a box with a longish text. The text is terminated by three dots,
+ *   and will expand to its full length when clicking those dots.
  * ---
  */
 function long_text()

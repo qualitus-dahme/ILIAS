@@ -10,14 +10,9 @@ namespace ILIAS\UI\examples\Dropzone\File\Standard;
  *   Example for rendering a standard file dropzone with additional input.
  *
  * expected output: >
- *   ILIAS shows a white box with a dashed border. You can see a text "Upload files" (displayed as a link) on the left
- *   side and on the right side the text "Drag files in here to upload them". Clicking onto the link or dragging a file
- *   into the box opens a small window with the buttons "Save" and "Cancel". If you dragged a file into the box you can
- *   see the file in said small window too including a text input under the file. The text input is labeled "Additional
- *   Input". Below said input "Additional input which affects all files of this upload" is written. You can upload any
- *   amount of files. The window will be closed if you click onto the "Save" button. An upload doesn't happen in this
- *   example. If a file got listed after saving your selection you can remove the file by clicking the "X" on the right
- *   side.
+ *   ILIAS shows a base file upload/dropzone box. Clicking onto the link or dragging a file
+ *   into the box opens a small window with the buttons "Save" and "Cancel" and an additional input field. The upload
+ *   process works as in the base file upload/dropzone example.
  * ---
  */
 function with_additional_input()

@@ -971,7 +971,7 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
     public function finishTestCmd()
     {
         $this->handleCheckTestPassValid();
-        ilSession::clear("tst_next");
+        ilSession::clear('tst_next');
 
         if ($this->testrequest->strVal('finalization_confirmed') !== 'confirmed') {
             $this->finish_test_modal = $this->buildFinishTestModal();
@@ -1355,8 +1355,7 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
         $this->test_session->saveToDb();
 
         $question_id = $this->test_sequence->getQuestionForSequence($sequence_element ?? 0);
-
-        if (!(int) $question_id && $this->test_session->isObjectiveOriented()) {
+        if ($question_id === null && $this->test_session->isObjectiveOriented()) {
             $this->handleTearsAndAngerNoObjectiveOrientedQuestion();
         }
 
@@ -1371,21 +1370,16 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
             $this->test_session->getPass()
         );
 
-        // fau: testNav - always use edit mode, except for fixed answer
         $instant_response = false;
         if ($this->isParticipantsAnswerFixed($question_id)) {
             $presentationMode = ilTestPlayerAbstractGUI::PRESENTATION_MODE_VIEW;
             $instant_response = true;
         } else {
             $presentationMode = ilTestPlayerAbstractGUI::PRESENTATION_MODE_EDIT;
-            // #37025 don't show instant response if a request for it should fix the answer and answer is not yet fixed
-            if ($this->object->isInstantFeedbackAnswerFixationEnabled()) {
-                $instant_response = false;
-            } else {
+            if (!$this->object->isInstantFeedbackAnswerFixationEnabled()) {
                 $instant_response = $this->getInstantResponseParameter();
             }
         }
-        // fau.
 
         $question_gui = $this->getQuestionGuiInstance($question_id);
 
@@ -1465,26 +1459,19 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
 
         $navigationToolbarGUI->build();
         $this->populateTestNavigationToolbar($navigationToolbarGUI);
-
-        // fau: testNav - enable the question navigation in edit mode
         $this->populateQuestionNavigation($sequence_element, $isNextPrimary);
-        // fau.
 
         if ($instant_response) {
-            // fau: testNav - always use authorized solution for instant feedback
             $this->populateInstantResponseBlocks(
                 $question_gui,
                 true
             );
-            // fau.
         }
 
-        // fau: testNav - add feedback modal
         if ($this->isForcedFeedbackNavUrlRegistered()) {
             $this->populateInstantResponseModal($question_gui, $this->getRegisteredForcedFeedbackNavUrl());
             $this->unregisterForcedFeedbackNavUrl();
         }
-        // fau.
     }
 
     protected function editSolutionCmd()
@@ -2347,7 +2334,9 @@ JS;
     {
         if ($this->object->isInstantFeedbackAnswerFixationEnabled()) {
             return $this->test_sequence->isQuestionChecked($question_id);
-        } elseif ($this->object->isFollowupQuestionAnswerFixationEnabled()) {
+        }
+
+        if ($this->object->isFollowupQuestionAnswerFixationEnabled()) {
             return $this->isForcedFeedbackNavUrlRegistered() || $this->test_sequence->isNextQuestionPresented($question_id);
         }
 
@@ -2439,14 +2428,7 @@ JS;
      */
     protected function populateHelperGuiContent($helperGui)
     {
-        if ($this->object->getKioskMode()) {
-            //$this->tpl->setBodyClass("kiosk");
-            $this->tpl->hideFooter();
-            $this->tpl->addBlockfile('CONTENT', 'adm_content', "tpl.il_as_tst_kiosk_mode_content.html", "components/ILIAS/Test");
-            $this->tpl->setContent($this->ctrl->getHTML($helperGui));
-        } else {
-            $this->tpl->setVariable($this->getContentBlockName(), $this->ctrl->getHTML($helperGui));
-        }
+        $this->tpl->setVariable($this->getContentBlockName(), $this->ctrl->getHTML($helperGui));
     }
 
     protected function getTestNavigationToolbarGUI(): ilTestNavigationToolbarGUI
@@ -2494,40 +2476,27 @@ JS;
 
     protected function buildEditableStateQuestionNavigationGUI($question_id): ilTestQuestionNavigationGUI
     {
-        $navigationGUI = new ilTestQuestionNavigationGUI(
+        $navigation_gui = new ilTestQuestionNavigationGUI(
             $this->lng,
             $this->ui_factory,
             $this->ui_renderer
         );
 
-        if ($this->object->isForceInstantFeedbackEnabled()) {
-            $navigationGUI->setSubmitSolutionCommand(ilTestPlayerCommands::SUBMIT_SOLUTION);
-        } else {
-            // fau: testNav - use simple "submitSolution" button instead of "submitSolutionAndNext"
-            $navigationGUI->setSubmitSolutionCommand(ilTestPlayerCommands::SUBMIT_SOLUTION);
-            // fau.
-        }
-
         // fau: testNav - add a 'revert changes' link for editable question
-        $navigationGUI->setRevertChangesLinkTarget($this->ctrl->getLinkTarget($this, ilTestPlayerCommands::REVERT_CHANGES));
-        // fau.
+        $navigation_gui->setRevertChangesLinkTarget($this->ctrl->getLinkTarget($this, ilTestPlayerCommands::REVERT_CHANGES));
 
+        if ($this->object->getSpecificAnswerFeedback()
+            || $this->object->getGenericAnswerFeedback()
+            || $this->object->getAnswerFeedbackPoints()
+            || $this->object->getInstantFeedbackSolution()) {
+            $navigation_gui->setAnswerFreezingEnabled($this->object->isInstantFeedbackAnswerFixationEnabled());
 
-        // feedback
-        switch (1) {
-            case $this->object->getSpecificAnswerFeedback():
-            case $this->object->getGenericAnswerFeedback():
-            case $this->object->getAnswerFeedbackPoints():
-            case $this->object->getInstantFeedbackSolution():
-
-                $navigationGUI->setAnswerFreezingEnabled($this->object->isInstantFeedbackAnswerFixationEnabled());
-
-                if ($this->object->isForceInstantFeedbackEnabled()) {
-                    $navigationGUI->setForceInstantResponseEnabled(true);
-                    $navigationGUI->setInstantFeedbackCommand(ilTestPlayerCommands::SUBMIT_SOLUTION);
-                } else {
-                    $navigationGUI->setInstantFeedbackCommand(ilTestPlayerCommands::SHOW_INSTANT_RESPONSE);
-                }
+            if ($this->object->isForceInstantFeedbackEnabled()) {
+                $navigation_gui->setForceInstantResponseEnabled(true);
+                $navigation_gui->setInstantFeedbackCommand(ilTestPlayerCommands::SUBMIT_SOLUTION);
+            } else {
+                $navigation_gui->setInstantFeedbackCommand(ilTestPlayerCommands::SHOW_INSTANT_RESPONSE);
+            }
         }
 
         // hints
@@ -2538,11 +2507,11 @@ JS;
             $questionHintTracking = new ilAssQuestionHintTracking($question_id, $activeId, $pass);
 
             if ($questionHintTracking->requestsPossible()) {
-                $navigationGUI->setRequestHintCommand(ilTestPlayerCommands::CONFIRM_HINT_REQUEST);
+                $navigation_gui->setRequestHintCommand(ilTestPlayerCommands::CONFIRM_HINT_REQUEST);
             }
 
             if ($questionHintTracking->requestsExist()) {
-                $navigationGUI->setShowHintsCommand(ilTestPlayerCommands::SHOW_REQUESTED_HINTS_LIST);
+                $navigation_gui->setShowHintsCommand(ilTestPlayerCommands::SHOW_REQUESTED_HINTS_LIST);
             }
         }
 
@@ -2556,14 +2525,14 @@ JS;
             }
 
             if ($solved === 1) {
-                $navigationGUI->setQuestionMarkLinkTarget($this->ctrl->getLinkTarget($this, ilTestPlayerCommands::UNMARK_QUESTION_SAVE));
-                $navigationGUI->setQuestionMarked(true);
+                $navigation_gui->setQuestionMarkLinkTarget($this->ctrl->getLinkTarget($this, ilTestPlayerCommands::UNMARK_QUESTION_SAVE));
+                $navigation_gui->setQuestionMarked(true);
             } else {
-                $navigationGUI->setQuestionMarkLinkTarget($this->ctrl->getLinkTarget($this, ilTestPlayerCommands::MARK_QUESTION_SAVE));
-                $navigationGUI->setQuestionMarked(false);
+                $navigation_gui->setQuestionMarkLinkTarget($this->ctrl->getLinkTarget($this, ilTestPlayerCommands::MARK_QUESTION_SAVE));
+                $navigation_gui->setQuestionMarked(false);
             }
         }
-        return $navigationGUI;
+        return $navigation_gui;
     }
 
     protected function getFinishTestCommand(): string
@@ -2618,9 +2587,10 @@ JS;
         $modal = $this->ui_factory->modal()->roundtrip(
             $this->lng->txt('tst_instant_feedback'),
             $this->ui_factory->legacy($tpl->get()),
-            [],
-            $nav_url
-        )->withCancelButtonLabel($this->lng->txt('proceed'));
+            []
+        )->withActionButtons([
+            $this->ui_factory->button()->standard($this->lng->txt('proceed'), $nav_url)
+        ]);
 
         return $this->ui_renderer->render([
             $modal->withOnLoad($modal->getShowSignal())

@@ -76,17 +76,17 @@ class assTextSubset extends assQuestion implements ilObjQuestionScoringAdjustabl
         if ($result->numRows() == 1) {
             $data = $this->db->fetchAssoc($result);
             $this->setId($question_id);
-            $this->setObjId($data["obj_fi"]);
+            $this->setObjId($data['obj_fi']);
             $this->setNrOfTries($data['nr_of_tries']);
-            $this->setTitle((string) $data["title"]);
-            $this->setComment((string) $data["description"]);
-            $this->setOriginalId($data["original_id"]);
-            $this->setAuthor($data["author"]);
-            $this->setPoints($data["points"]);
-            $this->setOwner($data["owner"]);
-            $this->setQuestion(ilRTE::_replaceMediaObjectImageSrc((string) $data["question_text"], 1));
-            $this->setCorrectAnswers((int) $data["correctanswers"]);
-            $this->setTextRating($data["textgap_rating"]);
+            $this->setTitle((string) $data['title']);
+            $this->setComment((string) $data['description']);
+            $this->setOriginalId($data['original_id']);
+            $this->setAuthor($data['author']);
+            $this->setPoints($data['points']);
+            $this->setOwner($data['owner']);
+            $this->setQuestion(ilRTE::_replaceMediaObjectImageSrc((string) $data['question_text'], 1));
+            $this->setCorrectAnswers((int) $data['correctanswers']);
+            $this->setTextRating($data['textgap_rating'] ?? assClozeGap::TEXTGAP_RATING_CASEINSENSITIVE);
 
             try {
                 $this->setLifecycle(ilAssQuestionLifecycle::getInstance($data['lifecycle']));

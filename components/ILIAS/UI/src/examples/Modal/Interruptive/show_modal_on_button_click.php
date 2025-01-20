@@ -10,10 +10,8 @@ namespace ILIAS\UI\examples\Modal\Interruptive;
  *   Example for rendering a interruptive modal on a click onto a button.
  *
  * expected output: >
- *   ILIAS shows three buttons: "Delete First Item", "Delete Second Item" and "Delete third Item".
- *   A click onto the buttons will open a modal each.
- *   The buttons "Delete" and "Cancel" are displayed too.
- *   A click onto "Delete" will reload the page and displays a confirmation below the example ("Affected Items...").
+ *   Clicking "Show Modal" opens up a modal with some content.
+ *   A click onto "Delete" will reload the page and displays a confirmation below the example.
  *   A click onto "Cancel" will hide the modal.
  *   You can leave each modal by clicking onto the greyed out ILIAS in the background outside of the modal.
  * ---

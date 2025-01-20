@@ -23,7 +23,6 @@ use ILIAS\Test\Logging\TestLogger;
 use ILIAS\Test\Logging\TestQuestionAdministrationInteractionTypes;
 use ILIAS\Test\RequestDataCollector;
 use ILIAS\UI\Factory as UIFactory;
-use ILIAS\UI\Renderer as UIRenderer;
 use ILIAS\Refinery\Factory as RefineryFactory;
 
 /**
@@ -73,6 +72,7 @@ class ilTestCorrectionsGUI
             return;
         }
 
+        $this->ctrl->saveParameterByClass(self::class, 'q_id');
         $command = $this->ctrl->getCmd('showQuestionList');
         $this->{$command}();
     }
@@ -186,7 +186,7 @@ class ilTestCorrectionsGUI
         }
 
         $this->main_tpl->setOnScreenMessage('success', $this->language->txt('saved_successfully'), true);
-        $this->ctrl->redirect($this, 'showQuestion');
+        $this->ctrl->redirectByClass([ilObjTestGUI::class, self::class], 'showQuestion');
     }
 
     protected function showSolution()
@@ -340,31 +340,27 @@ class ilTestCorrectionsGUI
         $this->tabs->addTab(
             'question',
             $this->language->txt('tst_corrections_tab_question'),
-            $this->ctrl->getLinkTargetByClass(self::class, 'showQuestion')
+            $this->ctrl->getLinkTargetByClass([ilObjTestGUI::class, self::class], 'showQuestion')
         );
 
         $this->tabs->addTab(
             'solution',
             $this->language->txt('tst_corrections_tab_solution'),
-            $this->ctrl->getLinkTargetByClass(self::class, 'showSolution')
+            $this->ctrl->getLinkTargetByClass([ilObjTestGUI::class, self::class], 'showSolution')
         );
 
         if ($question_gui->isAnswerFrequencyStatisticSupported()) {
             $this->tabs->addTab(
                 'answers',
                 $this->language->txt('tst_corrections_tab_statistics'),
-                $this->ctrl->getLinkTargetByClass(self::class, 'showAnswerStatistic')
+                $this->ctrl->getLinkTargetByClass([ilObjTestGUI::class, self::class], 'showAnswerStatistic')
             );
         }
 
-        $this->ctrl->clearParameterByClass(ilObjTestGUI::class, 'q_id');
-        $this->ctrl->clearParameterByClass(self::class, 'q_id');
         $this->tabs->setBackTarget(
             $this->language->txt('back'),
             $this->ctrl->getLinkTargetByClass(ilObjTestGUI::class, 'showQuestions')
         );
-        $this->ctrl->setParameterByClass(ilObjTestGUI::class, 'q_id', $question_gui->getObject()->getId());
-        $this->ctrl->setParameterByClass(self::class, 'q_id', $question_gui->getObject()->getId());
 
         $this->tabs->activateTab($active_tab_id);
     }

@@ -135,22 +135,6 @@ class ilTestAccess
         return false;
     }
 
-    /**
-     * @return bool
-     */
-    public function checkStatisticsAccess(): bool
-    {
-        if ($this->getAccess()->checkAccess('tst_statistics', '', $this->getRefId())) {
-            return true;
-        }
-
-        if ($this->getAccess()->checkPositionAccess(ilOrgUnitOperation::OP_ACCESS_RESULTS, $this->getRefId())) {
-            return true;
-        }
-
-        return false;
-    }
-
     protected function checkAccessForActiveId(Closure $access_filter, int $active_id, int $test_id): bool
     {
         $participantData = new ilTestParticipantData($this->db, $this->lng);

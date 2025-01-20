@@ -21,7 +21,6 @@ declare(strict_types=1);
 namespace ILIAS\Exercise\SampleSolution;
 
 use ILIAS\ResourceStorage\Stakeholder\ResourceStakeholder;
-use ILIAS\Exercise\IRSS\ResourceInformation;
 use ILIAS\Exercise\InternalDomainService;
 
 class SampleSolutionManager

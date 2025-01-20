@@ -32,7 +32,6 @@ use ILIAS\Test\Participants\ParticipantRepository;
 use ILIAS\Test\Settings\MainSettings\SettingsMainGUI;
 use ILIAS\Test\Settings\ScoreReporting\SettingsScoringGUI;
 use ILIAS\Test\Scoring\Settings\Settings as SettingsScoring;
-use ILIAS\Test\Settings\ScoreReporting\SettingsResultSummary;
 use ILIAS\Test\Scoring\Marks\MarkSchemaGUI;
 use ILIAS\Test\Scoring\Manual\TestScoringByQuestionGUI;
 use ILIAS\Test\Scoring\Manual\TestScoringByParticipantGUI;
@@ -64,6 +63,7 @@ use ILIAS\Filesystem\Util\Archive\Archives;
 use ILIAS\Skill\Service\SkillService;
 use ILIAS\ResourceStorage\Services as IRSS;
 use ILIAS\Taxonomy\DomainService as TaxonomyService;
+use ILIAS\Style\Content\Service as ContentStyle;
 
 /**
  * Class ilObjTestGUI
@@ -140,6 +140,7 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
     protected UIFactory $ui_factory;
     protected UIRenderer $ui_renderer;
     protected ilUIService $ui_service;
+    private ContentStyle $content_style;
     protected HTTPServices $http;
     protected ilHelpGUI $help;
     protected GlobalScreen $global_screen;
@@ -189,6 +190,7 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
         $this->ui_service = $DIC->uiService();
         $this->taxonomy = $DIC->taxonomy()->domain();
         $this->ui_service = $DIC->uiService();
+        $this->content_style = $DIC->contentStyle();
 
         $local_dic = TestDIC::dic();
         $this->questionrepository = $local_dic['question.general_properties.repository'];
@@ -562,7 +564,6 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
                     $this->ctrl,
                     $this->tpl,
                     $this->toolbar,
-                    $this->tabs_gui,
                     $this->getObject()->getTestLogger(),
                     $this->post_wrapper,
                     $this->request_wrapper,
@@ -576,7 +577,8 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
 
                 $this->prepareOutput();
                 $this->addHeaderAction();
-                $this->tabs_gui->activateSubTab(TabsManager::SETTINGS_SUBTAB_ID_MARK_SCHEMA);
+                $this->tabs_manager->activateTab(TabsManager::TAB_ID_SETTINGS);
+                $this->tabs_manager->activateSubTab(TabsManager::SETTINGS_SUBTAB_ID_MARK_SCHEMA);
 
                 break;
 
@@ -585,10 +587,8 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
                     $this->redirectAfterMissingRead();
                 }
 
-                $this->addHeaderAction();
                 $gui = new SettingsMainGUI(
                     $this->tpl,
-                    $this->tabs_gui,
                     $this->toolbar,
                     $this->ctrl,
                     $this->access,
@@ -608,6 +608,10 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
                     $this->questionrepository
                 );
                 $this->ctrl->forwardCommand($gui);
+                $this->prepareOutput();
+                $this->tabs_manager->activateTab(TabsManager::TAB_ID_SETTINGS);
+                $this->tabs_manager->activateSubTab(TabsManager::SUBTAB_ID_GENERAL_SETTINGS);
+                $this->addHeaderAction();
                 break;
 
             case strtolower(SettingsScoringGUI::class):
@@ -865,7 +869,8 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
                     $this->tabs_gui,
                     $this->lng,
                     $this->help,
-                    $this->qplrequest
+                    $this->qplrequest,
+                    $this->content_style
                 );
                 $this->ctrl->forwardCommand($gui);
                 break;
@@ -1398,13 +1403,13 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
     */
     public function afterSave(ilObject $new_object): void
     {
+        $info = '';
         $new_object->saveToDb();
 
         $test_def_id = $this->getSelectedPersonalDefaultsSettingsFromForm();
         if ($test_def_id !== null
-            && ($defaults = $new_object->getTestDefaults($test_def_id)) !== null
-            && !$new_object->applyDefaults($defaults)) {
-            $this->tpl->setOnScreenMessage('failure', $this->lng->txt('tst_defaults_apply_not_possible'));
+            && ($defaults = $new_object->getTestDefaults($test_def_id)) !== null) {
+            $info = $new_object->applyDefaults($defaults);
         }
 
         $new_object->saveToDb();
@@ -1420,8 +1425,11 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
             );
         }
 
-        // always send a message
-        $this->tpl->setOnScreenMessage('success', $this->lng->txt('object_added'), true);
+        if ($info === '') {
+            $this->tpl->setOnScreenMessage('success', $this->lng->txt('object_added'), true);
+        } else {
+            $this->tpl->setOnScreenMessage('info', $this->lng->txt($info), true);
+        }
         $this->ctrl->setParameter($this, 'ref_id', $new_object->getRefId());
         $this->ctrl->redirectByClass(SettingsMainGUI::class);
     }
@@ -2007,13 +2015,13 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
         }
 
         // do not apply if user datasets exist
-        if ($this->getTestObject()->evalTotalPersons() > 0) {
+        if ($this->getTestObject()->evalTotalPersons() > 0
+            || ($defaults = $this->getTestObject()->getTestDefaults($defaults_id[0])) === null) {
             $this->tpl->setOnScreenMessage('info', $this->lng->txt('tst_defaults_apply_not_possible'));
             $this->defaultsObject();
             return;
         }
 
-        $defaults = $this->getTestObject()->getTestDefaults($defaults_id[0]);
         $default_settings = unserialize(
             $defaults['defaults'],
             ['allowed_classes' => [DateTimeImmutable::class]]
@@ -2068,12 +2076,14 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
             $this->tpl->setOnScreenMessage('info', $info, true);
         }
 
-        if (is_array($defaults) && !$this->getTestObject()->applyDefaults($defaults)) {
-            $this->tpl->setOnScreenMessage('failure', $this->lng->txt('tst_defaults_apply_not_possible'));
-            $this->ctrl->redirect($this, 'defaults');
+        $info = $this->getTestObject()->applyDefaults($defaults);
+        if ($info === '') {
+            $this->tpl->setOnScreenMessage('success', $this->lng->txt('tst_defaults_applied'), true);
+        } else {
+            $this->tpl->setOnScreenMessage('info', $this->lng->txt($info), true);
         }
 
-        $this->tpl->setOnScreenMessage('success', $this->lng->txt('tst_defaults_applied'), true);
+
 
         if ($question_set_type_setting_switched && $old_question_set_config->doesQuestionSetRelatedDataExist()) {
             $old_question_set_config->removeQuestionSetRelatedData();

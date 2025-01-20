@@ -14,14 +14,21 @@
  */
 
 import terser from '@rollup/plugin-terser';
-import copyright from '../../../../../../../scripts/Copyright-Checker/copyright';
-import preserveCopyright from '../../../../../../../scripts/Copyright-Checker/preserveCopyright';
+import copyright from '../../../../../../../scripts/Copyright-Checker/copyright.js';
+import preserveCopyright from '../../../../../../../scripts/Copyright-Checker/preserveCopyright.js';
 
 export default {
   input: './src/input.factory.js',
+  external: [
+    'ilias',
+  ],
   output: {
     file: './dist/input.factory.min.js',
-    format: 'es',
+    format: 'iife',
+    banner: copyright,
+    globals: {
+      ilias: 'il',
+    },
     plugins: [
       terser({
         format: {

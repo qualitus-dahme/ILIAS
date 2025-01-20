@@ -10,17 +10,8 @@ namespace ILIAS\UI\examples\Panel\Secondary\Listing;
  *   Example for rendering a secondary listing panel with all view controls.
  *
  * expected output: >
- *   ILIAS shows a panel titled "Listing Panel Title", an action menu and two item groups titled "Listing Subtitle 1" and
- *   "Listing Subtitle 2". The first item group includes two items which displays action menu symbols (arrows on the right).
- *   The menu opens weblinks to ilias.de and GitHub. The second item group displays one item.
- *   The whole display is more compact in comparison to the standard listing panel.
- *   On the left next to the action menu a pagination is displayed (only with the numbers 1 and 10). The counter jumps to
- *   the next page if you click the <> symbols. As a result the numbers change to 1, 2 and 10. With another click the number
- *   2 changes to 3 etc.
- *   On the left next to the pagination two buttons are displayed. Those help to change the content view (ListView and TileView).
- *   If you click "TileView" the content will displayed as tiles.
- *   On the left next to the content view buttons a sortation button is displayed. It includes three entries (Sort by Alphabet,
- *   Sort by Date, Sort by Location). If you choose one option the page reloads.
+ *   ILIAS shows a standard secondary listing panel. Additionally three view controls (Sortation, Modes and Pagination)
+ *   are displayed on the top right corner of the panel.
  * ---
  */
 function with_all_view_controls(): string

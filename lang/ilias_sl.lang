@@ -5830,8 +5830,6 @@ common#:#tst_history_read#:#View History###26 08 2024 new variable
 common#:#tst_new#:#Ustvari nov test
 common#:#tst_results#:#Rezultati testa
 common#:#tst_run#:#Izvedi
-common#:#tst_statistical_evaluation#:#Statistika
-common#:#tst_statistics#:#Statistika
 common#:#tst_user_not_invited#:#Ne smete se udeležiti tega spletnega testa.
 common#:#tst_warning_test_not_complete#:#Test ni popoln!
 common#:#tutors#:#Mentorji
@@ -14787,7 +14785,6 @@ rbac#:#tst_edit_permission#:#Uredi nastavitve pravic
 rbac#:#tst_read#:#Opravi test
 rbac#:#tst_read_learning_progress#:#Uporabnik lahko vidi učni napredek drugih uporabnikov
 rbac#:#tst_tst_results#:#Dostop do rezultatov testa
-rbac#:#tst_tst_statistics#:#Dostop do statistike testa
 rbac#:#tst_visible#:#Test je viden
 rbac#:#tst_write#:#Sestavi test in uredi nastavitve
 rbac#:#upload_blacklisted_files#:#Bypass blacklist

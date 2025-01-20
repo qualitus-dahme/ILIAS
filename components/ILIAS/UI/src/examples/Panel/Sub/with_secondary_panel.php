@@ -7,7 +7,8 @@ namespace ILIAS\UI\Examples\Panel\Sub;
 /**
  * ---
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   ILIAS shows a standard panel including a sub panel. Additionally a seconday panel is rendered in the right side
+ *   of the sub panel content area.
  * ---
  */
 function with_secondary_panel()

@@ -18,9 +18,8 @@
 
 declare(strict_types=1);
 
-
-use ILIAS\Modules\DataCollection\Fields\Formula\FormulaParser\Math\Functions;
-use ILIAS\Modules\DataCollection\Fields\Formula\FormulaParser\Math\Operators;
+use ILIAS\components\DataCollection\Fields\Formula\FormulaParser\Math\Functions;
+use ILIAS\components\DataCollection\Fields\Formula\FormulaParser\Math\Operators;
 
 class ilDclTable
 {

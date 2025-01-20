@@ -91,8 +91,11 @@ while (count($argv) > 0) {
     }
 
     echo "Resolving Dependency using {$resolution_file}...\n";
-    $disambiguation = require_once($resolution_file);
+    $disambiguation = require($resolution_file);
 
+    foreach ($component_info as $ci) {
+        $ci->resetResolutions();
+    }
     $component_info = $resolver->resolveDependencies($disambiguation, ...$component_info);
 
     echo "Writing bootstrap to artifacts/bootstrap_$name.php\n";

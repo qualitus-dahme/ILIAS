@@ -153,8 +153,6 @@ class ilBookingObjectsTableGUI extends ilTable2GUI
         $ilUser = $this->user;
 
         $data = ilBookingObject::getList($this->pool_id, $this->filter["title"]);
-
-
         // check schedule availability
         if ($this->has_schedule) {
             $now = time();
@@ -413,7 +411,7 @@ class ilBookingObjectsTableGUI extends ilTable2GUI
             //}
         }
 
-        if ($a_set['info_file']) {
+        if ($a_set['obj_info_rid']) {
             $items[] = $this->ui_factory->button()->shy($lng->txt('book_download_info'), $ilCtrl->getLinkTarget($this->parent_obj, 'deliverInfo'));
         }
 

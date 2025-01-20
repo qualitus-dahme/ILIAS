@@ -10,8 +10,7 @@ namespace ILIAS\UI\examples\Link\Standard;
  *   Example for rendering a standard link with tooltips
  *
  * expected output: >
- *   ILIAS shows a link with the title "Goto ILIAS". Clicking the link opens the website www.ilias.de in the same
- *   browser window. Hovering over the link will show you a tooltip with the following lines: "tooltip: ilias" and
+ *   ILIAS shows a link. Hovering over the link will show you a tooltip with the following lines: "tooltip: ilias" and
  *   "tooltip: learning management system".
  * ---
  */

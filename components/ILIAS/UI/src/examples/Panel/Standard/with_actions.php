@@ -10,7 +10,7 @@ namespace ILIAS\UI\examples\Panel\Standard;
  *   Example for rendering a standard panel with actions.
  *
  * expected output: >
- *   ILIAS shows a panel with a large title "Panel Title" and a text "Some Content". It also includes a menu displayed by
+ *   ILIAS shows a base panel but it also includes a menu displayed by
  *   an triangle symbol pointing down. You can open the menu which includes links to ilias.de and GitHub.
  * ---
  */

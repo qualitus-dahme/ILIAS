@@ -432,15 +432,10 @@ class Renderer extends AbstractComponentRenderer
         // maybe render section 1 (permanent link):
         $permanent_url = $component->getPermanentURL();
         if (null !== $permanent_url) {
-            $this->parseAdditionalFooterSectionItems(
-                $template,
-                $default_renderer,
-                'permanent-link',
-                $this->txt('footer_permanent_link'),
-                [
-                    [$this->getUIFactory()->link()->standard($this->txt('perma_link'), (string) $permanent_url), null],
-                ],
-            );
+            $template->setCurrentBlock('with_additional_item');
+            $template->setVariable('ITEM_CONTENT', $this->permanentLink((string) $permanent_url, $default_renderer));
+            $template->parseCurrentBlock();
+            $this->parseFooterSection($template, 'permanent-link', $this->txt('footer_permanent_link'));
         }
 
         // maybe render section 2 (link groups):
@@ -591,5 +586,30 @@ class Renderer extends AbstractComponentRenderer
         $registry->register('assets/js/maincontrols.min.js');
         $registry->register('assets/js/GS.js');
         $registry->register('assets/js/system_info.js');
+        $registry->register('assets/js/footer.min.js');
+    }
+
+    private function permanentLink(string $permanent_url, RendererInterface $renderer): string
+    {
+        $template = $this->getTemplate("tpl.permanent-link.html", true, true);
+
+        $code = function (string $id) use ($permanent_url): string {
+            $id = $this->jsonEncode($id);
+            $perm_url = $this->jsonEncode((string) $permanent_url);
+
+            return "document.getElementById($id).addEventListener('click', e => il.Footer.permalink.copyText($perm_url)
+                        .then(() => il.Footer.permalink.showTooltip(e.target.nextElementSibling, 5000)));";
+        };
+        $button = $this->getUIFactory()->button()->shy($this->txt('copy_perma_link'), '')->withAdditionalOnLoadCode($code);
+
+        $template->setVariable('PERMANENT', $renderer->render($button));
+        $template->setVariable('PERMANENT_TOOLTIP', $this->txt('perma_link_copied'));
+
+        return $template->get();
+    }
+
+    private function jsonEncode($value): string
+    {
+        return json_encode($value, JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_THROW_ON_ERROR);
     }
 }

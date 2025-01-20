@@ -5830,8 +5830,6 @@ common#:#tst_history_read#:#View History###26 08 2024 new variable
 common#:#tst_new#:#Test i Ri
 common#:#tst_results#:#Test Results###10 11 2018 new variable
 common#:#tst_run#:#Run###20 Jun 2005 new variable
-common#:#tst_statistical_evaluation#:#Statistics###20 Jun 2005 new variable
-common#:#tst_statistics#:#Access to Test Statistics###29 11 2006 new variable
 common#:#tst_user_not_invited#:#You are not supposed to take this exam.###06 Aug 2005 new variable
 common#:#tst_warning_test_not_complete#:#The test is not complete!###20 Jun 2005 new variable
 common#:#tutors#:#Tutors###28 10 2009 new variable
@@ -14787,7 +14785,6 @@ rbac#:#tst_edit_permission#:#Ndërro konfigurimet e të drejtave
 rbac#:#tst_read#:#Qasje për Lexim në Test
 rbac#:#tst_read_learning_progress#:#User can view learning progress of other users###26 09 2014 new variable
 rbac#:#tst_tst_results#:#User has access to test results###10 11 2018 new variable
-rbac#:#tst_tst_statistics#:#Access to Test Statistics###18 01 2012 new variable
 rbac#:#tst_visible#:#Testi është i dukshëm
 rbac#:#tst_write#:#Edito Testin
 rbac#:#upload_blacklisted_files#:#Bypass blacklist###07 02 2020 new variable

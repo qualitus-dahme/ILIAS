@@ -194,7 +194,7 @@ class ilTestEvaluationGUI extends ilTestServiceGUI
         );
 
         if (count($attempts_ids_array) > 1) {
-            $results_panel->withViewControls([
+            $results_panel = $results_panel->withViewControls([
                 $this->buildAttemptSwitchingViewControl(
                     $attempts_ids_array,
                     ++$attempt_id

@@ -7,7 +7,13 @@ namespace ILIAS\UI\examples\Layout\Alignment\Horizontal\DynamicallyDistributed;
 /**
  * ---
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   ILIAS shows three colored text-blocks.
+ *   The blocks are differnt in size, according to the lenght of the contained
+ *   text. However, all three together will spread over the entire width of the
+ *   content section.
+ *   When the available width get less (e.g. by shrinking the browser window),
+ *   The first and second block will stay horizontally aligned, while the third
+ *   block is rendered in the next row.
  * ---
  */
 function base()

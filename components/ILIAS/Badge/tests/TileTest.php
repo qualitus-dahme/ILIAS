@@ -62,107 +62,6 @@ class TileTest extends TestCase
         $this->assertInstanceOf(Tile::class, new Tile($container, $parent, $modal, $sign_file, $format_date));
     }
 
-    public function testInDeck(): void
-    {
-        $modal_response = ['foo'];
-        $gui_class_name = 'Im a class.';
-        $signed_file = '/some-signed-file';
-        $remove_text = 'Translated: badge_remove_from_profile';
-        $url = 'Dummy URL';
-        $badge_id = 583;
-        $badge_title = 'Badge title';
-        $badge_image_path = '/file-path';
-        $badge_image_name = 'Dummy image';
-
-        $badge = $this->getMockBuilder(ilBadge::class)->disableOriginalConstructor()->getMock();
-        $assignment = $this->getMockBuilder(ilBadgeAssignment::class)->disableOriginalConstructor()->getMock();
-        $parent_component = $this->getMockBuilder(Component::class)->getMock();
-        $standard_button = $this->getMockBuilder(StandardButton::class)->disableOriginalConstructor()->getMock();
-        $modified_card = $this->getMockBuilder(StandardCard::class)->disableOriginalConstructor()->getMock();
-        $standard_card = $this->getMockBuilder(StandardCard::class)->disableOriginalConstructor()->getMock();
-        $card = $this->getMockBuilder(Card::class)->disableOriginalConstructor()->getMock();
-        $card_page = $this->getMockBuilder(LightboxCardPage::class)->disableOriginalConstructor()->getMock();
-        $lightbox = $this->getMockBuilder(Lightbox::class)->disableOriginalConstructor()->getMock();
-        $ui_modal = $this->getMockBuilder(UIModal::class)->disableOriginalConstructor()->getMock();
-        $button = $this->getMockBuilder(Button::class)->disableOriginalConstructor()->getMock();
-        $image_component = $this->getMockBuilder(ImageComponent::class)->disableOriginalConstructor()->getMock();
-        $image = $this->getMockBuilder(Image::class)->disableOriginalConstructor()->getMock();
-        $factory = $this->getMockBuilder(UI::class)->disableOriginalConstructor()->getMock();
-        $ui = $this->getMockBuilder(UIServices::class)->disableOriginalConstructor()->getMock();
-        $ctrl = $this->getMockBuilder(ilCtrl::class)->disableOriginalConstructor()->getMock();
-        $language = $this->getMockBuilder(ilLanguage::class)->disableOriginalConstructor()->getMock();
-        $resource_storage = $this->getMockBuilder(Services::class)->disableOriginalConstructor()->getMock();
-        $container = $this->getMockBuilder(Container::class)->disableOriginalConstructor()->getMock();
-        $parent = $this->getMockBuilder(BadgeParent::class)->disableOriginalConstructor()->getMock();
-        $modal = $this->getMockBuilder(Modal::class)->disableOriginalConstructor()->getMock();
-        $format_date = fn(int $x): string => 'Dummy';
-        $sign_file = function (string $path) use ($signed_file, $badge_image_path): string {
-            return $signed_file;
-        };
-
-        $badge->method('getParentMeta')->willReturn(['type' => 'crs']);
-        $badge->method('getId')->willReturn($badge_id);
-        $badge->method('getTitle')->willReturn($badge_title);
-        $badge->method('getImagePath')->willReturn($badge_image_path);
-        $badge->method('getImage')->willReturn($badge_image_name);
-
-        $assignment->method('getPosition')->willReturn(8);
-
-        $modified_card->expects(self::once())->method('withSections')->with([$parent_component, $standard_button])->willReturn($modified_card);
-        $modified_card->expects(self::once())->method('withImage')->willReturn($modified_card);
-        $modified_card->expects(self::once())->method('withTitleAction')->willReturn($modified_card);
-
-        $standard_card->expects(self::once())->method('withHiddenSections')->with($modal_response)->willReturn($modified_card);
-
-        $card->expects(self::once())->method('standard')->willReturn($standard_card);
-
-        $ui_modal->expects(self::once())->method('lightbox')->with($card_page)->willReturn($lightbox);
-        $ui_modal->expects(self::once())->method('lightBoxCardPage')->with($standard_card)->willReturn($card_page);
-
-        $button->expects(self::once())->method('standard')->with($remove_text, $url)->willReturn($standard_button);
-
-        $factory->method('card')->willReturn($card);
-        $factory->method('modal')->willReturn($ui_modal);
-        $factory->method('button')->willReturn($button);
-        $factory->method('image')->willReturn($image);
-
-        $ui->method('factory')->willReturn($factory);
-
-        $ctrl->expects(self::once())->method('getLinkTargetByClass')->with($gui_class_name, 'deactivateInCard')->willReturn($url);
-        $expected = [
-            [$gui_class_name, 'badge_id', (string) $badge_id],
-            [$gui_class_name, 'badge_id', '']
-        ];
-        $ctrl->expects(self::exactly(2))
-             ->method('setParameterByClass')
-             ->willReturnCallback(
-                 function ($classname, $param, $value) use (&$expected) {
-                     $this->assertEquals(array_shift($expected), [$classname, $param, $value]);
-                 }
-             );
-
-        $language->method('txt')->willReturnCallback(
-            static fn(string $lang_key) => 'Translated: ' . $lang_key
-        );
-
-        $container->method('ui')->willReturn($ui);
-        $container->method('ctrl')->willReturn($ctrl);
-        $container->method('language')->willReturn($language);
-        $container->method('resourceStorage')->willReturn($resource_storage);
-
-        $parent->expects(self::once())->method('asComponent')->with($badge)->willReturn($parent_component);
-
-        $modal->expects(self::once())->method('components')->willReturn($modal_response);
-
-        $tile = new Tile($container, $parent, $modal, $sign_file, $format_date);
-
-        $badge->setImageRid('23242-43sda3-2131231-csadf2');
-        $card_and_modal = $tile->inDeck($badge, $assignment, $gui_class_name);
-
-        $this->assertSame($modified_card, $card_and_modal['card']);
-        $this->assertSame($lightbox, $card_and_modal['modal']);
-    }
-
     /**
      * @dataProvider provideAsVariants
      */
@@ -211,8 +110,12 @@ class TileTest extends TestCase
     public static function provideAsVariants(): array
     {
         return [
-            'Test asImage.' => ['asImage', [ModalComponent::class, ImageComponent::class]],
-            'Test asTitle' => ['asTitle', [ModalComponent::class, ImageComponent::class, ButtonComponent::class]],
+            'Test asImage' => ['asImage', [ModalComponent::class, ImageComponent::class]],
+            'Test asTitle' => ['asTitle', [ModalComponent::class, ButtonComponent::class]],
+            'Test asTitleWithLeadingImage' => [
+                'asTitleWithLeadingImage',
+                [ModalComponent::class, ImageComponent::class, ButtonComponent::class]
+            ],
         ];
     }
 }

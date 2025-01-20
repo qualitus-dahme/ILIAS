@@ -348,32 +348,55 @@ il.Object = {
   },
 
   saveRating(mark) {
-    il.Util.sendAjaxGetRequestToUrl(`${this.url_rating}&rating=${mark}`, {}, { url_redraw: this.url_redraw_ah }, this.redrawAfterRating);
-  },
-
-  redrawAfterRating(o) {
-    const ah = document.getElementById('il_head_action');
-    if (ah !== null) {
-      il.Util.ajaxReplaceInner(o.argument.url_redraw, 'il_head_action');
-      if (typeof WebuiPopovers !== 'undefined') {
-        WebuiPopovers.hideAll();
-      }
-    }
-  },
-
-  saveRatingFromListGUI(ref_id, hash, mark) {
-    il.Util.sendAjaxGetRequestToUrl(`${this.url_rating}&rating=${mark}&child_ref_id=${ref_id}&cadh= ${hash}`, {}, { url_redraw: this.url_redraw_li, ref_id }, this.redrawAfterRatingFromListGUI);
-  },
-
-  redrawAfterRatingFromListGUI(o) {
-    $(`div[id^=lg_div_${o.argument.ref_id}_pref_]`).each(function () {
-      const id = $(this).attr('id');
-      const parent = id.split('_').pop();
-      il.Util.ajaxReplace(`${o.argument.url_redraw}&child_ref_id=${o.argument.ref_id}&parent_ref_id=${parent}`, id);
+    const urlRedraw = this.url_redraw_ah;
+    // eslint-disable-next-line no-undef
+    $.ajax({
+      url: `${this.url_rating}&rating=${mark}`,
+      type: 'GET',
+      success() {
+        if (typeof WebuiPopovers !== 'undefined') {
+          WebuiPopovers.hideAll();
+        }
+        if (urlRedraw) {
+          // eslint-disable-next-line no-undef
+          $.ajax({
+            url: `${urlRedraw}`,
+            type: 'GET',
+            success(response) {
+              $('#il_head_action').html(response);
+            },
+          });
+        }
+      },
     });
-    if (typeof WebuiPopovers !== 'undefined') {
-      WebuiPopovers.hideAll();
-    }
+  },
+
+  saveRatingFromListGUI(refId, hash, mark) {
+    const urlRedraw = this.url_redraw_li;
+    // eslint-disable-next-line no-undef
+    $.ajax({
+      url: `${this.url_rating}&rating=${mark}&child_ref_id=${refId}&cadh= ${hash}`,
+      type: 'GET',
+      success() {
+        if (typeof WebuiPopovers !== 'undefined') {
+          WebuiPopovers.hideAll();
+        }
+        $(`div[id^=lg_div_${refId}_pref_]`).each(function () {
+          const id = $(this).attr('id');
+          const parent = id.split('_').pop();
+          if (urlRedraw) {
+            // eslint-disable-next-line no-undef
+            $.ajax({
+              url: `${urlRedraw}&child_ref_id=${refId}&parent_ref_id=${parent}`,
+              type: 'GET',
+              success(response) {
+                $(`#${id}`).replaceWith(response);
+              },
+            });
+          }
+        });
+      },
+    });
   },
 };
 

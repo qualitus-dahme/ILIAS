@@ -291,7 +291,7 @@ class ilPCImageMapEditorGUI extends ilImageMapEditorGUI
         bool $a_output_new_area = false,
         string $a_area_type = "",
         string $a_coords = ""
-    ): void {
+    ): ilMediaItem {
         // old for pc media object
         //		$media_object = $this->media_object->getMediaItem("Standard");
         $media_object = $this->content_obj->getMediaObject();
@@ -325,6 +325,8 @@ class ilPCImageMapEditorGUI extends ilImageMapEditorGUI
                 $a_coords
             );
         }
+
+        return $st_item;
     }
 
     public function getAliasXML(): string

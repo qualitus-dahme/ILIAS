@@ -229,6 +229,7 @@ function touchendHandler(event) {
  * @returns {void}
  */
 function stopMoving(target) {
+  const source = draggedElement.parentNode;
   let dropElement = draggedElement;
   if (dragType !== 'move') {
     dropElement = draggedElement.cloneNode(true);
@@ -236,7 +237,7 @@ function stopMoving(target) {
     addDragEventListeners(dropElement);
   }
   target.parentNode.insertBefore(dropElement, target);
-  onChangeHandler(dropElement, target, draggedElement);
+  onChangeHandler(dropElement, target, draggedElement, source);
 }
 
 /**

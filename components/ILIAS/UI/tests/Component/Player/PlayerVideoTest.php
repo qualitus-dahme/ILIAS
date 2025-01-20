@@ -108,11 +108,11 @@ class PlayerVideoTest extends ILIAS_UI_TestBase
         $html = $r->render($video);
         $expected = <<<EOT
 <div class="il-video-container">
-    <video controls="true" class="il-video-player" id="id_1" src="/foo" style="max-width: 100%;" preload="metadata" >
+    <video controls class="il-video-player" id="id_1" src="/foo" style="max-width: 100%;" preload="metadata" >
     </video>
 </div>
 EOT;
-        $this->assertHTMLEquals(
+        $this->assertEquals(
             $this->brutallyTrimHTML($expected),
             $this->brutallyTrimHTML($html)
         );
@@ -129,11 +129,11 @@ EOT;
 
         $expected = <<<EOT
 <div class="il-video-container">
-    <video controls="true" class="il-video-player" id="id_1" src="/foo" style="max-width: 100%;" preload="metadata" poster="bar.jpg">
+    <video controls class="il-video-player" id="id_1" src="/foo" style="max-width: 100%;" preload="metadata" poster="bar.jpg">
     </video>
 </div>
 EOT;
-        $this->assertHTMLEquals(
+        $this->assertEquals(
             $this->brutallyTrimHTML($expected),
             $this->brutallyTrimHTML($html)
         );
@@ -149,12 +149,12 @@ EOT;
         $html = $r->render($video);
         $expected = <<<EOT
 <div class="il-video-container">
-    <video controls="true" class="il-video-player" id="id_1" src="/foo" style="max-width: 100%;" preload="metadata" >
+    <video controls class="il-video-player" id="id_1" src="/foo" style="max-width: 100%;" preload="metadata" >
         <track kind="subtitles" src="subtitles.vtt" srclang="en" />
     </video>
 </div>
 EOT;
-        $this->assertHTMLEquals(
+        $this->assertEquals(
             $this->brutallyTrimHTML($expected),
             $this->brutallyTrimHTML($html)
         );

@@ -5830,8 +5830,6 @@ common#:#tst_history_read#:#View History###26 08 2024 new variable
 common#:#tst_new#:#Inserir blog
 common#:#tst_results#:#Inserir código
 common#:#tst_run#:#Funcionar
-common#:#tst_statistical_evaluation#:#Inserir tabela de dados
-common#:#tst_statistics#:#Inserir lista de ficheiros
 common#:#tst_user_not_invited#:#Inserir imagem interativa
 common#:#tst_warning_test_not_complete#:#O teste não está completo!
 common#:#tutors#:#Inserir fragmento do conteúdo
@@ -14787,7 +14785,6 @@ rbac#:#tst_edit_permission#:#Mudar definições de permissões
 rbac#:#tst_read#:#Leia acesso ao Teste
 rbac#:#tst_read_learning_progress#:#O utilizador pode ver o progresso de aprendizagem dos outros utilizadores
 rbac#:#tst_tst_results#:#O utilizador tem acesso aos resultados do teste
-rbac#:#tst_tst_statistics#:#O utilizador tem acesso às estatísticas de teste
 rbac#:#tst_visible#:#O Teste é visível
 rbac#:#tst_write#:#Editar Teste
 rbac#:#upload_blacklisted_files#:#Bypass blacklist###07 02 2020 new variable

@@ -12,7 +12,6 @@ namespace ILIAS\UI\examples\Breadcrumbs;
  *
  * expected output: >
  *   ILIAS shows two rows of clickable links separated by simple arrows (>).
- *   The second row has one more entry than the first one.
  * ---
  */
 function breadcrumbs()

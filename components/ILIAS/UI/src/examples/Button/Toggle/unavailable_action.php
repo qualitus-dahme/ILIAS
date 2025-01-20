@@ -12,7 +12,7 @@ namespace ILIAS\UI\examples\Button\Toggle;
  *   even if done by keyboard.
  *
  * expected output: >
- *   ILIAS shows a greyed out switch which indicates it's status. Clicking onto the switch won't activate any actions.
+ *   ILIAS shows a greyed out switch. Clicking onto the switch won't activate any actions.
  * ---
  */
 function unavailable_action()

@@ -5832,8 +5832,6 @@ common#:#tst_history_read#:#View History###26 08 2024 new variable
 common#:#tst_new#:#Bài kiểm tra mới
 common#:#tst_results#:#Test Results###10 11 2018 new variable
 common#:#tst_run#:#Chạy
-common#:#tst_statistical_evaluation#:#Thống kê
-common#:#tst_statistics#:#Access to Test Statistics###25 02 2007 new variable
 common#:#tst_user_not_invited#:#Bạn không được mời làm bài này.
 common#:#tst_warning_test_not_complete#:#Chưa hoàn thành bài kiểm tra !
 common#:#tutors#:#Tutors###28 10 2009 new variable
@@ -14789,7 +14787,6 @@ rbac#:#tst_edit_permission#:#Thay đổi thiết lập quyền hạn
 rbac#:#tst_read#:#Đọc bài kiểm tra
 rbac#:#tst_read_learning_progress#:#User can view learning progress of other users###26 09 2014 new variable
 rbac#:#tst_tst_results#:#User has access to test results###10 11 2018 new variable
-rbac#:#tst_tst_statistics#:#Access to Test Statistics###18 01 2012 new variable
 rbac#:#tst_visible#:#Nhìn thấy bài kiểm tra
 rbac#:#tst_write#:#Sửa bài kiểm tra
 rbac#:#upload_blacklisted_files#:#Bypass blacklist###07 02 2020 new variable

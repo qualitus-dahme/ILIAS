@@ -24,10 +24,10 @@
  * other and are bundled into separate files.
  */
 
+import il from 'ilias';
 import TextareaFactory from './Textarea/textarea.factory';
 import MarkdownFactory from './Markdown/markdown.factory';
 
-var il = il || {};
 il.UI = il.UI || {};
 il.UI.Input = il.UI.Input || {};
 

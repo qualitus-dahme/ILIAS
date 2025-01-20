@@ -9,7 +9,12 @@ use ILIAS\DI\Container;
 /**
  * ---
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   ILIAS shows a link "See UI in fullscreen-mode".
+ *   On clicking the link, a new page opens.
+ *   The page has no entries in the mainbar and very(!) little content, but shows
+ *   four icons in the metabar: search, help, notes and user.
+ *   Only the notes-glyph is operable, it shows a little overlay with "some content"
+ *   when clicked.
  * ---
  */
 function base_metabar(): string

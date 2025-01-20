@@ -5830,8 +5830,6 @@ common#:#tst_history_read#:#View History###26 08 2024 new variable
 common#:#tst_new#:#ახალი ტესტი
 common#:#tst_results#:#Test Results###10 11 2018 new variable
 common#:#tst_run#:#მოთხოვნა/სვლა
-common#:#tst_statistical_evaluation#:#სტატისტიკები
-common#:#tst_statistics#:#Statistics
 common#:#tst_user_not_invited#:#თქვენ არ შეგიძლიათ ამ ტესტის აღება
 common#:#tst_warning_test_not_complete#:#ტესტი არ არის სრული
 common#:#tutors#:#მასწავლებლები
@@ -14787,7 +14785,6 @@ rbac#:#tst_edit_permission#:#User can change permission settings
 rbac#:#tst_read#:#User can perform the test
 rbac#:#tst_read_learning_progress#:#User can view learning progress of other users###26 09 2014 new variable
 rbac#:#tst_tst_results#:#User has access to test results###10 11 2018 new variable
-rbac#:#tst_tst_statistics#:#User has access to test statistics
 rbac#:#tst_visible#:#Test is visible
 rbac#:#tst_write#:#User can edit content and settings of test
 rbac#:#upload_blacklisted_files#:#Bypass blacklist###07 02 2020 new variable

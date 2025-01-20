@@ -9,7 +9,15 @@ use ILIAS\DI\Container;
 /**
  * ---
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   ILIAS shows a button "See UI in fullscreen-mode".
+ *   When clicked, a new page is shown with
+ *   - only one entry in the mainbar
+ *   - only the help-glyph in the metabar
+ *   - very(!) little content
+ *   - and a colored frame around the entire page.
+ *   On the top of the frame, there is colored area "Active Mode Info"
+ *   with a close-glyph. Clicking the close-glyph will return to the
+ *   UI documentation.
  * ---
  */
 function modeinfo(): string

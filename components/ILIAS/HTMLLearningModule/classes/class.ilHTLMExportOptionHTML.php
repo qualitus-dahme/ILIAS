@@ -53,7 +53,7 @@ class ilHTLMExportOptionHTML extends ilLegacyExportOption
     public function getLabel(): string
     {
         $this->lng->loadLanguageModule('exp');
-        return $this->lng->txt("exp_html");
+        return $this->lng->txt("exp_format_dropdown-html");
     }
 
     public function onExportOptionSelected(

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -18,6 +16,8 @@ declare(strict_types=1);
  *
  *********************************************************************/
 
+declare(strict_types=1);
+
 namespace ILIAS\Style\Content;
 
 use ILIAS\Filesystem;
@@ -27,16 +27,11 @@ use Generator;
 use ILIAS\FileUpload\DTO\ProcessingStatus;
 use ILIAS\FileUpload\Location;
 use ILIAS\FileUpload\DTO\UploadResult;
-use ILIAS\ResourceStorage\Stakeholder\ResourceStakeholder;
-use ILIAS\Exercise\IRSS\IRSSWrapper;
+use ILIAS\Repository\IRSS\IRSSWrapper;
 
-/**
- * @author Alexander Killing <killing@leifos.de>
- */
 class ImageFileRepo
 {
     protected const DIR_PATH = "sty/sty_%id%/images";
-    protected IRSSWrapper $irss;
 
     protected InternalDataService $factory;
     protected Filesystem\Filesystem $web_files;
@@ -45,14 +40,12 @@ class ImageFileRepo
     public function __construct(
         InternalDataService $factory,
         Filesystem\Filesystem $web_files,
-        FileUpload $upload
+        FileUpload $upload,
+        protected IRSSWrapper $irss
     ) {
         $this->web_files = $web_files;
         $this->factory = $factory;
         $this->upload = $upload;
-        // to do: migrate this on merge
-        $data = new \ILIAS\Exercise\InternalDataService();
-        $this->irss = new IRSSWrapper($data);
     }
 
     // get image directory
@@ -71,7 +64,6 @@ class ImageFileRepo
         int $style_id,
         string $rid
     ): Generator {
-
         if ($rid !== "") {
             $unzip = $this->irss->getContainerZip($rid);
             $uri = $this->irss->stream($rid)->getMetadata("uri");
@@ -90,7 +82,10 @@ class ImageFileRepo
                 }
                 $att = $zip_archive->statName($path);
                 $full_path = $this->irss->getContainerUri($rid, $path);
-                $image_size = getimagesize($full_path);
+                try {
+                    $image_size = getimagesize($full_path);
+                } catch (\Exception $e) {
+                }
                 $width = $image_size[0] ?? 0;
                 $height = $image_size[1] ?? 0;
                 yield $this->factory->image(
@@ -144,29 +139,6 @@ class ImageFileRepo
             }
         }
         return null;
-    }
-
-    /**
-     * @param int $style_id
-     * @throws Filesystem\Exception\IOException
-     * @throws \ILIAS\FileUpload\Exception\IllegalStateException
-     */
-    public function uploadImage(int $style_id): void
-    {
-        $upload = $this->upload;
-        $dir = $this->dir($style_id);
-        if (!$this->web_files->hasDir($dir)) {
-            $this->web_files->createDir($dir);
-        }
-        if ($upload->hasUploads()) {
-            if (!$upload->hasBeenProcessed()) {
-                $upload->process();
-            }
-            $result = array_values($upload->getResults())[0];
-            if ($result->getStatus()->getCode() === ProcessingStatus::OK) {
-                $upload->moveFilesTo($dir, Location::WEB);
-            }
-        }
     }
 
     // delete image

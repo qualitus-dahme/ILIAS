@@ -10,7 +10,10 @@ namespace ILIAS\UI\examples\Input\Container\Form\Standard;
  *   Example showing a Form with required fields. An explaining hint is displayed below the Form.
  *
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   ILIAS shows a form with a mandatory text input.
+ *   Above and below the form, the legend sports an asterisk and the word 'Required'
+ *   The input's label is also marked with an asterisk.
+ *   Submitting the form without giving any value in the field will result in an error.
  * ---
  */
 function with_required_input()
@@ -18,6 +21,7 @@ function with_required_input()
     global $DIC;
     $ui = $DIC->ui()->factory();
     $renderer = $DIC->ui()->renderer();
+    $request = $DIC->http()->request();
 
     $text_input = $ui->input()->field()
         ->text("Required Input", "User needs to fill this field")
@@ -29,6 +33,24 @@ function with_required_input()
         "The Form should show an explaining hint at the bottom"
     );
 
-    $form = $ui->input()->container()->form()->standard("", [$section]);
-    return $renderer->render($form);
+    $DIC->ctrl()->setParameterByClass(
+        'ilsystemstyledocumentationgui',
+        'example_name',
+        'required'
+    );
+    $form_action = $DIC->ctrl()->getFormActionByClass('ilsystemstyledocumentationgui');
+
+    $form = $ui->input()->container()->form()->standard($form_action, [$section]);
+
+    if ($request->getMethod() == "POST"
+            && $request->getQueryParams()['example_name'] == 'required') {
+        $form = $form->withRequest($request);
+        $result = $form->getData();
+    } else {
+        $result = "No result yet.";
+    }
+
+    return
+        "<pre>" . print_r($result, true) . "</pre><br/>" .
+        $renderer->render($form);
 }

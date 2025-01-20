@@ -18,12 +18,11 @@
 
 declare(strict_types=1);
 
-namespace ILIAS\Exercise\IRSS;
+namespace ILIAS\Repository\IRSS;
 
 use ILIAS\ResourceStorage\Identification\ResourceCollectionIdentification;
 use ILIAS\ResourceStorage\Collection\ResourceCollection;
 use ILIAS\ResourceStorage\Stakeholder\ResourceStakeholder;
-use ILIAS\Exercise\InternalDataService;
 use ILIAS\ResourceStorage\Identification\ResourceIdentification;
 use ILIAS\FileUpload\DTO\UploadResult;
 use ILIAS\Filesystem\Stream\FileStream;
@@ -34,23 +33,25 @@ use ILIAS\Filesystem\Util\Archive\Archives;
 use ILIAS\Filesystem\Util\Archive\Unzip;
 use ILIAS\Filesystem\Stream\ZIPStream;
 use ILIAS\ResourceStorage\Resource\StorableResource;
+use ILIAS\components\ResourceStorage\Container\Wrapper\ZipReader;
 
 class IRSSWrapper
 {
-    protected InternalDataService $data;
     protected \ILIAS\FileUpload\FileUpload $upload;
     protected \ILIAS\ResourceStorage\Services $irss;
     protected Archives $archives;
 
     public function __construct(
-        InternalDataService $data
+        protected DataService $data
     ) {
         global $DIC;
 
+        if (!$DIC->isDependencyAvailable("resourceStorage")) {
+            return;
+        }
         $this->irss = $DIC->resourceStorage();
         $this->archives = $DIC->archives();
         $this->upload = $DIC->upload();
-        $this->data = $data;
         $this->archives = $DIC->archives();
     }
 
@@ -85,6 +86,7 @@ class IRSSWrapper
         $this->irss->collection()->remove($id, $stakeholder, true);
     }
 
+    /*
     public function copyResourcesToDir(
         string $rcid,
         ResourceStakeholder $stakeholder,
@@ -98,7 +100,7 @@ class IRSSWrapper
             $stream = $this->irss->consume()->stream($rid);
             $stream->getContents();
         }
-    }
+    }*/
 
     public function importFilesFromLegacyUploadToCollection(
         ResourceCollection $collection,
@@ -382,6 +384,10 @@ class IRSSWrapper
         $this->irss->collection()->store($target_collection);
     }
 
+    //
+    // Container
+    //
+
     public function getStreamOfContainerEntry(
         string $rid,
         string $entry
@@ -394,6 +400,7 @@ class IRSSWrapper
     }
 
     // this currently does not work due to issues in the irss
+    /*
     public function importContainerFromZipUploadResult(
         UploadResult $result,
         ResourceStakeholder $stakeholder
@@ -409,7 +416,7 @@ class IRSSWrapper
             $stakeholder
         );
         return $container_id->serialize();
-    }
+    }*/
 
     /**
      * @return \Generator<Stream>
@@ -422,6 +429,64 @@ class IRSSWrapper
             $this->getResourceIdForIdString($container_id)
         )->getZIP()->getFileStreams() as $stream) {
             yield $stream;
+        }
+    }
+
+    public function getContainerPaths(
+        string $container_id
+    ): \Generator {
+        foreach ($this->irss->consume()->containerZIP(
+            $this->getResourceIdForIdString($container_id)
+        )->getZIP()->getPaths() as $path) {
+            yield $path;
+        }
+    }
+
+    public function getContainerEntries(
+        string $container_id
+    ): array {
+        $reader = new ZipReader(
+            $this->irss->consume()->stream($this->getResourceIdForIdString($container_id))->getStream()
+        );
+        return $reader->getStructure();
+    }
+
+    public function getContainerEntriesOfPath(
+        string $container_id,
+        string $dir_path
+    ): array {
+        $reader = new ZipReader(
+            $this->irss->consume()->stream($this->getResourceIdForIdString($container_id))->getStream()
+        );
+        $entries = [];
+        foreach ($reader->getStructure() as $path => $entry) {
+            $dirname = $entry['dirname'] ?? '';
+            if ($dirname !== $dir_path) {
+                continue;
+            }
+            $entries[$path] = $entry;
+        }
+        return $entries;
+    }
+
+    public function addContainerDirToTargetContainer(
+        string $source_container_id,
+        string $target_container_id,
+        string $source_dir_path = "",
+        string $target_dir_path = ""
+    ): void {
+        $reader = new ZipReader(
+            $this->irss->consume()->stream($this->getResourceIdForIdString($source_container_id))->getStream()
+        );
+        $entries = [];
+        foreach ($reader->getStructure() as $path => $entry) {
+            if (str_starts_with($entry['dirname'], $source_dir_path) && !$entry['is_dir']) {
+                $this->addStreamToContainer(
+                    $target_container_id,
+                    $this->getStreamOfContainerEntry($source_container_id, $path),
+                    $target_dir_path . "/" . substr($path, strlen($source_dir_path))
+                );
+            }
         }
     }
 
@@ -513,6 +578,36 @@ class IRSSWrapper
         fclose($stream);
     }
 
+    public function addDirectoryToContainer(
+        string $rid,
+        string $source_dir,
+        string $target_path = ""
+    ): void {
+        $source_dir = realpath($source_dir);
+        $directoryIterator = new \RecursiveDirectoryIterator(
+            $source_dir,
+            \FilesystemIterator::SKIP_DOTS
+        );
+
+        $recursiveIterator = new \RecursiveIteratorIterator(
+            $directoryIterator,
+            \RecursiveIteratorIterator::LEAVES_ONLY
+        );
+
+        foreach ($recursiveIterator as $fileInfo) {
+            if ($fileInfo->isFile()) {
+                $fullPath = $fileInfo->getPathname();
+                $relativePath = substr($fullPath, strlen($source_dir) + 1);
+                $files[] = $relativePath;
+                $this->addLocalFileToContainer(
+                    $rid,
+                    $fullPath,
+                    $target_path . "/" . $relativePath
+                );
+            }
+        }
+    }
+
     public function addUploadToContainer(
         string $rid,
         UploadResult $result
@@ -535,6 +630,8 @@ class IRSSWrapper
             $path,
             8 * 60
         )->getURI();
+        // temp fixes wrong slash escaping, maybe due to 24805bcaabb33b1c5c82609dbe6791c55577c6a4
+        $uri = str_replace("%2F", "/", (string) $uri);
         return (string) $uri;
     }
 
@@ -602,21 +699,6 @@ class IRSSWrapper
         }
     }
 
-    public function getContainerSrc(
-        string $rid,
-        string $path
-    ): string {
-        if ($rid !== "") {
-            $uri = $this->irss->consume()->containerURI(
-                $this->getResourceIdForIdString($rid),
-                $path,
-                8 * 60
-            )->getURI();
-            return (string) $uri;
-        }
-        return "";
-    }
-
     public function addStreamToContainer(
         string $rid,
         FileStream $stream,
@@ -632,4 +714,27 @@ class IRSSWrapper
             );
         }
     }
+
+    public function removePathFromContainer(
+        string $rid,
+        string $path
+    ): void {
+        $id = $this->getResourceIdForIdString($rid);
+        if (!is_null($id)) {
+            $this->irss->manageContainer()->removePathInsideContainer($id, $path);
+        }
+    }
+
+    public function renameContainer(
+        string $rid,
+        string $title
+    ): void {
+        $id = $this->getResourceIdForIdString($rid);
+        $rev = $this->irss->manageContainer()->getCurrentRevision($id);
+        $info = $rev->getInformation();
+        $info->setTitle($title);
+        $rev->setInformation($info);
+        $this->irss->manageContainer()->updateRevision($rev);
+    }
+
 }

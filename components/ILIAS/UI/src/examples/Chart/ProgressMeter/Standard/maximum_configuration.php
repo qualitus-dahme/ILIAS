@@ -10,7 +10,7 @@ namespace ILIAS\UI\examples\Chart\ProgressMeter\Standard;
  *   Example for rendering a standard Progress Meter with maximum configuration
  *
  * expected output: >
- *   ILIAS shows a rounded progress meter with two bars. The outer bar is colored red and takes up three quarter of the
+ *   ILIAS shows a base progress meter with two bars. The outer bar is colored red and takes up three quarter of the
  *   progress meter. The inner bar is colored grey and takes up half of the progress meter. A triangle marks the needed value
  *   at "80%". The information "Your Score 75%" and "80% Required Score" are positioned within the progress meter.
  *

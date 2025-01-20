@@ -124,16 +124,17 @@ abstract class ilXmlExporter
         string $a_target_release
     ): array {
         $svs = $this->getValidSchemaVersions($a_entity);
-        $found = false;
         $rsv = [];
         foreach ($svs as $k => $sv) {
-            if (!$found) {
-                if (version_compare($sv["min"], ILIAS_VERSION_NUMERIC, "<=")
-                    && ($sv["max"] == "" || version_compare($sv["max"], ILIAS_VERSION_NUMERIC, ">="))) {
-                    $rsv = $sv;
-                    $rsv["schema_version"] = $k;
-                    $found = true;
-                }
+            $min_version = $sv["min"] ?? "";
+            $max_version = $sv["max"] ?? "";
+            if (
+                ($min_version === "" || version_compare($min_version, ILIAS_VERSION_NUMERIC, "<=")) &&
+                ($max_version === "" || version_compare($max_version, ILIAS_VERSION_NUMERIC, ">="))
+            ) {
+                $rsv = $sv;
+                $rsv["schema_version"] = $k;
+                break;
             }
         }
         return $rsv;

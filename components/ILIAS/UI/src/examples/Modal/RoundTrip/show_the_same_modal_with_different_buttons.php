@@ -11,8 +11,7 @@ namespace ILIAS\UI\examples\Modal\RoundTrip;
  *
  * expected output: >
  *   ILIAS shows three buttons with different titles. After clicking one of the first two buttonns a modal with primary
- *   and secondary buttons is opened. Both buttons do not have any functions. The modal can be closed by hitting the ESC
- *   key or clicking the "Close" button or the "X" glyph. A click onto the third button does not activate any actions.
+ *   and secondary buttons is opened. Both buttons do not have any functions.
  * ---
  */
 function show_the_same_modal_with_different_buttons()

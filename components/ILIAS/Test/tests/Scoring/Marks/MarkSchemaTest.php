@@ -47,7 +47,7 @@ class MarkSchemaTest extends ilTestBaseTestCase
         $expected = is_array([]);
 
         // Act
-        $actual = is_array($this->ass_mark_schema->mark_steps);
+        $actual = is_array($this->ass_mark_schema->getMarkSteps());
 
         // Assert
         $this->assertEquals(
@@ -75,7 +75,7 @@ class MarkSchemaTest extends ilTestBaseTestCase
 
         // Act
         $mark_schema = $this->ass_mark_schema->createSimpleSchema();
-        $marks = $mark_schema->mark_steps;
+        $marks = $mark_schema->getMarkSteps();
 
         $failed = $marks[0];
         $passed = $marks[1];
@@ -151,7 +151,7 @@ class MarkSchemaTest extends ilTestBaseTestCase
             $passed_passed
         );
 
-        $marks = $mark_schema->mark_steps;
+        $marks = $mark_schema->getMarkSteps();
 
         $failed = $marks[0];
         $passed = $marks[1];

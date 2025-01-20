@@ -22,7 +22,7 @@ use ILIAS\Setup;
 use ILIAS\Refinery;
 use ILIAS\Setup\Objective;
 
-class ilHTLMSetupAgent implements Setup\Agent
+final class ilHTLMSetupAgent implements Setup\Agent
 {
     use Setup\Agent\HasNoNamedObjective;
 

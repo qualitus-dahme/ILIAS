@@ -35,7 +35,7 @@ class Statistics
         $this->stat_data = array_values($median_array);
         sort($this->stat_data);
 
-        if (($median_user_id = array_search(($rank = $this->rankMedian()), $median_array)) !== false) {
+        if (($median_user_id = array_search($this->median(), $median_array)) !== false) {
             $this->median_user = $eval_data->getParticipant($median_user_id);
         }
     }

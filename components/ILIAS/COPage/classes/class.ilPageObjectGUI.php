@@ -1355,7 +1355,8 @@ class ilPageObjectGUI
                 true,
                 $link_xml . $template_xml . $this->getComponentPluginsXML(),
                 false,
-                $this->getStyleId()
+                $this->getStyleId(),
+                $this->getOutputMode() === "offline"
             );
         }
 
@@ -1724,6 +1725,8 @@ class ilPageObjectGUI
         $ctrl = $DIC->ctrl();
         $ui = $DIC->ui();
 
+        $ui->renderer()->renderAsync($ui->factory()->legacy(""));
+
         $style_service = $DIC->contentStyle()->internal();
         $style_access_manager = $style_service->domain()->access(
             0,
@@ -2034,7 +2037,7 @@ class ilPageObjectGUI
             $btpl->setCurrentBlock("par_edit");
             $btpl->setVariable("TXT_PAR_FORMAT", $lng->txt("cont_par_format"));
 
-            $btpl->setVariable("STYLE_SELECTOR", $ui->renderer()->render($dd));
+            $btpl->setVariable("STYLE_SELECTOR", $ui->renderer()->renderAsync($dd));
 
             $btpl->parseCurrentBlock();
         }
@@ -2043,7 +2046,7 @@ class ilPageObjectGUI
         $sel = new \SectionStyleSelector($ui_wrapper, $a_style_id);
         $dd = $sel->getStyleSelector(" ", $type = "par-action", $action = "sec.class", $attr = "class", true);
         $btpl->setVariable("TXT_BLOCK", $lng->txt("cont_sur_block_format"));
-        $btpl->setVariable("BLOCK_STYLE_SELECTOR", $ui->renderer()->render($dd));
+        $btpl->setVariable("BLOCK_STYLE_SELECTOR", $ui->renderer()->renderAsync($dd));
 
 
         $btpl->setVariable("TINY_HEADER", $lng->txt("cont_text_editing"));

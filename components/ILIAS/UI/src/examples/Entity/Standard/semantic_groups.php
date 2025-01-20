@@ -7,7 +7,16 @@ namespace ILIAS\UI\Examples\Entity\Standard;
 /**
  * ---
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   This example shows/identifies the semantic groups of entites;
+ *   from top to bottom, left to right, the order of groups is this:
+ *   - blocking conditions (left) and actions in a dropdown (right)
+ *   - secondary indentifier (it indents all the latter) and featured properties
+ *   - primary identifier
+ *   - personal status
+ *   - main details
+ *   - availability
+ *   - details
+ *   - reactions (the tag) and prioritized reactions (the 'like' glyph)
  * ---
  */
 function semantic_groups()

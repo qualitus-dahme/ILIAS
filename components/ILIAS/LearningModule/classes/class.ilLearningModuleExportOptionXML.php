@@ -63,7 +63,7 @@ class ilLearningModuleExportOptionXML extends ilLegacyExportOption
     public function getLabel(): string
     {
         $this->lng->loadLanguageModule('exp');
-        return $this->lng->txt("exp_xml");
+        return $this->lng->txt("exp_format_dropdown-xml");
     }
 
     public function onExportOptionSelected(\ILIAS\Export\ExportHandler\I\Consumer\Context\HandlerInterface $context): void

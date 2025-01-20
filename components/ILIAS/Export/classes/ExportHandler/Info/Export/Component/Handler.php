@@ -58,8 +58,9 @@ class Handler implements ilExportHandlerExportComponentInfoInterface
         $this->sv['xsd_file'] ??= '';
     }
 
-    public function withExportTarget(ilExportHandlerTargetInterface $export_target): ilExportHandlerExportComponentInfoInterface
-    {
+    public function withExportTarget(
+        ilExportHandlerTargetInterface $export_target
+    ): ilExportHandlerExportComponentInfoInterface {
         $clone = clone $this;
         $clone->export_target = $export_target;
         $clone->init();

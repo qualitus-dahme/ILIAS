@@ -62,8 +62,7 @@ class assSingleChoiceGUI extends assQuestionGUI implements ilGuiQuestionScoringA
      */
     protected function writePostData(bool $always = false): int
     {
-        $hasErrors = (!$always) ? $this->editQuestion(true) : false;
-        if (!$hasErrors) {
+        if ($always || !$this->editQuestion(true)) {
             $this->writeQuestionGenericPostData();
             $this->writeQuestionSpecificPostData(new ilPropertyFormGUI());
             $this->writeAnswerSpecificPostData(new ilPropertyFormGUI());
@@ -116,8 +115,8 @@ class assSingleChoiceGUI extends assQuestionGUI implements ilGuiQuestionScoringA
         } else {
             $form->setMultipart(false);
         }
-        $form->setTableWidth("100%");
-        $form->setId("asssinglechoice");
+        $form->setTableWidth('100%');
+        $form->setId('asssinglechoice');
 
         $this->addBasicQuestionFormProperties($form);
         $this->populateQuestionSpecificFormPart($form, $is_singleline);
@@ -132,35 +131,21 @@ class assSingleChoiceGUI extends assQuestionGUI implements ilGuiQuestionScoringA
         if ($save) {
             foreach ($this->request_data_collector->getParsedBody() as $key => $value) {
                 $item = $form->getItemByPostVar($key);
-                if ($item !== null) {
-                    switch (get_class($item)) {
-                        case 'ilDurationInputGUI':
-                            $item->setHours($value['hh']);
-                            $item->setMinutes($value['mm']);
-                            $item->setSeconds($value['ss']);
-                            break;
-                        default:
-                            $item->setValue($value);
-                    }
+                if ($item === null) {
+                    continue;
+                }
+                switch (get_class($item)) {
+                    case 'ilDurationInputGUI':
+                        $item->setHours($value['hh']);
+                        $item->setMinutes($value['mm']);
+                        $item->setSeconds($value['ss']);
+                        break;
+                    default:
+                        $item->setValue($value);
                 }
             }
 
             $errors = !$form->checkInput();
-            foreach ($this->request_data_collector->getParsedBody() as $key => $value) {
-                $item = $form->getItemByPostVar($key);
-                if ($item !== null) {
-                    switch (get_class($item)) {
-                        case 'ilDurationInputGUI':
-                            $item->setHours($value['hh']);
-                            $item->setMinutes($value['mm']);
-                            $item->setSeconds($value['ss']);
-                            break;
-                        default:
-                            $item->setValue($value);
-                    }
-                }
-            } // again, because checkInput now performs the whole stripSlashes handling and we need this if we don't want to have duplication of backslashes
-
             if ($errors) {
                 $checkonly = false;
             }
@@ -192,7 +177,7 @@ class assSingleChoiceGUI extends assQuestionGUI implements ilGuiQuestionScoringA
     {
         $this->writePostData(true);
         $position = key($this->request_data_collector->raw('cmd')['addchoice']);
-        $this->object->addAnswer("", 0, $position + 1);
+        $this->object->addAnswer('', 0, $position + 1);
         $this->editQuestion();
     }
 
@@ -264,11 +249,11 @@ class assSingleChoiceGUI extends assQuestionGUI implements ilGuiQuestionScoringA
     ): ?string {
         $user_solution = '';
         foreach ($user_solutions as $idx => $solution_value) {
-            $user_solution = $solution_value["value1"];
+            $user_solution = $solution_value['value1'];
         }
 
-        $template = new ilTemplate("tpl.il_as_qpl_mc_sr_output_solution.html", true, true, "components/ILIAS/TestQuestionPool");
-        $solutiontemplate = new ilTemplate("tpl.il_as_tst_solution_output.html", true, true, "components/ILIAS/TestQuestionPool");
+        $template = new ilTemplate('tpl.il_as_qpl_mc_sr_output_solution.html', true, true, 'components/ILIAS/TestQuestionPool');
+        $solutiontemplate = new ilTemplate('tpl.il_as_tst_solution_output.html', true, true, 'components/ILIAS/TestQuestionPool');
 
         $keys = $this->getChoiceKeys();
         foreach ($keys as $answer_id) {
@@ -284,41 +269,41 @@ class assSingleChoiceGUI extends assQuestionGUI implements ilGuiQuestionScoringA
                             $correctness_icon = $this->generateCorrectnessIconsForCorrectness(self::CORRECTNESS_MOSTLY_OK);
                         }
                     }
-                    $template->setCurrentBlock("icon_ok");
-                    $template->setVariable("ICON_OK", $correctness_icon);
+                    $template->setCurrentBlock('icon_ok');
+                    $template->setVariable('ICON_OK', $correctness_icon);
                     $template->parseCurrentBlock();
                 }
             }
             if ($answer->hasImage()) {
-                $template->setCurrentBlock("answer_image");
+                $template->setCurrentBlock('answer_image');
                 if ($this->object->getThumbSize()) {
-                    $template->setVariable("ANSWER_IMAGE_URL", $this->object->getImagePathWeb() . $this->object->getThumbPrefix() . $answer->getImage());
+                    $template->setVariable('ANSWER_IMAGE_URL', $this->object->getImagePathWeb() . $this->object->getThumbPrefix() . $answer->getImage());
                 } else {
-                    $template->setVariable("ANSWER_IMAGE_URL", $this->object->getImagePathWeb() . $answer->getImage());
+                    $template->setVariable('ANSWER_IMAGE_URL', $this->object->getImagePathWeb() . $answer->getImage());
                 }
                 $alt = $answer->getImage();
                 if (strlen($answer->getAnswertext())) {
                     $alt = $answer->getAnswertext();
                 }
-                $alt = preg_replace("/<[^>]*?>/", "", $alt);
-                $template->setVariable("ANSWER_IMAGE_ALT", ilLegacyFormElementsUtil::prepareFormOutput($alt));
-                $template->setVariable("ANSWER_IMAGE_TITLE", ilLegacyFormElementsUtil::prepareFormOutput($alt));
+                $alt = preg_replace('/<[^>]*?>/', '', $alt);
+                $template->setVariable('ANSWER_IMAGE_ALT', ilLegacyFormElementsUtil::prepareFormOutput($alt));
+                $template->setVariable('ANSWER_IMAGE_TITLE', ilLegacyFormElementsUtil::prepareFormOutput($alt));
                 $template->parseCurrentBlock();
             }
 
             if (($show_feedback || !$this->isTestPresentationContext()) && $show_inline_feedback) {
                 $this->populateInlineFeedback($template, $answer_id, $user_solution);
             }
-            $template->setCurrentBlock("answer_row");
-            $template->setVariable("ANSWER_TEXT", ilLegacyFormElementsUtil::prepareTextareaOutput($answer->getAnswertext(), true));
+            $template->setCurrentBlock('answer_row');
+            $template->setVariable('ANSWER_TEXT', ilLegacyFormElementsUtil::prepareTextareaOutput($answer->getAnswertext(), true));
 
             if ($this->renderPurposeSupportsFormHtml() || $this->isRenderPurposePrintPdf()) {
                 if (strcmp($user_solution, $answer_id) == 0) {
-                    $template->setVariable("SOLUTION_IMAGE", ilUtil::getHtmlPath(ilUtil::getImagePath("object/radiobutton_checked.png")));
-                    $template->setVariable("SOLUTION_ALT", $this->lng->txt("checked"));
+                    $template->setVariable('SOLUTION_IMAGE', ilUtil::getHtmlPath(ilUtil::getImagePath('object/radiobutton_checked.png')));
+                    $template->setVariable('SOLUTION_ALT', $this->lng->txt('checked'));
                 } else {
-                    $template->setVariable("SOLUTION_IMAGE", ilUtil::getHtmlPath(ilUtil::getImagePath("object/radiobutton_unchecked.png")));
-                    $template->setVariable("SOLUTION_ALT", $this->lng->txt("unchecked"));
+                    $template->setVariable('SOLUTION_IMAGE', ilUtil::getHtmlPath(ilUtil::getImagePath('object/radiobutton_unchecked.png')));
+                    $template->setVariable('SOLUTION_ALT', $this->lng->txt('unchecked'));
                 }
             } else {
                 $template->setVariable('QID', $this->object->getId());
@@ -331,8 +316,8 @@ class assSingleChoiceGUI extends assQuestionGUI implements ilGuiQuestionScoringA
 
             if ($result_output) {
                 $points = $this->object->answers[$answer_id]->getPoints();
-                $resulttext = ($points == 1) ? "(%s " . $this->lng->txt("point") . ")" : "(%s " . $this->lng->txt("points") . ")";
-                $template->setVariable("RESULT_OUTPUT", sprintf($resulttext, $points));
+                $resulttext = ($points == 1) ? "(%s {$this->lng->txt('point')})" : "(%s {$this->lng->txt('points')})";
+                $template->setVariable('RESULT_OUTPUT', sprintf($resulttext, $points));
             }
             $template->parseCurrentBlock();
         }
@@ -342,20 +327,20 @@ class assSingleChoiceGUI extends assQuestionGUI implements ilGuiQuestionScoringA
             $questiontext .= $this->buildFocusAnchorHtml();
         }
         if ($show_question_text === true) {
-            $template->setVariable("QUESTIONTEXT", ilLegacyFormElementsUtil::prepareTextareaOutput($questiontext, true));
+            $template->setVariable('QUESTIONTEXT', ilLegacyFormElementsUtil::prepareTextareaOutput($questiontext, true));
         }
         $questionoutput = $template->get();
-        $feedback = ($show_feedback && !$this->isTestPresentationContext()) ? $this->getGenericFeedbackOutput((int) $active_id, $pass) : "";
+        $feedback = ($show_feedback && !$this->isTestPresentationContext()) ? $this->getGenericFeedbackOutput((int) $active_id, $pass) : '';
         if ($feedback !== '') {
             $cssClass = (
                 $this->hasCorrectSolution($active_id, $pass) ?
                 ilAssQuestionFeedback::CSS_CLASS_FEEDBACK_CORRECT : ilAssQuestionFeedback::CSS_CLASS_FEEDBACK_WRONG
             );
 
-            $solutiontemplate->setVariable("ILC_FB_CSS_CLASS", $cssClass);
-            $solutiontemplate->setVariable("FEEDBACK", ilLegacyFormElementsUtil::prepareTextareaOutput($feedback, true));
+            $solutiontemplate->setVariable('ILC_FB_CSS_CLASS', $cssClass);
+            $solutiontemplate->setVariable('FEEDBACK', ilLegacyFormElementsUtil::prepareTextareaOutput($feedback, true));
         }
-        $solutiontemplate->setVariable("SOLUTION_OUTPUT", $questionoutput);
+        $solutiontemplate->setVariable('SOLUTION_OUTPUT', $questionoutput);
 
         $solutionoutput = $solutiontemplate->get();
 
@@ -372,52 +357,52 @@ class assSingleChoiceGUI extends assQuestionGUI implements ilGuiQuestionScoringA
     ): string {
         $keys = $this->getChoiceKeys();
 
-        $template = new ilTemplate("tpl.il_as_qpl_mc_sr_output.html", true, true, "components/ILIAS/TestQuestionPool");
+        $template = new ilTemplate('tpl.il_as_qpl_mc_sr_output.html', true, true, 'components/ILIAS/TestQuestionPool');
         foreach ($keys as $answer_id) {
             $answer = $this->object->answers[$answer_id];
             if ($answer->hasImage()) {
                 if ($this->object->getThumbSize()) {
-                    $template->setCurrentBlock("preview");
-                    $template->setVariable("URL_PREVIEW", $this->object->getImagePathWeb() . $answer->getImage());
-                    $template->setVariable("TEXT_PREVIEW", $this->lng->txt('preview'));
-                    $template->setVariable("IMG_PREVIEW", ilUtil::getImagePath('media/enlarge.svg'));
-                    $template->setVariable("ANSWER_IMAGE_URL", $this->object->getImagePathWeb() . $this->object->getThumbPrefix() . $answer->getImage());
+                    $template->setCurrentBlock('preview');
+                    $template->setVariable('URL_PREVIEW', $this->object->getImagePathWeb() . $answer->getImage());
+                    $template->setVariable('TEXT_PREVIEW', $this->lng->txt('preview'));
+                    $template->setVariable('IMG_PREVIEW', ilUtil::getImagePath('media/enlarge.svg'));
+                    $template->setVariable('ANSWER_IMAGE_URL', $this->object->getImagePathWeb() . $this->object->getThumbPrefix() . $answer->getImage());
                     list($width, $height, $type, $attr) = getimagesize($this->object->getImagePath() . $answer->getImage());
                     $alt = $answer->getImage();
                     if (strlen($answer->getAnswertext())) {
                         $alt = $answer->getAnswertext();
                     }
-                    $alt = preg_replace("/<[^>]*?>/", "", $alt);
-                    $template->setVariable("ANSWER_IMAGE_ALT", ilLegacyFormElementsUtil::prepareFormOutput($alt));
-                    $template->setVariable("ANSWER_IMAGE_TITLE", ilLegacyFormElementsUtil::prepareFormOutput($alt));
+                    $alt = preg_replace('/<[^>]*?>/', '', $alt);
+                    $template->setVariable('ANSWER_IMAGE_ALT', ilLegacyFormElementsUtil::prepareFormOutput($alt));
+                    $template->setVariable('ANSWER_IMAGE_TITLE', ilLegacyFormElementsUtil::prepareFormOutput($alt));
                     $template->parseCurrentBlock();
                 } else {
-                    $template->setCurrentBlock("answer_image");
-                    $template->setVariable("ANSWER_IMAGE_URL", $this->object->getImagePathWeb() . $answer->getImage());
+                    $template->setCurrentBlock('answer_image');
+                    $template->setVariable('ANSWER_IMAGE_URL', $this->object->getImagePathWeb() . $answer->getImage());
                     list($width, $height, $type, $attr) = getimagesize($this->object->getImagePath() . $answer->getImage());
                     $alt = $answer->getImage();
                     if (strlen($answer->getAnswertext())) {
                         $alt = $answer->getAnswertext();
                     }
-                    $alt = preg_replace("/<[^>]*?>/", "", $alt);
-                    $template->setVariable("ATTR", $attr);
-                    $template->setVariable("ANSWER_IMAGE_ALT", ilLegacyFormElementsUtil::prepareFormOutput($alt));
-                    $template->setVariable("ANSWER_IMAGE_TITLE", ilLegacyFormElementsUtil::prepareFormOutput($alt));
+                    $alt = preg_replace('/<[^>]*?>/', '', $alt);
+                    $template->setVariable('ATTR', $attr);
+                    $template->setVariable('ANSWER_IMAGE_ALT', ilLegacyFormElementsUtil::prepareFormOutput($alt));
+                    $template->setVariable('ANSWER_IMAGE_TITLE', ilLegacyFormElementsUtil::prepareFormOutput($alt));
                     $template->parseCurrentBlock();
                 }
             }
             if ($show_inline_feedback && is_object($this->getPreviewSession())) {
                 $this->populateInlineFeedback($template, $answer_id, $this->getPreviewSession()->getParticipantsSolution());
             }
-            $template->setCurrentBlock("answer_row");
-            $template->setVariable("QID", $this->object->getId() . 'ID');
-            $template->setVariable("ANSWER_ID", $answer_id);
-            $template->setVariable("ANSWER_TEXT", ilLegacyFormElementsUtil::prepareTextareaOutput($answer->getAnswertext(), true));
+            $template->setCurrentBlock('answer_row');
+            $template->setVariable('QID', $this->object->getId() . 'ID');
+            $template->setVariable('ANSWER_ID', $answer_id);
+            $template->setVariable('ANSWER_TEXT', ilLegacyFormElementsUtil::prepareTextareaOutput($answer->getAnswertext(), true));
 
             if (is_object($this->getPreviewSession())) {
                 $user_solution = $this->getPreviewSession()->getParticipantsSolution();
                 if ($user_solution === (string) $answer_id) {
-                    $template->setVariable("CHECKED_ANSWER", " checked=\"checked\"");
+                    $template->setVariable('CHECKED_ANSWER', ' checked="checked"');
                 }
             }
 
@@ -427,7 +412,7 @@ class assSingleChoiceGUI extends assQuestionGUI implements ilGuiQuestionScoringA
         if ($show_inline_feedback && $this->hasInlineFeedback()) {
             $questiontext .= $this->buildFocusAnchorHtml();
         }
-        $template->setVariable("QUESTIONTEXT", ilLegacyFormElementsUtil::prepareTextareaOutput($questiontext, true));
+        $template->setVariable('QUESTIONTEXT', ilLegacyFormElementsUtil::prepareTextareaOutput($questiontext, true));
         $questionoutput = $template->get();
         if (!$show_question_only) {
             // get page object output
@@ -445,94 +430,62 @@ class assSingleChoiceGUI extends assQuestionGUI implements ilGuiQuestionScoringA
     ): string {
         $keys = $this->getChoiceKeys();
 
-        // get the solution of the user for the active pass or from the last pass if allowed
-        $user_solution = "";
-        if ($active_id) {
+        $user_solution = '';
+        if ($active_id !== 0) {
             $solutions = $this->object->getTestOutputSolutions($active_id, $pass);
-            foreach ($solutions as $idx => $solution_value) {
-                $user_solution = $solution_value["value1"];
+            foreach ($solutions as $solution_value) {
+                $user_solution = $solution_value['value1'];
             }
         }
 
-        $template = new ilTemplate("tpl.il_as_qpl_mc_sr_output.html", true, true, "components/ILIAS/TestQuestionPool");
+        $template = new ilTemplate('tpl.il_as_qpl_mc_sr_output.html', true, true, 'components/ILIAS/TestQuestionPool');
         foreach ($keys as $answer_id) {
             $answer = $this->object->answers[$answer_id];
             if ($answer->hasImage()) {
                 if ($this->object->getThumbSize()) {
-                    $template->setCurrentBlock("preview");
-                    $template->setVariable("URL_PREVIEW", $this->object->getImagePathWeb() . $answer->getImage());
-                    $template->setVariable("TEXT_PREVIEW", $this->lng->txt('preview'));
-                    $template->setVariable("IMG_PREVIEW", ilUtil::getImagePath('media/enlarge.svg'));
-                    $template->setVariable("ANSWER_IMAGE_URL", $this->object->getImagePathWeb() . $this->object->getThumbPrefix() . $answer->getImage());
+                    $template->setCurrentBlock('preview');
+                    $template->setVariable('URL_PREVIEW', $this->object->getImagePathWeb() . $answer->getImage());
+                    $template->setVariable('TEXT_PREVIEW', $this->lng->txt('preview'));
+                    $template->setVariable('IMG_PREVIEW', ilUtil::getImagePath('media/enlarge.svg'));
+                    $template->setVariable('ANSWER_IMAGE_URL', $this->object->getImagePathWeb() . $this->object->getThumbPrefix() . $answer->getImage());
                     list($width, $height, $type, $attr) = getimagesize($this->object->getImagePath() . $answer->getImage());
                     $alt = $answer->getImage();
                     if (strlen($answer->getAnswertext())) {
                         $alt = $answer->getAnswertext();
                     }
-                    $alt = preg_replace("/<[^>]*?>/", "", $alt);
-                    $template->setVariable("ANSWER_IMAGE_ALT", ilLegacyFormElementsUtil::prepareFormOutput($alt));
-                    $template->setVariable("ANSWER_IMAGE_TITLE", ilLegacyFormElementsUtil::prepareFormOutput($alt));
+                    $alt = preg_replace('/<[^>]*?>/', '', $alt);
+                    $template->setVariable('ANSWER_IMAGE_ALT', ilLegacyFormElementsUtil::prepareFormOutput($alt));
+                    $template->setVariable('ANSWER_IMAGE_TITLE', ilLegacyFormElementsUtil::prepareFormOutput($alt));
                     $template->parseCurrentBlock();
                 } else {
-                    $template->setCurrentBlock("answer_image");
-                    $template->setVariable("ANSWER_IMAGE_URL", $this->object->getImagePathWeb() . $answer->getImage());
+                    $template->setCurrentBlock('answer_image');
+                    $template->setVariable('ANSWER_IMAGE_URL', $this->object->getImagePathWeb() . $answer->getImage());
                     list($width, $height, $type, $attr) = getimagesize($this->object->getImagePath() . $answer->getImage());
                     $alt = $answer->getImage();
                     if (strlen($answer->getAnswertext())) {
                         $alt = $answer->getAnswertext();
                     }
-                    $alt = preg_replace("/<[^>]*?>/", "", $alt);
-                    $template->setVariable("ATTR", $attr);
-                    $template->setVariable("ANSWER_IMAGE_ALT", ilLegacyFormElementsUtil::prepareFormOutput($alt));
-                    $template->setVariable("ANSWER_IMAGE_TITLE", ilLegacyFormElementsUtil::prepareFormOutput($alt));
+                    $alt = preg_replace('/<[^>]*?>/', '', $alt);
+                    $template->setVariable('ATTR', $attr);
+                    $template->setVariable('ANSWER_IMAGE_ALT', ilLegacyFormElementsUtil::prepareFormOutput($alt));
+                    $template->setVariable('ANSWER_IMAGE_TITLE', ilLegacyFormElementsUtil::prepareFormOutput($alt));
                     $template->parseCurrentBlock();
                 }
             }
             if ($show_specific_inline_feedback) {
-                $feedback_output_required = false;
-
-                switch ($this->object->getSpecificFeedbackSetting()) {
-                    case 1:
-                        $feedback_output_required = true;
-                        break;
-
-                    case 2:
-                        if ($user_solution === $answer_id) {
-                            $feedback_output_required = true;
-                        }
-                        break;
-
-                    case 3:
-                        if ($this->object->getAnswer($answer_id)->getPoints() > 0) {
-                            $feedback_output_required = true;
-                        }
-                        break;
-                }
-
-                if ($feedback_output_required) {
-                    $feedback = $this->object->feedbackOBJ->getSpecificAnswerFeedbackTestPresentation(
-                        $this->object->getId(),
-                        0,
-                        $answer_id
-                    );
-                    if ($feedback !== '') {
-                        $template->setCurrentBlock("feedback");
-                        $template->setVariable("FEEDBACK", ilLegacyFormElementsUtil::prepareTextareaOutput($feedback, true));
-                        $template->parseCurrentBlock();
-                    }
-                }
+                $this->populateInlineFeedback($template, $answer_id, $user_solution);
             }
-            $template->setCurrentBlock("answer_row");
-            $template->setVariable("ANSWER_ID", $answer_id);
-            $template->setVariable("ANSWER_TEXT", ilLegacyFormElementsUtil::prepareTextareaOutput($answer->getAnswertext(), true));
+            $template->setCurrentBlock('answer_row');
+            $template->setVariable('ANSWER_ID', $answer_id);
+            $template->setVariable('ANSWER_TEXT', ilLegacyFormElementsUtil::prepareTextareaOutput($answer->getAnswertext(), true));
             if (strcmp($user_solution, $answer_id) == 0) {
-                $template->setVariable("CHECKED_ANSWER", " checked=\"checked\"");
+                $template->setVariable('CHECKED_ANSWER', ' checked="checked"');
             }
             $template->parseCurrentBlock();
         }
-        $template->setVariable("QUESTIONTEXT", $this->object->getQuestionForHTMLOutput());
+        $template->setVariable('QUESTIONTEXT', $this->object->getQuestionForHTMLOutput());
         $questionoutput = $template->get();
-        $pageoutput = $this->outQuestionPage("", $is_question_postponed, $active_id, $questionoutput, $show_specific_inline_feedback);
+        $pageoutput = $this->outQuestionPage('', $is_question_postponed, $active_id, $questionoutput, $show_specific_inline_feedback);
         return $pageoutput;
     }
 
@@ -555,22 +508,25 @@ class assSingleChoiceGUI extends assQuestionGUI implements ilGuiQuestionScoringA
     public function getSpecificFeedbackOutput(array $user_solution): string
     {
         // No return value, this question type supports inline specific feedback.
-        $output = "";
+        $output = '';
         return ilLegacyFormElementsUtil::prepareTextareaOutput($output, true);
     }
 
     public function writeQuestionSpecificPostData(ilPropertyFormGUI $form): void
     {
-        $types = $this->request_data_collector->string('types') ?? '0';
-        $this->object->setMultilineAnswerSetting($types);
+        $is_multi_line = $this->request_data_collector->string('types');
+        if ($is_multi_line === '') {
+            $is_multi_line = '0';
+        }
+        $this->object->setMultilineAnswerSetting($is_multi_line);
         $this->object->setShuffle($this->request_data_collector->bool('shuffle') ?? false);
 
         $choice = $this->request_data_collector->raw('choice');
-        if (isset($choice['imagename']) && is_array($choice['imagename']) && $types === '1') {
+        if (isset($choice['imagename']) && is_array($choice['imagename']) && $is_multi_line === '1') {
             $this->object->setIsSingleline(true);
             $this->tpl->setOnScreenMessage('info', $this->lng->txt('info_answer_type_change'), true);
         } else {
-            $this->object->setIsSingleline($types === '0');
+            $this->object->setIsSingleline($is_multi_line === '0');
         }
 
         $object_thumb_size = $this->object->getThumbSize();
@@ -584,7 +540,7 @@ class assSingleChoiceGUI extends assQuestionGUI implements ilGuiQuestionScoringA
     public function populateQuestionSpecificFormPart(\ilPropertyFormGUI $form, bool $is_singleline = false): ilPropertyFormGUI
     {
         // shuffle
-        $shuffle = new ilCheckboxInputGUI($this->lng->txt("shuffle_answers"), "shuffle");
+        $shuffle = new ilCheckboxInputGUI($this->lng->txt('shuffle_answers'), 'shuffle');
         $shuffle->setValue(1);
         $shuffle->setChecked($this->object->getShuffle());
         $shuffle->setRequired(false);
@@ -592,7 +548,7 @@ class assSingleChoiceGUI extends assQuestionGUI implements ilGuiQuestionScoringA
 
         if (!$this->object->getSelfAssessmentEditingMode()) {
             // Answer types
-            $types = new ilSelectInputGUI($this->lng->txt("answer_types"), "types");
+            $types = new ilSelectInputGUI($this->lng->txt('answer_types'), 'types');
             $types->setRequired(false);
             $types->setOptions(
                 [
@@ -606,8 +562,8 @@ class assSingleChoiceGUI extends assQuestionGUI implements ilGuiQuestionScoringA
 
         if ($is_singleline) {
             // thumb size
-            $thumb_size = new ilNumberInputGUI($this->lng->txt("thumb_size"), "thumb_size");
-            $thumb_size->setSuffix($this->lng->txt("thumb_size_unit_pixel"));
+            $thumb_size = new ilNumberInputGUI($this->lng->txt('thumb_size'), 'thumb_size');
+            $thumb_size->setSuffix($this->lng->txt('thumb_size_unit_pixel'));
             $thumb_size->setMinValue($this->object->getMinimumThumbSize());
             $thumb_size->setMaxValue($this->object->getMaximumThumbSize());
             $thumb_size->setDecimals(0);
@@ -674,9 +630,9 @@ class assSingleChoiceGUI extends assQuestionGUI implements ilGuiQuestionScoringA
 
             if ($file_temp_name !== '') {
                 // check suffix
-                $file_name_parts = explode(".", $file_org_name);
+                $file_name_parts = explode('.', $file_org_name);
                 $suffix = strtolower(array_pop($file_name_parts));
-                if (in_array($suffix, ["jpg", "jpeg", "png", "gif"])) {
+                if (in_array($suffix, ['jpg', 'jpeg', 'png', 'gif'])) {
                     // upload image
                     $filename = $this->object->buildHashedImageFilename($file_org_name);
                     if ($this->object->setImageFile($filename, $file_temp_name) == 0) {
@@ -709,7 +665,7 @@ class assSingleChoiceGUI extends assQuestionGUI implements ilGuiQuestionScoringA
 
     public function populateAnswerSpecificFormPart(\ilPropertyFormGUI $form, bool $is_singleline = false): ilPropertyFormGUI
     {
-        $choices = new ilSingleChoiceWizardInputGUI($this->lng->txt("answers"), "choice");
+        $choices = new ilSingleChoiceWizardInputGUI($this->lng->txt('answers'), 'choice');
         $choices->setRequired(true);
         $choices->setQuestionObject($this->object);
         $choices->setSingleline($is_singleline);
@@ -718,7 +674,7 @@ class assSingleChoiceGUI extends assQuestionGUI implements ilGuiQuestionScoringA
             $choices->setSize(40);
         }
         if ($this->object->getAnswerCount() == 0) {
-            $this->object->addAnswer("", 0, 0);
+            $this->object->addAnswer('', 0, 0);
         }
         $choices->setValues(array_map(
             function (ASS_AnswerBinaryStateImage $value) {
@@ -787,7 +743,7 @@ class assSingleChoiceGUI extends assQuestionGUI implements ilGuiQuestionScoringA
      */
     public function renderAggregateView($aggregate): ilTemplate
     {
-        $tpl = new ilTemplate('tpl.il_as_aggregated_answers_table.html', true, true, "components/ILIAS/TestQuestionPool");
+        $tpl = new ilTemplate('tpl.il_as_aggregated_answers_table.html', true, true, 'components/ILIAS/TestQuestionPool');
 
         $tpl->setCurrentBlock('headercell');
         $tpl->setVariable('HEADER', $this->lng->txt('tst_answer_aggr_answer_header'));
@@ -831,8 +787,8 @@ class assSingleChoiceGUI extends assQuestionGUI implements ilGuiQuestionScoringA
         if ($feedbackOutputRequired) {
             $fb = $this->object->feedbackOBJ->getSpecificAnswerFeedbackTestPresentation($this->object->getId(), 0, $answer_id);
             if (strlen($fb)) {
-                $template->setCurrentBlock("feedback");
-                $template->setVariable("FEEDBACK", ilLegacyFormElementsUtil::prepareTextareaOutput($fb, true));
+                $template->setCurrentBlock('feedback');
+                $template->setVariable('FEEDBACK', ilLegacyFormElementsUtil::prepareTextareaOutput($fb, true));
                 $template->parseCurrentBlock();
             }
         }
@@ -856,7 +812,7 @@ class assSingleChoiceGUI extends assQuestionGUI implements ilGuiQuestionScoringA
 
     public function populateCorrectionsFormProperties(ilPropertyFormGUI $form): void
     {
-        $choices = new ilAssSingleChoiceCorrectionsInputGUI($this->lng->txt("answers"), "choice");
+        $choices = new ilAssSingleChoiceCorrectionsInputGUI($this->lng->txt('answers'), 'choice');
         $choices->setRequired(true);
         $choices->setQuestionObject($this->object);
         $choices->setValues($this->object->getAnswers());

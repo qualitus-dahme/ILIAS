@@ -7,7 +7,8 @@ namespace ILIAS\UI\examples\Card\Standard;
 /**
  * ---
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   ILIAS shows a base ILIAS-Logo. Additionally, a descriptive listing consisting of two entries is repeated three
+ *   times below the title.
  * ---
  */
 function with_sections()

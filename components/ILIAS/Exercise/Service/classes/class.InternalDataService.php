@@ -21,7 +21,7 @@ declare(strict_types=1);
 namespace ILIAS\Exercise;
 
 use ILIAS\Exercise\Assignment\Assignment;
-use ILIAS\Exercise\IRSS\ResourceInformation;
+use ILIAS\Repository\IRSS\ResourceInformation;
 use ILIAS\Exercise\Team\TeamMember;
 use ILIAS\Exercise\Submission\Submission;
 use ILIAS\Exercise\PeerReview\Criteria\CriteriaFile;

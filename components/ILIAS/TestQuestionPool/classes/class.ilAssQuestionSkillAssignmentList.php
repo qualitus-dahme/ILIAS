@@ -243,10 +243,7 @@ class ilAssQuestionSkillAssignmentList
 
         foreach ($this->assignments as $assignmentsByQuestion) {
             foreach ($assignmentsByQuestion as $assignment) {
-                /* @var ilAssQuestionSkillAssignment $assignment */
-
                 $key = $this->buildSkillKey($assignment->getSkillBaseId(), $assignment->getSkillTrefId());
-
                 if (!isset($skills[$key])) {
                     $skills[$key] = [
                         'skill' => new ilBasicSkill($assignment->getSkillBaseId()),

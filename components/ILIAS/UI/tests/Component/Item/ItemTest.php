@@ -642,11 +642,11 @@ EOT;
 <div class="il-item il-std-item ">
     <h4 class="il-item-title">title</h4>
     <div class="il-item-audio"><div class="il-audio-container">
-    <audio controls="true" class="il-audio-player" id="id_1" src="src" preload="metadata"/>
+    <audio controls class="il-audio-player" id="id_1" src="src" preload="metadata"></audio>
 </div></div>
 </div>
 EOT;
-        $this->assertHTMLEquals(
+        $this->assertEquals(
             $this->brutallyTrimHTML($expected),
             $this->brutallyTrimHTML($html)
         );

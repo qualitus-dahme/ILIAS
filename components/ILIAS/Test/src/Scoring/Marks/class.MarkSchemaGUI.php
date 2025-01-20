@@ -20,7 +20,6 @@ declare(strict_types=1);
 
 namespace ILIAS\Test\Scoring\Marks;
 
-use ILIAS\Test\Presentation\TabsManager;
 use ILIAS\Test\Logging\TestLogger;
 use ILIAS\Test\Logging\TestAdministrationInteractionTypes;
 use ILIAS\Test\ResponseHandler;
@@ -55,7 +54,6 @@ class MarkSchemaGUI
         private \ilCtrlInterface $ctrl,
         private \ilGlobalTemplateInterface $tpl,
         private \ilToolbarGUI $toolbar,
-        private \ilTabsGUI $tabs,
         private TestLogger $logger,
         private RequestWrapper $post_wrapper,
         private RequestWrapper $request_wrapper,
@@ -111,7 +109,7 @@ class MarkSchemaGUI
             $this->ui_factory
         );
 
-        $confirmation_modal = $this->buildConfirmationModal();
+        $confirmation_modal = $this->buildResetConfirmationModal();
 
         $this->populateToolbar($confirmation_modal, $add_mark_modal);
 
@@ -137,8 +135,13 @@ class MarkSchemaGUI
 
         $mark_steps = $this->mark_schema->getMarkSteps();
         $mark_steps[$data['index']] = $data['mark'];
-        $this->mark_schema = $this->mark_schema->withMarkSteps($mark_steps);
-
+        $new_schema = $this->checkSchemaForErrors($this->mark_schema->withMarkSteps($mark_steps));
+        if (is_string($new_schema)) {
+            $this->tpl->setOnScreenMessage('failure', $new_schema);
+            $this->showMarkSchema();
+            return;
+        }
+        $this->mark_schema = $new_schema;
         $this->test->storeMarkSchema(
             $this->mark_schema
         );
@@ -201,9 +204,9 @@ class MarkSchemaGUI
             $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->int())
         );
 
-        $new_schema = $this->buildAndCheckNewSchema($marks_to_be_deleted);
-
-        if ($new_schema === null) {
+        $new_schema = $this->removeMarksAndCheckNewSchema($marks_to_be_deleted);
+        if (is_string($new_schema)) {
+            $this->tpl->setOnScreenMessage('failure', $new_schema);
             $this->showMarkSchema();
             return;
         }
@@ -225,7 +228,7 @@ class MarkSchemaGUI
         $this->showMarkSchema();
     }
 
-    private function buildConfirmationModal(): InterruptiveModal
+    private function buildResetConfirmationModal(): InterruptiveModal
     {
         return $this->ui_factory->modal()->interruptive(
             $this->lng->txt('tst_mark_reset_to_simple_mark_schema'),
@@ -319,17 +322,17 @@ class MarkSchemaGUI
         }
     }
 
-    private function confirmMarkDeletion(array $affected_marks): void
+    private function confirmMarkDeletion(array $marks_to_delete): void
     {
         $this->exitOnMarkSchemaNotEditable();
-        $this->exitOnSchemaError($affected_marks);
+        $this->exitOnSchemaError($this->removeMarksAndCheckNewSchema($marks_to_delete));
 
         $confirm_delete_modal = $this->ui_factory->modal()->interruptive(
             $this->lng->txt('confirm'),
-            $this->lng->txt('tst_mark_reset_to_simple_mark_schema_confirmation'),
+            $this->lng->txt('delete_mark_confirmation'),
             $this->ctrl->getFormActionByClass(MarkSchemaGUI::class, 'deleteMarkSteps')
         )->withActionButtonLabel($this->lng->txt('delete'))
-        ->withAffectedItems($this->buildInteruptiveItems($affected_marks));
+        ->withAffectedItems($this->buildInteruptiveItems($marks_to_delete));
 
         $this->response_handler->sendAsync(
             $this->ui_renderer->renderAsync($confirm_delete_modal)
@@ -409,49 +412,45 @@ class MarkSchemaGUI
         exit;
     }
 
-    private function buildAndCheckNewSchema(array $affected_marks): ?MarkSchema
+    private function removeMarksAndCheckNewSchema(array $marks_to_delete): MarkSchema|String
     {
-        $message = $this->checkSchemaForErrors($affected_marks);
-
-        if (!is_string($message)) {
-            return $message;
+        $new_marks = $this->mark_schema->getMarkSteps();
+        foreach ($marks_to_delete as $mark) {
+            unset($new_marks[$mark]);
         }
 
-        $this->tpl->setOnScreenMessage('failure', $message);
-        return null;
+        return $this->checkSchemaForErrors(
+            $this->mark_schema->withMarkSteps(array_values($new_marks))
+        );
     }
 
-    private function exitOnSchemaError(array $affected_marks): void
+    private function exitOnSchemaError(MarkSchema|string $checked_value): MarkSchema
     {
-        $message = $this->checkSchemaForErrors($affected_marks);
-
-        if (!is_string($message)) {
-            return;
+        if (!is_string($checked_value)) {
+            return $checked_value;
         }
 
         $this->response_handler->sendAsync(
             $this->ui_renderer->render(
                 $this->ui_factory->modal()->roundtrip(
                     $this->lng->txt('error'),
-                    $this->ui_factory->messageBox()->failure($message)
+                    $this->ui_factory->messageBox()->failure($checked_value)
                 )
             )
         );
     }
 
-    private function checkSchemaForErrors(array $affected_marks): MarkSchema|string
+    private function checkSchemaForErrors(MarkSchema $new_schema): MarkSchema|string
     {
-        $new_marks = $this->mark_schema->getMarkSteps();
-        foreach ($affected_marks as $mark) {
-            unset($new_marks[$mark]);
-        }
-        $local_schema = $this->mark_schema->withMarkSteps(array_values($new_marks));
         $messages = [];
-        if ($local_schema->checkForMissingPassed()) {
+        if ($new_schema->checkForMissingPassed()) {
             $messages[] = $this->lng->txt('no_passed_mark');
         }
-        if ($local_schema->checkForMissingZeroPercentage()) {
+        if ($new_schema->checkForMissingZeroPercentage()) {
             $messages[] = $this->lng->txt('min_percentage_ne_0');
+        }
+        if ($new_schema->checkForFailedAfterPassed()) {
+            $messages[] = $this->lng->txt('no_passed_after_failed');
         }
 
         if (isset($messages[1])) {
@@ -459,7 +458,7 @@ class MarkSchemaGUI
         }
 
         if ($messages === []) {
-            return $local_schema;
+            return $new_schema;
         }
 
         return $messages[0];

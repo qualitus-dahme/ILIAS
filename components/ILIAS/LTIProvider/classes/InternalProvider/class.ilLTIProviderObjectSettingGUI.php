@@ -424,7 +424,6 @@ class ilLTIProviderObjectSettingGUI
                     }
                     if ($type == "tst") {
                         $ops[] = ilRbacReview::_getOperationIdsByName(array('tst_results'))[0];
-                        $ops[] = ilRbacReview::_getOperationIdsByName(array('tst_statistics'))[0];
                     }
                     $rbacadmin->grantPermission($role->getId(), $ops, $this->ref_id);
                 }

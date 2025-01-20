@@ -20,7 +20,7 @@ declare(strict_types=1);
 
 namespace ILIAS\Exercise\SampleSolution;
 
-use ILIAS\Exercise\IRSS\IRSSWrapper;
+use ILIAS\Repository\IRSS\IRSSWrapper;
 use ILIAS\ResourceStorage\Stakeholder\ResourceStakeholder;
 
 class SampleSolutionRepository

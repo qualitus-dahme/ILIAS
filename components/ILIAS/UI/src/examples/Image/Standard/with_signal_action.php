@@ -10,7 +10,7 @@ namespace ILIAS\UI\examples\Image\Standard;
  *   Example for rendering an Image with a signal as action
  *
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   Clicking onto the rendered image will open a modal.
  * ---
  */
 function with_signal_action()

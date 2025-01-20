@@ -10,7 +10,7 @@ namespace ILIAS\UI\examples\Button\Primary;
  *   Example for rendering a primary button with tooltips
  *
  * expected output: >
- *   ILIAS shows an active button titled "Goto ILIAS". Hovering over the button will show you a tooltip with the following
+ *   Hovering over the rendered button will show you a tooltip with the following
  *   content: "tooltip: ilias" and "tooltip: learning management system".
  * ---
  */

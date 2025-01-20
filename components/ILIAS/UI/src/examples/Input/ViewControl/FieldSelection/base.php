@@ -7,7 +7,11 @@ namespace ILIAS\UI\examples\Input\ViewControl\FieldSelection;
 /**
  * ---
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   There's a button with the column selection glyph as a label.
+ *   Clicking the button will open a dropdown with three checkboxes and
+ *   a standard button "apply".
+ *   Tick one, many or no box and click "apply".
+ *   The results will show the selected options.
  * ---
  */
 function base()

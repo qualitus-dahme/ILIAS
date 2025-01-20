@@ -10,13 +10,7 @@ namespace ILIAS\UI\examples\Panel\Secondary\Legacy;
  *   Example for rendering a secondary legacy panel listing with all view controls.
  *
  * expected output: >
- *   ILIAS shows a panel titled "Legacy Panel Title" and including an action menu. The panel's content is set to "Legacy Content".
- *   On the left next to the action menu a pagination is displayed (with the numbers 1 and 10). Clicking the <> symbols results
- *   to the counter jumping back/forth a page.
- *   On the left next to the pagination two buttons are displayed. Those buttons change the content view (ListView and TileView).
- *   Clicking TileView will display the content as tiles.
- *   On the left next to the content view buttons a sortation button is shown. The button has three entries (Sort by Alphabet,
- *   Sort by Date, Sort by Location). Clicking one of those options will relaod the page.
+ *   ILIAS shows a panel with a title, some content and (sub-)items. Additionally view controls are displayed.
  * ---
  */
 function with_all_view_controls(): string

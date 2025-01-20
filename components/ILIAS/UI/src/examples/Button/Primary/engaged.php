@@ -10,7 +10,7 @@ namespace ILIAS\UI\examples\Button\Primary;
  *   Example for rendering an engaged primary button
  *
  * expected output: >
- *   ILIAS shows a white button titled "Engaged Button". A click onto the button won't activate any actions.
+ *   ILIAS shows a white button with a title. A click onto the button won't activate any actions.
  * ---
  */
 function engaged()

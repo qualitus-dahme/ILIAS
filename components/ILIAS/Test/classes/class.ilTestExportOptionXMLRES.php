@@ -55,7 +55,9 @@ class ilTestExportOptionXMLRES extends ilBasicLegacyExportOption
 
     public function getLabel(): string
     {
-        return $this->lng->txt('ass_create_export_file_with_results');
+        $this->lng->loadLanguageModule('exp');
+        $this->lng->loadLanguageModule('assessment');
+        return  $this->lng->txt("exp_format_dropdown-xml") . " (" . $this->lng->txt('ass_create_export_file_with_results') . ")";
     }
 
     public function onDeleteFiles(

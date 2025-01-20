@@ -12,7 +12,7 @@ namespace ILIAS\UI\examples\Input\Field\Url;
  *
  * expected output: >
  *   ILIAS shows an input field titled "Disabled Input". You cannot activate the field and therefore you can also not
- *   enter any text. Clicking "Save" will relaod the page.
+ *   enter any text.
  * ---
  */
 function disabled()

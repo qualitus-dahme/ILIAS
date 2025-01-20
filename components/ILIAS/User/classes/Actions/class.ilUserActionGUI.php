@@ -54,7 +54,7 @@ class ilUserActionGUI
     public function init(): void
     {
         foreach ($this->user_action_provider_factory->getProviders() as $prov) {
-            foreach ($prov->getActionTypes() as $act_type => $txt) {
+            foreach (array_keys($prov->getActionTypes()) as $act_type) {
                 if ($this->user_action_admin->isActionActive(
                     $this->user_action_context->getComponentId(),
                     $this->user_action_context->getContextId(),
@@ -80,7 +80,7 @@ class ilUserActionGUI
                 $action_link = $action_link->withAdditionalOnLoadCode(
                     static function ($id) use ($data): string {
                         $js = '';
-                        foreach($data as $key => $datum) {
+                        foreach ($data as $key => $datum) {
                             $js .= "{$id}.setAttribute('data-{$key}', '{$datum}');";
                         }
                         return $js;

@@ -18,7 +18,7 @@
 
 declare(strict_types=1);
 
-namespace ILIAS\Exercise\IRSS;
+namespace ILIAS\Repository\IRSS;
 
 use ILIAS\ResourceStorage\Stakeholder\ResourceStakeholder;
 use ILIAS\components\ResourceStorage\Collections\View\Configuration;

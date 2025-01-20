@@ -7,7 +7,30 @@ namespace ILIAS\UI\examples\MainControls\MainBar;
 /**
  * ---
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   ILIAS shows a link "Full Screen Page Layout".
+ *   On clicking the link, a new page opens. The mainbar on the new page is
+ *   initially closed.
+ *
+ *   MainBar is big component; the page shows some of its features:
+ *   "Tools": >
+ *      The Tools-entry is differently colored than the rest of the entries.
+ *      Clicking it will open the slate and reveal the tools "Help", "Editor"
+ *      and "Closeable Tool". Each of them are clickable and will alter the
+ *      slate's content when clicked.
+ *      The "X" will remove the "Closeable Tool" from the tools-section.
+ *    "Repository": >
+ *      The slate in "Repository" is filled with a lot of entries to demonstrate
+ *      the vertical scrollbar within it.
+ *    "Personal Workspace": >
+ *       will contain two entries "Bookmarks", which will open sub-entries (links)
+ *       rather than changing the content of the page.
+ *    "Organisation": >
+ *      There is a larger sub-structure of further slates in "Organisation".
+ *      Higher slates ("1") will close all lower levels(1.1, 1.2), but will
+ *      re-open to the state the user left the substructure.
+ *
+ *   Clicking an opened entry will close the slate.
+ *   Re-opening will have the state of the substructure preserved.
  * ---
  */
 function mainbar(): string

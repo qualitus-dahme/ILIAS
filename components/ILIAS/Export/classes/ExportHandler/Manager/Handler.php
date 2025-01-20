@@ -128,14 +128,25 @@ class Handler implements ilExportHandlerManagerInterface
                 if ($item['is_dir']) {
                     continue;
                 }
+                /**
+                 * @var \ILIAS\Filesystem\Stream\Stream $stream
+                 */
                 $stream = $zip_reader->getItem($path_inside_zip, $zip_structure)[0];
-                $main_element->getIRSS()->write($stream, "set_" . $export_info->getSetNumber() . DIRECTORY_SEPARATOR . $path_inside_zip);
+                # Contents of the stream $stream are lost later (possible incompatible stream object), therefore a new
+                # stream with the content of $stream is created and passed on.
+                $main_element->getIRSS()->write(
+                    Streams::ofString($stream->getContents()),
+                    "set_" . $export_info->getSetNumber() . DIRECTORY_SEPARATOR . $path_inside_zip
+                );
             }
         }
         $container = $this->export_handler->part()->container()->handler()
             ->withExportInfos($container_export_info->getExportInfos()->withElementAtHead($main_export_info))
             ->withMainEntityExportInfo($main_export_info);
-        $main_element->getIRSS()->write(Streams::ofString($container->getXML(false)), "manifest.xml");
+        $main_element->getIRSS()->write(
+            Streams::ofString($container->getXML(false)),
+            "manifest.xml"
+        );
         return $main_element;
     }
 

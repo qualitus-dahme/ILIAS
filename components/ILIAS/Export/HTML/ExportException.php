@@ -16,17 +16,10 @@
  *
  *********************************************************************/
 
-
 declare(strict_types=1);
 
-class ilDclCreateViewDefinitionConfig extends ilPageConfig
+namespace ILIAS\components\Export\HTML;
+
+class ExportException extends \ilException
 {
-    public function init(): void
-    {
-        // config
-        $this->setPreventHTMLUnmasking(true);
-        $this->setEnableInternalLinks(false);
-        $this->setEnableWikiLinks(false);
-        $this->setEnableActivation(false);
-    }
 }

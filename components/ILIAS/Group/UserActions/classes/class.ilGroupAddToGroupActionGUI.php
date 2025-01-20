@@ -1,12 +1,26 @@
 <?php
 
+/**
+ * This file is part of ILIAS, a powerful learning management system
+ * published by ILIAS open source e-Learning e.V.
+ *
+ * ILIAS is licensed with the GPL-3.0,
+ * see https://www.gnu.org/licenses/gpl-3.0.en.html
+ * You should have received a copy of said license along with the
+ * source code, too.
+ *
+ * If this is not the case or you just want to try ILIAS, you'll find
+ * us at:
+ * https://www.ilias.de
+ * https://github.com/ILIAS-eLearning
+ *
+ *********************************************************************/
+
 declare(strict_types=1);
 
 use ILIAS\DI\UIServices;
 use ILIAS\HTTP\GlobalHttpState;
 use ILIAS\Refinery\Factory;
-
-/* Copyright (c) 1998-2017 ILIAS open source, Extended GPL, see docs/LICENSE */
 
 /**
  * Add user to group from awareness tool
@@ -171,7 +185,7 @@ class ilGroupAddToGroupActionGUI
                 $lng->txt("grp_add_user_to_group"),
                 $content
             )->withOnLoadCode(function ($id) {
-                return "il.UI.modal.showModal('$id', {'ajaxRenderUrl':'','keyboard':true}, {id: '$id'});";
+                return "il.UI.modal.showModal(document.getElementById('$id'), {'ajaxRenderUrl':'','keyboard':true}, {id: '$id'});";
             });
             echo $this->ui->renderer()->renderAsync($modal);
         }

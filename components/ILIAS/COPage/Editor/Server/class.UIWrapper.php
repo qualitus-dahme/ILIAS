@@ -82,6 +82,10 @@ class UIWrapper
     public function getRenderedInfoBox(string $text, array $buttons = []): string
     {
         $ui = $this->ui;
+
+        // workaround to clear async code from dropdowns
+        $ui->renderer()->renderAsync($ui->factory()->legacy(""));
+
         $f = $ui->factory();
         $m = $f->messageBox()->info($text);
         if (count($buttons)) {
@@ -93,6 +97,10 @@ class UIWrapper
     public function getRenderedSuccessBox(string $text): string
     {
         $ui = $this->ui;
+
+        // workaround to clear async code from dropdowns
+        $ui->renderer()->renderAsync($ui->factory()->legacy(""));
+
         $f = $ui->factory();
         $m = $f->messageBox()->success($text);
         return $ui->renderer()->renderAsync($m);
@@ -101,6 +109,10 @@ class UIWrapper
     public function getRenderedFailureBox(): string
     {
         $ui = $this->ui;
+
+        // workaround to clear async code from dropdowns
+        $ui->renderer()->renderAsync($ui->factory()->legacy(""));
+
         $f = $ui->factory();
         $m = $f->messageBox()->failure($this->lng->txt("copg_an_error_occured"))
             ->withLinks([$f->link()->standard($this->lng->txt("copg_details"), "#")]);
@@ -118,6 +130,17 @@ class UIWrapper
         string $aria_label = ""
     ): string {
         $ui = $this->ui;
+
+        // workaround to clear async code from dropdowns
+        $ui->renderer()->renderAsync($ui->factory()->legacy(""));
+        /*
+        $something = htmlentities($ui->renderer()->renderAsync($ui->factory()->legacy("")));
+        if ($something !== "&lt;script data-replace-marker=&quot;script&quot;&gt;&lt;/script&gt;") {
+            echo $something;
+            exit;
+        }*/
+
+
         $b = $this->getButton($content, $type, $action, $data, $component, $primary, $aria_label);
         return $ui->renderer()->renderAsync($b);
     }
@@ -125,6 +148,10 @@ class UIWrapper
     public function getRenderedModalFailureBox(): string
     {
         $ui = $this->ui;
+
+        // workaround to clear async code from dropdowns
+        $ui->renderer()->renderAsync($ui->factory()->legacy(""));
+
         $f = $ui->factory();
         $m = $f->messageBox()->failure($this->lng->txt("copg_error_occured_modal"))
                ->withButtons([$f->button()->standard($this->lng->txt("copg_reload_page"), "#")->withOnLoadCode(function ($id) {
@@ -139,6 +166,10 @@ class UIWrapper
     {
         $ui = $this->ui;
         $r = $ui->renderer();
+
+        // workaround to clear async code from dropdowns
+        $ui->renderer()->renderAsync($ui->factory()->legacy(""));
+
 
         $tpl = new \ilTemplate("tpl.editor_button_group.html", true, true, "components/ILIAS/COPage");
 
@@ -160,6 +191,9 @@ class UIWrapper
     {
         $ui = $this->ui;
         $r = $ui->renderer();
+
+        // workaround to clear async code from dropdowns
+        $ui->renderer()->renderAsync($ui->factory()->legacy(""));
 
         $tpl = new \ilTemplate("tpl.form_footer.html", true, true, "components/ILIAS/COPage");
 
@@ -199,7 +233,8 @@ class UIWrapper
     public function getRenderedAdapterForm(
         FormAdapterGUI $form,
         array $buttons,
-        string $id = ""
+        string $id = "",
+        bool $in_modal = false
     ): string {
         $button_html = "";
         foreach ($buttons as $button) {
@@ -213,8 +248,12 @@ class UIWrapper
         }
         $html = $form->render();
         $tag = "button";
-        $html = preg_replace("#\\<" . $tag . "(.*)/" . $tag . ">#iUs", "", $html, 1);
+        $del_count = $in_modal ? 2 : 1;
+        $html = preg_replace("#\\<" . $tag . "([^>]*)btn-default(.*)/" . $tag . ">#iUs", "", $html, $del_count);
         $footer_pos = stripos($html, "il-standard-form-footer");
+        if (!is_int($footer_pos)) {
+            $footer_pos = stripos($html, "c-form__footer");
+        }
 
         $html =
             substr($html, 0, $footer_pos) .
@@ -319,7 +358,7 @@ class UIWrapper
             $view_modes[$act[2]] = "cmd-" . $cnt;
         }
         $vc = $ui->factory()->viewControl()->mode($view_modes, "");
-        $html = $ui->renderer()->render($vc);
+        $html = $ui->renderer()->renderAsync($vc);
         $cnt = 0;
         foreach ($actions as $act) {
             $cnt++;
@@ -409,6 +448,6 @@ class UIWrapper
             )]
         );
 
-        return $r->render($p);
+        return $r->renderAsync($p);
     }
 }

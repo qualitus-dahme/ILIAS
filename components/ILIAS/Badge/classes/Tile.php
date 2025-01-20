@@ -91,12 +91,25 @@ class Tile
     /**
      * @return list<Component>
      */
-    public function asImage(ModalContent $content): array
+    public function asTitleWithLeadingImage(ModalContent $content): array
     {
         $modal = $this->modal($this->card($content));
         return [
             $modal,
             $this->image($modal, $content->badge()),
+            $this->title($modal, $content->badge()),
+        ];
+    }
+
+    /**
+     * @return list<Component>
+     */
+    public function asImage(ModalContent $content, int $size = ilBadgeImage::IMAGE_SIZE_M): array
+    {
+        $modal = $this->modal($this->card($content));
+        return [
+            $modal,
+            $this->image($modal, $content->badge(), $size),
         ];
     }
 
@@ -108,7 +121,6 @@ class Tile
         $modal = $this->modal($this->card($content));
         return [
             $modal,
-            $this->image($modal, $content->badge()),
             $this->title($modal, $content->badge()),
         ];
     }
@@ -130,14 +142,14 @@ class Tile
         );
     }
 
-    private function image(Component $modal, ilBadge $badge): Component
+    private function image(Component $modal, ilBadge $badge, int $size = ilBadgeImage::IMAGE_SIZE_M): Component
     {
-        $image_src = $this->badge_image_service->getImageFromBadge($badge, ilBadgeImage::IMAGE_SIZE_M);
+        $image_src = $this->badge_image_service->getImageFromBadge($badge, $size);
         return $this->container
             ->ui()
             ->factory()
             ->image()
-            ->responsive($image_src, $image_src)
+            ->responsive($image_src, $badge->getTitle())
             ->withAction($modal->getShowSignal());
     }
 
@@ -168,7 +180,7 @@ class Tile
     public function addAssignment(ModalContent $content, ilBadgeAssignment $assignment): ModalContent
     {
         return $content->withAdditionalProperties([
-            $this->txt('issued_on') => ($this->format_date)($assignment->getTimestamp()),
+            $this->txt('badge_issued_on') => ($this->format_date)($assignment->getTimestamp()),
         ]);
     }
 
@@ -185,7 +197,7 @@ class Tile
 
         try {
             return ($this->format_date)($valid, IL_CAL_DATE);
-        } catch (ilDateTimeException $x) {
+        } catch (ilDateTimeException) {
             return $valid;
         }
     }

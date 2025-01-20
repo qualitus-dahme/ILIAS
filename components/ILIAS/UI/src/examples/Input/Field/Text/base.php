@@ -11,8 +11,7 @@ namespace ILIAS\UI\examples\Input\Field\Text;
  *   form. This example does not contain any data processing.
  *
  * expected output: >
- *   ILIAS shows a text field titled "Basic Input". You can enter numbers and letters into the field. Clicking "Save"
- *   reloads the page.
+ *   ILIAS shows a text field titled "Basic Input". You can enter numbers and letters into the field.
  * ---
  */
 function base()

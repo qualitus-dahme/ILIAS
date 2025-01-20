@@ -55,7 +55,8 @@ class ilWikiExportOptionHTMLWithComments extends ilBasicLegacyExportOption
 
     public function getLabel(): string
     {
-        return "HTML (" . $this->lng->txt("wiki_incl_comments") . ")";
+        $this->lng->loadLanguageModule('exp');
+        return $this->lng->txt("exp_format_dropdown-html") . " (" . $this->lng->txt("wiki_incl_comments") . ")";
     }
 
     public function isObjectSupported(ObjectId $object_id): bool

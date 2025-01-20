@@ -10,9 +10,9 @@ namespace ILIAS\UI\examples\Dropzone\File\Wrapper;
  *   Example for rendering a file dropzone wrapper with clear buttons.
  *
  * expected output: >
- *   ILIAS shows a blue box titled "Drag and drop files onto me!". If you drag a file into the box a small window opens
+ *   ILIAS shows a base file wrapper. If you drag a file into the box a small window opens
  *   including three buttons named "Save","Close" and "Clear files!". Clicking the clear button will remove the file.
- *   The file will be shown too. You can remove an uploaded file by clicking onto the "X" on the right side.
+ *   The upload process works as in the base file wrapper example.
  * ---
  */
 function with_clear_button()

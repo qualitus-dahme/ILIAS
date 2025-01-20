@@ -10,8 +10,7 @@ namespace ILIAS\UI\examples\Chart\ProgressMeter\Mini;
  *   Example for rendering a mini Progress Meter as part of a headline
  *
  * expected output: >
- *   ILIAS shows a rounded progress meter with a red colored bar and the headline "Your Progress". The bar takes up
- *   three quarter of the display.
+ *   ILIAS shows a rounded progress meter with a red colored bar and the headline "Your Progress".
  * ---
  */
 function headline()

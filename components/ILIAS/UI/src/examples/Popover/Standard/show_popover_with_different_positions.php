@@ -11,10 +11,7 @@ namespace ILIAS\UI\examples\Popover\Standard;
  *
  * expected output: >
  *   In this example ILIAS shows depending on the screen size and scroll position the popover's text accordingly.
- *   ILIAS shows three different buttons:
- *   - Auto Popover
- *   - Vertical Popover
- *   - Horizontal Popover
+ *   ILIAS shows three different buttons.
  *   Click onto the button and check if the popover's behaviour aligns with the description in the first sentence of this example's
  *   expected output.
  *   Please do some tests with different size and scroll positions on your browser window to see if the functions still work.

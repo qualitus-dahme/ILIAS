@@ -10,9 +10,8 @@ namespace ILIAS\UI\examples\Panel\Listing\Standard;
  *   Example for rendering a panel standard listing with all view controls.
  *
  * expected output: >
- *   ILIAS shows a panel title "List Title" including two item groups (see the specific test cases) titled "Subtitle 1"
- *   and "Subtitle 2". The first item group includes tow items with an action menue each. The second item group includes
- *   one item with an action menu. You can also see View Controls (sortation and pagination).
+ *   The panel listing looks like the base standard panel listing, except that View Controls (sortation and pagination)
+ *   are included.
  * ---
  */
 function with_all_view_controls(): string

@@ -10,7 +10,7 @@ namespace ILIAS\UI\examples\Panel\Secondary\Legacy;
  *  Example for rendering a secondary legacy panel listing.
  *
  * expected output: >
- *   ILIAS shows a panel titled "Legacy Panel Title" and including an action menu. The panel's content is set to "Legacy Content".
+ *   ILIAS shows a panel with a title, some content and an action menu.
  * ---
  */
 function base()

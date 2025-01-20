@@ -10,7 +10,8 @@ namespace ILIAS\UI\examples\Legacy;
  *   Example for rendering a legacy box.
  *
  * expected output: >
- *   ILIAS shows a box including the text "Legacy Content".
+ *   ILIAS shows a box titled "Panel Title" and a grey background. In the lower part of the box the text "Legacy Content"
+ *   on a white background is written.
  * ---
  */
 function inside_panel()

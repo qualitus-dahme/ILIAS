@@ -257,7 +257,7 @@ class ilAssQuestionSkillAssignmentsTableGUI extends ilTable2GUI
         ]);
 
         if ($this->loadSkillPointsFromRequest) {
-            $skill_points = $this->request_data_collector->strArray('skill_points', 2);
+            $skill_points = $this->request_data_collector->strArray('skill_points');
             $points = ilUtil::stripSlashes($skill_points[$assignmentKey] ?? '');
         } else {
             $points = $assignment->getSkillPoints();

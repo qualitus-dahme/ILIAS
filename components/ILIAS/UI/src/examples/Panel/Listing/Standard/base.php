@@ -10,9 +10,8 @@ namespace ILIAS\UI\examples\Panel\Listing\Standard;
  *   Example for rendering a panel standard listing.
  *
  * expected output: >
- *   ILIAS shows a panel title "List Title" including two item groups (see the specific test cases) titled "Subtitle 1"
- *   and "Subtitle 2". The first item group includes tow items with an action menue each. The second item group includes
- *   one item with an action menu.
+ *   ILIAS shows a panel title including two item groups (see the specific test cases) with a title and description each.
+ *   The first item group includes two items. Every item includes an action menu.
  * ---
  */
 function base()

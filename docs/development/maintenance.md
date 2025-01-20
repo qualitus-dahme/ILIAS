@@ -500,11 +500,10 @@ of ILIAS. The file contains the following fields:
 [//]: # (BEGIN DataCollection)
 
 * **Data Collection**
-    * Authority to Sign off on Conceptual Changes: [PerPascalSeeland](https://docu.ilias.de/go/usr/31492), [oliver.samoila](https://docu.ilias.de/go/usr/26160)
-    * Authority to Sign off on Code Changes: [PerPascalSeeland](https://docu.ilias.de/go/usr/31492)
-        , [iszmais](https://docu.ilias.de/go/usr/65630)
-    * Authority to Curate Test Cases: [PerPascalSeeland](https://docu.ilias.de/go/usr/31492), [oliver.samoila](https://docu.ilias.de/go/usr/26160)
-    * Authority to (De-)Assign Authorities: [PerPascalSeeland](https://docu.ilias.de/go/usr/31492), [oliver.samoila (Databay AG)](https://docu.ilias.de/go/usr/26160)
+    * Authority to Sign off on Conceptual Changes: [oliver.samoila](https://docu.ilias.de/go/usr/26160)
+    * Authority to Sign off on Code Changes: [iszmais](https://docu.ilias.de/go/usr/65630)
+    * Authority to Curate Test Cases: [oliver.samoila](https://docu.ilias.de/go/usr/26160)
+    * Authority to (De-)Assign Authorities: [oliver.samoila (Databay AG)](https://docu.ilias.de/go/usr/26160)
 	* Tester: [TESTER MISSING](https://docu.ilias.de/go/pg/64423_4793)
     * Assignee for Security Reports: [iszmais](https://docu.ilias.de/go/usr/65630)
     * Assignee for Security Issues: [iszmais](https://docu.ilias.de/go/usr/65630)

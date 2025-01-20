@@ -22,10 +22,12 @@ namespace ILIAS\MediaObjects;
 
 use ILIAS\MediaObjects\ImageMap\ImageMapEditSessionRepository;
 use ILIAS\MediaObjects\Usage\UsageDBRepository;
-use ILIAS\Exercise\IRSS\IRSSWrapper;
+use ILIAS\Repository\RepoServiceBase;
 
 class InternalRepoService
 {
+    use RepoServiceBase;
+
     protected static array $instance = [];
 
     public function __construct(
@@ -49,7 +51,7 @@ class InternalRepoService
         return self::$instance["media_object"] ??=
             new MediaObjectRepository(
                 $this->db,
-                new IRSSWrapper(new \ILIAS\Exercise\InternalDataService())
+                $this->irss()
             );
     }
 

@@ -9,11 +9,9 @@ namespace ILIAS\UI\examples\Button\Minimize;
  * description: >
  *   This example is rather artificial, since the minimize button is only used
  *   in other components (see purpose).
- *   This examples just shows how one could render the button if implementing
- *   such a component
  *
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   ILIAS shows a minus (-) symbol. Clicking minus won't activate any actions.
  *
  * note: >
  *  In some cases, additional CSS will be required for placing the button

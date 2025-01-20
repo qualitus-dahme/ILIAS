@@ -10,7 +10,11 @@ use ILIAS\UI\Implementation\Component\Input\ViewControl\Pagination;
 /**
  * ---
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   ILIAS shows the rendered viewcontrols Pagination, Sortation and Field Selection.
+ *   Above, the current values are displayed as an array withe the keys
+ *   vc_range (for the pagination), vc_sortation and vc_columns (for the field selection).
+ *   All of them are operable, i.e. changing any value will reload the page.
+ *   The altered values are reflected in the results.
  * ---
  */
 function base()

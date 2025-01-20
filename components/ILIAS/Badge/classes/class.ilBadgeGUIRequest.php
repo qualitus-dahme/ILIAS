@@ -22,6 +22,7 @@ use ILIAS\Refinery;
 class ilBadgeGUIRequest
 {
     private const ACTION_PARAMETER_TOKEN = 'tid_id';
+    private const ACTION_PARAMETER_TOKEN_ID = 'id';
 
     protected HTTP\Services $http;
     protected Refinery\Factory $refinery;
@@ -185,6 +186,24 @@ class ilBadgeGUIRequest
 
         return $tmpl_ids;
     }
+
+    /**
+     * @return list<string>
+     */
+    public function getMultiActionBadgeIdsFromPost(): array
+    {
+        $tmpl_ids = [];
+        $query = $this->http->wrapper()->post();
+        if ($query->has(self::ACTION_PARAMETER_TOKEN_ID)) {
+            $tmpl_ids = $query->retrieve(
+                self::ACTION_PARAMETER_TOKEN_ID,
+                $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->string())
+            );
+        }
+
+        return $tmpl_ids;
+    }
+
 
     public function getBadgeId(): int
     {

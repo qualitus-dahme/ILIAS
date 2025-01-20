@@ -10,11 +10,7 @@ namespace ILIAS\UI\examples\Listing\Unordered;
  *   Example for rendering an unordered list.
  *
  * expected output: >
- *   ILIAS shows a list in the following format:
- *
- *   - Point 1
- *   - Point 2
- *   - Point 3
+ *   ILIAS shows a bullet point ("-") list.
  * ---
  */
 function base()

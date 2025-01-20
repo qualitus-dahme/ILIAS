@@ -10,7 +10,7 @@ namespace ILIAS\UI\examples\Image\Standard;
  *   Example for rendering an Image with a string as action
  *
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   Clicking onto the rendered image will open a new tab to ilias.de.
  * ---
  */
 function with_string_action()

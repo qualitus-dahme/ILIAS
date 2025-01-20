@@ -10,10 +10,9 @@ namespace ILIAS\UI\examples\Panel\Report;
  *   Example for rendering a report panel.
  *
  * expected output: >
- *   ILIAS shows a panel titled "Report Title" and two sub panels as content.
- *   The first sub panel is titled "Sub Panel Title 1", displays the text "Some Content" and a card titled  "Card Heading"
- *   including it's content "Card Content".
- *   The second sub panel is titled "Sub Panel Title 2" and displays the content text "Some Content".
+ *   ILIAS shows a panel with a title and two sub panels as content.
+ *   The first sub panel displays a title, a text and a card titled  "Card Heading" including it's content "Card Content".
+ *   The second sub panel displays a title and some content.
  * ---
  */
 function base()

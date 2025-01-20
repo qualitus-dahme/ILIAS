@@ -56,7 +56,7 @@ class ilWikiExportOptionHTML extends ilBasicLegacyExportOption
     public function getLabel(): string
     {
         $this->lng->loadLanguageModule('exp');
-        return $this->lng->txt('exp_html');
+        return $this->lng->txt('exp_format_dropdown-html');
     }
 
     public function onExportOptionSelected(ilExportHandlerConsumerContextInterface $context): void

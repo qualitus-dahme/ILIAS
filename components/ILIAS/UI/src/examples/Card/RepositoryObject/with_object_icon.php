@@ -10,9 +10,8 @@ namespace ILIAS\UI\examples\Card\RepositoryObject;
  *   Example for rendering a repository card with an object icon
  *
  * expected output: >
- *   ILIAS shows a ILIAS-Logo. The logo's size changes accordingly to the size of the browser window/desktop. A title and
- *   some entries (Entry 1, Some text etc.) are displayed below the logo. In the left top corner you can see the outlined
- *   icon "Course".
+ *   ILIAS shows a base ILIAS-Logo with an outlined icon in the left top corner. The logo's size changes accordingly to the
+ *   size of the browser window/desktop.
  * ---
  */
 function with_object_icon()

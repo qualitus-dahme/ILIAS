@@ -5830,8 +5830,6 @@ common#:#tst_history_read#:#View History###26 08 2024 new variable
 common#:#tst_new#:#Ny test
 common#:#tst_results#:#Test Results###10 11 2018 new variable
 common#:#tst_run#:#Kør
-common#:#tst_statistical_evaluation#:#Statistik
-common#:#tst_statistics#:#Adgang til teststatistiker
 common#:#tst_user_not_invited#:#Du ikke en af de studerende der skal tage denne test
 common#:#tst_warning_test_not_complete#:#Testen er endnu ikke færdiggjort
 common#:#tutors#:#Hjælpeinstruktøter
@@ -14787,7 +14785,6 @@ rbac#:#tst_edit_permission#:#Ændre systemindstillinger
 rbac#:#tst_read#:#Læseadgang til test
 rbac#:#tst_read_learning_progress#:#User can view learning progress of other users###26 09 2014 new variable
 rbac#:#tst_tst_results#:#User has access to test results###10 11 2018 new variable
-rbac#:#tst_tst_statistics#:#User has access to test statistics###28 08 2012 new variable
 rbac#:#tst_visible#:#Testen er synlig
 rbac#:#tst_write#:#Rediger Test
 rbac#:#upload_blacklisted_files#:#Bypass blacklist###07 02 2020 new variable

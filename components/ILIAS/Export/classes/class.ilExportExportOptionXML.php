@@ -76,7 +76,7 @@ class ilExportExportOptionXML extends ilBasicExportOption
 
     public function getLabel(): string
     {
-        return $this->lng->txt("exp_create_file") . " (xml)";
+        return $this->lng->txt("exp_format_dropdown-xml");
     }
 
     public function onExportOptionSelected(

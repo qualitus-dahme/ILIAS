@@ -7,7 +7,16 @@ namespace ILIAS\UI\examples\Layout\Alignment\Vertical;
 /**
  * ---
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   ILIAS shows several sections.
+ *   The first and last row spread over the entire width.
+ *   The second row consists of logos and text-blocks.
+ *   When space is available, all elements are shown horizontally next to each other.
+ *   Upon decreasing the available width (shrink the browser window),
+ *   the text-blocks and logos on the right will start breaking lines first,
+ *   while the logos on the left will remain horizontally next to each other and
+ *   the now breaking sections.
+ *   Finally, when the space gets smaller, _all_ sections and logos will be
+ *   displayed vertically, one element per row.
  * ---
  */
 function nested()

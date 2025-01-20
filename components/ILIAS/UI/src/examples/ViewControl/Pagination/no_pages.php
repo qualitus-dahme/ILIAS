@@ -10,7 +10,7 @@ namespace ILIAS\UI\examples\ViewControl\Pagination;
  *   Example for a pagination view control with no pages
  *
  * expected output: >
- *   A Pagination with one page only will render as empty string
+ *   A Pagination with one page only will render as empty string which results into an empty display.
  * ---
  */
 function no_pages()

@@ -10,7 +10,7 @@ namespace ILIAS\UI\examples\Button\Shy;
  *   Example for rendering a shy button with tooltips
  *
  * expected output: >
- *   ILIAS shows a small button titled "Goto ILIAS". Hovering over the button will show a tooltip with the following contents:
+ *   Hovering over the rendered button will show a tooltip with the following contents:
  *   "tooltip: ilias" and "tooltip: learning management system".
  * ---
  */

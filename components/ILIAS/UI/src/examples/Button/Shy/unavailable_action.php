@@ -12,7 +12,7 @@ namespace ILIAS\UI\examples\Button\Shy;
  *   even if done by keyboard.
  *
  * expected output: >
- *   ILIAS shows a small button titled "Unavailable". The button's background is colored dark grey. Clicking the button
+ *   ILIAS shows a small button with a title. The button's background is colored dark grey. Clicking the button
  *   won't activate any actions.
  * ---
  */

@@ -10,8 +10,8 @@ namespace ILIAS\UI\Examples\Dropdown\Standard;
  *   Example for rendering a dropdown.
  *
  * expected output: >
- *   ILIAS shows a button titled "Actions" and a triangle pointing to the bottom. Clicking the button will open a
- *   dropdown menu with the entries "ILIAS" and "GitHub" rendered as shy buttons. Clicking the entries will open
+ *   ILIAS shows a dropdown button with a title and arrow symbol. Clicking the button will open a
+ *   dropdown menu with entries rendered as shy buttons. Clicking the entries will open
  *   the appropriate website in the same browser window.
  * ---
  */

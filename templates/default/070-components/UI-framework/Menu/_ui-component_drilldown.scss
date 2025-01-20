@@ -98,6 +98,9 @@ $c-drilldown-selected-bg: $il-main-dark-bg;
     .c-drilldown__menulevel--trigger {
         @extend .btn;
         @extend .btn-bulky;
+        &:focus-visible {
+            z-index: 100;
+        }
     }
 
     // visibility of menu items

@@ -398,7 +398,7 @@ adn#:#msg_type_3#:#Eilmeldung
 adn#:#msg_type_during_event#:#Während Ereignis
 adn#:#msg_type_info#:#Die Wichtigkeit entscheidet über die farbliche Darstellung der Ankündigungen
 adve#:#advanced_editing_excass_settings#:#Einstellungen Übungseinheiten (Textabgaben)
-adve#:#advanced_editing_tst_editing#:#Seiteneditor für zusätzliche Frageninhalte
+adve#:#advanced_editing_tst_editing#:#ILIAS-Seiteneditor für zusätzliche Frageninhalte
 adve#:#advanced_editing_tst_editing_desc#:#Aktiviert den ILIAS-Seiteneditor für Feedback- und Hinweistexte.
 adve#:#adve_activation#:#Aktivierung
 adve#:#adve_auto_url_linking#:#URL Auto-Linking
@@ -420,11 +420,11 @@ adve#:#adve_minutes#:#Minuten
 adve#:#adve_minutes_info#:#Zeitraum in Minuten bis die Seite wegen fehlender Aktivität wieder freigegeben und dann von einem anderen Benutzer bearbeitet werden kann.
 adve#:#adve_page_editor_settings#:#ILIAS-Seiteneditor
 adve#:#adve_pe_general#:#Einstellungen
-adve#:#adve_rte_settings#:#TinyMCE Editor
+adve#:#adve_rte_settings#:#TinyMCE-Editor
 adve#:#adve_text_content_features#:#Text Content Menü
 adve#:#adve_use_physical#:#str|emp|imp durch <b>B</b>|<i>I</i>|<u>U</u> ersetzen
 adve#:#adve_use_physical_info#:#Die Einstellung ersetzt die Buttons der semantischen Styleklassen für strong, emphatic und important durch die fest definierten Auszeichnungen <b>B</b> (bold), <i>I</i> (italic) und <u>U</u> (underline). Achtung: hierbei kann es zu Inkonsistenzen kommen, wenn über den Styleeditor den Styleklassen für strong, emphatic und important andere Auszeichnungen zugeordnet wurden.
-adve#:#adve_use_tiny_mce#:#TinyMCE für WYSIWYG-Editieren aktivieren
+adve#:#adve_use_tiny_mce#:#TinyMCE-Editor für WYSIWYG-Bearbeitung aktivieren
 assessment#:#activate_logging#:#Protokollieren des Test und Assessments aktivieren
 assessment#:#activate_manual_scoring#:#Manuelle Bewertung aktivieren
 assessment#:#activate_manual_scoring_desc#:#Aktiviert die manuelle Bewertung für alle Fragentypen
@@ -505,10 +505,8 @@ assessment#:#ass_comments#:#Kommentare
 assessment#:#ass_competence_respect_level_ordering#:#Bitte beachten Sie, dass die Kompetenz-Schwellenwerte gemäß der Reihenfolge der Kompetenzstufen in aufsteigender Reihenfolge definiert werden müssen.
 assessment#:#ass_completion_by_submission#:#Bestehen durch Abgabe
 assessment#:#ass_completion_by_submission_info#:#Falls aktiviert, führt die Abgabe einer Lösungsdatei zur Vergabe der Maximalpunktzahl für diese Frage. Die Bewertung kann jederzeit manuell angepasst werden. Das Ändern dieser Einstellung hat keine nachträglichen Auswirkungen auf bereits eingereichte Lösungen.
-assessment#:#ass_create_export_file#:#Erstelle Exportdatei
-assessment#:#ass_create_export_file_with_results#:#Erstelle Exportdatei (inkl. Teilnehmerergebnisse)
-assessment#:#ass_create_export_test_archive#:#Erstelle Archivdatei für Test
-assessment#:#ass_create_export_test_results#:#Erstelle Ergebnisdatei
+assessment#:#ass_create_export_file_with_results#:#inkl. Teilnehmerergebnisse
+assessment#:#ass_create_export_test_archive#:#als Archivdatei
 assessment#:#ass_create_question#:#Frage erstellen
 assessment#:#ass_imap_hint#:#Hinweis (angezeigt als Tooltip)
 assessment#:#ass_imap_map_file_not_readable#:#Die hochgeladene Imagemap kann nicht gelesen werden.
@@ -576,7 +574,7 @@ assessment#:#circle_click_center#:#Bitte klicken Sie auf den Mittelpunkt der gew
 assessment#:#circle_click_circle#:#Bitte klicken Sie auf einen Punkt auf dem Umkreis der gewünschten Region
 assessment#:#client_ip_range#:#Client IP Bereich
 assessment#:#clientip#:#Client IP
-assessment#:#close_text_hint#:#Um eine Lücke in den Text einzufügen, setzen Sie den Cursor an die entsprechende Position und nutzen Sie die Schaltfläche "Textlücke". Anschließend stehen weiter unten entsprechende Bearbeitungsbereiche zur Verfügung. Ebenso können Sie die Lücken zur Bearbeitung im Lückentext direkt anklicken.
+assessment#:#close_text_hint#:#Um eine Lücke in den Text einzufügen, setzen Sie den Cursor an die entsprechende Position und nutzen Sie die Schaltfläche „Textlücke“. Anschließend stehen weiter unten entsprechende Bearbeitungsbereiche zur Verfügung. Ebenso können Sie die Lücken zur Bearbeitung im Lückentext direkt anklicken.
 assessment#:#cloze_answer_text_info#:#Vorangestellte oder nachfolgende Leerzeichen werden beim Speichern aus der Antwort gelöscht.
 assessment#:#cloze_fixed_textlength#:#Länge des Textfeldes
 assessment#:#cloze_fixed_textlength_description#:#Wenn Sie hier einen Wert eintragen, werden Textlücken, welche keinen eigenen Wert für eine maximale Länge definieren, sowie numerische Lücken mit dieser Länge erzeugt, so dass es nicht möglich ist eine größere Anzahl an Zeichen einzugeben. Für numerische Lücken ist darüber hinaus zu beachten, dass das Dezimaltrennzeichen dabei mit gezählt wird.
@@ -611,6 +609,7 @@ assessment#:#deleteSuggestedSolution#:#Inhalte zur Wiederholung entfernen
 assessment#:#delete_all_user_data_confirmation#:#Wollen Sie wirklich die Testergebnisse aller Teilnehmer löschen?
 assessment#:#delete_image_header#:#Bild entfernen
 assessment#:#delete_image_question#:#Möchten Sie das Bild wirklich entfernen?
+assessment#:#delete_mark_confirmation#:#Soll die folgende Notenstufe definitiv gelöscht werden?
 assessment#:#delete_participants_no_valid_participants_selected#:#Für die gewählten Teilnehmer liegen bereits Testergebnisse vor und können deshalb nicht entfernt werden.
 assessment#:#delete_result_no_valid_participants_selected#:#Für die gewählten Teilnehmer liegen keine Testergebnisse vor und können deshalb nicht entfernt werden.
 assessment#:#delete_selected_user_data_confirmation#:#Sind Sie sicher, dass Sie alle Testdaten der ausgewählten Teilnehmenden entfernen wollen?
@@ -689,7 +688,7 @@ assessment#:#exam_id_of_attempt#:#Test ID des Versuchs
 assessment#:#examid_in_test_pass#:#ILIAS-Prüfungsnummer anzeigen
 assessment#:#examid_in_test_pass_desc#:#Im Test wird eine ILIAS-Prüfungsnummer angezeigt. Für jeden Testdurchlauf wird eine eigene Nummer erzeugt.
 assessment#:#examid_in_test_res#:#ILIAS-Prüfungsnummer anzeigen
-assessment#:#examid_in_test_res_desc#:#In den Testergebnissen, der Statistik und dem Excel-Export wird die ILIAS-Prüfungsnummer dargestellt.
+assessment#:#examid_in_test_res_desc#:#In den Testergebnissen und dem Excel-Export wird die ILIAS-Prüfungsnummer dargestellt.
 assessment#:#exp_all_test_runs#:#Alle Durchläufe
 assessment#:#exp_eval_data#:#Daten exportieren
 assessment#:#exp_file_created#:#Exportdatei erzeugt.
@@ -766,7 +765,7 @@ assessment#:#formula#:#Formel
 assessment#:#fq_formula_desc#:#Erlaubt ist die Verwendung von bereits definierten Variablen ($v1 bis $vn), von bereits definierten Ergebnissen (z.B. $r1), das beliebige Klammern von Ausdrücken, die mathematischen Operatoren + (Addition), - (Subtraktion), * (Multiplikation), / (Division), ^ (Potenzieren), die Verwendung der Konstanten 'pi' für die Zahl Pi und 'e‘ für die Eulersche Zahl, sowie die mathematischen Funktionen 'sin', 'sinh', 'arcsin', 'asin', 'arcsinh', 'asinh', 'cos', 'cosh', 'arccos', 'acos', 'arccosh', 'acosh', 'tan', 'tanh', 'arctan', 'atan', 'arctanh', 'atanh', 'sqrt', 'abs', 'ln', 'log'.
 assessment#:#fq_no_restriction_info#:#Sowohl Dezimalzahlen als auch Brüche werden als Eingabe akzeptiert.
 assessment#:#fq_precision_info#:#Geben Sie hier die Anzahl der gewünschten Nachkommastellen an.
-assessment#:#fq_question_desc#:#Sie definieren Variablen durch die Angabe von $v1, $v2 ... $vn, Ergebnisfelder mit $r1, $r2 .... $rn an den gewünschten Positionen im Text. Klicken Sie dann auf die Schaltfläche "Frage analysieren", um Bearbeitungsformulare für alle Variablen und Ergebnisse zu erzeugen.
+assessment#:#fq_question_desc#:#Sie definieren Variablen durch die Angabe von $v1, $v2 ... $vn, Ergebnisfelder mit $r1, $r2 .... $rn an den gewünschten Positionen im Text. Klicken Sie dann auf die Schaltfläche „Frage analysieren“, um Bearbeitungsformulare für alle Variablen und Ergebnisse zu erzeugen.
 assessment#:#gap#:#Lücke
 assessment#:#gap_combination#:#Lückentext-Kombination
 assessment#:#glossary_term#:#Glossarbegriff
@@ -790,7 +789,7 @@ assessment#:#insert_gap#:#Lücke einfügen
 assessment#:#interaction_type#:#Interaktion
 assessment#:#internal_links#:#Interne Verweise
 assessment#:#intprecision#:#Teilbar durch
-assessment#:#intprecision_info#:#"Teilbar durch" hat nur Auswirkungen auf die Variablenerzeugung, wenn der Wert für die Präzision 0 beträgt. In diesem Fall legt "Teilbar durch" fest, durch welche ganze Zahl die erzeugte Variable teilbar sein muss. Ein Wert von 10 erzeugt also nur ganze Zahlen, die durch 10 teilbar sind, ein Wert von 5 erzeugt ganze Zahlen, die durch 5 teilbar sind usw. Bei einer Präzision von 0 ist "Teilbar durch" ein Pflichtfeld und muss eine positive, ganze Zahl enthalten. Voreingestellt ist der Wert 1 für beliebige ganze Zahlen.
+assessment#:#intprecision_info#:#„Teilbar durch“ hat nur Auswirkungen auf die Variablenerzeugung, wenn der Wert für die Präzision 0 beträgt. In diesem Fall legt „Teilbar durch“ fest, durch welche ganze Zahl die erzeugte Variable teilbar sein muss. Ein Wert von 10 erzeugt also nur ganze Zahlen, die durch 10 teilbar sind, ein Wert von 5 erzeugt ganze Zahlen, die durch 5 teilbar sind usw. Bei einer Präzision von 0 ist „Teilbar durch“ ein Pflichtfeld und muss eine positive, ganze Zahl enthalten. Voreingestellt ist der Wert 1 für beliebige ganze Zahlen.
 assessment#:#invalid_ip#:#Ungültige IP
 assessment#:#ip_range_byline#:#Nur IP Adressen die innerhalb der IP Bereich liegen, können den Test starten. Sie können entweder IPv4 ODER IPv6 verwenden.
 assessment#:#ip_range_for_all_participants#:#Sie bearbeiten die IP Bereich für alle Teilnehmer.
@@ -798,15 +797,14 @@ assessment#:#ip_range_for_selected_participants#:#Sie bearbeiten die IP Bereich 
 assessment#:#ip_range_for_single_participant#:#Sie bearbeiten die IP Bereich für folgenden Teilnehmer:
 assessment#:#ip_range_info#:#Nur Geräte mit einer IP aus der festgelegten Spanne können den Test starten.
 assessment#:#ip_range_label#:#Beschränkung auf IPs
-assessment#:#ip_range_updated#:#Die IP-Rang wurde für die gewählten Teilnehmer aktualisiert.
-assessment#:#javaapplet#:#Java-Applet
+assessment#:#ip_range_updated#:#Die IP Bereich wurde für die gewählten Teilnehmer aktualisiert.
 assessment#:#kiosk#:#Prüfungsansicht
-assessment#:#kiosk_description#:#Die Prüfungsansicht zeigt den Test im Kiosk-Modus. Dabei werden alle Bildschirmelemente, die nicht zum Test gehören, ausgeblendet. Um Teilnehmer effektiv daran zu hindern, während des Tests andere Webseiten zu öffnen, setzen Sie bitte zusätzlich einen auf E-Klausuren spezialisierten Browser ein (z.B. den 'Safe Exam Browser').
+assessment#:#kiosk_description#:#Die Prüfungsansicht zeigt den Test im Kiosk-Modus. Dabei werden alle Bildschirmelemente, die nicht zum Test gehören, ausgeblendet. Um Teilnehmer effektiv daran zu hindern, während des Tests andere Webseiten zu öffnen, setzen Sie bitte zusätzlich einen auf E-Klausuren spezialisierten Browser ein (z.B. den „Safe Exam Browser“).
 assessment#:#kiosk_options#:#Angezeigte Informationen
 assessment#:#kiosk_options_desc#:#Die ausgewählten Informationen werden im Kopfbereich der Seite angezeigt.
 assessment#:#kiosk_show_participant#:#Name des Teilnehmers
 assessment#:#kiosk_show_title#:#Titel des Tests
-assessment#:#kprim_answers_info#:#Der Multiple Choice-Fragetyp "Vierfache Entscheidung richtig/falsch" (Typ K', genannt Kprim) zeichnet sich dadurch aus, dass auf eine Frage oder unvollständige Aussage vier Antworten oder Ergänzungen folgen. Für jede dieser vier Möglichkeiten muss jeweils entschieden werden, ob sie zutrifft (richtig/+) oder nicht zutrifft (falsch/-). Um die maximal erreichbare Punktezahl zu erhalten, müssen alle vier Antworten korrekt sein.
+assessment#:#kprim_answers_info#:#Der Multiple Choice-Fragetyp „Vierfache Entscheidung richtig/falsch“ (Typ K', genannt Kprim) zeichnet sich dadurch aus, dass auf eine Frage oder unvollständige Aussage vier Antworten oder Ergänzungen folgen. Für jede dieser vier Möglichkeiten muss jeweils entschieden werden, ob sie zutrifft (richtig/+) oder nicht zutrifft (falsch/-). Um die maximal erreichbare Punktezahl zu erhalten, müssen alle vier Antworten korrekt sein.
 assessment#:#kprim_instruction_text#:#Für jede Aussage muss entschieden werden: [%s] oder [%s]
 assessment#:#lacex_assClozeTest_NumberOfResultExpression_d#:#Bei der 4ten Antwortoption handelt es sich um eine Auswahllücke und es wurde dort die 2te Option ausgewählt
 assessment#:#lacex_assClozeTest_NumberOfResultExpression_e#:#R[4] = +2+
@@ -853,7 +851,7 @@ assessment#:#log_deletion_not_allowed#:#Es fehlen Ihnen die Berechtigung, um Pro
 assessment#:#log_entry_type#:#Typ des Protokolleintrags
 assessment#:#log_ip#:#IP-Adresse protokollieren
 assessment#:#log_ip_info#:#Die IP-Adresse wird bei Interaktionen von Teilnehmenden protokolliert. Bestehende Protokolleinträge werden beim Deaktivieren nicht gelöscht.
-assessment#:#log_participant_data_delete_warning#:#Für diesen Test sind Protokolldaten von Teilnehmenden vorhanden. Diese werden beim Umstellen auf "Testergebnisse ohne Namen/Anonymer Test" gelöscht.
+assessment#:#log_participant_data_delete_warning#:#Für diesen Test sind Protokolldaten von Teilnehmenden vorhanden. Diese werden beim Umstellen auf „Testergebnisse ohne Namen/Anonymer Test“ gelöscht.
 assessment#:#log_text#:#Protokolleintrag
 assessment#:#log_user_solution_willingly_deleted#:#Der Benutzer hat seine Antwort entfernt.
 assessment#:#logging_settings#:#Protokolldaten
@@ -898,7 +896,7 @@ assessment#:#logs_test_run_started#:#Testdurchlauf gestartet
 assessment#:#logs_wrong_test_password_provided#:#Teilnehmer hat falsches Testpasswort eingegeben.
 assessment#:#longmenu#:#Longmenu
 assessment#:#longmenu_answeroptions_differ#:#Diese Frage funktioniert nicht richtig, denn sie hat nicht die gleiche Anzahl Lücken im Text wie in den Antwortoptionen.
-assessment#:#longmenu_text#:#‘Long Menu’-Text
+assessment#:#longmenu_text#:#„Long Menu“-Text
 assessment#:#mailnottype#:#Ein Versand findet auch beim Beenden einzelner Testdurchläufe statt
 assessment#:#mailnottype_desc#:#Der Besitzer des Tests wird auch dann benachrichtigt, wenn die Anzahl Durchläufe nicht beschränkt ist.
 assessment#:#mainbar_button_label_questionlist#:#Fragenliste
@@ -946,6 +944,7 @@ assessment#:#new_unit#:#Neue Einheit
 assessment#:#next_question#:#Weiter
 assessment#:#next_question_rows#:#Fragen %d - %d von %d →
 assessment#:#no_manual_feedback_export_info#:#Manuelle Rückmeldungen werden nicht exportiert.
+assessment#:#no_passed_after_failed#:#Alle als bestanden markierten Notenschritte müssen höhere Mindestprozentsätze haben als die als nicht bestanden markierten.
 assessment#:#no_passed_mark#:#Sie müssen wenigstens einen Notenschritt als BESTANDEN markieren!
 assessment#:#no_question_selected_for_move#:#Bitte wählen Sie mindestens eine Frage aus, um sie zu verschieben!
 assessment#:#no_questions_available#:#Es sind keine Fragen verfügbar!
@@ -961,14 +960,15 @@ assessment#:#not_yet_accessed#:#Noch kein Zugriff erfolgt
 assessment#:#nr_of_correct_answers#:#Anzahl der erwünschten Antworten
 assessment#:#number_of_answers#:#Anzahl der Antworten
 assessment#:#numeric_gap#:#Numerische Lücke
+assessment#:#old_mark_default_not_applied#:#Das Notenschma aus Ihren persönlichen Einstellungen konnte nicht übernommen werden, da es ein altes Format verwendet. Alle anderen Einstellungen wurden angewendet.
 assessment#:#option_label#:#Optionsbezeichnungen
 assessment#:#option_label_adequate#:#adäquat
 assessment#:#option_label_adequate_or_not#:#adäquat / nicht adäquat
 assessment#:#option_label_applicable#:#zutreffend
 assessment#:#option_label_applicable_or_not#:#zutreffend / nicht zutreffend
 assessment#:#option_label_custom#:#Benutzerdefinierte Bezeichnungen
-assessment#:#option_label_custom_false#:#Bezeichnung für "FALSCH"
-assessment#:#option_label_custom_true#:#Bezeichnung für "WAHR"
+assessment#:#option_label_custom_false#:#Bezeichnung für „FALSCH“
+assessment#:#option_label_custom_true#:#Bezeichnung für „WAHR“
 assessment#:#option_label_info#:#Die hier konfigurierten Bezeichnungen werden als Beschriftung für die Entscheidungsoptionen verwendet.
 assessment#:#option_label_minus#:#-
 assessment#:#option_label_not_adequate#:#nicht adäquat
@@ -1136,7 +1136,7 @@ assessment#:#question_id_short#:#ID
 assessment#:#question_instances_title#:#Diese Frage wird in den folgenden Tests verwendet
 assessment#:#question_is_part_of_running_test#:#Die Frage ist Teil eines laufenden Tests und darf nicht geändert werden.
 assessment#:#question_marking#:#Fragen markieren
-assessment#:#question_marking_description#:#Teilnehmer erhalten die Möglichkeit, Fragen für sich zu markieren. Die Markierungen werden auch in der 'Übersicht Testdurchlauf' angezeigt, sofern diese aktiviert ist.
+assessment#:#question_marking_description#:#Teilnehmer erhalten die Möglichkeit, Fragen für sich zu markieren. Die Markierungen werden auch in der „Übersicht Testdurchlauf“ angezeigt, sofern diese aktiviert ist.
 assessment#:#question_not_answered#:#Die Frage wurde nicht beantwortet
 assessment#:#question_saved_for_upload#:#Die Frage wurde automatisch gespeichert, um das Hochladen einer Datei zu ermöglichen. Wenn Sie die Bearbeitung dieser Frage jetzt abbrechen, beachten Sie bitte, dass Sie die Frage im Fragenpool löschen müssen, wenn Sie sie nicht behalten wollen.
 assessment#:#question_summary#:#Übersicht Testdurchlauf
@@ -1170,7 +1170,7 @@ assessment#:#rectangle_click_tl_corner#:#Bitte klicken Sie auf die obere linke E
 assessment#:#redirectAfterSave#:#Die maximale Bearbeitungszeit für diesen Test wurde erreicht. In wenigen Sekunden werden Sie weitergeleitet...
 assessment#:#redirect_after_finishing_rule#:#Weiterleitung
 assessment#:#redirect_after_finishing_tst#:#Weiterleitung
-assessment#:#redirect_after_finishing_tst_desc#:#Teilnehmer werden nach Beenden des Tests automatisch zu einer definierten Webseite weitergeleitet. Dies geschieht nur, wenn der Test so konfiguriert wurde, dass die Teilnehmer ihre Testergebnisse nach Beenden des Tests nicht einsehen können. Wenn Sie die Adresse einer externen Webseite eingeben, verwenden Sie die vollständige URL (einschließlich "https://"). Wenn Sie zu einem Objekt in ILIAS weiterleiten, verwenden Sie den Permalink, der in der Fußzeile des betreffenden Objekts zu finden ist.
+assessment#:#redirect_after_finishing_tst_desc#:#Teilnehmer werden nach Beenden des Tests automatisch zu einer definierten Webseite weitergeleitet. Dies geschieht nur, wenn der Test so konfiguriert wurde, dass die Teilnehmer ihre Testergebnisse nach Beenden des Tests nicht einsehen können. Wenn Sie die Adresse einer externen Webseite eingeben, verwenden Sie die vollständige URL (einschließlich „https://”). Wenn Sie zu einem Objekt in ILIAS weiterleiten, verwenden Sie den Permalink, der in der Fußzeile des betreffenden Objekts zu finden ist.
 assessment#:#redirect_always#:#immer zur definierten Zielseite
 assessment#:#redirect_in_kiosk_mode#:#nur bei aktivierter Prüfungsansicht
 assessment#:#redirection_url#:#URL Zielseite
@@ -1194,7 +1194,7 @@ assessment#:#result_dec_info#:#Gültige Dezimalzahlen sind beispielsweise 2,3 un
 assessment#:#result_frac#:#Bruch
 assessment#:#result_frac_info#:#Die Eingaben 1/3 und 2/6  sind beides gültige Ergebnisse
 assessment#:#result_type_selection#:#Ergebnistypauswahl
-assessment#:#result_unit_info#:#Bitte beachten Sie, dass die hier festgelegte Einheit auch innerhalb der "Auswählbaren Einheiten" selektiert werden muss.
+assessment#:#result_unit_info#:#Bitte beachten Sie, dass die hier festgelegte Einheit auch innerhalb der „Auswählbaren Einheiten“ selektiert werden muss.
 assessment#:#result_units#:#Auswählbare Einheiten
 assessment#:#result_units_info#:#Zum Beantworten der Frage werden die aktivierten Einheiten angeboten.###Modified as part of gender mainstreaming activities for ILIAS 8
 assessment#:#result_x#:#Ergebnis %s
@@ -1240,7 +1240,7 @@ assessment#:#set_manual_feedback#:#Manuelle Rückmeldung
 assessment#:#shape#:#Form
 assessment#:#showSuggestedSolution#:#Art
 assessment#:#show_all_test_properties_on_info_page#:#Testeigenschaften anzeigen
-assessment#:#show_all_test_properties_on_info_page_byline#:#Den Benutzern werden auf dem 'Info'-Reiter alle Testeigenschaften angezeigt, z.B. Reihenfolge, Bewertung oder Ergebnisausgabe.
+assessment#:#show_all_test_properties_on_info_page_byline#:#Den Benutzern werden auf dem „Info“-Reiter alle Testeigenschaften angezeigt, z.B. Reihenfolge, Bewertung oder Ergebnisausgabe.
 assessment#:#show_answer_overview#:#Antwortübersicht zeigen
 assessment#:#show_best_solution#:#Beste Antworten einblenden
 assessment#:#show_detailed_results#:#Detaillierte Testergebnisse (bewerteter Testdurchlauf)
@@ -1333,7 +1333,7 @@ assessment#:#total_duration#:#Dauer Gesamt
 assessment#:#true#:#Wahr
 assessment#:#tst_access_code_created#:#Damit Sie dauerhaften Zugriff auf Ihre Testergebnisse haben und einen unterbrochenen Test wieder aufnehmen können, wurde für Sie ein persönlicher Zugangsschlüssel erzeugt. Bitte notieren Sie sich den nachfolgenden Code, um später den Test fortführen zu können.
 assessment#:#tst_activate_skill_service#:#Kompetenzen
-assessment#:#tst_activate_skill_service_desc#:#Erlaubt die Zuordnung von Fragen zu Kompetenzen , sowie die Definition von Schwellenwerten für die Erreichung bestimmter Kompetenzstufen.
+assessment#:#tst_activate_skill_service_desc#:#Erlaubt die Zuordnung von Fragen zu Kompetenzen, sowie die Definition von Schwellenwerten für die Erreichung bestimmter Kompetenzstufen.
 assessment#:#tst_activation_limited_visibility_info#:#Außerhalb des angegebenen Zeitraums wird der Testtitel angezeigt. Der Test kann aber nicht gestartet werden. Der weitere Zugriff, auch auf bereits laufende Tests, wird zum Ende des Zeitraums unterbunden.
 assessment#:#tst_activation_online_info#:#Nur wenn der Test online geschaltet ist, können Benutzer am Test teilnehmen.
 assessment#:#tst_add_quest_cont_edit_mode#:#Editor
@@ -1406,7 +1406,7 @@ assessment#:#tst_corr_answ_stat_tbl_header_frequency#:#Häufigkeit
 assessment#:#tst_corrections_answers_tbl#:#Antwortstatistik
 assessment#:#tst_corrections_answers_tbl_subindex#:#Antwortstatistik für %s
 assessment#:#tst_corrections_incompatible_question_set_type#:#Eine Nachkorrektur ist nur möglich, wenn der Test eine fest definierte Fragenauswahl verwendet.
-assessment#:#tst_corrections_manscore_reset_warning#:#Es liegen %s manuelle Bewertungen für die Frage "%s (ID: %s)" vor. Alle manuellen Bewertungen werden zurückgesetzt wenn die Frage gespeichert wird.
+assessment#:#tst_corrections_manscore_reset_warning#:#Es liegen %s manuelle Bewertungen für die Frage „%s (ID: %s)” vor. Alle manuellen Bewertungen werden zurückgesetzt wenn die Frage gespeichert wird.
 assessment#:#tst_corrections_qst_form#:#Korrektur der Punkte
 assessment#:#tst_corrections_tab_question#:#Frage
 assessment#:#tst_corrections_tab_solution#:#Lösung
@@ -1435,7 +1435,7 @@ assessment#:#tst_enable_questionlist#:#Fragenliste
 assessment#:#tst_enable_questionlist_description#:#Teilnehmer können sich links neben den Testfragen eine Fragenliste anzeigen lassen.
 assessment#:#tst_ending_time#:#Ende
 assessment#:#tst_ending_time_before_starting_time#:#Bitte geben Sie für das Ende des Tests ein Datum ein, das nach dem Startdatum liegt.
-assessment#:#tst_ending_time_desc#:#Zeitpunkt, ab dem Teilnehmer keine Antworten mehr abgeben können. <strong>Wichtig</strong>: Benutzen Sie diese Option <strong>nicht</strong> für E-Klausuren/Fernklausuren. Verwenden Sie stattdessen die Funktion „Bearbeitungsdauer begrenzen“, siehe unten. Nur dann wird der Test serverseitig beendet und die letzte Eingabe bei Freitext-Fragen jedes Teilnehmers automatisch als Auto-Save-Inhalt gespeichert.
+assessment#:#tst_ending_time_desc#:#Zeitpunkt, ab dem Teilnehmer keine Antworten mehr abgeben können. <strong>Wichtig</strong>: Benutzen Sie diese Option <strong>nicht</strong> für E-Klausuren/Fernklausuren. Verwenden Sie stattdessen z.B. die Funktion „Bearbeitungsdauer begrenzen“, siehe unten. Nur dann wird der Test serverseitig beendet und die letzte Eingabe bei Freitext-Fragen jedes Teilnehmers automatisch als Auto-Save-Inhalt gespeichert. <strong>VORSICHT:</strong> Dieser Inhalt wird <strong>NICHT</strong> automatisch bewertet.
 assessment#:#tst_enter_questionpool#:#Bitte geben Sie den Namen eines Fragenpools an, in dem die neue Frage abgelegt werden soll
 assessment#:#tst_eval_question_points#:#Fragenergebnisse für Testdurchlauf %s
 assessment#:#tst_eval_results_by_pass#:#Liste der Antworten für Testdurchlauf %s
@@ -1449,7 +1449,7 @@ assessment#:#tst_eval_total_passed_average_points#:#Durchschnittliche Punktezahl
 assessment#:#tst_eval_total_passed_average_time#:#Mittlere Bearbeitungsdauer aller bestandenen Tests
 assessment#:#tst_eval_total_persons#:#Gesamtzahl der Personen, die den Test gestartet haben
 assessment#:#tst_exam_access_code#:#Zugangscode
-assessment#:#tst_exam_access_code_label#:#Geben Sie den Zugangscode ein, um Ihren bereits begonnenen Test fortzusetzen.
+assessment#:#tst_exam_access_code_label#:#Geben Sie den Zugangscode ein, um Ihren bereits begonnenen Test fortzusetzen. Lassen Sie das Feld leer, um einen neuen Testdurchlauf zu starten.
 assessment#:#tst_exam_conditions#:#Prüfungsbedingungen
 assessment#:#tst_exam_conditions_label#:#Ankreuzen, um die Bedingungen zu akzeptieren.
 assessment#:#tst_exam_conditions_not_checked_message#:#Sie müssen die Prüfungsbedingungen akzeptieren!
@@ -1501,7 +1501,7 @@ assessment#:#tst_heading_scoring#:#Bewertung
 assessment#:#tst_hide_info_tab#:#Info-Tab ausblenden
 assessment#:#tst_hide_info_tab_desc#:#Blendet den Tab „Info“ des Tests aus.
 assessment#:#tst_hide_pagecontents#:#Seiteninhalte ausblenden
-assessment#:#tst_hide_pagecontents_desc#:#ILIAS-Inhalte, die über den Button "Seite bearbeiten" vor und hinter dem eigentlichen Fragentext platziert wurden, werden in den Ergebnisansichten und der Druckausgabe nicht angezeigt.
+assessment#:#tst_hide_pagecontents_desc#:#ILIAS-Inhalte, die über den Button „Seite bearbeiten" vor und hinter dem eigentlichen Fragentext platziert wurden, werden in den Ergebnisansichten und der Druckausgabe nicht angezeigt.
 assessment#:#tst_hide_side_list#:#Fragenliste aus
 assessment#:#tst_highscore_achieved_ts#:#Datum
 assessment#:#tst_highscore_achieved_ts_description#:#Es wird eine zusätzliche Spalte mit dem Zeitpunkt des Tests eingeblendet.
@@ -1509,7 +1509,7 @@ assessment#:#tst_highscore_all_tables#:#Eigener Rang und Bestenliste
 assessment#:#tst_highscore_all_tables_description#:#Zeigt sowohl eine Tabelle mit der eigenen Platzierung als auch eine Tabelle mit den besten Platzierungen.
 assessment#:#tst_highscore_anon#:#Keine Namen anzeigen
 assessment#:#tst_highscore_anon_description#:#Die Platzierungen anderer Teilnehmerinnen und Teilnehmer werden ohne Angabe der Namen angezeigt. Dies geschieht automatisch bei anonymisierten Tests.
-assessment#:#tst_highscore_description#:#Im Reiter 'Ergebnisse' wird ein zusätzlicher Unterreiter 'Platzierung' angezeigt. Es wird eine Tabelle über das Abschneiden der verschiedenen Personen im Test angezeigt. Sie müssen die Option „Eigenes Testergebnis einsehen“ aktivieren, um diese Funktion zu nutzen.
+assessment#:#tst_highscore_description#:#Im Reiter „Meine Ergebnisse“ wird ein zusätzlicher Unterreiter „Platzierung“ angezeigt. Es wird eine Tabelle über das Abschneiden der verschiedenen Personen im Test angezeigt. Sie müssen die Option „Eigenes Testergebnis einsehen“ aktivieren, um diese Funktion zu nutzen.
 assessment#:#tst_highscore_enabled#:#Platzierungen
 assessment#:#tst_highscore_hints#:#Lösungshinweise
 assessment#:#tst_highscore_hints_description#:#Es wird einen zusätzliche Spalte eingeblendet, in welcher angezeigt wird, wie viele Lösungshinweise angefordert wurden.
@@ -1559,23 +1559,23 @@ assessment#:#tst_insert_missing_question#:#Bitte wählen Sie mindestens eine Fra
 assessment#:#tst_insert_questions#:#Sind Sie sicher, dass Sie die folgenden Fragen dem Test hinzufügen wollen?
 assessment#:#tst_instant_feedback#:#Direkte Rückmeldung
 assessment#:#tst_instant_feedback_answer_generic#:#Rückmeldung zur richtigen Lösung
-assessment#:#tst_instant_feedback_answer_generic_desc#:#Ist die Gesamtheit der Antwort richtig, so zeigt ILIAS beim Anklicken des 'Rückmeldung anfordern'-Buttons die eine Art hinterlegter Rückmeldung an. Ist die Gesamtheit der Antwort nicht vollständig richtig, wird eine andere  Rückmeldung angezeigt. Beide Versionen müssen bei der Frage im Reiter 'Rückmeldung' hinterlegt werden.
+assessment#:#tst_instant_feedback_answer_generic_desc#:#Ist die Gesamtheit der Antwort richtig, so zeigt ILIAS beim Anklicken des „Rückmeldung anfordern“-Buttons die eine Art hinterlegter Rückmeldung an. Ist die Gesamtheit der Antwort nicht vollständig richtig, wird eine andere Rückmeldung angezeigt. Beide Versionen müssen bei der Frage im Reiter „Rückmeldung“ hinterlegt werden.
 assessment#:#tst_instant_feedback_answer_specific#:#Unterschiedliche Rückmeldungen pro gegebener Antwort
-assessment#:#tst_instant_feedback_answer_specific_desc#:#Bei Anklicken des 'Rückmeldung anfordern'-Buttons zeigt ILIAS zu jeder abgegebenen Antwort die jeweils hinterlegte  Rückmeldung an. Nicht alle Fragetypen unterstützen diese Art von Rückmeldungen. Die Rückmeldungen müssen bei der Frage im Reiter 'Rückmeldung' hinterlegt werden.
+assessment#:#tst_instant_feedback_answer_specific_desc#:#Bei Anklicken des 'Rückmeldung anfordern'-Buttons zeigt ILIAS zu jeder abgegebenen Antwort die jeweils hinterlegte  Rückmeldung an. Nicht alle Fragetypen unterstützen diese Art von Rückmeldungen. Die Rückmeldungen müssen bei der Frage im Reiter „Rückmeldung“ hinterlegt werden.
 assessment#:#tst_instant_feedback_contents#:#Inhalte der Rückmeldung
 assessment#:#tst_instant_feedback_desc#:#Sofern Fragen mit Rückmeldungen versehen sind, stehen diese den Teilnehmern während des Tests zur Verfügung.
 assessment#:#tst_instant_feedback_forced#:#Rückmeldung immer beim Einreichen einer Antwort anzeigen
 assessment#:#tst_instant_feedback_results#:#Erreichte Punkte
-assessment#:#tst_instant_feedback_results_desc#:#Klicken Teilnehmer beim Beantworten einer Frage auf den Button 'Rückmeldung anfordern' zeigt ILIAS an, wie viele Punkte für die gegebene Antwort erreichen wurden.
+assessment#:#tst_instant_feedback_results_desc#:#Klicken Teilnehmer beim Beantworten einer Frage auf den Button „Rückmeldung anfordern“ zeigt ILIAS an, wie viele Punkte für die gegebene Antwort erreichen wurden.
 assessment#:#tst_instant_feedback_solution#:#Bestmögliche Lösung anzeigen
-assessment#:#tst_instant_feedback_solution_desc#:#Bei Anklicken des 'Rückmeldung anfordern'-Buttons zeigt ILIAS die bestmögliche Lösung der Frage an.
+assessment#:#tst_instant_feedback_solution_desc#:#Bei Anklicken des „Rückmeldung anfordern“-Buttons zeigt ILIAS die bestmögliche Lösung der Frage an.
 assessment#:#tst_instant_feedback_trigger#:#Auslöser der Rückmeldung
 assessment#:#tst_instant_feedback_trigger_forced#:#Die Rückmeldung wird bei Beantwortung von Fragen gezeigt
 assessment#:#tst_instant_feedback_trigger_forced_desc#:#Durch Beantwortung einer Frage wird die Rückmeldung automatisch ausgelöst.
 assessment#:#tst_instant_feedback_trigger_manual#:#Teilnehmer können die Rückmeldung selbst auslösen
 assessment#:#tst_instant_feedback_trigger_manual_desc#:#Die Rückmeldung steht Teilnehmern zur Verfügung, wird aber erst gezeigt, wenn der Teilnehmer diese auslöst.
 assessment#:#tst_introduction#:#Einleitung
-assessment#:#tst_introduction_desc#:#Zeigt einen Einleitungstext auf dem "Test"-Reiter an. Der Einleitungstext kann im Unterreiter "Einleitung bearbeiten" geändert werden und ist bereits vor Beginn des Tests zugänglich.
+assessment#:#tst_introduction_desc#:#Zeigt einen Einleitungstext auf dem „Test”-Reiter an. Der Einleitungstext kann im Unterreiter „Einleitung bearbeiten” geändert werden und ist bereits vor Beginn des Tests zugänglich.
 assessment#:#tst_introduction_text#:#Einleitungstext
 assessment#:#tst_invited_nobody#:#Es wurden keine Benutzer, Gruppen oder Rollen als feste Teilnehmer hinzugefügt
 assessment#:#tst_invited_selected_users#:#Die ausgewählten Benutzer wurden als feste Teilnehmer hinzugefügt
@@ -1848,13 +1848,13 @@ assessment#:#tst_result_user_name#:#Testergebnisse für %s
 assessment#:#tst_result_user_name_pass#:#Ergebnisse von Testdurchlauf %s für %s
 assessment#:#tst_results#:#Testergebnisse
 assessment#:#tst_results_access_always#:#Sofort
-assessment#:#tst_results_access_always_desc#:#Schon während eines Testdurchlaufs kann ein Zwischenergebnis über den Reiter "Ergebnisse" eingesehen werden. Nach Abschluss des Durchlaufs wird automatisch das Testergebnis angezeigt.
+assessment#:#tst_results_access_always_desc#:#Schon während eines Testdurchlaufs kann ein Zwischenergebnis über den Reiter „Meine Ergebnisse“ eingesehen werden. Nach Abschluss des Durchlaufs wird automatisch das Testergebnis angezeigt.
 assessment#:#tst_results_access_date#:#Ab definiertem Datum
-assessment#:#tst_results_access_date_desc#:#Erst ab dem gewählten Datum werden Ergebnisse im Reiter "Ergebnisse" anzeigt.
+assessment#:#tst_results_access_date_desc#:#Erst ab dem gewählten Datum werden Ergebnisse im Reiter „Meine Ergebnisse” anzeigt.
 assessment#:#tst_results_access_enabled#:#Eigenes Testergebnis einsehen
-assessment#:#tst_results_access_enabled_desc#:#Teilnehmerinnen und Teilnehmer erhalten Zugriff auf Ihre Testergebnisse über den Reiter "Ergebnisse".
+assessment#:#tst_results_access_enabled_desc#:#Teilnehmerinnen und Teilnehmer erhalten Zugriff auf Ihre Testergebnisse über den Reiter „Meine Ergebnisse“.
 assessment#:#tst_results_access_finished#:#Nach Durchlauf des Tests
-assessment#:#tst_results_access_finished_desc#:#Nach Abschluss eines Testdurchlaufs werden die Ergebnisse automatisch im Reiter "Ergebnisse" angezeigt.
+assessment#:#tst_results_access_finished_desc#:#Nach Abschluss eines Testdurchlaufs werden die Ergebnisse automatisch im Reiter „Meine Ergebnisse” angezeigt.
 assessment#:#tst_results_access_passed#:#Nach Bestehen des Tests
 assessment#:#tst_results_access_passed_desc#:#Erst wenn der Test bestanden wurde, werden die Ergebnisse angezeigt. Teilnehmerinnen und Teilnehmern, die den Test nicht bestehen, wird kein Ergebnis angezeigt.
 assessment#:#tst_results_access_setting#:#Zeitpunkt
@@ -1864,11 +1864,11 @@ assessment#:#tst_results_back_overview#:#Zurück zur Ergebnisübersicht
 assessment#:#tst_results_details_options#:#Weitere Optionen
 assessment#:#tst_results_gamification#:#Gamification
 assessment#:#tst_results_grading_opt_show_details#:#Detaillierte Testergebnisse anzeigen
-assessment#:#tst_results_grading_opt_show_details_desc#:#Zusätzlich zum zusammenfassenden Testergebnis wird eine Aktion "Detaillierte Ergebnisse" angeboten. Die Tabelle "Detaillierte Testergebnisse" zeigt für jeden Durchlauf die Titel der Fragen, die erreichten Punkte und die gewählten Antworten an. Der Inhalt der Tabelle kann im Abschnitt "Weitere Optionen" weiter ergänzt werden.
+assessment#:#tst_results_grading_opt_show_details_desc#:#Zusätzlich zum zusammenfassenden Testergebnis wird eine Aktion „Detaillierte Ergebnisse“ angeboten. Die Tabelle „Detaillierte Testergebnisse” zeigt für jeden Durchlauf die Titel der Fragen, die erreichten Punkte und die gewählten Antworten an. Der Inhalt der Tabelle kann im Abschnitt „Weitere Optionen“ weiter ergänzt werden.
 assessment#:#tst_results_grading_opt_show_mark#:#Note anzeigen
-assessment#:#tst_results_grading_opt_show_mark_desc#:#Eine Meldung im Reiter "Ergebnisse" informiert Teilnehmerinnen und Teilnehmer, welche Note sie erzielt haben.
-assessment#:#tst_results_grading_opt_show_status#:#"Bestanden" / "Nicht bestanden" anzeigen
-assessment#:#tst_results_grading_opt_show_status_desc#:#Eine Meldung im Reiter "Ergebnisse" informiert Teilnehmerinnen und Teilnehmer, ob sie bestanden haben oder nicht.
+assessment#:#tst_results_grading_opt_show_mark_desc#:#Eine Meldung im Reiter „Meine Ergebnisse“ informiert Teilnehmerinnen und Teilnehmer, welche Note sie erzielt haben.
+assessment#:#tst_results_grading_opt_show_status#:#„Bestanden“ / „Nicht bestanden“ anzeigen
+assessment#:#tst_results_grading_opt_show_status_desc#:#Eine Meldung im Reiter „Meine Ergebnisse“ informiert Teilnehmerinnen und Teilnehmer, ob sie bestanden haben oder nicht.
 assessment#:#tst_results_overview#:#Übersicht der Testdurchläufe
 assessment#:#tst_results_print_best_solution#:#Bestmögliche Lösung
 assessment#:#tst_results_print_best_solution_info#:#Den eigenen Antworten werden die bestmöglichen Lösungen gegenübergestellt.
@@ -1904,36 +1904,36 @@ assessment#:#tst_session_settings#:#Durchführung
 assessment#:#tst_set_offline_due_to_switched_question_set_type_setting#:#Der Test wurde offline gesetzt, da sich die Einstellung zur Auswahl der Testfragen geändert hat. Weisen Sie dem Test wieder Fragen zu. Anschließend können Sie den Test wieder online setzen.
 assessment#:#tst_setting_offer_hints_info#:#Teilnehmer können Lösungshinweise anfordern, um eine Frage zu beantworten. Pro gegebenem Lösungshinweis verringern sich die Punkte für die richtige Antwort.
 assessment#:#tst_setting_offer_hints_label#:#Lösungshinweise
-assessment#:#tst_settings_conflict_postpone_and_lock#:#"Nicht beantwortete Fragen werden ans Testende geschoben" kann nicht zusammen mit "Antworten bei Anzeige der Folgefrage festschreiben" verwendet werden.
-assessment#:#tst_settings_conflict_shuffle_and_lock#:#"Fragen mischen" kann nicht zusammen mit "Antworten bei Anzeige der Folgefrage festschreiben" verwendet werden.
+assessment#:#tst_settings_conflict_postpone_and_lock#:#„Nicht beantwortete Fragen werden ans Testende geschoben“ kann nicht zusammen mit „Antworten bei Anzeige der Folgefrage festschreiben“ verwendet werden.
+assessment#:#tst_settings_conflict_shuffle_and_lock#:#„Fragen mischen“ kann nicht zusammen mit „Antworten bei Anzeige der Folgefrage festschreiben“ verwendet werden.
 assessment#:#tst_settings_header_additional#:#Zusätzliche Funktionen
 assessment#:#tst_settings_header_execution#:#Durchführung: Zugang
 assessment#:#tst_settings_header_intro#:#Informationen zum Einstieg
 assessment#:#tst_settings_header_test_run#:#Durchführung: Steuerung Testdurchlauf
 assessment#:#tst_show_answer_sheet#:#Antwortenübersicht anzeigen
 assessment#:#tst_show_cancel#:#"Test unterbrechen" anzeigen
-assessment#:#tst_show_cancel_description#:#Zeigt während der Durchführung des Tests einen Button an, mit der der Test unterbrochen werden kann. Achtung: Das Unterbrechen des Tests hält nicht die unter 'Maximale Bearbeitungsdauer' festgelegte Bearbeitungszeit an.
+assessment#:#tst_show_cancel_description#:#Zeigt während der Durchführung des Tests einen Button an, mit der der Test unterbrochen werden kann. Achtung: Das Unterbrechen des Tests hält nicht die unter „Maximale Bearbeitungsdauer“ festgelegte Bearbeitungszeit an.
 assessment#:#tst_show_comp_results#:#Kompetenz-Ergebnisse
 assessment#:#tst_show_results#:#Testergebnisse
 assessment#:#tst_show_side_list#:#Fragenliste an
 assessment#:#tst_show_solution_answers_only#:#Druckausgabe der Ergebnisse (nur Antworten)
-assessment#:#tst_show_solution_answers_only_desc#:#Wenn "Druckausgabe der Ergebnisse (nur Antworten)" ausgewählt ist, werden ILIAS-Inhalte, die Sie über den "Inhalt bearbeiten"-Reiter der Fragen vor und hinter dem eigentlichen Fragentext platzieren können, in einem Ausdruck nicht angezeigt.
-assessment#:#tst_show_solution_compare#:#Zeige bestmögliche Lösung in 'Tabelle mit detaillierten Testergebnissen'
-assessment#:#tst_show_solution_compare_desc#:#Teilnehmern wird als Teil der 'Tabelle mit detaillierten Testergebnissen' eine Übersicht präsentiert, welche ihre eigenen Antworten und die bestmögliche Lösung gegenüberstellt. <br> Diese Übersicht wird nicht im Unterreiter 'Bewertete Antworten' des 'Ergebnisse'-Reiters angezeigt, auch wenn diese Einstellung hier vorgenommen wird.
+assessment#:#tst_show_solution_answers_only_desc#:#Wenn „Druckausgabe der Ergebnisse (nur Antworten)“ ausgewählt ist, werden ILIAS-Inhalte, die Sie über den „Inhalt bearbeiten“-Reiter der Fragen vor und hinter dem eigentlichen Fragentext platzieren können, in einem Ausdruck nicht angezeigt.
+assessment#:#tst_show_solution_compare#:#Zeige bestmögliche Lösung in „Tabelle mit detaillierten Testergebnissen“
+assessment#:#tst_show_solution_compare_desc#:#Teilnehmern wird als Teil der Tabelle „Detallierte Testergebnisse“ eine Ansicht präsentiert, welche ihre eigenen Antworten und die bestmögliche Lösung gegenüberstellt. <br> Diese Ansicht wird nicht im Unterreiter „Bewertete Antworten“ des „Meine Ergebnisse“-Reiters angezeigt, auch wenn diese Einstellung hier vorgenommen wird.
 assessment#:#tst_show_solution_details#:#Bewertete Antworten als Liste
-assessment#:#tst_show_solution_details_desc#:#Die Tabelle "Detallierte Testergebnisse" wird um eine Liste der eigenen Antworten ergänzt.
+assessment#:#tst_show_solution_details_desc#:#Die Tabelle „Detallierte Testergebnisse“ wird um eine Liste der eigenen Antworten ergänzt.
 assessment#:#tst_show_solution_details_singlepage#:#Bewertete Antworten auf Einzelseiten
 assessment#:#tst_show_solution_details_singlepage_desc#:#Teilnehmerinnen und Teilnehmer können jede Frage einzeln aufrufen und sehen, ob ihre Antworten richtig waren und wie viele Punkte sie damit erreicht haben.
 assessment#:#tst_show_solution_feedback#:#Rückmeldungen
-assessment#:#tst_show_solution_feedback_desc#:#Falls Rückmeldungen zu den gegebenen Antworten bei der Frage hinterlegt worden sind, werden diese angezeigt. Sie müssen die Option "Detallierte Testergebnisse anzeigen" aktivieren, um diese Funktion zu nutzen.
+assessment#:#tst_show_solution_feedback_desc#:#Falls Rückmeldungen zu den gegebenen Antworten bei der Frage hinterlegt worden sind, werden diese angezeigt. Sie müssen die Option „Detallierte Testergebnisse anzeigen“ aktivieren, um diese Funktion zu nutzen.
 assessment#:#tst_show_solution_printview#:#Druckbare Liste der Antworten
-assessment#:#tst_show_solution_printview_desc#:#Nach dem Klick auf "Test beenden" wird im Reiter "Ergebnisse" ein zusätzlicher Reiter "Bewertete Antworten" eingeblendet. Den Teilnehmerinnen und Teilnehmern werden hier ihre Antworten zu den einzelnen Testfragen angezeigt.
+assessment#:#tst_show_solution_printview_desc#:#Nach dem Klick auf „Test beenden“ wird im Reiter „Meine Ergebnisse“ ein zusätzlicher Reiter „Bewertete Antworten“ eingeblendet. Den Teilnehmerinnen und Teilnehmern werden hier ihre Antworten zu den einzelnen Testfragen angezeigt.
 assessment#:#tst_show_solution_signature#:#Platzhalter für Unterschrift
 assessment#:#tst_show_solution_signature_desc#:#Ist die Option „Detaillierte Testergebnisse anzeigen“ oder „Druckbare Liste der Antworten“ aktiviert, fügt ILIAS zusätzlich ein Unterschriftenfeld in den Ausdruck ein. In diesem kann die Person, die den Test durchgeführt hat, unterschreiben.
 assessment#:#tst_show_solution_suggested#:#Inhalte zur Wiederholung
-assessment#:#tst_show_solution_suggested_desc#:#Falls den Fragen im Test Inhalte zur Wiederholung des Stoffs zugeordnet wurden, werden diese angezeigt. Sie müssen die Option "Detaillierte Testergebnissen anzeigen" aktivieren, um diese Funktion zu nutzen. Teilnehmerinnen und Teilnehmer können so etwaige Wissenslücken schließen.
+assessment#:#tst_show_solution_suggested_desc#:#Falls den Fragen im Test Inhalte zur Wiederholung des Stoffs zugeordnet wurden, werden diese angezeigt. Sie müssen die Option „Detaillierte Testergebnissen anzeigen“ aktivieren, um diese Funktion zu nutzen. Teilnehmerinnen und Teilnehmer können so etwaige Wissenslücken schließen.
 assessment#:#tst_show_summary#:#Übersicht Testdurchlauf
-assessment#:#tst_show_summary_description#:#Mit der Schaltfläche 'Übersicht Testdurchlauf' können Teilnehmer eine Übersicht aufrufen, die zeigt, welche Fragen sie jeweils bereits bearbeitet oder markiert haben. Das Verhalten des 'Übersicht Testdurchlauf' können Sie noch weiter konfigurieren:
+assessment#:#tst_show_summary_description#:#Mit der Schaltfläche „Übersicht Testdurchlauf“ können Teilnehmer eine Übersicht aufrufen, die zeigt, welche Fragen sie jeweils bereits bearbeitet oder markiert haben. Das Verhalten des „Übersicht Testdurchlauf“ können Sie noch weiter konfigurieren:
 assessment#:#tst_show_toplist#:#Platzierung
 assessment#:#tst_shuffle_questions#:#Fragen mischen
 assessment#:#tst_shuffle_questions_description#:#Die Reihenfolge der Fragen wird pro Teilnehmer und pro Testdurchlauf neu gemischt.
@@ -2052,7 +2052,7 @@ assessment#:#uploaded_material#:#Hochgeladene Materialien
 assessment#:#use_previous_solution#:#Verwende vorherige Lösung
 assessment#:#use_previous_solution_advice#:#Die angezeigte Lösung wurde vormals von Ihnen abgegeben. Sie müssen die Übernahme dieser Lösung unterhalb der Frage bestätigen, falls Sie die Lösung ohne Änderungen übernehmen wollen.
 assessment#:#user_has_finished_a_test#:#Ein Teilnehmer hat einen Test beendet.
-assessment#:#user_ip_outside_range#:#Sie dürfen von Ihrer IP aus, nicht auf den Test zugreifen.
+assessment#:#user_ip_outside_range#:#Sie dürfen von Ihrer IP aus nicht auf den Test zugreifen.
 assessment#:#user_not_invited#:#Sie sind kein Teilnehmer der Prüfung.
 assessment#:#value_between_x_and_y#:#Der Wert muss zwischen %s und %s liegen
 assessment#:#values#:#Werte
@@ -2069,7 +2069,7 @@ assessment#:#without_solutions_participants#:#Teilnehmer ohne Antworten
 assessment#:#worked_through#:#Bearbeitet
 assessment#:#working_time#:#Bearbeitungsdauer
 assessment#:#you_received_a_of_b_points#:#Sie haben %s von %s möglichen Punkten erreicht.
-assessment#:#your_results#:#Ihre Ergebnisse
+assessment#:#your_results#:#Meine Ergebnisse
 auth#:#auth_account_code#:#Code
 auth#:#auth_account_code_info#:#Um Ihr Anmeldekonto zu reaktivieren, können Sie einen ILIAS-Anmeldekonten-Code benutzen.
 auth#:#auth_account_code_title#:#Anmeldekonten-Code
@@ -2296,6 +2296,14 @@ badge#:#badge_select_one#:#Sie müssen mindestens einen Badge auswählen
 badge#:#badge_service_activate#:#Service aktivieren
 badge#:#badge_service_activate_info#:#Aktiveren Sie den Service, um Badges verfügbar zu machen
 badge#:#badge_settings#:#Badge Einstellungen
+badge#:#badge_sort_active_badges_first#:#Aktive Badges zuerst
+badge#:#badge_sort_active_badges_last#:#Aktive Badges zuletzt
+badge#:#badge_sort_activity_badges_first#:#Automatisch vergebene Badges zuerst
+badge#:#badge_sort_activity_badges_last#:#Automatisch vergebene Badges zuletzt
+badge#:#badge_sort_added_to_profile_first#:#Zum Profil hinzugefügte zuerst
+badge#:#badge_sort_excluded_from_profile_first#:#Vom Profil ausgeklammerte zuerst
+badge#:#badge_sort_manual_awarding_first#:#Badges mit manueller Vergabe zuerst
+badge#:#badge_sort_manual_awarding_last#:#Badges mit manueller Vergabe zuletzt
 badge#:#badge_subtype_auto#:#automatisch
 badge#:#badge_subtype_manual#:#manuell
 badge#:#badge_template_deletion_confirmation#:#Wollen Sie wirklich die folgenden Bildvorlagen löschen?
@@ -3816,6 +3824,7 @@ common#:#copy_all#:#Alle kopieren
 common#:#copy_n_of_suffix#:#- Kopie (%1$s)
 common#:#copy_of#:#Kopie von
 common#:#copy_of_suffix#:#- Kopie
+common#:#copy_perma_link#:#Link in Zwischenablage kopieren
 common#:#copy_selected_items#:#Kopieren
 common#:#count#:#Anzahl
 common#:#counter_novelty#:#Neuigkeiten
@@ -4883,7 +4892,7 @@ common#:#obj_adm#:#Administration
 common#:#obj_adm_desc#:#Beinhaltet alle Verwaltungstools für Ihre ILIAS-Installation.
 common#:#obj_adn#:#Ankündigungen
 common#:#obj_adve#:#Editor
-common#:#obj_adve_desc#:#Administrationseinstellungen für den ILIAS-Editor und TinyMCE.
+common#:#obj_adve_desc#:#Administrationseinstellungen für den ILIAS-Seiteneditor und den TinyMCE-Editor
 common#:#obj_ass#:#Asset
 common#:#obj_assf#:#Test und Assessment
 common#:#obj_assf_desc#:#Einstellungen und Verwaltung des Test und Assessment-Tools
@@ -5292,6 +5301,7 @@ common#:#pd_items_news#:#Einschließlich Neuigkeiten der ausgewählten Objekte
 common#:#pdf_export#:#PDF-Export
 common#:#perm_settings#:#Rechte
 common#:#perma_link#:#Link zu dieser Seite
+common#:#perma_link_copied#:#Link zu dieser Seite wurde in die Zwischenablage kopiert.
 common#:#permission#:#Recht
 common#:#permission_denied#:#Kein Zugriffsrecht
 common#:#permission_settings#:#Rechteeinstellungen
@@ -5807,8 +5817,6 @@ common#:#tst_history_read#:#Verlauf einsehen
 common#:#tst_new#:#Neuen Test anlegen
 common#:#tst_results#:#Testergebnisse
 common#:#tst_run#:#Ausführen
-common#:#tst_statistical_evaluation#:#Statistik
-common#:#tst_statistics#:#Statistik
 common#:#tst_user_not_invited#:#Sie dürfen an dieser Online-Prüfung nicht teilnehmen.
 common#:#tst_warning_test_not_complete#:#Der Test ist nicht vollständig!
 common#:#tutors#:#Kursbetreuung
@@ -6190,8 +6198,7 @@ content#:#cont_active_from#:#Aktiv ab
 content#:#cont_active_to#:#Aktiv bis
 content#:#cont_add_area#:#Bereich hinzufügen
 content#:#cont_add_cell#:#Spalte hinzufügen
-content#:#cont_add_change_comment#:#Überarbeitungskommentar hinzufügen
-content#:#cont_add_definition#:#Add Definition###26 08 2024 new variable
+content#:#cont_add_definition#:#Definition hinzufügen
 content#:#cont_add_elements#:#<b>Klicken</b> Sie auf ein <b>Plus-Symbol</b>, um ein neues Element <b>hinzuzufügen</b>.
 content#:#cont_add_file#:#Datei hinzufügen
 content#:#cont_add_images#:#Bild hinzufügen
@@ -6858,7 +6865,7 @@ content#:#cont_other_resources#:#Inhalt (Andere Ressourcen)
 content#:#cont_out_of_focus_message#:#Diese Seite ist nicht mehr Teil der Inhalte des aktuellen Lernziels.
 content#:#cont_out_of_focus_message_last_page#:#Sie befinden sich auf der letzten Seite der Inhalte zum aktuellen Lernziel.
 content#:#cont_ov_all_correct#:#Sie haben alle Fragen richtig beantwortet.
-content#:#cont_ov_preview#:#Die Fragenübersicht funktioniert nicht im Seiteneditor-Kontext. Benutzen Sie stattdessen die Vorschau auf SCO- oder SCORM-Level.
+content#:#cont_ov_preview#:# Die Fragenübersicht funktioniert nicht im Kontext des ILIAS-Seiteneditors. Benutzen Sie stattdessen die Vorschau auf SCO- oder SCORM-Level.
 content#:#cont_ov_some_correct#:#Sie haben [x] von [y] Fragen richtig beantwortet.
 content#:#cont_ov_wrong_answered#:#Die folgenden Fragen wurden noch nicht oder falsch beantwortet
 content#:#cont_overlay_image#:#Overlay-Bild
@@ -9756,7 +9763,12 @@ exp#:#exp_create_file#:#Exportdatei erzeugen
 exp#:#exp_error_disabled#:#Der Export von Container-Objekten ist deaktiviert. Bei Fragen wenden Sie sich bitte an die technische Betreuung.
 exp#:#exp_error_too_many_objects#:#Der Export überschreitet die maximal erlaubte Zahl an Objekten (%1). Bitte wählen Sie eine kleinere Anzahl an Objekten.
 exp#:#exp_export_files#:#Exportdateien
+exp#:#exp_export_single_option#:#Export %s
 exp#:#exp_file_created#:#Eine Exportdatei wurde erstellt.
+exp#:#exp_format_dropdown-csv#:#als CSV
+exp#:#exp_format_dropdown-html#:#als HTML
+exp#:#exp_format_dropdown-xls#:#als XLS
+exp#:#exp_format_dropdown-xml#:#als XML
 exp#:#exp_html#:#HTML
 exp#:#exp_import_validation_err_no_matching_xsd#:#Eine Schema Datei für Version %s existiert nicht.
 exp#:#exp_print_pdf#:#Drucken/PDF
@@ -9852,6 +9864,8 @@ file#:#preview_caption#:#Vorschau %svon %s
 file#:#preview_image_size_info#:#Die Vorschauversionen der Bilder werden je nach Bedarf verkleinert oder vergrößert, so dass ihre längste Seite der hier eingegebenen Länge (in px) entspricht.
 file#:#preview_persisting#:#Vorschaubilder speichern
 file#:#preview_persisting_info#:#Vorschaubilder werden generiert und gespeichert. Sie müssen nicht mehr bei jedem Aufruf neu erzeugt werden. Das verbessert die Performanz.
+file#:#previews_for_tiles#:#Kachelbilder
+file#:#previews_for_tiles_info#:#Verwende Vorschaubilder für Kacheln.
 file#:#publish_before_delete#:#Version(en) konnte(n) nicht gelöscht werden, da ein noch unveröffentlichter Entwurf existiert.
 file#:#replace_file_info#:#Alle früheren Dateiversionen werden gelöscht.
 file#:#resource_id#:#Ressourcen ID
@@ -10892,6 +10906,7 @@ ldoc#:#ldoc_form_edit_doc_head#:#Dokument bearbeiten
 ldoc#:#ldoc_form_new_doc_head#:#Dokument erstellen
 ldoc#:#ldoc_last_modified#:#Letzte Änderung
 ldoc#:#ldoc_ldoc_settings#:#Einstellungen
+ldoc#:#ldoc_order_invalid#:#Bitte geben Sie eine Zahl für die Sortierung ein
 ldoc#:#ldoc_period#:#Zeitraum
 ldoc#:#ldoc_period_from#:#Von
 ldoc#:#ldoc_period_until#:#Bis
@@ -13009,17 +13024,17 @@ obj#:#custom_icon#:#Angepasstes Icon
 obj#:#edit_availability_period#:#Zeitliche Verfügbarkeit
 obj#:#edit_questions#:#Fragen bearbeiten
 obj#:#no_objects_selected#:#Es muss mindestens ein Objekt ausgewählt werden.
-obj#:#obj_activate_content_lang#:#Mehrsprachigkeit für Seiteneditor aktivieren
+obj#:#obj_activate_content_lang#:#Mehrsprachigkeit für die Bearbeitung aktivieren
 obj#:#obj_activate_multilang#:#Mehrsprachigkeit aktivieren
 obj#:#obj_activation#:#Aktivierung
 obj#:#obj_activation_list_gui#:#Verfügbarkeit
 obj#:#obj_add_languages#:#Sprachen hinzufügen
 obj#:#obj_additional_langs#:#Zusätzliche Sprachen
 obj#:#obj_conf_delete_lang#:#Wollen Sie die Anzeige von Titel und Beschreibung für diese Sprachen wirklich beenden?
-obj#:#obj_cont_transl_deactivated#:#Die Unterstützung für mehrsprachige Inhalte im Seiteneditor wurde deaktiviert.
+obj#:#obj_cont_transl_deactivated#:#Die Unterstützung für mehrsprachige Inhalte wurde deaktiviert.
 obj#:#obj_copy_progress#:#Fortschritt des Kopierens
-obj#:#obj_deactivate_content_lang#:#Mehrsprachigkeit für Seiteneditor deaktivieren.
-obj#:#obj_deactivate_content_transl_conf#:#Wollen Sie die Unterstützung für mehrsprachige Inhalte im Seiteneditor wirklich deaktivieren? Nur die Inhalte der Standardsprache werden verfügbar bleiben.
+obj#:#obj_deactivate_content_lang#:#Mehrsprachigkeit für die Bearbeitung deaktivieren
+obj#:#obj_deactivate_content_transl_conf#:# Wollen Sie die Unterstützung für mehrsprachige Inhalte im Seiteneditor wirklich deaktivieren? Nur die Inhalte der Standardsprache bleiben verfügbar.
 obj#:#obj_deactivate_multilang#:#Mehrsprachigkeit deaktivieren
 obj#:#obj_deactivate_multilang_conf#:#Wollen Sie die Unterstützung für mehrsprachige Inhalte wirklich deaktivieren? Nur die Inhalte der Standardsprache werden verfügbar bleiben.
 obj#:#obj_fallback_lang#:#Standardsprache
@@ -13129,7 +13144,7 @@ orgu#:#org_op_score_participants#:#Teilnehmer bewerten
 orgu#:#org_op_view_certificates#:#Zertifikate von anderen Benutzern einsehen
 orgu#:#org_op_view_competences#:#Kompetenzen von anderen Benutzern einsehen
 orgu#:#org_op_view_individual_plan#:#Individuellen Plan einsehen
-orgu#:#org_op_view_members#:#Mitgliedschaften sichtbar
+orgu#:#org_op_view_members#:#Zuweisungen einsehen
 orgu#:#org_op_write_learning_progress#:#Lernfortschritt von anderen Benutzern setzen
 orgu#:#org_unit_not_found#:#Die Organisationseinheit wurde nicht gefunden.
 orgu#:#orgu_add#:#Organisationseinheit hinzufügen
@@ -13939,9 +13954,9 @@ rbac#:#adn_visible#:#Administration für Ankündigungen ist sichtbar.
 rbac#:#adn_write#:#Ankündigungen erstellen und verwalten
 rbac#:#adopt_perm_from_template#:#Rechteeinstellungen kopieren
 rbac#:#adve_edit_permission#:#Rechteeinstellungen ändern
-rbac#:#adve_read#:#Zugriff auf die Editoreinstellungen
-rbac#:#adve_visible#:#Editoreinstellungen sind sichtbar
-rbac#:#adve_write#:#Editoreinstellungen bearbeiten
+rbac#:#adve_read#:#Zugriff auf die Editor-Administration
+rbac#:#adve_visible#:#Editor-Administration ist sichtbar
+rbac#:#adve_write#:#Einstellungen in der Editor-Administration bearbeiten
 rbac#:#amend_grading#:#Abschließende Bewertung ändern
 rbac#:#assf_edit_permission#:#Rechteeinstellungen ändern
 rbac#:#assf_read#:#Zugriff auf die Test und Assessment-Administration
@@ -14060,10 +14075,10 @@ rbac#:#condition_result_range_percentage#:#Ergebnisbereich
 rbac#:#contribute#:#Beiträge erstellen
 rbac#:#copa_copy#:#Inhaltsseite kopieren
 rbac#:#copa_delete#:#Inhaltsseite löschen
-rbac#:#copa_edit_learning_progress#:#Benutzer kann Lernfortschrittseinstellungen bearbeiten
+rbac#:#copa_edit_learning_progress#:#Lernfortschrittseinstellungen können bearbeitet werden
 rbac#:#copa_edit_permission#:#Rechteeinstellungen ändern
 rbac#:#copa_read#:#Inhaltsseite lesen
-rbac#:#copa_read_learning_progress#:#Benutzer kann Lernfortschritt anderer Benutzer einsehen
+rbac#:#copa_read_learning_progress#:#Lernfortschritt von anderen einsehen
 rbac#:#copa_visible#:#Inhaltsseite ist sichtbar
 rbac#:#copa_write#:#Inhaltsseite bearbeiten
 rbac#:#cpad_edit_permissions#:#Rechteeinstellungen der Administration für Inhaltsseiten ändern
@@ -14073,7 +14088,7 @@ rbac#:#cpad_write#:#Einstellungen in Administration für Inhaltsseiten ändern
 rbac#:#crs_copy#:#Kurs kopieren
 rbac#:#crs_delete#:#Kurs löschen oder verschieben
 rbac#:#crs_edit_event#:#Kalendertermine bearbeiten
-rbac#:#crs_edit_learning_progress#:#Benutzer kann Lernfortschrittseinstellungen bearbeiten
+rbac#:#crs_edit_learning_progress#:#Lernfortschrittseinstellungen können bearbeitet werden
 rbac#:#crs_edit_permission#:#Rechteeinstellungen ändern
 rbac#:#crs_grade#:#Kursmitglieder bewerten
 rbac#:#crs_join#:#Kurs beitreten
@@ -14081,14 +14096,14 @@ rbac#:#crs_leave#:#Kursmitgliedschaft beenden
 rbac#:#crs_manage_members#:#Mitglieder eines Kurses verwalten
 rbac#:#crs_news_add_news#:#Neuigkeiten erstellen und eigene Neuigkeiten bearbeiten
 rbac#:#crs_read#:#Kurs lesen
-rbac#:#crs_read_learning_progress#:#Benutzer kann Lernfortschritt anderer Benutzer einsehen
+rbac#:#crs_read_learning_progress#:#Lernfortschritt von anderen einsehen
 rbac#:#crs_visible#:#Kurs ist sichtbar
 rbac#:#crs_write#:#Kurs bearbeiten
 rbac#:#crsr_copy#:#Kurslinks kopieren
 rbac#:#crsr_delete#:#Kurslinks verschieben oder löschen
-rbac#:#crsr_edit_learning_progress#:#Benutzer kann Lernfortschrittseinstellungen bearbeiten
+rbac#:#crsr_edit_learning_progress#:#Lernfortschrittseinstellungen können bearbeitet werden
 rbac#:#crsr_edit_permission#:#Rechteeinstellungen ändern
-rbac#:#crsr_read_learning_progress#:#Benutzer kann Lernfortschritt anderer Benutzer einsehen
+rbac#:#crsr_read_learning_progress#:#Lernfortschritt von anderen einsehen
 rbac#:#crsr_visible#:#Kurslinks sind sichtbar und können genutzt werden
 rbac#:#crsr_write#:#Einstellungen der Kurslinks bearbeiten
 rbac#:#crss_edit_permission#:#Rechteeinstellungen für die Kurs-Administration ändern
@@ -14127,11 +14142,11 @@ rbac#:#edit_userassignment#:#Benutzerzuweisung ändern
 rbac#:#edit_wiki_navigation#:#Navigation bearbeiten
 rbac#:#exc_copy#:#Übung kopieren
 rbac#:#exc_delete#:#Übung löschen oder verschieben
-rbac#:#exc_edit_learning_progress#:#Benutzer kann Lernfortschrittseinstellungen bearbeiten
+rbac#:#exc_edit_learning_progress#:#Lernfortschrittseinstellungen können bearbeitet werden
 rbac#:#exc_edit_permission#:#Rechteeinstellungen ändern
 rbac#:#exc_edit_submissions_grades#:#Benutzer kann Abgaben und Noten bearbeiten
 rbac#:#exc_read#:#An Übung teilnehmen
-rbac#:#exc_read_learning_progress#:#Benutzer kann Lernfortschritt anderer Benutzer einsehen
+rbac#:#exc_read_learning_progress#:#Lernfortschritt von anderen einsehen
 rbac#:#exc_visible#:#Übung ist sichtbar
 rbac#:#exc_write#:#Einstellungen und Aufgaben der Übung bearbeiten
 rbac#:#excs_edit_permission#:#Rechteeinstellungen für die Übungs-Administration ändern
@@ -14156,11 +14171,12 @@ rbac#:#feed_write#:#Einstellungen des Webfeeds bearbeiten
 rbac#:#file_copy#:#Datei kopieren
 rbac#:#file_delete#:#Datei verschieben oder löschen
 rbac#:#file_edit_file#:#Bearbeitung in einem externen Editor erlauben, sofern vorhanden
-rbac#:#file_edit_learning_progress#:#Benutzer kann Lernfortschrittseinstellungen bearbeiten
+rbac#:#file_edit_learning_progress#:#Lernfortschrittseinstellungen können bearbeitet werden.
 rbac#:#file_edit_permission#:#Rechteeinstellungen ändern
 rbac#:#file_read#:#Datei herunterladen
-rbac#:#file_read_learning_progress#:#Benutzer kann Lernfortschritt anderer Benutzer einsehen
-rbac#:#file_visible#:#Datei ist sichtbar
+rbac#:#file_read_learning_progress#:#Lernfortschritt von anderen einsehen
+rbac#:#file_view_content#:#Inhalt der Datei wird im Browser angezeigt (wenn WOPI aktiv ist).
+rbac#:#file_visible#:#Datei ist sichtbar.
 rbac#:#file_write#:#Einstellungen der Datei bearbeiten und neue Version hochladen
 rbac#:#files_visible#:#Dateien sichtbar
 rbac#:#fils_edit_permissions#:#Rechteeinstellungen der Administration für Datei-Services ändern
@@ -14175,10 +14191,10 @@ rbac#:#filter_roles_local_policy#:#Zeige nur Rollen mit lokaler Zugriffsregelung
 rbac#:#fld_create_poll#:#Abstimmung anlegen
 rbac#:#fold_copy#:#Ordner kopieren
 rbac#:#fold_delete#:#Ordner löschen oder verschieben
-rbac#:#fold_edit_learning_progress#:#Benutzer kann Lernfortschrittseinstellungen bearbeiten
+rbac#:#fold_edit_learning_progress#:#Lernfortschrittseinstellungen können bearbeitet werden
 rbac#:#fold_edit_permission#:#Rechteeinstellungen ändern
 rbac#:#fold_read#:#Lesezugriff auf Ordner
-rbac#:#fold_read_learning_progress#:#Benutzer kann Lernfortschritt anderer Benutzer einsehen
+rbac#:#fold_read_learning_progress#:#Lernfortschritt von anderen einsehen
 rbac#:#fold_visible#:#Ordner ist sichtbar
 rbac#:#fold_write#:#Ordner bearbeiten
 rbac#:#folders_create#:#Ordner erstellen
@@ -14187,9 +14203,11 @@ rbac#:#frm_add_reply#:#Benutzer können auf Forenbeiträge antworten
 rbac#:#frm_add_thread#:#Forenthema anlegen
 rbac#:#frm_copy#:#Forum kopieren
 rbac#:#frm_delete#:#Forum löschen oder verschieben
+rbac#:#frm_edit_learning_progress#:#Lernfortschrittseinstellungen können bearbeitet werden
 rbac#:#frm_edit_permission#:#Rechteeinstellungen ändern
 rbac#:#frm_moderate_frm#:#Forenbeiträge löschen und zensieren
 rbac#:#frm_read#:#Forum und Beiträge lesen
+rbac#:#frm_read_learning_progress#:#Lernfortschritt von anderen einsehen
 rbac#:#frm_visible#:#Forum ist sichtbar
 rbac#:#frm_write#:#Einstellungen des Forums bearbeiten und Moderation verwalten###Modified as part of gender mainstreaming activities for ILIAS 8
 rbac#:#frma_edit_permission#:#Rechteeinstellungen für Administration ändern
@@ -14206,7 +14224,7 @@ rbac#:#glo_write#:#Inhalt und Einstellungen des Glossars bearbeiten
 rbac#:#grp_copy#:#Gruppe kopieren
 rbac#:#grp_delete#:#Gruppe löschen oder verschieben
 rbac#:#grp_edit_event#:#Kalendertermine bearbeiten
-rbac#:#grp_edit_learning_progress#:#Benutzer kann Lernfortschrittseinstellungen bearbeiten
+rbac#:#grp_edit_learning_progress#:#Lernfortschrittseinstellungen können bearbeitet werden
 rbac#:#grp_edit_permission#:#Rechteeinstellungen ändern
 rbac#:#grp_grade#:#Gruppenmitglieder bewerten
 rbac#:#grp_join#:#Benutzer kann Gruppe beitreten
@@ -14214,7 +14232,7 @@ rbac#:#grp_leave#:#Benutzer kann Gruppenmitgliedschaft beenden
 rbac#:#grp_manage_members#:#Mitglieder einer Gruppe verwalten
 rbac#:#grp_news_add_news#:#Neuigkeiten erstellen und eigene Neuigkeiten bearbeiten
 rbac#:#grp_read#:#Lesezugriff auf Gruppe
-rbac#:#grp_read_learning_progress#:#Benutzer kann Lernfortschritt anderer Benutzer einsehen
+rbac#:#grp_read_learning_progress#:#Lernfortschritt von anderen einsehen
 rbac#:#grp_visible#:#Gruppe ist sichtbar
 rbac#:#grp_write#:#Einstellungen der Gruppe und Inhalt bearbeiten
 rbac#:#grpr_copy#:#Gruppenlinks kopieren
@@ -14232,10 +14250,10 @@ rbac#:#hlps_visible#:#Administration der Online-Hilfe ist sichtbar.
 rbac#:#hlps_write#:#Einstellungen der Online-Hilfe bearbeiten und neue Version hochladen
 rbac#:#htlm_copy#:#HTML-Lernmodul kopieren
 rbac#:#htlm_delete#:#HTML-Lernmodul löschen
-rbac#:#htlm_edit_learning_progress#:#Benutzer kann Lernfortschrittseinstellungen bearbeiten
+rbac#:#htlm_edit_learning_progress#:#Lernfortschrittseinstellungen können bearbeitet werden
 rbac#:#htlm_edit_permission#:#Rechteeinstellungen ändern
 rbac#:#htlm_read#:#HTML-Lernmodul lesen
-rbac#:#htlm_read_learning_progress#:#Benutzer kann Lernfortschritt anderer Benutzer einsehen
+rbac#:#htlm_read_learning_progress#:#Lernfortschritt von anderen einsehen
 rbac#:#htlm_visible#:#HTML-Lernmodul ist sichtbar
 rbac#:#htlm_write#:#HTML-Lernmodul bearbeiten
 rbac#:#iass_amend_grading#:#Finalisierte Bewertung der Individuellen Bewertung ändern
@@ -14268,10 +14286,10 @@ rbac#:#lhts_visible#:#Administration für Lernverlauf ist sichtbar.
 rbac#:#lhts_write#:#Einstellungen in Administration für Lernverlauf ändern
 rbac#:#lm_copy#:#ILIAS-Lernmodul kopieren
 rbac#:#lm_delete#:#ILIAS-Lernmodul löschen
-rbac#:#lm_edit_learning_progress#:#Benutzer kann Lernfortschrittseinstellungen bearbeiten
+rbac#:#lm_edit_learning_progress#:#Lernfortschrittseinstellungen können bearbeitet werden
 rbac#:#lm_edit_permission#:#Rechteeinstellungen ändern
 rbac#:#lm_read#:#ILIAS-Lernmodul lesen
-rbac#:#lm_read_learning_progress#:#Benutzer kann Lernfortschritt anderer Benutzer einsehen
+rbac#:#lm_read_learning_progress#:#Lernfortschritt von anderen einsehen
 rbac#:#lm_visible#:#ILIAS-Lernmodul ist sichtbar
 rbac#:#lm_write#:#ILIAS-Lernmodul bearbeiten
 rbac#:#lngf_edit_permission#:#Rechteeinstellungen der Administration ändern
@@ -14291,11 +14309,11 @@ rbac#:#lso_copy#:#Lernsequenz kopieren
 rbac#:#lso_delete#:#Lernsequenz löschen
 rbac#:#lso_edit_learning_progress#:#Lernfortschrittseinstellungen bearbeiten
 rbac#:#lso_edit_permission#:#Rechteeinstellungen ändern
-rbac#:#lso_lp_other_users#:#Benutzer kann Lernfortschritt anderer Benutzer einsehen
+rbac#:#lso_lp_other_users#:#Lernfortschritt von anderen einsehen
 rbac#:#lso_manage_members#:#Mitglieder bearbeiten
 rbac#:#lso_participate#:#An der Lernsequenz anmelden
 rbac#:#lso_read#:#Lesezugriff auf die Lernsequenz
-rbac#:#lso_read_learning_progress#:#Benutzer kann Lernfortschritt anderer Benutzer einsehen
+rbac#:#lso_read_learning_progress#:#Lernfortschritt von anderen einsehen
 rbac#:#lso_unparticipate#:#Von der Lernsequenz abmelden
 rbac#:#lso_visible#:#Lernsequenz sichtbar
 rbac#:#lso_write#:#Lernsequenz bearbeiten
@@ -14336,7 +14354,7 @@ rbac#:#mcst_delete#:#Mediacast löschen oder verschieben
 rbac#:#mcst_edit_learning_progress#:#Lernfortschrittseinstellungen bearbeiten
 rbac#:#mcst_edit_permission#:#Rechteeinstellung ändern
 rbac#:#mcst_read#:#Mediacast lesen
-rbac#:#mcst_read_learning_progress#:#Benutzer kann Lernfortschritt anderer Benutzer einsehen
+rbac#:#mcst_read_learning_progress#:#Lernfortschritt von anderen einsehen
 rbac#:#mcst_visible#:#Mediacast ist sichtbar
 rbac#:#mcst_write#:#Inhalt und Einstellungen des Mediacasts bearbeiten
 rbac#:#mcts_edit_permission#:#Rechteeinstellung in Mediacast-Administration ändern
@@ -14366,6 +14384,7 @@ rbac#:#moderate_frm#:#Moderieren
 rbac#:#msg_anonymous_cannot_be_assigned#:#Der anonyme Benutzer darf keiner Rolle zugewiesen werden.
 rbac#:#msg_no_roles_of_type#:#Keine Rollen vorhanden mit der gewählten Filtereinstellung
 rbac#:#news_add_news#:#Neuigkeiten erstellen
+rbac#:#no_corresponding_roles#:#Es sind keine passenden Rollen vorhanden.
 rbac#:#nots_edit_permissions#:#Rechteeinstellungen der Administration für Notizen ändern
 rbac#:#nots_read#:#Lesezugriff auf Administration für Notizen
 rbac#:#nots_visible#:#Administration für Notizen ist sichtbar.
@@ -14609,6 +14628,7 @@ rbac#:#rbac_ud_local#:#Selbst erstelle lokale Rolle
 rbac#:#rbac_ud_rolt#:#Selbst erstellte Rollenvorlage
 rbac#:#rbac_unprotected_delete_local_policies_info#:#Wenn aktiviert, werden alle lokalen Zugriffsregelungen überschrieben und die Rechte in Kursen und Gruppen neu initialisiert.
 rbac#:#rbac_unprotected_keep_local_policies_info#:#Wählen Sie diese Einstellung, um alle vorhandenen lokalen Zugriffsregelungen beizubehalten.
+rbac#:#rbac_view_content#:#Inhalt anzeigen
 rbac#:#rcat_delete#:#ECS-Kategorie löschen
 rbac#:#rcat_edit_permission#:#Rechteeinstellungen ändern
 rbac#:#rcat_read#:#Lesezugriff auf ECS-Kategorie
@@ -14679,10 +14699,10 @@ rbac#:#rwik_visible#:#ECS-Wiki ist sichtbar
 rbac#:#rwik_write#:#ECS-Wiki bearbeiten
 rbac#:#sahs_copy#:#Benutzer kann SCORM-Lernmodul kopieren
 rbac#:#sahs_delete#:#SCORM-Lernmodul löschen oder verschieben
-rbac#:#sahs_edit_learning_progress#:#Benutzer kann Lernfortschrittseinstellungen bearbeiten
+rbac#:#sahs_edit_learning_progress#:#Lernfortschrittseinstellungen können bearbeitet werden
 rbac#:#sahs_edit_permission#:#Rechteeinstellungen ändern
 rbac#:#sahs_read#:#SCORM-Lernmodul lesen
-rbac#:#sahs_read_learning_progress#:#Benutzer kann Lernfortschritt anderer Benutzer einsehen
+rbac#:#sahs_read_learning_progress#:#Lernfortschritt von anderen einsehen
 rbac#:#sahs_visible#:#SCORM-Lernmodul ist sichtbar
 rbac#:#sahs_write#:#Inhalt und Einstellungen des SCORM-Lernmoduls bearbeiten
 rbac#:#seas_edit_permission#:#Rechteeinstellungen der Suche-Administration ändern
@@ -14693,13 +14713,13 @@ rbac#:#seas_write#:#Einstellungen in Administration der Suche bearbeiten
 rbac#:#sess_copy#:#Sitzung kopieren
 rbac#:#sess_delete#:#Sitzung löschen
 rbac#:#sess_edit_event#:#Kalendertermine bearbeiten
-rbac#:#sess_edit_learning_progress#:#Benutzer kann Lernfortschrittseinstellungen bearbeiten
+rbac#:#sess_edit_learning_progress#:#Lernfortschrittseinstellungen können bearbeitet werden
 rbac#:#sess_edit_metadata#:#Metadaten bearbeiten
 rbac#:#sess_edit_permission#:#Rechteeinstellungen ändern
 rbac#:#sess_manage_materials#:#Materialzuordnungen verwalten
 rbac#:#sess_manage_members#:#Teilnahme an Sitzungen verwalten
 rbac#:#sess_read#:#Lesezugriff auf Sitzungen
-rbac#:#sess_read_learning_progress#:#Benutzer kann Lernfortschritt anderer Benutzer einsehen
+rbac#:#sess_read_learning_progress#:#Lernfortschritt von anderen einsehen
 rbac#:#sess_visible#:#Sitzungen sind sichtbar
 rbac#:#sess_write#:#Sitzungen bearbeiten
 rbac#:#skee_copy#:#Kompetenzbaum kopieren (derzeit nicht verfügbar)
@@ -14737,11 +14757,11 @@ rbac#:#stys_sty_write_system#:#System-Styles bearbeiten
 rbac#:#stys_visible#:#Layout-Administration ist sichtbar
 rbac#:#svy_copy#:#Umfrage kopieren
 rbac#:#svy_delete#:#Umfrage löschen oder verschieben
-rbac#:#svy_edit_learning_progress#:#Benutzer kann Lernfortschrittseinstellungen bearbeiten
+rbac#:#svy_edit_learning_progress#:#Lernfortschrittseinstellungen können bearbeitet werden
 rbac#:#svy_edit_permission#:#Rechteeinstellungen ändern
 rbac#:#svy_invite#:#Andere zu einer Umfrage einladen
 rbac#:#svy_read#:#An Umfrage teilnehmen
-rbac#:#svy_read_learning_progress#:#Benutzer kann Lernfortschritt anderer Benutzer einsehen
+rbac#:#svy_read_learning_progress#:#Lernfortschritt von anderen einsehen
 rbac#:#svy_read_results#:#Benutzer hat Zugriff auf alle Umfrageergebnisse
 rbac#:#svy_visible#:#Umfrage ist sichtbar
 rbac#:#svy_write#:#Umfrage zusammenstellen und Einstellungen bearbeiten
@@ -14777,15 +14797,15 @@ rbac#:#trac_visible#:#Zugriffsstatistiken und Lernfortschrittsverwaltung ist sic
 rbac#:#trac_write#:#Einstellungen für Zugriffsstatistiken und Lernfortschrittsverwaltung bearbeiten
 rbac#:#tst_copy#:#Test kopieren
 rbac#:#tst_delete#:#Test löschen oder verschieben
-rbac#:#tst_edit_learning_progress#:#Benutzer kann Lernfortschrittseinstellungen bearbeiten
+rbac#:#tst_edit_learning_progress#:#Lernfortschrittseinstellungen können bearbeitet werden
 rbac#:#tst_edit_permission#:#Rechteeinstellungen bearbeiten
 rbac#:#tst_read#:#Test durchführen
-rbac#:#tst_read_learning_progress#:#Benutzer kann Lernfortschritt anderer Benutzer einsehen
+rbac#:#tst_read_learning_progress#:#Lernfortschritt von anderen einsehen
+rbac#:#tst_tst_history_read#:#Verlauf einsehen
 rbac#:#tst_tst_results#:#Zugriff auf Testergebnisse
-rbac#:#tst_tst_statistics#:#Zugriff auf Teststatistik
 rbac#:#tst_visible#:#Test ist sichtbar
 rbac#:#tst_write#:#Test zusammenstellen und Einstellungen bearbeiten
-rbac#:#upload_blacklisted_files#:#Blacklist umgehen
+rbac#:#upload_blacklisted_files#:#Negativliste umgehen
 rbac#:#usrf_delete#:#Anmeldekonten löschen
 rbac#:#usrf_edit_permission#:#Rechteeinstellungen für die Anmeldekontenverwaltung ändern
 rbac#:#usrf_edit_roleassignment#:#Rollenzuweisung von Anmeldekonten ändern
@@ -16650,10 +16670,10 @@ survey#:#survey_question_obligatory#:#(Diese Frage ist eine Pflichtfrage. Sie mu
 survey#:#survey_question_pool#:#Fragenpool
 survey#:#survey_question_pool_title#:#Pool-Titel
 survey#:#survey_question_pool_usage#:#Fragenpool verwenden
-survey#:#survey_question_pool_usage_active#:#Fragen können optional in einem Fragenpool angelegt werden
-survey#:#survey_question_pool_usage_active_info#:#Beim Anlegen einer Fragen muss jeweils entschieden werden, ob ein Fragenpool verwendet werden soll.
-survey#:#survey_question_pool_usage_inactive#:#Fragen werden direkt in der Umfrage angelegt.
-survey#:#survey_question_pool_usage_inactive_info#:#Die Frage wird zuerst nur für diese Umfrage erstellt und kann später manuell zu einem Fragenpool hinzugefügt werden.
+survey#:#survey_question_pool_usage_active#:#Fragen optional aus Pool hinzufügen
+survey#:#survey_question_pool_usage_active_info#:#Beim Anlegen einer Frage kann gewählt werden, ob die Frage direkt in der Umfrage erstellt oder aus einem bestehenden Fragenpool übernommen wird.
+survey#:#survey_question_pool_usage_inactive#:#Fragen nur in der Umfrage erstellen
+survey#:#survey_question_pool_usage_inactive_info#:#Die Umfrage bietet nur die Möglichkeit, Fragen direkt in der Umfrage zu erstellen. Eine Wiederverwendung von Fragen aus einem Fragenpool wird nicht unterstützt.
 survey#:#survey_question_title#:#Fragetitel
 survey#:#survey_questions#:#Fragen
 survey#:#survey_questions_to_clipboard_copy#:#Es wurden Fragen in die Zwischenablage kopiert. Wählen Sie ein Ziel oder leeren Sie die Zwischenablage.
@@ -17296,13 +17316,13 @@ ui#:#order_option_alphabetical_ascending#:#A bis Z
 ui#:#order_option_alphabetical_descending#:#Z bis A
 ui#:#order_option_chronological_ascending#:#Älteste zuerst
 ui#:#order_option_chronological_descending#:#Neueste zuerst
-ui#:#order_option_first#:#zuerst
-ui#:#order_option_generic_ascending#:#aufsteigend
-ui#:#order_option_generic_descending#:#absteigend
+ui#:#order_option_first#:#Zuerst
+ui#:#order_option_generic_ascending#:#Aufsteigend
+ui#:#order_option_generic_descending#:#Absteigend
 ui#:#order_option_numerical_ascending#:#0 bis 9
 ui#:#order_option_numerical_descending#:#9 bis 0
-ui#:#presentation_table_collapse#:#alle minimieren
-ui#:#presentation_table_expand#:#alle zeigen
+ui#:#presentation_table_collapse#:#Alle minimieren
+ui#:#presentation_table_expand#:#Alle zeigen
 ui#:#rating_average#:#Andere bewerteten mit %s von 5
 ui#:#reset_stars#:#neutral
 ui#:#table_posinput_col_title#:#Position
@@ -17492,8 +17512,8 @@ validation#:#not_max_length#:#Der eingegebene Text hat eine Länge von mehr als 
 validation#:#not_min_length#:#Ihre Eingabe hat eine Länge von %d und liegt damit unter der Mindestlänge von %d.
 validation#:#not_numeric#:#„%s“ ist nicht nummerisch.
 validation#:#not_numeric_empty_string#:#Ihre Eingabe ist nicht numerisch.
-validation#:#numeric_only#:#Bitte geben sie eine ganze Zahl ein.
-validation#:#tag_required#:#Bitte geben sie mindestens ein Tag ein.
+validation#:#numeric_only#:#Bitte geben Sie eine ganze Zahl ein.
+validation#:#tag_required#:#Bitte geben Sie mindestens ein Tag ein.
 violation#:#not_a_string#:#Wert ist keine Zeichenkette
 webr#:#invalid_links_tbl#:#Ungültige Links
 webr#:#webr_active#:#Aktiv

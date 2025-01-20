@@ -327,9 +327,6 @@ class assFormulaQuestionGUI extends assQuestionGUI
             });
 
             foreach ($results as $result) {
-                /**
-                 * @var $result assFormulaQuestionResult
-                 */
                 $result_header = new ilFormSectionHeaderGUI();
                 $result_header->setTitle(sprintf($this->lng->txt('result_x'), $result->getResult()));
 
@@ -815,23 +812,32 @@ class assFormulaQuestionGUI extends assQuestionGUI
             $user_solution['active_id'] = $active_id;
             $user_solution['pass'] = $pass;
             $solutions = $this->object->getSolutionValues($active_id, $pass);
-            $user_solution = array_merge($user_solution, $solutions);
-        } elseif ($active_id) {
-            $solution_values = [];
-            $participants_solution = $this->object->getSolutionValues($active_id, $pass);
-            foreach ($participants_solution as $val1 => $val2) {
-                $solution_values[] = ['value1' => $val1, 'value2' => $val2];
+            foreach ($solutions as $solution_value) {
+                if (preg_match('/^(\$v\d+)$/', $solution_value['value1'], $matches)) {
+                    $user_solution[$matches[1]] = $solution_value['value2'];
+                } elseif (preg_match('/^(\$r\d+)$/', $solution_value['value1'], $matches)) {
+                    if (!array_key_exists($matches[1], $user_solution)) {
+                        $user_solution[$matches[1]] = [];
+                    }
+                    $user_solution[$matches[1]]["value"] = $solution_value['value2'];
+                } elseif (preg_match('/^(\$r\d+)_unit$/', $solution_value['value1'], $matches)) {
+                    if (!array_key_exists($matches[1], $user_solution)) {
+                        $user_solution[$matches[1]] = [];
+                    }
+                    $user_solution[$matches[1]]['unit'] = $solution_value['value2'];
+                }
             }
-            $user_solution = $this->object->getBestSolution($solution_values);
+        } elseif ($active_id !== 0) {
+            $user_solution = $this->object->getBestSolution($this->object->getSolutionValues($active_id, $pass));
         } elseif (is_object($this->getPreviewSession())) {
-            $solution_values = [];
+            $solutionValues = [];
             $participants_solution = $this->getPreviewSession()->getParticipantsSolution();
             if (is_array($participants_solution)) {
                 foreach ($participants_solution as $val1 => $val2) {
-                    $solution_values[] = ['value1' => $val1, 'value2' => $val2];
+                    $solutionValues[] = ['value1' => $val1, 'value2' => $val2];
                 }
             }
-            $user_solution = $this->object->getBestSolution($solution_values);
+            $user_solution = $this->object->getBestSolution($solutionValues);
         }
 
         return $this->renderSolutionOutput(
@@ -897,24 +903,23 @@ class assFormulaQuestionGUI extends assQuestionGUI
     ): string {
         $user_solution = [];
         if (is_object($this->getPreviewSession())) {
-            $solutions = (array) $this->getPreviewSession()->getParticipantsSolution();
-
+            $solutions = $this->getPreviewSession()->getParticipantsSolution() ?? [];
             foreach ($solutions as $val1 => $val2) {
-                if (preg_match("/^(\\\$v\\d+)$/", $val1, $matches)) {
+                if (preg_match('/^(\$v\d+)$/', $val1, $matches)) {
                     $user_solution[$matches[1]] = $val2;
-                } elseif (preg_match("/^(\\\$r\\d+)$/", $val1, $matches)) {
+                } elseif (preg_match('/^(\$r\d+)$/', $val1, $matches)) {
                     if (!array_key_exists($matches[1], $user_solution)) {
                         $user_solution[$matches[1]] = [];
                     }
                     $user_solution[$matches[1]]['value'] = $val2;
-                } elseif (preg_match("/^(\\\$r\\d+)_unit$/", $val1, $matches)) {
+                } elseif (preg_match('/^(\$r\d+)_unit$/', $val1, $matches)) {
                     if (!array_key_exists($matches[1], $user_solution)) {
                         $user_solution[$matches[1]] = [];
                     }
-                    $user_solution[$matches[1]][['unit']] = $val2;
+                    $user_solution[$matches[1]]['unit'] = $val2;
                 }
 
-                if (preg_match("/^(\\\$r\\d+)/", $val1, $matches) && !isset($user_solution[$matches[1]]['result_type'])) {
+                if (preg_match('/^(\$r\d+)/', $val1, $matches) && !isset($user_solution[$matches[1]]['result_type'])) {
                     $user_solution[$matches[1]]['result_type'] = assFormulaQuestionResult::getResultTypeByQstId($this->object->getId(), $val1);
                 }
             }
@@ -954,44 +959,38 @@ class assFormulaQuestionGUI extends assQuestionGUI
         // get the solution of the user for the active pass or from the last pass if allowed
         $user_solution = [];
         if ($active_id) {
+            $solutions = $this->object->getTestOutputSolutions($active_id, $pass);
             $actualPassIndex = null;
             if ($this->object->getTestPresentationConfig()->isSolutionInitiallyPrefilled()) {
                 $actualPassIndex = ilObjTest::_getPass($active_id);
             }
-            $solutions = [];
-            foreach ($this->object->getTestOutputSolutions($active_id, $pass) as $val1 => $val2) {
-                $solutions[] = ['value1' => $val1, 'value2' => $val2];
-            }
             foreach ($solutions as $idx => $solution_value) {
-                if (preg_match("/^(\\\$v\\d+)$/", $solution_value['value1'], $matches)) {
+                if (preg_match('/^(\$v\d+)$/', $solution_value['value1'], $matches)) {
                     if ($this->object->getTestPresentationConfig()->isSolutionInitiallyPrefilled()) {
                         $this->object->saveCurrentSolution($active_id, $actualPassIndex, $matches[1], $solution_value['value2'], true);
                     }
                     $user_solution[$matches[1]] = $solution_value['value2'];
-                } elseif (preg_match("/^(\\\$r\\d+)$/", $solution_value['value1'], $matches)) {
+                } elseif (preg_match('/^(\$r\d+)$/', $solution_value['value1'], $matches)) {
                     if (!array_key_exists($matches[1], $user_solution)) {
                         $user_solution[$matches[1]] = [];
                     }
                     $user_solution[$matches[1]]['value'] = $solution_value['value2'];
-                } elseif (preg_match("/^(\\\$r\\d+)_unit$/", $solution_value['value1'], $matches)) {
+                } elseif (preg_match('/^(\$r\d+)_unit$/', $solution_value['value1'], $matches)) {
                     if (!array_key_exists($matches[1], $user_solution)) {
                         $user_solution[$matches[1]] = [];
                     }
                     $user_solution[$matches[1]][['unit']] = $solution_value['value2'];
                 }
-                if (preg_match("/^(\\\$r\\d+)/", $solution_value['value1'], $matches) && !isset($user_solution[$matches[1]]['result_type'])) {
+                if (preg_match('/^(\$r\d+)/', $solution_value['value1'], $matches) && !isset($user_solution[$matches[1]]['result_type'])) {
                     $user_solution[$matches[1]]['result_type'] = assFormulaQuestionResult::getResultTypeByQstId($this->object->getId(), $solution_value['value1']);
                 }
             }
         }
 
         // fau: testNav - take question variables always from authorized solution because they are saved with this flag, even if an authorized solution is not saved
-        $solutions = [];
-        foreach ($this->object->getSolutionValues($active_id, $pass, true) as $val1 => $val2) {
-            $solutions[] = ['value1' => $val1, 'value2' => $val2];
-        }
+        $solutions = $this->object->getSolutionValues($active_id, $pass, true);
         foreach ($solutions as $idx => $solution_value) {
-            if (preg_match("/^(\\\$v\\d+)$/", $solution_value['value1'], $matches)) {
+            if (preg_match('/^(\$v\d+)$/', $solution_value['value1'], $matches)) {
                 $user_solution[$matches[1]] = $solution_value['value2'];
             }
         }

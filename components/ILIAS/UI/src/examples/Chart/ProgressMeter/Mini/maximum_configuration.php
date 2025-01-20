@@ -10,8 +10,7 @@ namespace ILIAS\UI\examples\Chart\ProgressMeter\Mini;
  *   Example for rendering a mini Progress Meter with minimum configuration
  *
  * expected output: >
- *   ILIAS shows a rounded progress meter with a red colored bar. The bar takes up half of the display. A grey bar marks
- *   the needed value.
+ *   ILIAS shows a rounded progress meter with a red colored bar. A grey bar marks the needed value.
  * ---
  */
 function maximum_configuration()

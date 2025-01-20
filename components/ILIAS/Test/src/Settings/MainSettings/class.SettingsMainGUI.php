@@ -20,7 +20,6 @@ declare(strict_types=1);
 
 namespace ILIAS\Test\Settings\MainSettings;
 
-use ILIAS\Test\Presentation\TabsManager;
 use ILIAS\Test\Settings\TestSettingsGUI;
 use ILIAS\Test\Logging\TestLogger;
 use ILIAS\Test\Logging\TestAdministrationInteractionTypes;
@@ -48,9 +47,6 @@ use ILIAS\Refinery\Constraint;
  */
 class SettingsMainGUI extends TestSettingsGUI
 {
-    /**
-     * command constants
-     */
     public const CMD_SHOW_FORM = 'showForm';
     public const CMD_SAVE_FORM = 'saveForm';
     public const CMD_CONFIRMED_SAVE_FORM = 'confirmedSaveForm';
@@ -76,25 +72,24 @@ class SettingsMainGUI extends TestSettingsGUI
     private \ilTestQuestionSetConfigFactory $testQuestionSetConfigFactory;
 
     public function __construct(
-        protected readonly \ilGlobalTemplateInterface $tpl,
-        protected readonly \ilTabsGUI $tabs,
-        protected readonly \ilToolbarGUI $toolbar,
-        protected readonly \ilCtrlInterface $ctrl,
-        protected readonly \ilAccessHandler $access,
-        protected readonly \ilLanguage $lng,
-        protected readonly \ilTree $tree,
-        protected readonly \ilDBInterface $db,
-        protected readonly \ilObjectDataCache $object_data_cache,
-        protected readonly \ilSetting $settings,
-        protected readonly UIFactory $ui_factory,
-        protected readonly UIRenderer $ui_renderer,
-        protected readonly Refinery $refinery,
-        protected readonly ServerRequestInterface $request,
-        protected readonly \ilComponentRepository $component_repository,
-        protected readonly \ilObjUser $active_user,
-        protected readonly \ilObjTestGUI $test_gui,
-        protected readonly TestLogger $logger,
-        protected readonly GeneralQuestionPropertiesRepository $questionrepository
+        private readonly \ilGlobalTemplateInterface $tpl,
+        private readonly \ilToolbarGUI $toolbar,
+        private readonly \ilCtrlInterface $ctrl,
+        private readonly \ilAccessHandler $access,
+        private readonly \ilLanguage $lng,
+        private readonly \ilTree $tree,
+        private readonly \ilDBInterface $db,
+        private readonly \ilObjectDataCache $object_data_cache,
+        private readonly \ilSetting $settings,
+        private readonly UIFactory $ui_factory,
+        private readonly UIRenderer $ui_renderer,
+        private readonly Refinery $refinery,
+        private readonly ServerRequestInterface $request,
+        private readonly \ilComponentRepository $component_repository,
+        private readonly \ilObjUser $active_user,
+        private readonly \ilObjTestGUI $test_gui,
+        private readonly TestLogger $logger,
+        private readonly GeneralQuestionPropertiesRepository $questionrepository
     ) {
         $this->object_properties = $this->test_gui->getTestObject()->getObjectProperties();
         $this->main_settings = $this->test_gui->getTestObject()->getMainSettings();
@@ -110,6 +105,7 @@ class SettingsMainGUI extends TestSettingsGUI
         );
 
         $this->lng->loadLanguageModule('validation');
+        $this->lng->loadLanguageModule('rep');
 
         parent::__construct($this->test_gui->getTestObject());
     }
@@ -128,9 +124,6 @@ class SettingsMainGUI extends TestSettingsGUI
         $this->$cmd();
 
         $this->object_data_cache->deleteCachedEntry($this->test_object->getId());
-        $this->test_gui->prepareOutput();
-        $this->tabs->activateTab(TabsManager::TAB_ID_SETTINGS);
-        $this->tabs->activateSubTab(TabsManager::SUBTAB_ID_GENERAL_SETTINGS);
     }
 
     private function showOldIntroduction(): void
@@ -791,6 +784,7 @@ class SettingsMainGUI extends TestSettingsGUI
                 $this->lng->txt('obj_orgunit_positions_info')
             )->withValue(
                 (new \ilOrgUnitObjectPositionSetting($this->test_object->getId()))->isActive()
+                    ?? $position_settings->getActivationDefault() === \ilOrgUnitObjectTypePositionSetting::DEFAULT_ON
             );
         if (!$position_settings->isChangeableForObject()) {
             return $enable_organisational_units_access->withDisabled(true);

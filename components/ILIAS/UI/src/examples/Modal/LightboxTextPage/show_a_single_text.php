@@ -11,10 +11,7 @@ namespace ILIAS\UI\examples\Modal\LightboxTextPage;
  *
  * expected output: >
  *   ILIAS shows a button titled "Show Text".
- *   A click onto the button greys out ILIAS and opens the modal titled "User Agreement" including an "X" glyph on the
- *   right top and also a text.
- *   You can leave the modal by hitting the ESC key, clicking onto the greyed out ILIAS in the background outside of the
- *   modal or by clicking "X".
+ *   A click onto the button greys out ILIAS and opens the modal titled "User Agreement" and also a text.
  * ---
  */
 function show_a_single_text()

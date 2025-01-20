@@ -28,6 +28,8 @@ use ILIAS\MetaData\Manipulator\ScaffoldProvider\ScaffoldProviderInterface;
 
 class Creator implements CreatorInterface
 {
+    protected const PLACEHOLDER_TITLE = 'PLACEHOLDER';
+
     protected ManipulatorInterface $manipulator;
     protected PathFactory $path_factory;
     protected ScaffoldProviderInterface $scaffold_provider;
@@ -43,7 +45,7 @@ class Creator implements CreatorInterface
     }
 
     /**
-     * @throws \ilMDServicesException if title is empty string
+     * If title is empty, a placeholder is used instead.
      */
     public function createSet(
         string $title,
@@ -59,16 +61,13 @@ class Creator implements CreatorInterface
         return $set;
     }
 
-    /**
-     * @throws \ilMDServicesException if title is empty string
-     */
     protected function prepareTitle(
         SetInterface $set,
         string $title,
         string $language
     ): SetInterface {
         if ($title === '') {
-            throw new \ilMDServicesException('Title cannot be empty.');
+            $title = self::PLACEHOLDER_TITLE;
         }
 
         $set = $this->manipulator->prepareCreateOrUpdate(

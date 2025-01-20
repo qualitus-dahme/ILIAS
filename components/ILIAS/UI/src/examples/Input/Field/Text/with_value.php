@@ -12,7 +12,7 @@ namespace ILIAS\UI\examples\Input\Field\Text;
  *
  * expected output: >
  *   ILIAS shows a text field titled "Basic Input". The field is already filled with the text "Default Value". You can
- *   enter numbers and letter into the field. Clicking "Save" will relaod the page.
+ *   enter numbers and letter into the field.
  * ---
  */
 function with_value()

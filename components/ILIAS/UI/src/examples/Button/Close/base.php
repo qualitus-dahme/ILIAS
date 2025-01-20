@@ -9,11 +9,9 @@ namespace ILIAS\UI\examples\Button\Close;
  * description: >
  *   This example is rather artificial, since the close button is only used
  *   in other components (see purpose).
- *   This examples just shows how one could render the button if implementing
- *   such a component.
  *
  * expected output: >
- *   ILIAS shows a grey box with a dark grey "X" in the right corner. Clicking the "X" won't activate any action.
+ *   ILIAS a dark grey "X" in the right corner. Clicking the "X" won't activate any action.
  *
  * note: >
  *  In some cases, additional CSS will be required for placing the button

@@ -21,9 +21,7 @@ declare(strict_types=1);
 namespace ILIAS\Test\ExportImport;
 
 use ILIAS\Test\Logging\TestLogger;
-
 use ILIAS\TestQuestionPool\Questions\GeneralQuestionPropertiesRepository;
-
 use ILIAS\Language\Language;
 use ILIAS\FileDelivery\Services as FileDeliveryServices;
 
@@ -180,6 +178,10 @@ abstract class Export implements Exporter
         $exp_log->write(date('[y-m-d H:i:s] ') . 'Finished Export');
         $this->bench->stop('TestExport', 'write');
 
+        if (!$this->isResultExportingEnabled()) {
+            unlink($this->export_dir . '/' . $this->subdir . '.zip');
+        }
+
         return $this->export_dir . '/' . $this->subdir . '.zip';
     }
 
@@ -194,7 +196,6 @@ abstract class Export implements Exporter
             null,
             true
         );
-        $this->file_delivery->deliver();
     }
 
     protected function getQtiXml()

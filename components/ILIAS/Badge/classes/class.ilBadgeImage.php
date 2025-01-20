@@ -26,6 +26,9 @@ use ilBadgeFileStakeholder;
 use ILIAS\FileUpload\FileUpload;
 use ILIAS\FileUpload\Exception\IllegalStateException;
 use ilGlobalTemplateInterface;
+use ilWACSignedPath;
+use ilFSStorageBadgeImageTemplate;
+use ILIAS\Badge;
 
 class ilBadgeImage
 {
@@ -52,33 +55,31 @@ class ilBadgeImage
 
     public function getImageFromBadge(ilBadge $badge, int $size = self::IMAGE_SIZE_XS): string
     {
-        return $this->getImageFromResourceId($badge, (string) $badge->getImageRid(), $size);
+        return $this->getImageFromResourceId($badge, $size);
     }
 
     public function getImageFromResourceId(
-        ilBadge|array $badge,
-        ?string $image_rid,
+        ilBadge $badge,
         int $size = self::IMAGE_SIZE_XS
     ): string {
         $image_src = '';
 
-        if ($image_rid !== null) {
-            $identification = $this->resource_storage->manage()->find($image_rid);
+        if ($badge->getImageRid() !== '' && $badge->getImageRid() !== null) {
+            $identification = $this->resource_storage->manage()->find($badge->getImageRid());
             if ($identification !== null) {
                 $flavour = $this->resource_storage->flavours()->get($identification, new \ilBadgePictureDefinition());
-                $urls = $this->resource_storage->consume()->flavourUrls($flavour)->getURLsAsArray(false);
+                $urls = $this->resource_storage->consume()->flavourUrls($flavour)->getURLsAsArray();
                 if (\count($urls) === self::IMAGE_URL_COUNT && isset($urls[$size])) {
                     $image_src = $urls[$size];
                 }
             }
-        } elseif (\is_array($badge) && isset($badge['image'])) {
-            $image_src = $badge['image'];
         } elseif ($badge instanceof ilBadge) {
-            $image_src = $badge->getImage();
+            $image_src = ilWACSignedPath::signFile($badge->getImagePath());
         }
 
         return $image_src;
     }
+
 
     public function processImageUpload(ilBadge $badge): void
     {

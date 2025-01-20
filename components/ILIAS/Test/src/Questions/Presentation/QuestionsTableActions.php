@@ -172,7 +172,6 @@ class QuestionsTableActions
                 return false;
 
             case self::ACTION_ADJUST:
-                $this->ctrl->setParameterByClass(\ilTestCorrectionsGUI::class, 'qid', (int) current($row_ids));
                 $this->redirectWithQuestionParameters(
                     current($row_ids),
                     \ilTestCorrectionsGUI::class,

@@ -10,11 +10,8 @@ namespace ILIAS\UI\examples\Card\RepositoryObject;
  *   Example for rendering a repository card with an object icon title action.
  *
  * expected output: >
- *   ILIAS shows a ILIAS-Logo. The logo's size changes accordingly to the size of the browser window/desktop. A title and
- *    some entries (Entry 1, Some text etc.) are displayed below the logo. The upper part of the Icons are darkened. In the
- *    left top corner you can see the outlined icon "Course".
- *    Additionally a dropdown menu is displayed in the right top corner. The menu can be opened by a click and displays links
- *    titled "Go to Course", "Go to Portfolio" and "ilias.de". Only the last link functions.
+ *   ILIAS shows a base logo. Additionally a dropdown menu is displayed in the right top corner. The menu can be
+ *   opened by a click and displays links. Only the last link functions.
  * ---
  */
 function with_object_icon_and_actions()

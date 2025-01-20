@@ -10,9 +10,8 @@ namespace ILIAS\UI\examples\Card\RepositoryObject;
  *   Example for rendering a repository card with an object icon and small progressmeter
  *
  * expected output: >
- *   ILIAS shows a ILIAS-Logo. The logo's size changes accordingly to the size of the browser window/desktop. A title and
- *   some entries (Entry 1, Some text etc.) are displayed below the logo. In the left top corner an outlined icon "Course"
- *   is displayed. Additionally you can see a small progress meter next to the course icon.
+ *   ILIAS shows a base ILIAS-Logo. The logo's size changes accordingly to the size of the browser window/desktop.
+ *   Additionally you can see a small progress meter next to the course icon.
  * ---
  */
 function with_object_icon_and_progressmeter_mini()

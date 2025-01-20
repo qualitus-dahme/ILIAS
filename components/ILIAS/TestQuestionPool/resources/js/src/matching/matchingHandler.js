@@ -127,11 +127,10 @@ function updatePlaceholders() {
   );
 }
 
-function updateValues(draggedElement, droppedElement, target) {
+function updateValues(droppedElement, target, source) {
   const dropData = droppedElement.dataset;
-  if (target.parentNode.id === sourceAreaId) {
-    droppedElement.id = `${dropData.type}_${dropData.id}`;
-    const parentDefinitionInput = draggedElement.closest(`.${definitionElementClass}`).querySelector('input');
+  if (source.id !== sourceAreaId) {
+    const parentDefinitionInput = source.closest(`.${definitionElementClass}`).querySelector('input');
     const value = JSON.parse(parentDefinitionInput.value);
     const index = value.indexOf(dropData.id);
     if (index > -1) {
@@ -141,21 +140,21 @@ function updateValues(draggedElement, droppedElement, target) {
     return;
   }
   const parentDefinition = target.closest(`.${definitionElementClass}`);
-  droppedElement.id = `${parentDefinition.id}_${dropData.type}_${dropData.id}`;
   const value = JSON.parse(parentDefinition.querySelector('input').value);
   value.push(dropData.id);
   parentDefinition.querySelector('input').value = JSON.stringify(value);
 }
 
-function changeHandler(droppedElement, target, draggedElement) {
-  updateValues(draggedElement, droppedElement, target);
+function changeHandler(droppedElement, target, draggedElement, source) {
+  updateValues(droppedElement, target, source);
   updateTerms(droppedElement, target, draggedElement);
 }
 
 function onStartPrepareHandler(draggedElement) {
   updatePlaceholders();
   const sourceArea = parentElement.querySelector(`#${sourceAreaId}`);
-  if (!sourceArea.firstElementChild.classList.contains(placeholderClass)) {
+  if (sourceArea.firstElementChild === null
+    || !sourceArea.firstElementChild.classList.contains(placeholderClass)) {
     sourceArea.prepend(placeholderElement.cloneNode());
   }
 

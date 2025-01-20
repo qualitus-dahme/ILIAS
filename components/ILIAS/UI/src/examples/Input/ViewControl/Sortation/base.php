@@ -9,7 +9,10 @@ use ILIAS\Data\Order;
 /**
  * ---
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   There's a button with the sort glyph as a label.
+ *   Clicking the button will open a dropdown with three entries.
+ *   When you click an entry, the page will reload an the results will show the
+ *   selected option.
  * ---
  */
 function base()

@@ -664,7 +664,8 @@ class ilAssQuestionSkillAssignmentsGUI
 
     private function checkPointsAreInt(ilPropertyFormGUI $form): bool
     {
-        if (is_int($form->getInput('q_res_skill_points'))) {
+        $points = $form->getInput('q_res_skill_points');
+        if ($points == (int) $points) {
             return true;
         }
         $this->tpl->setOnScreenMessage('failure', $this->lng->txt('numeric_only'));

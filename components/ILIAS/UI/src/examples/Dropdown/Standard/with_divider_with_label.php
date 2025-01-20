@@ -10,10 +10,9 @@ namespace ILIAS\UI\examples\Dropdown\Standard;
  *   Example for rendering a dropdown with a divider including a label
  *
  * expected output: >
- *   ILIAS shows a button titled "Actions" and a triangle pointing to the bottom. Clicking the button will open a
- *   dropdown menu with the entries "GitHub", "Docu", "Features" and "Bugs" rendered as shy buttons. The last three
- *   entries are positioned under the not clickable caption "ILIAS". Clicking the entries will open the appropriate
- *   website in the same browser window.
+ *   ILIAS shows a base dropdown button. Clicking the button will open a
+ *   dropdown menu with entries. The last three entries are positioned under the not clickable caption "ILIAS".
+ *   Clicking the entries will open the appropriate website in the same browser window.
  * ---
  */
 function with_divider_with_label()

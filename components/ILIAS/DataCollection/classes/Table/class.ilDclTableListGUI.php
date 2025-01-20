@@ -154,9 +154,9 @@ class ilDclTableListGUI
 
         $this->tpl->setContent(
             $this->renderer->render(
-                $this->ui_factory->panel()->standard(
+                $this->ui_factory->panel()->listing()->standard(
                     $this->lng->txt('dcl_tables'),
-                    $this->getItems()
+                    [$this->ui_factory->item()->group('', $this->getItems())]
                 )
             )
         );
@@ -168,8 +168,6 @@ class ilDclTableListGUI
         foreach ($this->parent_obj->getDataCollectionObject()->getTables() as $table) {
 
             $this->ctrl->setParameterByClass(ilObjDataCollectionGUI::class, 'table_id', $table->getId());
-            $checked = $this->ui_factory->symbol()->icon()->custom(ilUtil::getImagePath('standard/icon_checked.svg'), '');
-            $unchecked = $this->ui_factory->symbol()->icon()->custom(ilUtil::getImagePath('standard/icon_unchecked.svg'), '');
             $item = $this->ui_factory->item()->standard(
                 $this->ui_factory->link()->standard(
                     $table->getTitle(),
@@ -177,8 +175,8 @@ class ilDclTableListGUI
                 )
             )
                 ->withProperties([
-                    $this->lng->txt('visible') => $table->getIsVisible() ? $checked : $unchecked,
-                    $this->lng->txt('comments') => $table->getPublicCommentsEnabled() ? $checked : $unchecked
+                    $this->lng->txt('visible') => $this->lng->txt($table->getIsVisible() ? 'yes' : 'no'),
+                    $this->lng->txt('comments') => $this->lng->txt($table->getPublicCommentsEnabled() ? 'active' : 'inactive')
                 ])
                 ->withActions(
                     $this->ui_factory->dropdown()->standard(
@@ -215,12 +213,12 @@ class ilDclTableListGUI
 
         $actions[] = $this->ui_factory->button()->shy(
             $this->lng->txt('dcl_tableviews'),
-            $this->ctrl->getLinkTargetByClass(ilDclFieldListGUI::class, 'show')
+            $this->ctrl->getLinkTargetByClass(ilDclTableViewGUI::class, 'show')
         );
 
         $actions[] = $this->ui_factory->button()->shy(
             $this->lng->txt('delete'),
-            $this->ctrl->getLinkTargetByClass(ilDclFieldListGUI::class, 'confirmDelete')
+            $this->ctrl->getLinkTargetByClass(ilDclTableEditGUI::class, 'confirmDelete')
         );
 
         if ($table->getIsVisible()) {

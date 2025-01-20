@@ -20,10 +20,10 @@ declare(strict_types=1);
 
 namespace ILIAS\Exercise\InstructionFile;
 
-use ILIAS\Exercise\IRSS\IRSSWrapper;
+use ILIAS\Repository\IRSS\IRSSWrapper;
 use ILIAS\ResourceStorage\Collection\ResourceCollection;
 use ILIAS\ResourceStorage\Stakeholder\ResourceStakeholder;
-use ILIAS\Exercise\IRSS\ResourceInformation;
+use ILIAS\Repository\IRSS\ResourceInformation;
 use ILIAS\Filesystem\Stream\FileStream;
 
 class InstructionFileRepository

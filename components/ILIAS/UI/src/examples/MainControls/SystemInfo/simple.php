@@ -13,7 +13,9 @@ use ILIAS\Data\URI;
  *   example use the example of the UI-Component Layout\Page\Standard.
  *
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   ILIAS shows a box with a message text.
+ *   The message is dismissable with the close-glyph on the right and will vanish
+ *   when clicking the glyph.
  * ---
  */
 function simple()

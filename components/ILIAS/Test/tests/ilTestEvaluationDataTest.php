@@ -77,6 +77,7 @@ class ilTestEvaluationDataTest extends ilTestBaseTestCase
     {
         $records = [];
         $records[] = [
+            "active_id" => 7 ,
             "question_fi" => 9,
             "result_points" => 1.2,
             "answered" => true,
@@ -86,7 +87,6 @@ class ilTestEvaluationDataTest extends ilTestBaseTestCase
             "qpl_maxpoints" => 2.4,
             "submitted" => true,
             "last_finished_pass" => 1,
-            "active_fi" => 7 ,
             "pass" => 1,
             "points" => 10.3,
             "maxpoints" => 32,
@@ -104,6 +104,7 @@ class ilTestEvaluationDataTest extends ilTestBaseTestCase
             "title" => "",
             "login" => "root"
         ];
+        $records[] = ['first_access' => '2024-12-11 17:54:26'];
         $records[] = null;
 
         $test_obj = $this->createMock(ilObjTest::class);
@@ -130,7 +131,7 @@ class ilTestEvaluationDataTest extends ilTestBaseTestCase
 
         $db = $this->createMock(ilDBInterface::class);
         $db
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(3))
             ->method('fetchAssoc')
             ->willReturnCallback(
                 function ($res) use (&$records) {

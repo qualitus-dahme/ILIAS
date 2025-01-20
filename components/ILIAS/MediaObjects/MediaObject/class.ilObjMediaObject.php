@@ -404,17 +404,6 @@ class ilObjMediaObject extends ilObject
     }
 
     /**
-     * Get path for standard item.
-     */
-    public static function _lookupStandardItemPath(
-        int $a_mob_id,
-        bool $a_url_encode = false,
-        bool $a_web = true
-    ): string {
-        return ilObjMediaObject::_lookupItemPath($a_mob_id, $a_url_encode, $a_web, "Standard");
-    }
-
-    /**
      * Get path for item with specific purpose.
      */
     public static function _lookupItemPath(
@@ -465,30 +454,14 @@ class ilObjMediaObject extends ilObject
         ilFileUtils::createDirectory(ilFileUtils::getWebspaceDir() . "/thumbs/mm_" . $a_obj_id);
     }
 
-    /**
-     * Get files of directory
-     */
     public function getFilesOfDirectory(
-        string $a_subdir = ""
+        string $dir_path = ""
     ): array {
-        $a_subdir = str_replace("..", "", $a_subdir);
-        $dir = ilObjMediaObject::_getDirectory($this->getId());
-        if ($a_subdir != "") {
-            $dir .= "/" . $a_subdir;
-        }
-
-        $files = array();
-        if (is_dir($dir)) {
-            $entries = ilFileUtils::getDir($dir);
-            foreach ($entries as $e) {
-                if (is_file($dir . "/" . $e["entry"]) && $e["entry"] != "." && $e["entry"] != "..") {
-                    $files[] = $e["entry"];
-                }
-            }
-        }
-        return $files;
+        return $this->manager->getFilesOfPath(
+            $this->getId(),
+            $dir_path
+        );
     }
-
 
     /**
      * get MediaObject XLM Tag
@@ -501,12 +474,11 @@ class ilObjMediaObject extends ilObject
     public function getXML(
         int $a_mode = IL_MODE_FULL,
         int $a_inst = 0,
-        bool $a_sign_locals = false
+        bool $a_sign_locals = false,
+        bool $offline = false
     ): string {
         $ilUser = $this->user;
         $xml = "";
-        // TODO: full implementation of all parameters
-        //echo "-".$a_mode."-";
         switch ($a_mode) {
             case IL_MODE_ALIAS:
                 $xml = "<MediaObject>";
@@ -568,17 +540,21 @@ class ilObjMediaObject extends ilObject
                             $location = ilWACSignedPath::signFile($this->getDataDirectory() . "/" . $item->getLocation());
                             $location = substr($location, strrpos($location, "/") + 1);
                         } else {
-                            $location = $this->manager->getLocationSrc(
-                                $this->getId(),
-                                $item->getLocation()
-                            );
+                            if ($offline) {
+                                $location = $item->getLocation();
+                            } else {
+                                $location = $this->manager->getLocalSrc(
+                                    $this->getId(),
+                                    $item->getLocation()
+                                );
+                            }
                         }
                     } else {
                         $location = $item->getLocation();
                         // irss
                         if ($item->getLocationType() === "LocalFile" &&
                         !is_file($this->getDataDirectory() . "/" . $item->getLocation())) {
-                            $location = $this->manager->getLocationSrc(
+                            $location = $this->manager->getLocalSrc(
                                 $this->getId(),
                                 $item->getLocation()
                             );
@@ -1366,7 +1342,9 @@ class ilObjMediaObject extends ilObject
     }
 
     /**
-     * Create new media object and update page in db and return new media object
+     * @deprecated
+     * - for upload cases use $media_object->addMediaItemFrom(Legacy)Upload
+     * - imports must use the dependency mechanism
      */
     public static function _saveTempFileAsMediaObject(
         string $name,
@@ -1395,6 +1373,12 @@ class ilObjMediaObject extends ilObject
                 true
             );
         } else {
+            $media_item = $media_object->addMediaItemFromLocalFile(
+                "Standard",
+                $tmp_name,
+                $name
+            );
+            /*
             $media_item = new ilMediaItem();
             $media_object->addMediaItem($media_item);
             $media_item->setPurpose("Standard");
@@ -1405,7 +1389,7 @@ class ilObjMediaObject extends ilObject
             $media_item->setFormat($format);
             $location = $name;
             $media_item->setLocation($location);
-            $media_item->setLocationType("LocalFile");
+            $media_item->setLocationType("LocalFile");*/
         }
 
         // set real meta and object data
@@ -1498,6 +1482,55 @@ class ilObjMediaObject extends ilObject
         return $media_item;
     }
 
+    public function addMediaItemFromLocalFile(
+        string $purpose,
+        string $tmp_name,
+        string $name
+    ): \ilMediaItem {
+        $media_item = new ilMediaItem();
+        $this->addMediaItem($media_item);
+        $media_item->setPurpose($purpose);
+        $location = $name;
+        $this->manager->addFileFromLocal($this->getId(), $tmp_name, $name);
+
+        // get mime type
+        $format = self::getMimeType($location, true);
+
+        // set real meta and object data
+        $media_item->setFormat($format);
+        $media_item->setLocation($location);
+        $media_item->setLocationType("LocalFile");
+        if ($purpose === "Standard") {
+            $this->generatePreviewPic(320, 240);
+        }
+        return $media_item;
+    }
+
+    public function replaceMediaItemFromUpload(
+        string $purpose,
+        UploadResult $result,
+        string $upload_hash = "",
+    ): \ilMediaItem {
+        $media_item = $this->getMediaItem($purpose);
+        $this->manager->removeLocation($this->getId(), $media_item->getLocation());
+        $this->manager->addFileFromUpload($this->getId(), $result);
+
+        // get mime type
+        $format = self::getMimeType($result->getName(), true);
+
+        // set real meta and object data
+        $media_item->setFormat($format);
+        $media_item->setLocation($result->getName());
+        $media_item->setLocationType("LocalFile");
+        if ($upload_hash !== "") {
+            $media_item->setUploadHash($upload_hash);
+        }
+        if ($purpose === "Standard") {
+            $this->generatePreviewPic(320, 240);
+        }
+        return $media_item;
+    }
+
     /**
      * Create new media object and update page in db and return new media object
      */
@@ -1523,18 +1556,13 @@ class ilObjMediaObject extends ilObject
     }
 
     public function addAdditionalFileFromUpload(
-        FileUpload $upload,
         UploadResult $result,
         string $subdir
     ): void {
-        $mob_dir = self::_getRelativeDirectory($this->getId());
-        $mob_dir .= "/" . $subdir;
-        $upload->moveOneFileTo(
+        $this->manager->addFileFromUpload(
+            $this->getId(),
             $result,
-            $mob_dir,
-            Location::WEB,
-            $result->getName(),
-            true
+            $subdir
         );
     }
 
@@ -1578,38 +1606,18 @@ class ilObjMediaObject extends ilObject
      * Make thumbnail
      */
     public function makeThumbnail(
-        string $a_file,
-        string $a_thumbname,
+        string $source,
+        string $thumbname,
     ): void {
-        $size = self::DEFAULT_PREVIEW_SIZE;
-        $m_dir = ilObjMediaObject::_getDirectory($this->getId());
-        $t_dir = ilObjMediaObject::_getThumbnailDirectory($this->getId());
-        $file = $m_dir . "/" . $a_file;
-
-        $mime = ilObjMediaObject::getMimeType($file);
-        $wh = ilMediaImageUtil::getImageSize($file);
-
-        // see #8602
-        if ($size > (int) $wh[0] && $size > $wh[1]) {
-            $size = min($wh[0], $wh[1]);
-        }
-
-        $m_dir = ilObjMediaObject::_getDirectory($this->getId());
-        $t_dir = ilObjMediaObject::_getThumbnailDirectory($this->getId());
-        self::_createThumbnailDirectory($this->getId());
-        $this->image_converter->croppedSquare(
-            $m_dir . "/" . $a_file,
-            $t_dir . "/" . $a_thumbname,
-            $size
+        $format = self::getMimeType($source, true);
+        $this->manager->generatePreview(
+            $this->getId(),
+            $source,
+            true,
+            $format,
+            1,
+            $thumbname
         );
-    }
-
-    public static function getThumbnailPath(
-        int $a_mob_id,
-        string $a_thumbname
-    ): string {
-        $t_dir = ilObjMediaObject::_getThumbnailDirectory($a_mob_id);
-        return $t_dir . "/" . $a_thumbname;
     }
 
     public function removeAdditionalFile(
@@ -1744,7 +1752,7 @@ class ilObjMediaObject extends ilObject
     ): string {
 
         if (!$a_filename_only) {
-            $src = $this->manager->getLocationSrc($this->getId(), "mob_vpreview.png");
+            $src = $this->manager->getLocalSrc($this->getId(), "mob_vpreview.png");
             if ($src !== "") {
                 return $src;
             }
@@ -1928,36 +1936,14 @@ class ilObjMediaObject extends ilObject
     protected function getLocationSrc(string $purpose): string
     {
         $med = $this->getMediaItem($purpose);
-        if (strcasecmp("Reference", $med->getLocationType()) === 0) {
-            $src = $med->getLocation();
+        if (strcasecmp("Reference", $med?->getLocationType()) === 0) {
+            $src = $med?->getLocation();
         } else {
-            $src = $this->manager->getLocationSrc(
+            $src = $this->manager->getLocalSrc(
                 $this->getId(),
-                $med->getLocation()
-            );
-            if ($src !== "") {  // fallback: old source
-                $path_to_file = \ilObjMediaObject::_getURL($this->getId()) . "/" . $med->getLocation();
-                try {
-                    $src = ilWACSignedPath::signFile($path_to_file);
-                } catch (Exception $e) {
-                }
-            }
-        }
-        return $src;
-    }
-
-    public function getPreviewSrc(): string
-    {
-        $med = $this->getMediaItem("Standard");
-        if (strcasecmp("Reference", $med->getLocationType()) === 0) {
-            $src = $med->getLocation();
-        } else {
-            $src = $this->manager->getLocationSrc(
-                $this->getId(),
-                "mob_vpreview.png"
+                $med?->getLocation()
             );
         }
         return $src;
     }
-
 }

@@ -10,7 +10,7 @@ namespace ILIAS\UI\examples\Chart\ProgressMeter\Mini;
  *   Example for rendering a mini Progress Meter when 100% is reached
  *
  * expected output: >
- *   ILIAS shows a rounded progress meter with a green colored bar. The bar takes up the whole display.
+ *   ILIAS shows a base progress meter with a green colored bar. The bar takes up the whole display.
  * ---
  */
 function reached_100_percent()

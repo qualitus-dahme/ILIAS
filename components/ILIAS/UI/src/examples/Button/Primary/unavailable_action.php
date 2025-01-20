@@ -12,8 +12,8 @@ namespace ILIAS\UI\examples\Button\Primary;
  *   even if done by keyboard.
  *
  * expected output: >
- *   ILIAS shows a inactive button titled "Unavailable". The button looks more ordinary as compared to the base
- *   primary button. Clicking the button won't activate any actions.
+ *   ILIAS shows a grayed out inactive button with a title. Clicking the button won't activate any actions.
+ *   Hovering over the button will change the look of the cursor.
  * ---
  */
 function unavailable_action()

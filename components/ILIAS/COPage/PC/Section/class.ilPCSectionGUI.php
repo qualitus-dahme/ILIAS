@@ -267,9 +267,6 @@ class ilPCSectionGUI extends ilPageContentGUI
 
         $options = [];
         foreach ($chars as $k => $char) {
-            $html = '<div class="ilCOPgEditStyleSelectionItem"><div class="ilc_section_' . $k . '" style="' . self::$style_selector_reset . '">' .
-                $char . '</div></div>';
-            //$char_prop->addOption($k, $char, $html);
             $options[$k] = $char;
         }
         $char_prop->setOptions($options);

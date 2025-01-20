@@ -59,21 +59,19 @@ class assLongMenuGUI extends assQuestionGUI implements ilGuiQuestionScoringAdjus
      */
     protected function writePostData(bool $always = false): int
     {
-        $form = $this->buildEditForm();
-        $form->setValuesByPost();
-        $check = $form->checkInput() && $this->verifyAnswerOptions();
+        $this->edit_form = $this->buildEditForm();
+        $this->edit_form->setValuesByPost();
+        $check = $this->edit_form->checkInput() && $this->verifyAnswerOptions();
 
         if (!$check) {
-            $this->edit_form = $form;
             $this->editQuestion();
             return 1;
         }
         $this->writeQuestionGenericPostData();
-        $this->writeQuestionSpecificPostData($form);
-        $custom_check = $this->object->checkQuestionCustomPart($form);
+        $this->writeQuestionSpecificPostData($this->edit_form);
+        $custom_check = $this->object->checkQuestionCustomPart($this->edit_form);
         if (!$custom_check) {
-            $this->tpl->setOnScreenMessage('failure', $this->lng->txt("form_input_not_valid"));
-            $this->edit_form = $form;
+            $this->tpl->setOnScreenMessage('failure', $this->lng->txt('form_input_not_valid'));
             $this->editQuestion();
             return 1;
         }
@@ -83,7 +81,7 @@ class assLongMenuGUI extends assQuestionGUI implements ilGuiQuestionScoringAdjus
 
     public function writeQuestionSpecificPostData(ilPropertyFormGUI $form): void
     {
-        $min_auto_complete = (int) $form->getInput('min_auto_complete');
+        $min_auto_complete = (int) ($form->getInput('min_auto_complete') ?? assLongMenu::MIN_LENGTH_AUTOCOMPLETE);
         $hidden_text_files = $this->request_data_collector->string('hidden_text_files');
         $hidden_correct_answers = $this->request_data_collector->string('hidden_correct_answers');
         $long_menu_type = $this->request_data_collector->raw('long_menu_type') ?? [];
@@ -167,27 +165,18 @@ class assLongMenuGUI extends assQuestionGUI implements ilGuiQuestionScoringAdjus
     protected function buildEditForm(): ilPropertyFormGUI
     {
         $form = $this->buildBasicEditFormObject();
-
         $this->addQuestionFormCommandButtons($form);
-
         $this->addBasicQuestionFormProperties($form);
-
         $this->populateQuestionSpecificFormPart($form);
-        //$this->populateAnswerSpecificFormPart($form);
-
         $this->populateTaxonomyFormSection($form);
 
         return $form;
     }
-    /**
-     * @param ilPropertyFormGUI $form
-     * @return ilPropertyFormGUI
-     */
+
     public function populateQuestionSpecificFormPart(ilPropertyFormGUI $form): ilPropertyFormGUI
     {
         $long_menu_text = new ilTextAreaInputGUI($this->lng->txt("longmenu_text"), 'longmenu_text');
         $long_menu_text->setRequired(true);
-        //$long_menu_text->setInfo($this->lng->txt("longmenu_hint"));
         $long_menu_text->setRows(10);
         $long_menu_text->setCols(80);
         if (!$this->object->getSelfAssessmentEditingMode()) {
@@ -204,7 +193,7 @@ class assLongMenuGUI extends assQuestionGUI implements ilGuiQuestionScoringAdjus
         $long_menu_text->setValue($this->object->getLongMenuTextValue());
         $form->addItem($long_menu_text);
 
-        $tpl = new ilTemplate("tpl.il_as_qpl_longmenu_question_gap_button_code.html", true, true, "components/ILIAS/TestQuestionPool");
+        $tpl = new ilTemplate('tpl.il_as_qpl_longmenu_question_gap_button_code.html', true, true, 'components/ILIAS/TestQuestionPool');
         $tpl->setVariable('INSERT_GAP', $this->lng->txt('insert_gap'));
         $tpl->parseCurrentBlock();
         $button = new ilCustomInputGUI('&nbsp;', '');
@@ -224,7 +213,7 @@ class assLongMenuGUI extends assQuestionGUI implements ilGuiQuestionScoringAdjus
         $min_auto_complete->setSize(5);
         $form->addItem($min_auto_complete);
         // identical scoring
-        $identical_scoring = new ilCheckboxInputGUI($this->lng->txt("identical_scoring"), "identical_scoring");
+        $identical_scoring = new ilCheckboxInputGUI($this->lng->txt('identical_scoring'), 'identical_scoring');
         $identical_scoring->setValue(1);
         $identical_scoring->setChecked($this->object->getIdenticalScoring());
         $identical_scoring->setInfo($this->lng->txt('identical_scoring_desc'));
@@ -287,10 +276,11 @@ class assLongMenuGUI extends assQuestionGUI implements ilGuiQuestionScoringAdjus
         $tag_input->setPostVar('taggable');
         $tag_input->setJsSelfInit(false);
         $tag_input->setTypeAheadMinLength(1);
-        $tpl->setVariable("TAGGING_PROTOTYPE", $tag_input->render(''));
+        $tpl->setVariable('TAGGING_PROTOTYPE', $tag_input->render(''));
 
         $modal_id = self::DEFAULT_MODAL_ID;
         $tpl->setVariable('MY_MODAL', $this->getModalHtml($modal_id));
+        $tpl->parseCurrentBlock();
         $this->tpl->addOnLoadCode(
             'longMenuQuestion.Init(' .
             implode(', ', [
@@ -301,7 +291,6 @@ class assLongMenuGUI extends assQuestionGUI implements ilGuiQuestionScoringAdjus
             ])
             . ');'
         );
-        $tpl->parseCurrentBlock();
 
         $button = new ilCustomInputGUI('&nbsp;', '');
         $button->setHtml($tpl->get());

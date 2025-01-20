@@ -10,14 +10,8 @@ namespace ILIAS\UI\examples\Panel\Standard;
  *   Example for rendering a standard panel with an all view control.
  *
  * expected output: >
- *   ILIAS shows a panel with a large title "Panel Title", a text "Some Content" and a menu displayed by
- *   an triangle symbol pointing down. It also includes two subtitles and three items.
- *   On the left next to the menu a pagination field is displayed. The counter jumps back/forth if you click the <> symbols.
- *   Clicking the number will select those.
- *   On the left next to the pagination field a format selection field is displayed. Selection "Tile View" will change the
- *   display of the content to tiles. The standard text listing will be activated if you select "List View".
- *   On the left next to the format selection field a sortation button is displayed. Here you can sort the content of the panel.
- *   Selection a sortation will reload the page. The content won't be changed.
+ *   ILIAS shows a base panel with some content like sub items, titles etc. Additionally it displayes three view controls
+ *   (Sortation, modes and pagination).
  * ---
  */
 function with_view_controls(): string

@@ -47,7 +47,7 @@ class DateTimeInputTest extends ILIAS_UI_TestBase
     public function getUIFactory(): NoUIFactory
     {
         return new class () extends NoUIFactory {
-            public function symbol(): C\Symbol\Factory
+            public function symbol(): I\Symbol\Factory
             {
                 return new S\Factory(
                     new S\Icon\Factory(),

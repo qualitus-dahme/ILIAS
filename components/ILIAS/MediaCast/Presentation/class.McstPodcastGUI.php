@@ -111,7 +111,7 @@ class McstPodcastGUI
                     (int) $med_item["id"]
                 );
                 //var_dump($med_item["id"]);
-                $properties[$this->lng->txt("comments")] = $renderer->render($f->legacy($comments_gui->getNumber()));
+                $properties[$this->lng->txt("comments")] = $renderer->render($f->legacy()->content($comments_gui->getNumber()));
                 $actions[] = $comments_gui->getTriggerShyButton();
             }
 

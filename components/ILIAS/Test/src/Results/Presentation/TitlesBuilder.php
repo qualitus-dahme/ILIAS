@@ -207,7 +207,7 @@ class TitlesBuilder
 
     private function initCourseTitle()
     {
-        $this->crs_title = $this->obj_cache->lookupTitle((int) $this->getObjectiveOrientedContainerId());
+        $this->crs_title = $this->obj_cache->lookupTitle($this->objective_oriented_container_id);
     }
 
     private function isInitialTest(): bool

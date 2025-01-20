@@ -35,8 +35,8 @@ class Authentication implements Component\Component
         // currently this is will be a session storage because we cannot store
         // data on the client, see https://mantis.ilias.de/view.php?id=38503.
         // @todo: this should be implemented by some proper key-value storage (or service).
-        $implement[UI\Component\Table\Storage::class] = static fn() =>
-            new class () implements UI\Component\Table\Storage {
+        $implement[UI\Storage::class] = static fn() =>
+            new class () implements UI\Storage {
                 public function offsetExists(mixed $offset): bool
                 {
                     return \ilSession::has($offset);

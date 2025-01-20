@@ -7,7 +7,7 @@ namespace ILIAS\UI\examples\Card\Standard;
 /**
  * ---
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   ILIAS shows a base ILIAS-Logo. A clickable title, linked to ilias.de, is displayed below the logo.
  * ---
  */
 function with_title_action()

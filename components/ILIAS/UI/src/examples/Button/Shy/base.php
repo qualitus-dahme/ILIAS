@@ -10,7 +10,7 @@ namespace ILIAS\UI\examples\Button\Shy;
  *   Example for rendering a shy button.
  *
  * expected output: >
- *   ILIAS shows a small button titled "ILIAS". The button lacks a background, but shows a text. Clicking the button will
+ *   The shown button lacks a background, but shows a text. Clicking the button will
  *   open the website www.ilias.de in the same browser window.
  * ---
  */

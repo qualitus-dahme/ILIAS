@@ -5832,8 +5832,6 @@ common#:#tst_history_read#:#View History###26 08 2024 new variable
 common#:#tst_new#:#Nuevo test
 common#:#tst_results#:#Test Results
 common#:#tst_run#:#Ejecutar
-common#:#tst_statistical_evaluation#:#Estadísticas
-common#:#tst_statistics#:#Acceso a estadísticas del test
 common#:#tst_user_not_invited#:#Usted no debe realizar este examen.
 common#:#tst_warning_test_not_complete#:#¡El test no está completo!
 common#:#tutors#:#Tutores
@@ -14789,7 +14787,6 @@ rbac#:#tst_edit_permission#:#Modificar configuración permisos
 rbac#:#tst_read#:#Acceso de lectura al Test
 rbac#:#tst_read_learning_progress#:#Usuario puede ver progreso de aprendizaje de otros usuarios
 rbac#:#tst_tst_results#:#User has access to test results
-rbac#:#tst_tst_statistics#:#El usuario tiene acceso a las estadísticas del test
 rbac#:#tst_visible#:#Test visible
 rbac#:#tst_write#:#Editar Test
 rbac#:#upload_blacklisted_files#:#Bypass blacklist###07 02 2020 new variable

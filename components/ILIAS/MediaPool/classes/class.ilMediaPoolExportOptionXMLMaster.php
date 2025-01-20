@@ -54,7 +54,8 @@ class ilMediaPoolExportOptionXMLMaster extends ilBasicLegacyExportOption
 
     public function getLabel(): string
     {
-        return "XML (" . $this->lng->txt("mep_master_language_only") . ")";
+        $this->lng->loadLanguageModule('exp');
+        return $this->lng->txt("exp_format_dropdown-xml") . " (" . $this->lng->txt("mep_master_language_only") . ")";
     }
 
     public function onDownloadFiles(

@@ -133,14 +133,14 @@ class assLongMenu extends assQuestion implements ilObjQuestionScoringAdjustable,
         return $this->specificFeedbackSetting;
     }
 
-    public function setMinAutoComplete($minAutoComplete): void
+    public function setMinAutoComplete(int $min_auto_complete): void
     {
-        $this->minAutoComplete = $minAutoComplete;
+        $this->minAutoComplete = $min_auto_complete;
     }
 
     public function getMinAutoComplete(): int
     {
-        return $this->minAutoComplete ? $this->minAutoComplete : self::MIN_LENGTH_AUTOCOMPLETE;
+        return $this->minAutoComplete;
     }
 
     public function isComplete(): bool
@@ -367,19 +367,19 @@ class assLongMenu extends assQuestion implements ilObjQuestionScoringAdjustable,
         if ($result->numRows() == 1) {
             $data = $this->db->fetchAssoc($result);
             $this->setId($question_id);
-            $this->setObjId($data["obj_fi"]);
+            $this->setObjId($data['obj_fi']);
             $this->setNrOfTries($data['nr_of_tries']);
-            $this->setTitle((string) $data["title"]);
-            $this->setComment((string) $data["description"]);
-            $this->setOriginalId($data["original_id"]);
-            $this->setAuthor($data["author"]);
-            $this->setPoints($data["points"]);
-            $this->setIdenticalScoring((bool) $data["identical_scoring"]);
-            $this->setOwner($data["owner"]);
+            $this->setTitle((string) $data['title']);
+            $this->setComment((string) $data['description']);
+            $this->setOriginalId($data['original_id']);
+            $this->setAuthor($data['author']);
+            $this->setPoints($data['points']);
+            $this->setIdenticalScoring((bool) $data['identical_scoring']);
+            $this->setOwner($data['owner']);
             $this->setQuestion(ilRTE::_replaceMediaObjectImageSrc((string) $data['question_text'], 1));
             $this->setLongMenuTextValue(ilRTE::_replaceMediaObjectImageSrc((string) $data['long_menu_text'], 1));
             $this->loadCorrectAnswerData($question_id);
-            $this->setMinAutoComplete($data["min_auto_complete"]);
+            $this->setMinAutoComplete($data['min_auto_complete'] ?? self::MIN_LENGTH_AUTOCOMPLETE);
             if (isset($data['feedback_setting'])) {
                 $this->setSpecificFeedbackSetting((int) $data['feedback_setting']);
             }

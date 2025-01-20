@@ -5830,8 +5830,6 @@ common#:#tst_history_read#:#View History###26 08 2024 new variable
 common#:#tst_new#:#تست جدید
 common#:#tst_results#:#Test Results###10 11 2018 new variable
 common#:#tst_run#:#Run
-common#:#tst_statistical_evaluation#:#آمار
-common#:#tst_statistics#:#دسترسی به امار تست
 common#:#tst_user_not_invited#:#You are not supposed to take this test.
 common#:#tst_warning_test_not_complete#:#The test is not complete!
 common#:#tutors#:#Tutors
@@ -14787,7 +14785,6 @@ rbac#:#tst_edit_permission#:#User can change permission settings###28 08 2012 ne
 rbac#:#tst_read#:#User can perform the test###28 08 2012 new variable
 rbac#:#tst_read_learning_progress#:#User can view learning progress of other users###26 09 2014 new variable
 rbac#:#tst_tst_results#:#User has access to test results###10 11 2018 new variable
-rbac#:#tst_tst_statistics#:#User has access to test statistics###28 08 2012 new variable
 rbac#:#tst_visible#:#Test is visible###28 08 2012 new variable
 rbac#:#tst_write#:#User can edit content and settings of test###28 08 2012 new variable
 rbac#:#upload_blacklisted_files#:#Bypass blacklist###07 02 2020 new variable

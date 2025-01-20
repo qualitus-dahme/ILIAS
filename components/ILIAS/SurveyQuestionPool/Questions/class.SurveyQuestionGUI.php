@@ -607,7 +607,7 @@ abstract class SurveyQuestionGUI
         $r = $this->gui->ui()->renderer();
         $p = $f->panel()->standard(
             "",
-            $f->legacy($tpl->get())
+            $f->legacy()->content($tpl->get())
         );
 
         $this->tpl->setContent($r->render($p));

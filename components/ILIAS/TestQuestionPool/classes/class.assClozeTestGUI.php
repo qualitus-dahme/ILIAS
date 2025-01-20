@@ -228,12 +228,12 @@ JS;
             $ass_cloze_gab_combination = new assClozeGapCombination();
             $ass_cloze_gab_combination::clearGapCombinationsFromDb($this->object->getId());
 
-            $gap_combination = $this->request_data_collector->floatArray('gap_combination', 4);
+            $gap_combination = $this->request_data_collector->rawArray('gap_combination', 4);
             if ($gap_combination !== []) {
                 $ass_cloze_gab_combination->saveGapCombinationToDb(
                     $this->object->getId(),
                     $gap_combination,
-                    $this->request_data_collector->strArray('gap_combination_values', 4)
+                    $this->request_data_collector->rawArray('gap_combination_values')
                 );
             }
         }
@@ -886,7 +886,7 @@ JS;
                         foreach ($gaps_used_in_combination as $key => $value) {
                             $a = 0;
                             if ($value == $combination_id) {
-                                foreach ($user_solution as $solution_key => $solution_value) {
+                                foreach ($user_solutions as $solution_key => $solution_value) {
                                     if ($solution_value['value1'] == $key) {
                                         $result_row = [];
                                         $result_row['gap_id'] = $solution_value['value1'];
@@ -1004,7 +1004,7 @@ JS;
             }
 
             $feedback = $this->getSpecificFeedbackOutput(
-                $this->object->fetchIndexedValuesFromValuePairs($user_solution)
+                $this->object->fetchIndexedValuesFromValuePairs($user_solutions)
             );
         }
         if ($feedback !== '') {

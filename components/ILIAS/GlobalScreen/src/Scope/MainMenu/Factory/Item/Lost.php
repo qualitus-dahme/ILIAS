@@ -104,7 +104,7 @@ class Lost extends AbstractBaseItem implements
     {
         global $DIC;
 
-        return $DIC->ui()->factory()->legacy("");
+        return $DIC->ui()->factory()->legacy()->content("");
     }
 
     /**

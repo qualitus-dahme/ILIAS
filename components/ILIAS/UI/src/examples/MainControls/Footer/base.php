@@ -14,6 +14,8 @@ namespace ILIAS\UI\examples\MainControls\Footer;
  *   ILIAS shows the Primary Button. After the Button is clicked, ILIAS loads a demo Page,
  *   which shows the Footer. The Footer consists of 5 distinct sections, each operable by
  *   keyboard and accessible for screen-readers.
+ *
+ *   (For testing/HTML validation, please click the button and validate the footer on the consecutive page.)
  * ---
  */
 function base(): string

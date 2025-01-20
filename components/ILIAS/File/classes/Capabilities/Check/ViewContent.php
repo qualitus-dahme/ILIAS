@@ -40,7 +40,7 @@ class ViewContent extends BaseCheck implements Check
         \ilObjFileInfo $info,
         int $ref_id,
     ): Capability {
-        if (!$this->hasPermission($helpers, $ref_id, $capability->getPermission())) {
+        if (!$this->hasPermission($helpers, $ref_id, ...$capability->getPermissions())) {
             return $capability->withUnlocked(false);
         }
 

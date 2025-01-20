@@ -1352,7 +1352,7 @@ class ilObjQuestionPoolGUI extends ilObjectGUI implements ilCtrlBaseClassInterfa
         $panel = $this->ui_factory->panel()->standard(
             $this->lng->txt('import_question'),
             [
-                $this->ui_factory->legacy($this->lng->txt('qpl_import_verify_found_questions')),
+                $this->ui_factory->legacy()->content($this->lng->txt('qpl_import_verify_found_questions')),
                 $form
             ]
         );
@@ -1395,7 +1395,7 @@ class ilObjQuestionPoolGUI extends ilObjectGUI implements ilCtrlBaseClassInterfa
         $panel = $this->ui_factory->panel()->standard(
             $this->lng->txt('import_qpl'),
             [
-                $this->ui_factory->legacy($this->lng->txt('qpl_import_verify_found_questions')),
+                $this->ui_factory->legacy()->content($this->lng->txt('qpl_import_verify_found_questions')),
                 $form
             ]
         );

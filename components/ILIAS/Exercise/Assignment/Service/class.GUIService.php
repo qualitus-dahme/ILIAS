@@ -23,7 +23,7 @@ namespace ILIAS\Exercise\Assignment;
 use ILIAS\Exercise\InternalDomainService;
 use ILIAS\Exercise\InternalGUIService;
 use ILIAS\Exercise\Assignment\Mandatory\MandatoryAssignmentsManager;
-use ILIAS\Exercise\IRSS\CollectionWrapperGUI;
+use ILIAS\Repository\IRSS\CollectionWrapperGUI;
 
 class GUIService
 {

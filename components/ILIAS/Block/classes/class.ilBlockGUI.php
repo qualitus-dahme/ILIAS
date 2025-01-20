@@ -394,14 +394,14 @@ abstract class ilBlockGUI
             case self::PRES_SEC_LEG:
                 $panel = $this->factory->panel()->secondary()->legacy(
                     $this->specialCharsAsEntities($this->getTitle()),
-                    $this->factory->legacy($this->getLegacyContent())
+                    $this->factory->legacy()->content($this->getLegacyContent())
                 );
                 break;
 
             case self::PRES_MAIN_LEG:
                 $panel = $this->factory->panel()->standard(
                     $this->specialCharsAsEntities($this->getTitle()),
-                    $this->factory->legacy($this->getLegacyContent())
+                    $this->factory->legacy()->content($this->getLegacyContent())
                 );
                 break;
 
@@ -429,12 +429,12 @@ abstract class ilBlockGUI
             if ($this->getPresentation() === self::PRES_SEC_LIST) {
                 $panel = $this->factory->panel()->secondary()->legacy(
                     $this->specialCharsAsEntities($this->getTitle()),
-                    $this->factory->legacy($this->getNoItemFoundContent())
+                    $this->factory->legacy()->content($this->getNoItemFoundContent())
                 );
             } else {
                 $panel = $this->factory->panel()->standard(
                     $this->specialCharsAsEntities($this->getTitle()),
-                    $this->factory->legacy($this->getNoItemFoundContent())
+                    $this->factory->legacy()->content($this->getNoItemFoundContent())
                 );
             }
         }

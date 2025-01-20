@@ -10,8 +10,7 @@ namespace ILIAS\UI\examples\Panel\Sub;
  *   Example for rendering a sub panel.
  *
  * expected output: >
- *   ILIAS shows a Panel including a large title "Panel Title" and a sub panel as content. The sub panel is titled
- *   "Sub Panel Title" and owns a text content "Some Content".
+ *   ILIAS shows a standard panel including a sub panel.
  * ---
  */
 function base()
@@ -22,7 +21,7 @@ function base()
 
     $block = $f->panel()->standard(
         "Panel Title",
-        $f->panel()->sub("Sub Panel Title", $f->legacy("Some Content"))
+        $f->panel()->sub("Sub Panel Title", $f->legacy()->content("Some Content"))
     );
 
     return $renderer->render($block);

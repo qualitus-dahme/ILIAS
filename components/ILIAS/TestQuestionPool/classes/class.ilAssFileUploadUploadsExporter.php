@@ -28,7 +28,7 @@ class ilAssFileUploadUploadsExporter
 {
     public const ZIP_FILE_MIME_TYPE = 'application/zip';
     public const ZIP_FILE_EXTENSION = '.zip';
-    private Closure $acces_filter;
+    private Closure $access_filter;
     private \ILIAS\ResourceStorage\Services $irss;
     private \ILIAS\Filesystem\Util\Archive\Archives $archive;
     private \ILIAS\FileDelivery\Services $file_delivery;
@@ -74,7 +74,7 @@ class ilAssFileUploadUploadsExporter
     ) {
         global $DIC;
         $f = new ilTestParticipantAccessFilterFactory($DIC->access());
-        $this->acces_filter = $f->getAccessStatisticsUserFilter($this->ref_id);
+        $this->access_filter = $f->getAccessStatisticsUserFilter($this->ref_id);
 
         $this->irss = $DIC->resourceStorage();
         $this->archive = $DIC->archives();
@@ -189,7 +189,7 @@ class ilAssFileUploadUploadsExporter
 
         $participantData = new ilTestParticipantData($this->db, $this->lng);
         $participantData->setActiveIdsFilter($activeIds);
-        $participantData->setParticipantAccessFilter($this->acces_filter);
+        $participantData->setParticipantAccessFilter($this->access_filter);
         $participantData->load($this->getTestId());
 
         return $participantData;

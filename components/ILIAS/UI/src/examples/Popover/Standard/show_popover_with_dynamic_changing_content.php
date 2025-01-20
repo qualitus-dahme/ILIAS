@@ -13,10 +13,8 @@ use ILIAS\UI\Implementation\Component\ReplaceContentSignal;
  *
  * expected output: >
  *   ILIAS shows a button titled "Show Popover".
- *   A click onto the button opens the popover including...
- *   - a popover title: Pages
- *   - popover content: a list with three buttons which open a new page within the popover by clicking them.
- *   - you can navigate to the overview by clicking the "Back" button.
+ *   A click onto the button opens the popover including buttons. You can navigate through the popover content by clicking
+ *   those buttons.
  *   You can close the popover by clicking onto the ILIAS background outside of the popover.
  * ---
  */
@@ -62,13 +60,13 @@ function show_popover_with_dynamic_changing_content()
         $replaceSignal = new ReplaceContentSignal($signalId);
         $button = $factory->button()->standard('Back to Overview', '#')
             ->withOnClick($replaceSignal->withAsyncRenderUrl($url . '&page=overview&replaceSignal=' . $signalId));
-        $intro = $factory->legacy("<p>You are viewing page $page</p>");
+        $intro = $factory->legacy()->content("<p>You are viewing page $page</p>");
         echo $renderer->renderAsync([$intro, $button]);
         exit();
     }
 
     // This is the "normal" request to render the popover. Any content of the popover is rendered async.
-    $popover = $factory->popover()->standard($factory->legacy(''))->withTitle('Pages');
+    $popover = $factory->popover()->standard($factory->legacy()->content(''))->withTitle('Pages');
     $asyncUrl = $url . '&page=overview&replaceSignal=' . $popover->getReplaceContentSignal()->getId();
     $popover = $popover->withAsyncContentUrl($asyncUrl);
     $button = $factory->button()->standard('Show Popover', '#')

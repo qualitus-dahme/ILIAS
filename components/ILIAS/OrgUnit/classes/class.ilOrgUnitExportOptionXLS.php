@@ -55,7 +55,8 @@ class ilOrgUnitExportOptionXLS extends ilBasicExportOption
 
     public function getLabel(): string
     {
-        return $this->lng->txt('simple_xls');
+        $this->lng->loadLanguageModule('exp');
+        return $this->lng->txt('exp_format_dropdown-xls');
     }
 
     public function isObjectSupported(ObjectId $object_id): bool

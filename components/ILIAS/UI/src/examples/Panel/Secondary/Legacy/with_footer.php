@@ -28,7 +28,7 @@ function with_footer()
         $html .= $renderer->render($factory->button()->tag($tag, ""));
     }
 
-    $legacy = $factory->legacy($html);
+    $legacy = $factory->legacy()->content($html);
     $link = $factory->button()->Shy("Edit Keywords", "");
 
     $panel = $factory->panel()->secondary()->legacy("panel title", $legacy)->withFooter($link);

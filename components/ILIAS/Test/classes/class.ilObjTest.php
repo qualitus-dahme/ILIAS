@@ -1653,14 +1653,16 @@ class ilObjTest extends ilObject
     * @return array An array containing the id's as keys and the database row objects as values
     * @access public
     */
-    public function &getAllQuestions($pass = null): array
+    public function getAllQuestions($pass = null): array
     {
-        $result_array = [];
         if ($this->isRandomTest()) {
             $active_id = $this->getActiveIdOfUser($this->user->getId());
+            if ($active_id === null) {
+                return [];
+            }
             $this->loadQuestions($active_id, $pass);
-            if (count($this->questions) == 0) {
-                return $result_array;
+            if (count($this->questions) === 0) {
+                return [];
             }
             if (is_null($pass)) {
                 $pass = self::_getPass($active_id);
@@ -1671,11 +1673,12 @@ class ilObjTest extends ilObject
                 [$active_id, $pass]
             );
         } else {
-            if (count($this->questions) == 0) {
-                return $result_array;
+            if (count($this->questions) === 0) {
+                return [];
             }
             $result = $this->db->query("SELECT qpl_questions.* FROM qpl_questions, tst_test_question WHERE tst_test_question.question_fi = qpl_questions.question_id AND " . $this->db->in('qpl_questions.question_id', $this->questions, false, 'integer'));
         }
+        $result_array = [];
         while ($row = $this->db->fetchAssoc($result)) {
             $result_array[$row["question_id"]] = $row;
         }
@@ -2553,19 +2556,23 @@ class ilObjTest extends ilObject
     * @return string The output name of the user
     * @access public
     */
-    public function buildName($user_id, $firstname, $lastname, $title): string
-    {
+    public function buildName(
+        int $user_id,
+        string $firstname,
+        string $lastname,
+        string $title
+    ): string {
         $name = "";
-        if (strlen($firstname . $lastname . $title) == 0) {
+        if ($firstname . $lastname . $title !== '') {
             $name = $this->lng->txt('deleted_user');
         } else {
             if ($user_id == ANONYMOUS_USER_ID) {
                 $name = $lastname;
             } else {
-                $name = trim($lastname . ", " . $firstname . " " . $title);
+                $name = trim($lastname . ', ' . $firstname . ' ' . $title);
             }
             if ($this->getAnonymity()) {
-                $name = $this->lng->txt("anonymous");
+                $name = $this->lng->txt('anonymous');
             }
         }
         return $name;
@@ -3711,7 +3718,7 @@ class ilObjTest extends ilObject
         $a_xml_writer->xmlElement("fieldentry", null, (int) $main_settings->getTestBehaviourSettings()->getProcessingTimeEnabled());
         $a_xml_writer->xmlEndTag("qtimetadatafield");
 
-        foreach ($this->getMarkSchema()->mark_steps as $index => $mark) {
+        foreach ($this->getMarkSchema()->getMarkSteps() as $index => $mark) {
             $a_xml_writer->xmlStartTag("qtimetadatafield");
             $a_xml_writer->xmlElement("fieldlabel", null, "mark_step_$index");
             $a_xml_writer->xmlElement("fieldentry", null, sprintf(
@@ -5762,6 +5769,16 @@ class ilObjTest extends ilObject
             'HideInfoTab' => (int) $main_settings->getAdditionalSettings()->getHideInfoTab(),
         ];
 
+        $marks = array_map(
+            fn(Mark $v): array => [
+                'short_name' => $v->getShortName(),
+                'official_name' => $v->getOfficialName(),
+                'minimum_level' => $v->getMinimumLevel(),
+                'passed' => $v->getPassed()
+            ],
+            $this->getMarkSchema()->getMarkSteps()
+        );
+
         $next_id = $this->db->nextId('tst_test_defaults');
         $this->db->insert(
             'tst_test_defaults',
@@ -5770,29 +5787,34 @@ class ilObjTest extends ilObject
                 'name' => ['text', $a_name],
                 'user_fi' => ['integer', $this->user->getId()],
                 'defaults' => ['clob', serialize($testsettings)],
-                'marks' => ['clob', serialize($this->getMarkSchema()->getMarkSteps())],
+                'marks' => ['clob', json_encode($marks)],
                 'tstamp' => ['integer', time()]
             ]
         );
     }
 
-    /**
-     * Applies given test defaults to this test
-     *
-     * @param array $test_default The test defaults database id.
-     *
-     * @return boolean TRUE if the application succeeds, FALSE otherwise
-     */
-    public function applyDefaults(array $test_defaults): bool
+    public function applyDefaults(array $test_defaults): string
     {
         $testsettings = unserialize($test_defaults['defaults'], ['allowed_classes' => [DateTimeImmutable::class]]);
-        try {
-            $unserialized_marks = unserialize($test_defaults['marks'], ['allowed_classes' => [Mark::class]]);
-        } catch (Exception $e) {
-            return false;
-        }
+        $unserialized_marks = json_decode($test_defaults['marks'], true);
 
-        $this->mark_schema = $this->getMarkSchema()->withMarkSteps($unserialized_marks);
+        $info = '';
+        if (is_array($unserialized_marks)
+            && is_array($unserialized_marks[0])) {
+            $this->mark_schema = $this->getMarkSchema()->withMarkSteps(
+                array_map(
+                    fn(array $v): Mark => new Mark(
+                        $v['short_name'],
+                        $v['official_name'],
+                        $v['minimum_level'],
+                        $v['passed']
+                    ),
+                    $unserialized_marks
+                )
+            );
+        } else {
+            $info = 'old_mark_default_not_applied';
+        }
 
         $this->storeActivationSettings([
             'is_activation_limited' => $testsettings['activation_limited'],
@@ -5854,7 +5876,7 @@ class ilObjTest extends ilObject
                 ->withUsePreviousAnswerAllowed((bool) $testsettings['use_previous_answers'])
                 ->withSuspendTestAllowed((bool) $testsettings['ShowCancel'])
                 ->withPostponedQuestionsMoveToEnd((bool) $testsettings['SequenceSettings'])
-                ->withUsrPassOverviewMode($testsettings['ListOfQuestionsSettings'])
+                ->withUsrPassOverviewMode((int) $testsettings['ListOfQuestionsSettings'])
                 ->withQuestionMarkingEnabled((bool) $testsettings['ShowMarker'])
             )
             ->withFinishingSettings(
@@ -5924,7 +5946,7 @@ class ilObjTest extends ilObject
         $this->getScoreSettingsRepository()->store($score_settings);
         $this->saveToDb();
 
-        return true;
+        return $info;
     }
 
     private function convertTimeToDateTimeImmutableIfNecessary(

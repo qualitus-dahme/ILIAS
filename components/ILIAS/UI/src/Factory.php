@@ -25,7 +25,7 @@ use ILIAS\UI\Component\Link\Standard;
 use ILIAS\UI\Component\Breadcrumbs\Breadcrumbs;
 use ILIAS\UI\Component\Deck\Deck;
 use ILIAS\UI\Component\Card\Card;
-use ILIAS\UI\Component\Legacy\Legacy;
+use ILIAS\UI\Component\Legacy;
 
 /**
  * This is how the factory for UI elements looks. This should provide access
@@ -727,21 +727,21 @@ interface Factory
      * ---
      * description:
      *   purpose: >
-     *     This component is used to wrap an existing ILIAS UI element into a UI component. This is useful if a container
-     *     of the UI components needs to contain content that is not yet implement in the centralized UI components.
+     *     legacy components are used as provisional elements in the UI framework
+     *     while there are no sophisticated components yet replacing them.
      *   composition: >
-     *     The legacy component contains html or any other content as string.
+     *     Legacy component regularly contain rendered HTML.
      *
      * rules:
      *   usage:
-     *      1: >
-     *          This component MUST only be used to ensure backwards compatibility with existing UI elements in ILIAS,
-     *          therefore it SHOULD only contain Elements which cannot be generated using other UI Components from the UI Service.
+     *     1: >
+     *       Legacy components MUST only be used to ensure backwards compatibility
+     *       with existing UI elements in ILIAS or to implement temporal and provisional
+     *       dependencies.
      * ---
-     * @param   string $content
-     * @return  \ILIAS\UI\Component\Legacy\Legacy
+     * @return  \ILIAS\UI\Component\Legacy\Factory
      */
-    public function legacy(string $content): Legacy;
+    public function legacy(): C\Legacy\Factory;
 
     /**
      * ---

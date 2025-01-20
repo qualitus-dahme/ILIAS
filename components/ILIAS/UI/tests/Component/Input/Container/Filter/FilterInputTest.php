@@ -51,9 +51,9 @@ class FilterInputsTestNoUIFactories extends NoUIFactory
         return $this->popover_factory;
     }
 
-    public function legacy($content): I\Legacy\Legacy
+    public function legacy(): I\Legacy\Factory
     {
-        return $this->legacy_factory->legacy("");
+        return $this->legacy_factory;
     }
 }
 
@@ -100,7 +100,11 @@ class FilterInputTest extends ILIAS_UI_TestBase
 
     protected function buildLegacyFactory(): I\Legacy\Factory
     {
-        return new I\Legacy\Factory(new I\SignalGenerator());
+        $mock = $this->createMock(I\Legacy\Factory::class);
+        $mock->method('content')->willReturn(
+            new I\Legacy\Content('', new I\SignalGenerator())
+        );
+        return $mock;
     }
 
     public function getUIFactory(): FilterInputsTestNoUIFactories

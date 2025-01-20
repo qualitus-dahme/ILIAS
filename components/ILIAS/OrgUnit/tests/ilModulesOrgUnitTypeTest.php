@@ -76,7 +76,7 @@ class ilModulesOrgUnitTypeTest extends TestCase
             ) {
             }
 
-            public function input(): ILIAS\UI\Component\Input\Factory
+            public function input(): Component\Input\Factory
             {
                 $signal_generator = new Component\SignalGenerator();
                 $data_factory = new \ILIAS\Data\Factory();

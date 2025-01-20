@@ -302,7 +302,7 @@ class ilExSubmissionObjectGUI extends ilExSubmissionBaseGUI
         $r = $this->gui->ui()->renderer();
         $p = $f->panel()->standard(
             $title,
-            $f->legacy($html)
+            $f->legacy()->content($html)
         );
 
         $this->tpl->setContent($r->render($p));

@@ -93,7 +93,7 @@ final class ilFooterTranslationGUI
             );
             $content = $this->back_target === null ? $this->ui_factory->panel()->secondary()->legacy(
                 $this->translator->translate('translations'),
-                $this->ui_factory->legacy(
+                $this->ui_factory->legacy()->content(
                     $this->ui_handling->render($content)
                 )
             ) : $content;

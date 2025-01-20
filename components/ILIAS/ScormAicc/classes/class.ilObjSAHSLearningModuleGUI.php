@@ -492,7 +492,7 @@ class ilObjSAHSLearningModuleGUI extends ilObjectGUI
             $this->deleteUploadedImportFile($path_to_uploaded_file_in_temp_dir);
             $ilLog->error('SCORM import of ILIAS exportfile not possible because parsing error');
             $ilLog->error($import_result->error());
-            $this->tpl->setOnScreenMessage('failure', $this->lng->txt("import_file_not_valid"), true);
+            $this->tpl->setOnScreenMessage('failure', $this->lng->txt("import_file_not_valid_here"), true);
             return;
         }
 

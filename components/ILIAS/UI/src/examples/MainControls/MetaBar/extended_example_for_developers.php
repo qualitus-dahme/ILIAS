@@ -64,7 +64,7 @@ function extended_example_for_developers(): string
 
     if ($request_wrapper->has('close_item') && $request_wrapper->retrieve('close_item', $refinery->kindlyTo()->string()) === "true") {
         //Note that we passe back JS logic here for further processing here
-        $js = $f->legacy("")->withOnLoadCode(function ($id) use ($async_replace_content_load_url) {
+        $js = $f->legacy()->content("")->withOnLoadCode(function ($id) use ($async_replace_content_load_url) {
             return "
                 il.DemoScopeRemaining--;
                 il.DemoScopeItem.replaceContentByAsyncItemContent('$async_replace_content_load_url',{remaining: il.DemoScopeRemaining,added: il.DemoScopeAdded});

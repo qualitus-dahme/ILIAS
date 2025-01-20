@@ -60,7 +60,7 @@ class TaggingMainBarProvider extends AbstractStaticMainMenuProvider
                 ->withContentWrapper(function () {
                     $tag_ui = new \ilTaggingSlateContentGUI();
 
-                    return $this->dic->ui()->factory()->legacy($tag_ui->render());
+                    return $this->dic->ui()->factory()->legacy()->content($tag_ui->render());
                 })
                 ->withParent(StandardTopItemsProvider::getInstance()->getPersonalWorkspaceIdentification())
                 ->withPosition(20),

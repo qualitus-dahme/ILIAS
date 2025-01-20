@@ -81,15 +81,8 @@ class Renderer extends AbstractComponentRenderer
     protected function maybeAddError(Form\Form $component, Template $tpl): void
     {
         if (null !== ($error = $component->getError())) {
-            $tpl->setCurrentBlock("error");
-            $error_id = $this->createId();
             $tpl->setVariable("ERROR", $error);
-            $tpl->setVariable("ERROR_ID", $error_id);
             $tpl->setVariable("ERROR_LABEL", $this->txt("ui_error"));
-            $tpl->parseCurrentBlock();
-            $tpl->setCurrentBlock("reference_error");
-            $tpl->setVariable("ERROR_ID", $error_id);
-            $tpl->parseCurrentBlock();
         }
     }
 

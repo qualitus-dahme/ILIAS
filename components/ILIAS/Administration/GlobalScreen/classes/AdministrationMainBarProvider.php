@@ -101,7 +101,7 @@ class AdministrationMainBarProvider extends AbstractStaticMainMenuProvider
                     ->withParent($top)
                     ->withPosition($position * 10)
                     ->withAlwaysAvailable(true)
-                    ->withNonAvailableReason($this->dic->ui()->factory()->legacy("{$this->dic->language()->txt('item_must_be_always_active')}"))
+                    ->withNonAvailableReason($this->dic->ui()->factory()->legacy()->content("{$this->dic->language()->txt('item_must_be_always_active')}"))
                     ->withVisibilityCallable(
                         $access_helper->hasAdministrationAccess()
                     )->withAvailableCallable(

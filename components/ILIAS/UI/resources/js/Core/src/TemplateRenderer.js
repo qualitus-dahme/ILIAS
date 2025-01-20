@@ -13,8 +13,8 @@
  * https://github.com/ILIAS-eLearning
  */
 
-import crypto from 'crypto';
 import createDocumentFragment from './createDocumentFragment';
+import createRandomString from './createRandomString';
 
 /**
  * Updates all attribute values from an old element id to a new one.
@@ -32,13 +32,6 @@ function mapAttributeElementIds(parentElement, elementIdMapping, attributeName) 
     }
     child.setAttribute(attributeName, elementIdMapping.get(originalId));
   });
-}
-
-/**
- * @returns {string}
- */
-function createId() {
-  return crypto.randomUUID();
 }
 
 /**
@@ -79,7 +72,7 @@ export default class TemplateRenderer {
     const elementIdMapping = new Map();
 
     newElement.querySelectorAll('[id]').forEach((element) => {
-      const newId = createId();
+      const newId = createRandomString('il_ui_fw_');
       elementIdMapping.set(element.id, newId);
       element.id = newId;
     });

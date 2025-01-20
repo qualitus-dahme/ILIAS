@@ -106,7 +106,7 @@ class ilObjFileUploadDropzone
         $dropzone = $this->ui->factory()->dropzone()->file()->wrapper(
             $this->language->txt('upload_files'),
             $post_url,
-            $this->ui->factory()->legacy($this->content ?? ''),
+            $this->ui->factory()->legacy()->content($this->content ?? ''),
             $this->ui->factory()->input()->field()->file(
                 $this->upload_handler,
                 $this->language->txt('upload_files'),

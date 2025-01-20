@@ -5831,8 +5831,6 @@ common#:#tst_history_read#:#View History###26 08 2024 new variable
 common#:#tst_new#:#Új teszt
 common#:#tst_results#:#Teszteredmények
 common#:#tst_run#:#Indítás
-common#:#tst_statistical_evaluation#:#Statisztikák
-common#:#tst_statistics#:#Statisztika
 common#:#tst_user_not_invited#:#Nem vehet részt ebben a tesztben.
 common#:#tst_warning_test_not_complete#:#A teszt még nincs kész.
 common#:#tutors#:#Tutorok
@@ -14788,7 +14786,6 @@ rbac#:#tst_edit_permission#:#Jogosultsági beállítások változtatása
 rbac#:#tst_read#:#A felhasználó tesztet tölthet ki
 rbac#:#tst_read_learning_progress#:#A felhasználó megnézheti mások tanulási haladását
 rbac#:#tst_tst_results#:#A felhasználó hozzáférhet mások teszteredményeihez
-rbac#:#tst_tst_statistics#:#A felhasználónak elérése van a tesztstatisztikához
 rbac#:#tst_visible#:#A teszt látható
 rbac#:#tst_write#:#A felhasználó szerkesztheti teszt tartalmát és beállításait
 rbac#:#upload_blacklisted_files#:#A tiltólista megkerülése

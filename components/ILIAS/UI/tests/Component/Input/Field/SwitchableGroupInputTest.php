@@ -26,7 +26,7 @@ use ILIAS\UI\Implementation\Component as I;
 use ILIAS\UI\Implementation\Component\Input\Field\SwitchableGroup;
 use ILIAS\UI\Implementation\Component\Input\Field\Group;
 use ILIAS\UI\Implementation\Component\Input\NameSource;
-use ILIAS\UI\Implementation\Component\Input\InputData;
+use ILIAS\UI\Component\Input\InputData;
 use ILIAS\Data;
 use ILIAS\UI\Implementation\Component\SignalGenerator;
 use ILIAS\Refinery\Factory as Refinery;

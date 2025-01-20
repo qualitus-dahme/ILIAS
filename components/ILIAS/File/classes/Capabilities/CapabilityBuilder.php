@@ -52,6 +52,7 @@ class CapabilityBuilder
         private readonly \ilCtrlInterface $ctrl,
         private readonly ActionRepository $action_repository,
         private readonly Services $http,
+        private readonly TypeResolver $type_resolver,
         private readonly URIBuilder $static_url
     ) {
         $this->checks = [
@@ -79,19 +80,18 @@ class CapabilityBuilder
          * which will return the first unlocked Capability
          */
         $capabilities = [
-            new Capability(Capabilities::FORCED_INFO_PAGE, Permissions::VISIBLE),
+            new Capability(Capabilities::FORCED_INFO_PAGE, ...Permissions::ANY()),
             new Capability(Capabilities::VIEW_EXTERNAL, Permissions::VIEW_CONTENT),
             new Capability(Capabilities::EDIT_EXTERNAL, Permissions::EDIT_CONTENT),
             new Capability(Capabilities::DOWNLOAD, Permissions::READ),
             new Capability(Capabilities::MANAGE_VERSIONS, Permissions::WRITE),
             new Capability(Capabilities::EDIT_SETTINGS, Permissions::WRITE),
-            new Capability(Capabilities::INFO_PAGE, Permissions::VISIBLE),
+            new Capability(Capabilities::INFO_PAGE, ...Permissions::ANY()),
             new Capability(Capabilities::NONE, Permissions::NONE),
             new Capability(Capabilities::UNZIP, Permissions::WRITE),
         ];
 
-
-        if (\ilObject2::_lookupType($ref_id, true) !== 'file') {
+        if ($this->type_resolver->resolveType($ref_id) !== 'file') {
             return new CapabilityCollection($capabilities);
         }
 

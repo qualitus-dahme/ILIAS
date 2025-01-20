@@ -24,7 +24,7 @@ use ILIAS\Data\Factory as DataFactory;
 use ILIAS\Refinery\Constraint;
 use ILIAS\UI\Implementation\Component\JavaScriptBindable;
 use ILIAS\UI\Implementation\Component\Triggerer;
-use ILIAS\UI\Implementation\Component\Input\InputData;
+use ILIAS\UI\Component\Input\InputData;
 use ILIAS\UI\Component\Input\Field as I;
 use ILIAS\Language\Language;
 use LogicException;

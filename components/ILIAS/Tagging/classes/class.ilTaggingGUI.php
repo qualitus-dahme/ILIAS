@@ -292,7 +292,7 @@ class ilTaggingGUI
         global $DIC;
 
         $ui = $DIC->ui();
-        $modal = $ui->factory()->modal()->roundtrip('#tag_title#', $ui->factory()->legacy(''));
+        $modal = $ui->factory()->modal()->roundtrip('#tag_title#', $ui->factory()->legacy()->content(''));
         $modalt["show"] = $modal->getShowSignal()->getId();
         $modalt["close"] = $modal->getCloseSignal()->getId();
         $modalt["template"] = $ui->renderer()->renderAsync($modal);

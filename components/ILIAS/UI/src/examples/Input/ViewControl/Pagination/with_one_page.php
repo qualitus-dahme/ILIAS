@@ -28,7 +28,7 @@ function with_one_page()
         ->withRequest($DIC->http()->request());
 
     return $r->render([
-        $f->legacy('<pre>' . print_r($vc_container->getData(), true) . '</pre>'),
+        $f->legacy()->content('<pre>' . print_r($vc_container->getData(), true) . '</pre>'),
         $f->divider()->horizontal(),
         $vc_container
     ]);

@@ -650,7 +650,7 @@ class ilExPeerReviewGUI
 
         return $f->panel()->sub(
             $title,
-            $f->legacy($tpl->get() . $mess_html)
+            $f->legacy()->content($tpl->get() . $mess_html)
         );
     }
 
@@ -1185,7 +1185,7 @@ class ilExPeerReviewGUI
             $r = $this->gui->ui()->renderer();
             $p = $f->panel()->standard(
                 $this->lng->txt("exc_peer_review_overview_invalid_users"),
-                $f->legacy($ptpl->get())
+                $f->legacy()->content($ptpl->get())
             );
 
             $panel = $r->render($p);

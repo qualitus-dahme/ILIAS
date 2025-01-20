@@ -20,7 +20,7 @@ declare(strict_types=1);
 
 namespace ILIAS\Exercise\PeerReview;
 
-use ILIAS\Exercise\IRSS\IRSSWrapper;
+use ILIAS\Repository\IRSS\IRSSWrapper;
 use ILIAS\Exercise\InternalDataService;
 use ILIAS\Exercise\PeerReview\Criteria\CriteriaFileRepository;
 

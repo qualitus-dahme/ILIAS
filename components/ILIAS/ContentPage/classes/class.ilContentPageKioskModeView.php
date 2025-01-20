@@ -174,7 +174,7 @@ class ilContentPageKioskModeView extends ilKioskModeView
 
         $this->ctrl->setParameterByClass(ilContentPagePageGUI::class, 'ref_id', $this->contentPageObject->getRefId());
 
-        return $factory->legacy(implode('', [
+        return $factory->legacy()->content(implode('', [
             $this->uiRenderer->render($this->messages),
             $forwarder->forward($this->ctrl->getLinkTargetByClass([
                 ilRepositoryGUI::class, ilObjContentPageGUI::class, ilContentPagePageGUI::class

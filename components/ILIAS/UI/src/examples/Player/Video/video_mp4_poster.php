@@ -10,9 +10,8 @@ namespace ILIAS\UI\examples\Player\Video;
  *   Example for rendering a mp4 video player with a poster as a start screen.
  *
  * expected output: >
- *   ILIAS shows a rendered video player with the ILIAS Logo as a start screen. On the left side you will see a Start/Stop
- *   symbol, followed by a time bar and on the right side a symbol for volume control and for the the full screen.
- *   A big start symbol is shown in the middle of the start screen.
+ *   ILIAS shows a base video player with the ILIAS Logo as a start screen including all functions like stop/start symbols.
+ *   The subtitle symbol (CC) is missing.
  *
  *   In addition following functions have to be tested:
  *   - The video starts playing if clicking the start/stop symbol in the middle of the image. The video stops after another click.

@@ -33,6 +33,7 @@ use ILIAS\Refinery\Transformation;
 use Psr\Http\Message\ServerRequestInterface;
 use ILIAS\UI\Component\ReplaceSignal;
 use ILIAS\UI\Component\Input\Container\Form\FormInput;
+use ILIAS\UI\Component\Input\InputData;
 
 /**
  * @author Thibeau Fuhrer <thibeau@sr.solutions>
@@ -215,6 +216,13 @@ abstract class File implements FileDropzone
     {
         $clone = clone $this;
         $clone->modal = $clone->modal->withRequest($request);
+        return $clone;
+    }
+
+    public function withInput(InputData $input_data): self
+    {
+        $clone = clone $this;
+        $clone->modal = $clone->modal->withInput($request);
         return $clone;
     }
 

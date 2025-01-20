@@ -188,7 +188,7 @@ class TestScreenGUI
         ) {
             $elements[] = $this->ui_factory->panel()->standard(
                 $this->lng->txt('tst_introduction'),
-                $this->ui_factory->legacy($introduction),
+                $this->ui_factory->legacy()->content($introduction),
             );
         }
 
@@ -449,7 +449,6 @@ class TestScreenGUI
                         if ($anonymous && !empty($value)) {
                             $this->test_session->setAccessCodeToSession($value);
                         } else {
-                            $conditions_met = false;
                             $this->test_session->unsetAccessCodeInSession();
                         }
                         break;

@@ -10,8 +10,7 @@ namespace ILIAS\UI\examples\Input\Field\Password;
  *   Example of how to create and render a basic password field and attach it to a form.
  *
  * expected output: >
- *   ILIAS shows a input field titled "Password". An inserted text won't be displayed but exchanged with dots. Clicking
- *   "Save" will reload the page.
+ *   ILIAS shows a input field titled "Password". An inserted text won't be displayed but exchanged with dots.
  * ---
  */
 function base()

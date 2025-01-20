@@ -21,7 +21,7 @@ declare(strict_types=1);
 namespace ILIAS\Test\ExportImport;
 
 use ILIAS\Language\Language;
-use ILIAS\UI\Factory as UIFactory;
+use ILIAS\Test\Logging\TestLogger;
 use ILIAS\FileDelivery\Services as FileDeliveryServices;
 
 class CertificateExport implements Exporter
@@ -29,6 +29,7 @@ class CertificateExport implements Exporter
     public function __construct(
         private readonly Language $lng,
         private readonly \ilDBInterface $db,
+        private readonly TestLogger $logger,
         private \ilGlobalTemplateInterface $tpl,
         private FileDeliveryServices $file_delivery,
         private readonly \ilObjTest $object
@@ -46,7 +47,6 @@ class CertificateExport implements Exporter
             null,
             true
         );
-        $this->file_delivery->deliver();
     }
 
     public function write(): ?string
@@ -70,7 +70,7 @@ class CertificateExport implements Exporter
             $this->object->buildStatisticsAccessFilteredParticipantList()
         );
 
-        $certificate_repo = new \ilUserCertificateRepository($this->db, $this->logger);
+        $certificate_repo = new \ilUserCertificateRepository($this->db);
         $pdf_generator = new \ilPdfGenerator($certificate_repo);
 
         $total_users = $this->object->evalTotalPersonsArray();

@@ -11,7 +11,7 @@ namespace ILIAS\UI\examples\Input\Field\File;
  *
  * expected output: >
  *   ILIAS shows a field titled "Upload File" next to a box surrounded by dashed lines. You can choose a file by dragging
- *   the file to the box or by clicking "Select files". If you save your selection ILIAS will reset the field.
+ *   the file to the box or by clicking "Select files".
  * ---
  */
 function base()

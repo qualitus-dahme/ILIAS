@@ -12,8 +12,7 @@ namespace ILIAS\UI\examples\Modal\RoundTrip;
  *
  * expected output: >
  *   ILIAS shows a button titled "I will show you something". A click onto the button will open a modal including the two
- *   buttons "Nothing todo here" and "Thank you and goodbye". A click onto the first button does not do anything. A click
- *   onto the second button closes the modal.
+ *   buttons with custom labels.
  * ---
  */
 function with_custom_labels()

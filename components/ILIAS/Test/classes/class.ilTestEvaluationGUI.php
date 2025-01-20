@@ -152,7 +152,7 @@ class ilTestEvaluationGUI extends ilTestServiceGUI
             'ADM_CONTENT',
             $this->ui_renderer->render([
                 $results_panel,
-                $this->ui_factory->legacy('')->withAdditionalOnLoadCode(
+                $this->ui_factory->legacy()->content('')->withAdditionalOnLoadCode(
                     fn(string $id): string => 'setTimeout(() => {window.print();}, 50)'
                 )
             ])
@@ -194,7 +194,7 @@ class ilTestEvaluationGUI extends ilTestServiceGUI
         );
 
         if (count($attempts_ids_array) > 1) {
-            $results_panel->withViewControls([
+            $results_panel = $results_panel->withViewControls([
                 $this->buildAttemptSwitchingViewControl(
                     $attempts_ids_array,
                     ++$attempt_id

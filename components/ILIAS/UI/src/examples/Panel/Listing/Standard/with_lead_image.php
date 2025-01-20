@@ -10,9 +10,9 @@ namespace ILIAS\UI\examples\Panel\Listing\Standard;
  *   Example for rendering a panel standard listing with an lead image.
  *
  * expected output: >
- *   ILIAS shows a panel titled "Content" including two item groups titled "Courses" and "Groups". The first item group
- *   includes two items, each displaying an action menu and a ILIAS-Logo as image. The second item group includes an
- *   action menu and a ILIAS-Logo. The logos are displayed on the left side of the text.
+ *   ILIAS shows a panel including two item groups. The first item group includes two items, each displaying an action
+ *   menu and a ILIAS-Logo as image. The second item group includes an action menu and a ILIAS-Logo.
+ *   The logos are displayed on the left side of the text.
  * ---
  */
 function with_lead_image()

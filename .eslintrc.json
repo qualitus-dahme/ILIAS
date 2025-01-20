@@ -55,6 +55,9 @@
         "devDependencies": true
       }
     ],
+    // enforce file extensions for Node.js compatibility
+    // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/extensions.md
+    "import/extensions": ["error", "ignorePackages"],
     // allow to reassign argument properties for e.g. altering
     // HTMLElement styles and state.
     "no-param-reassign": [

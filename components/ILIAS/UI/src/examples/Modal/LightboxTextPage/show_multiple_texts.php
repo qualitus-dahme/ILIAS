@@ -16,8 +16,6 @@ namespace ILIAS\UI\examples\Modal\LightboxTextPage;
  *   All contents consist of a title each.
  *   In the lower part of the modal a circle glyph is centered about which you can see that you can look at two contents
  *   within the modal.
- *   You can leave the modal by hitting the ESC key or by clicking the greyed out ILIAS in the background outside of the
- *   modal or by clicking the "X".
  * ---
  */
 function show_multiple_texts()

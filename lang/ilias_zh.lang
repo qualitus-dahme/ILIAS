@@ -5829,8 +5829,6 @@ common#:#tst_history_read#:#View History###26 08 2024 new variable
 common#:#tst_new#:#新测试
 common#:#tst_results#:#Test Results###10 11 2018 new variable
 common#:#tst_run#:#运行
-common#:#tst_statistical_evaluation#:#统计
-common#:#tst_statistics#:#访问测试统计
 common#:#tst_user_not_invited#:#您不应该参加这个考试。
 common#:#tst_warning_test_not_complete#:#此测试未完成！
 common#:#tutors#:#导师
@@ -14786,7 +14784,6 @@ rbac#:#tst_edit_permission#:#更改许可设置
 rbac#:#tst_read#:#测试设为读访问
 rbac#:#tst_read_learning_progress#:#User can view learning progress of other users###26 09 2014 new variable
 rbac#:#tst_tst_results#:#User has access to test results###10 11 2018 new variable
-rbac#:#tst_tst_statistics#:#访问测试统计
 rbac#:#tst_visible#:#测试可视
 rbac#:#tst_write#:#编辑测试
 rbac#:#upload_blacklisted_files#:#Bypass blacklist###07 02 2020 new variable

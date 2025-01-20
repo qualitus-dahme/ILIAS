@@ -23,7 +23,7 @@ use ILIAS\DI\Container;
 use ILIAS\FileUpload\FileUpload;
 use ILIAS\Filesystem\Filesystems;
 use ILIAS\HTTP\Services as HTTPServices;
-use ILIAS\UI\Implementation\Factory;
+use ILIAS\UI\Implementation\FactoryInternal;
 use ILIAS\Refinery\Factory as RefineryFactory;
 use ILIAS\Refinery\Random\Group as RandomGroup;
 use GuzzleHttp\Psr7\Uri as GuzzleURI;
@@ -285,7 +285,7 @@ trait ilTestBaseTestCaseTrait
 
     protected function addGlobal_uiFactory(): void
     {
-        $this->setGlobalVariable('ui.factory', $this->createMock(Factory::class));
+        $this->setGlobalVariable('ui.factory', $this->createMock(FactoryInternal::class));
     }
 
     protected function addGlobal_uiRenderer(): void

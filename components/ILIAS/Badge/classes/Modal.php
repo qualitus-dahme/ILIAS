@@ -50,11 +50,11 @@ class Modal
     {
         $modal_content = [];
 
-        $image_src = $this->badge_image_service->getImageFromBadge($content->badge());
+        $image_src = $this->badge_image_service->getImageFromBadge($content->badge(), ilBadgeImage::IMAGE_SIZE_XL);
 
         $modal_content[] = $this->container->ui()->factory()->image()->responsive(
             $image_src,
-            $image_src
+            $content->badge()->getTitle()
         );
         $modal_content[] = $this->container->ui()->factory()->divider()->horizontal();
         $modal_content[] = $this->item($content);

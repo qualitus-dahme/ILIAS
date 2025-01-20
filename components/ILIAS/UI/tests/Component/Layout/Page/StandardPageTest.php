@@ -28,7 +28,7 @@ use ILIAS\UI\Component\Breadcrumbs\Breadcrumbs;
 use ILIAS\UI\Component\Image\Image;
 use ILIAS\UI\Component\Toast\Container;
 use ILIAS\UI\Implementation\Component\Layout\Page;
-use ILIAS\UI\Implementation\Component\Legacy\Legacy;
+use ILIAS\UI\Implementation\Component\Legacy\Content;
 use ILIAS\UI\Implementation\Component\SignalGenerator;
 use ILIAS\UI\Implementation\Component\Breadcrumbs\Breadcrumbs as Crumbs;
 use ILIAS\UI\Implementation\Component\Link\Standard as CrumbEntry;
@@ -72,7 +72,7 @@ class StandardPageTest extends ILIAS_UI_TestBase
         $this->responsive_logo->method("getCanonicalName")->willReturn("Responsive Logo Stub");
         $this->overlay = $this->createMock(Container::class);
         $this->overlay->method("getCanonicalName")->willReturn("Overlay Stub");
-        $this->contents = array(new Legacy('some content', $sig_gen));
+        $this->contents = array(new Content('some content', $sig_gen));
         $this->title = 'pagetitle';
 
         $this->factory = new Page\Factory();
@@ -392,12 +392,12 @@ class StandardPageTest extends ILIAS_UI_TestBase
     public function getUIFactory(): NoUIFactory
     {
         return new class () extends NoUIFactory {
-            public function button(): \ILIAS\UI\Component\Button\Factory
+            public function button(): Button\Factory
             {
                 return new Button\Factory();
             }
 
-            public function dropdown(): Factory
+            public function dropdown(): Dropdown\Factory
             {
                 return new Dropdown\Factory();
             }

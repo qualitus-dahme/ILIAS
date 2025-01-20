@@ -259,13 +259,9 @@ class ilDclRecordListTableGUI extends ilTable2GUI
 
         if ($a_set["_front"]) {
             $this->tpl->setCurrentBlock('view');
-            $this->tpl->setVariable("VIEW_IMAGE_LINK", $a_set["_front"]);
             $this->tpl->setVariable(
-                "VIEW_IMAGE_SRC",
-                ilUtil::img(
-                    ilUtil::getImagePath("media/enlarge.svg"),
-                    $this->lng->txt('dcl_display_record_alt')
-                )
+                "VIEW_DETAILS",
+                $this->ui->renderer()->render($this->ui->factory()->symbol()->glyph()->enlarge($a_set["_front"]))
             );
             $this->tpl->parseCurrentBlock();
         }

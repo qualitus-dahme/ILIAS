@@ -13,7 +13,7 @@ namespace ILIAS\UI\examples\Button\Tag;
  *   ILIAS shows four different buttons titled "simple tag" in following order:
  *   1. Five buttons in shaded colors. The cursor will change while hovering above the button which confirms that the
  *      buttons are clickable.
- *   2. with unavailable action: five grey buttons which are not clickable. A click won't activate any actions.
+ *   2. with unavailable action: five grey buttons which are not clickable.
  *   3. with additional class(es): a very broad button with a loading animation on the right side.
  *   4. with fix colors: three buttons with different background colors and different text colors. Hovering over the
  *      buttons will change the cursor which confirms that the buttons are clickable.

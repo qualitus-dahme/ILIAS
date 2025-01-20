@@ -181,7 +181,7 @@ class ilObjAuthSettingsGUI extends ilObjectGUI
         $page_content = [
             $this->ui_factory->panel()->standard(
                 $this->lng->txt('auth_select'),
-                $this->ui_factory->legacy($generalSettingsTpl->get()),
+                $this->ui_factory->legacy()->content($generalSettingsTpl->get()),
             )
         ];
 
@@ -728,7 +728,7 @@ class ilObjAuthSettingsGUI extends ilObjectGUI
             $test_form = $test_form->withRequest($this->request);
             $result = $test_form->getData();
             if (!is_null($result)) {
-                $panel_content[] = $this->ui_factory->legacy(
+                $panel_content[] = $this->ui_factory->legacy()->content(
                     ilSOAPAuth::testConnection($result['ext_uid'], $result['soap_pw'], $result['new_user'])
                 );
             }

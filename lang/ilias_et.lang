@@ -5830,8 +5830,6 @@ common#:#tst_history_read#:#View History###26 08 2024 new variable
 common#:#tst_new#:#Uus test
 common#:#tst_results#:#Test Results###10 11 2018 new variable
 common#:#tst_run#:#Käivita
-common#:#tst_statistical_evaluation#:#Statistika
-common#:#tst_statistics#:#Ligipääs testi statistikale
 common#:#tst_user_not_invited#:#Sa ei pea seda testi tegema.
 common#:#tst_warning_test_not_complete#:#Test pole valmis!
 common#:#tutors#:#Tuutorid
@@ -14787,7 +14785,6 @@ rbac#:#tst_edit_permission#:#Muuda õiguseid
 rbac#:#tst_read#:#Read access to Test
 rbac#:#tst_read_learning_progress#:#User can view learning progress of other users
 rbac#:#tst_tst_results#:#User has access to test results###10 11 2018 new variable
-rbac#:#tst_tst_statistics#:#Access to Test Statistics
 rbac#:#tst_visible#:#Test on nähtav
 rbac#:#tst_write#:#Muuda testi
 rbac#:#upload_blacklisted_files#:#Bypass blacklist###07 02 2020 new variable

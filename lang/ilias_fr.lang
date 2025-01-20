@@ -5815,8 +5815,6 @@ common#:#tst_history_read#:#View History###26 08 2024 new variable
 common#:#tst_new#:#Nouveau Test
 common#:#tst_results#:#Test Results
 common#:#tst_run#:#Commencer
-common#:#tst_statistical_evaluation#:#Statistiques
-common#:#tst_statistics#:#Statistiques
 common#:#tst_user_not_invited#:#Vous n'êtes pas censé passer ce test.
 common#:#tst_warning_test_not_complete#:#Ce test est incomplet !
 common#:#tutors#:#Tuteurs
@@ -14772,7 +14770,6 @@ rbac#:#tst_edit_permission#:#L'utilisateur peut modifier les permissions de l'ob
 rbac#:#tst_read#:#L'utilisateur peut effectuer le test
 rbac#:#tst_read_learning_progress#:#L'utilisateur peut afficher les progrès d'apprentissage des autres utilisateurs
 rbac#:#tst_tst_results#:#User has access to test results
-rbac#:#tst_tst_statistics#:#L'utilisateur a accès aux statistics du test
 rbac#:#tst_visible#:#L'objet est visible
 rbac#:#tst_write#:#L'utilisateur peut modifier les paramètres et éditer le contenu de l'objet
 rbac#:#upload_blacklisted_files#:#Bypass blacklist

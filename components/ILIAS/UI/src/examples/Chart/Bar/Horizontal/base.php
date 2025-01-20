@@ -7,7 +7,7 @@ namespace ILIAS\UI\examples\Chart\Bar\Horizontal;
 /**
  * ---
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   ILIAS shows a rendered horizontal bar chart with a title, legend and different bars and labels.
  * ---
  */
 function base()

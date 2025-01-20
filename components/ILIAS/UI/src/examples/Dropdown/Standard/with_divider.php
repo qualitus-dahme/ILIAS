@@ -10,8 +10,8 @@ namespace ILIAS\UI\examples\Dropdown\Standard;
  *   Example for rendering a dropdown with dividers
  *
  * expected output: >
- *   ILIAS shows a button titled "Actions" and a triangle pointing to the bottom. Clicking the button will open a
- *   dropdown menu with the entries "ILIAS" and "GitHub" rendered as shy buttons. The entries are divided by a fine line.
+ *   ILIAS shows a base dropdown button. Clicking the button will open a
+ *   dropdown menu with entries divided by a fine line.
  *   Clicking the entries will open the appropriate website in the same browser window.
  * ---
  */

@@ -139,9 +139,9 @@ class ilDclTableViewGUI
 
         $this->tpl->setContent(
             $this->renderer->render(
-                $this->ui_factory->panel()->standard(
+                $this->ui_factory->panel()->listing()->standard(
                     sprintf($this->lng->txt('dcl_tableviews_of_X'), $this->table->getTitle()),
-                    $this->getItems()
+                    [$this->ui_factory->item()->group('', $this->getItems())]
                 )
             )
         );

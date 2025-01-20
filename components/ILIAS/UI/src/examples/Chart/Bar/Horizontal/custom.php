@@ -11,7 +11,7 @@ use ILIAS\UI\Component\Chart\Bar\XAxis;
 /**
  * ---
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   ILIAS shows a base horizontal bar chart but customized with e.g. different colors.
  * ---
  */
 function custom()

@@ -29,7 +29,7 @@ class ilWebDAVMountInstructionsGUI
 {
     protected ilWebDAVUriBuilder $uri_builder;
     protected ilWebDAVBaseMountInstructions $mount_instruction;
-    protected ilLanguage$lang;
+    protected ilLanguage $lang;
     protected UIServices $ui;
     protected Services $http;
 
@@ -54,7 +54,7 @@ class ilWebDAVMountInstructionsGUI
 
         $components = [];
 
-        $js_function_legacy = $f->legacy('<script>'
+        $js_function_legacy = $f->legacy()->content('<script>'
             . 'il.UI.showMountInstructions = function (e, id){'
             . "obj = $(e['target']);"
             . "obj.siblings().removeClass('engaged disabled ilSubmitInactive').attr('aria-pressed', 'false');"
@@ -64,7 +64,7 @@ class ilWebDAVMountInstructionsGUI
             . '$("#"+id).show();}</script>');
 
         if (count($mount_instructions) === 1) {
-            $content = $f->legacy("<div class='instructions'>" . array_shift($mount_instructions) . "</div>");
+            $content = $f->legacy()->content("<div class='instructions'>" . array_shift($mount_instructions) . "</div>");
 
             return $render_async ? $r->renderAsync($content) : $r->render($content);
         }
@@ -89,7 +89,7 @@ class ilWebDAVMountInstructionsGUI
                 $hidden = 'style="display: none;"';
             }
 
-            $legacy = $f->legacy("<div id='$title' class='instructions' $hidden>$text</div>")
+            $legacy = $f->legacy()->content("<div id='$title' class='instructions' $hidden>$text</div>")
                 ->withCustomSignal($title, "il.UI.showMountInstructions(event, '$title');");
 
             $view_control_actions[$title] = $legacy->getCustomSignal($title);
@@ -101,9 +101,9 @@ class ilWebDAVMountInstructionsGUI
 
         // Add view control and legacy add the beginning of the array (so they will be rendered first)
         $header_components = [
-            $f->legacy("<div class='webdav-view-control'>"),
+            $f->legacy()->content("<div class='webdav-view-control'>"),
             $view_control,
-            $f->legacy("</div>"),
+            $f->legacy()->content("</div>"),
             $js_function_legacy];
 
         $components = array_merge($header_components, $components);

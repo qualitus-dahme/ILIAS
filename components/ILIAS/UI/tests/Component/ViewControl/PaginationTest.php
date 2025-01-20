@@ -34,7 +34,7 @@ class PaginationTest extends ILIAS_UI_TestBase
     public function getUIFactory(): NoUIFactory
     {
         return new class () extends NoUIFactory {
-            public function symbol(): C\Symbol\Factory
+            public function symbol(): IC\Symbol\Factory
             {
                 return new IC\Symbol\Factory(
                     new IC\Symbol\Icon\Factory(),
@@ -42,11 +42,11 @@ class PaginationTest extends ILIAS_UI_TestBase
                     new IC\Symbol\Avatar\Factory()
                 );
             }
-            public function button(): C\Button\Factory
+            public function button(): IC\Button\Factory
             {
                 return new IC\Button\Factory();
             }
-            public function dropdown(): C\Dropdown\Factory
+            public function dropdown(): IC\Dropdown\Factory
             {
                 return new IC\Dropdown\Factory();
             }

@@ -25,7 +25,7 @@ use ILIAS\UI\Component\Symbol\Icon\Icon;
 use ILIAS\UI\Component\Link\Link;
 use ILIAS\ResourceStorage\Services as IRSS;
 use ILIAS\UI\Component\Link\Relationship;
-use ILIAS\UI\Component\Legacy\Legacy;
+use ILIAS\UI\Component\Legacy\Content;
 
 class Renderer implements RendererInterface
 {
@@ -43,7 +43,7 @@ class Renderer implements RendererInterface
     }
 
     /**
-     * @return Icon[]|Link[]|Legacy[]
+     * @return Icon[]|Link[]|Content[]
      */
     public function toUIComponents(CopyrightDataInterface $copyright): array
     {
@@ -149,9 +149,9 @@ class Renderer implements RendererInterface
         return $this->factory->link()->standard($label, $action);
     }
 
-    protected function textInLegacy(string $text): Legacy
+    protected function textInLegacy(string $text): Content
     {
-        return $this->factory->legacy($text);
+        return $this->factory->legacy()->content($text);
     }
 
     protected function getSourceFromIRSS(string $string_id): string

@@ -41,7 +41,7 @@ class ComponentRendererFSLoaderTest extends TestCase
 
     protected function getComponentRendererFSLoader(): FSLoader
     {
-        $ui_factory = $this->getMockBuilder(ILIAS\UI\Factory::class)->getMock();
+        $ui_factory = $this->getMockBuilder(ILIAS\UI\Implementation\FactoryInternal::class)->disableOriginalConstructor()->getMock();
         $tpl_factory = $this->getMockBuilder(I\Render\TemplateFactory::class)->getMock();
         $lng = $this->getMockBuilder(ILIAS\Language\Language::class)->disableOriginalConstructor()->getMock();
         $js_binding = $this->getMockBuilder(I\Render\JavaScriptBinding::class)->getMock();

@@ -32,7 +32,7 @@ class BreadcrumbsTest extends ILIAS_UI_TestBase
     public function getFactory(): NoUIFactory
     {
         return new class () extends NoUIFactory {
-            public function breadcrumbs(array $crumbs): C\Breadcrumbs\Breadcrumbs
+            public function breadcrumbs(array $crumbs): I\Component\Breadcrumbs\Breadcrumbs
             {
                 return new I\Component\Breadcrumbs\Breadcrumbs($crumbs);
             }

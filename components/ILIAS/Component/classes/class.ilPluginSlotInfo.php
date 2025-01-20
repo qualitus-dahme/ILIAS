@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -65,7 +66,11 @@ class ilPluginSlotInfo
 
     public function getPath(): string
     {
-        return ilComponentRepository::PLUGIN_BASE_PATH . "/" . $this->getQualifiedName();
+        return implode('/', [
+            ilComponentRepository::PLUGIN_BASE_PATH,
+            $this->component->getName(),
+            $this->getName()
+        ]);
     }
 
     /**

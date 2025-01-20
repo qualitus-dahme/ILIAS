@@ -20,22 +20,16 @@ declare(strict_types=1);
 
 namespace ILIAS\Repository;
 
-/**
- * Repository internal data service
- * @author Alexander Killing <killing@leifos.de>
- */
+use ILIAS\Repository\IRSS;
+
 class InternalDataService
 {
-    // protected ...\DataFactory ..._factory;
-
     public function __construct()
     {
-        //$this->..._factory = new ...\DataFactory();
     }
 
-    /*
-    public function ...() : ...\...
+    public function irss(): IRSS\DataService
     {
-        return $this->..._factory->...();
-    }*/
+        return new IRSS\DataService();
+    }
 }

@@ -10,8 +10,8 @@ namespace ILIAS\UI\examples\Button\Standard;
  *   This example provides buttons with a Glyph in (and as) the label.
  *
  * expected output: >
- *   ILIAS shows a button with the Search Gylph and a label in different states
- *   as well as a Button with _only_ a Glyph, again in different states.
+ *   ILIAS shows a button with the Search Gylph and in some cases a label in different states. Clicking the button
+ *   won't activate any actions.
  * ---
  */
 function with_glyph()

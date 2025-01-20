@@ -10,7 +10,7 @@ namespace ILIAS\UI\examples\MessageBox\Failure;
  *   Example for rendering a failure message box.
  *
  * expected output: >
- *   ILIAS shows a red box with a dummy text ("Lorem ipsum...").
+ *   ILIAS shows a red box with a dummy text.
  * ---
  */
 function failure()

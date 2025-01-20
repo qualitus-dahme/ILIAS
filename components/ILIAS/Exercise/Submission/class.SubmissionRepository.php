@@ -20,10 +20,9 @@ declare(strict_types=1);
 
 namespace ILIAS\Exercise\Submission;
 
-use ILIAS\Exercise\IRSS\IRSSWrapper;
+use ILIAS\Repository\IRSS\IRSSWrapper;
 use ILIAS\ResourceStorage\Stakeholder\ResourceStakeholder;
 use ILIAS\Filesystem\Stream\FileStream;
-use ILIAS\Data\Result;
 use ILIAS\FileUpload\DTO\UploadResult;
 use ILIAS\Exercise\InternalDataService;
 

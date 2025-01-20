@@ -99,7 +99,14 @@ class ilTestLegacyFormsHelper
      */
     public function transformPoints($data, string $key = 'points'): array
     {
-        return $this->transformArray($data, $key, $this->refinery->kindlyTo()->float());
+        if (!$this->inArray($data, $key)) {
+            return [];
+        }
+
+        return array_map(
+            fn($v): ?float => $this->refinery->byTrying([$this->refinery->kindlyTo()->float(), $this->refinery->always(null)])->transform($v),
+            $data[$key]
+        );
     }
 
     /**

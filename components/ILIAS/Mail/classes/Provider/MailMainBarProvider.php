@@ -54,7 +54,7 @@ class MailMainBarProvider extends AbstractStaticMainMenuProvider
                 ->withPosition(10)
                 ->withSymbol($icon)
                 ->withNonAvailableReason(
-                    $this->dic->ui()->factory()->legacy($this->dic->language()->txt('component_not_active'))
+                    $this->dic->ui()->factory()->legacy()->content($this->dic->language()->txt('component_not_active'))
                 )
                 ->withAvailableCallable(
                     static function () use ($dic): bool {

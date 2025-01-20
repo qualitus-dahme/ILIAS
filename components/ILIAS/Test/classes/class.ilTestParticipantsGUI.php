@@ -255,6 +255,7 @@ class ilTestParticipantsGUI
             $this->lng->txt('exp_all_test_runs'),
             $this->ctrl->getLinkTargetByClass(self::class, 'exportResults')
         );
+        $options = $this->addPluginExportsToOptions($options);
         return $this->addCertificateExportToOptions($options);
     }
 
@@ -335,13 +336,35 @@ class ilTestParticipantsGUI
             $this->participant_repository,
             $this->test_obj,
             [
-                ParticipantTableDeleteParticipantAction::ACTION_ID => new ParticipantTableDeleteParticipantAction(
+                ParticipantTableShowResultsAction::ACTION_ID => new ParticipantTableShowResultsAction(
+                    $this->lng,
+                    $this->ui_factory,
+                    $this->test_access,
+                    $this->ctrl,
+                    $this->test_obj
+                ),
+                ParticipantTableDeleteResultsAction::ACTION_ID => new ParticipantTableDeleteResultsAction(
                     $this->lng,
                     $this->main_tpl,
                     $this->ui_factory,
-                    $this->participant_repository,
+                    $this->db,
+                    $this->participant_access_filter,
                     $this->test_access,
                     $this->test_obj
+                ),
+                ParticipantTableFinishTestAction::ACTION_ID => new ParticipantTableFinishTestAction(
+                    $this->lng,
+                    $this->main_tpl,
+                    $this->ui_factory,
+                    $this->db,
+                    new \ilTestProcessLockerFactory(
+                        new \ilSetting('assessment'),
+                        $this->db
+                    ),
+                    $this->current_user,
+                    $this->test_access,
+                    $this->test_obj,
+                    $this->test_pass_result_repository
                 ),
                 ParticipantTableIpRangeAction::ACTION_ID => new ParticipantTableIpRangeAction(
                     $this->lng,
@@ -361,34 +384,12 @@ class ilTestParticipantsGUI
                     $this->test_access,
                     $this->test_obj
                 ),
-                ParticipantTableFinishTestAction::ACTION_ID => new ParticipantTableFinishTestAction(
+                ParticipantTableDeleteParticipantAction::ACTION_ID => new ParticipantTableDeleteParticipantAction(
                     $this->lng,
                     $this->main_tpl,
                     $this->ui_factory,
-                    $this->db,
-                    new \ilTestProcessLockerFactory(
-                        new \ilSetting('assessment'),
-                        $this->db
-                    ),
-                    $this->current_user,
+                    $this->participant_repository,
                     $this->test_access,
-                    $this->test_obj,
-                    $this->test_pass_result_repository
-                ),
-                ParticipantTableDeleteResultsAction::ACTION_ID => new ParticipantTableDeleteResultsAction(
-                    $this->lng,
-                    $this->main_tpl,
-                    $this->ui_factory,
-                    $this->db,
-                    $this->participant_access_filter,
-                    $this->test_access,
-                    $this->test_obj
-                ),
-                ParticipantTableShowResultsAction::ACTION_ID => new ParticipantTableShowResultsAction(
-                    $this->lng,
-                    $this->ui_factory,
-                    $this->test_access,
-                    $this->ctrl,
                     $this->test_obj
                 )
             ]

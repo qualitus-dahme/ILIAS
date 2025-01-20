@@ -47,13 +47,13 @@ interface Factory
      * ----
      * @param string $name
      * @param \ILIAS\UI\Component\Symbol\Symbol $symbol
-     * @param \ILIAS\UI\Component\Legacy\Legacy $content
+     * @param \ILIAS\UI\Component\Legacy\Content $content
      * @return \ILIAS\UI\Component\MainControls\Slate\Legacy
      */
     public function legacy(
         string $name,
         Symbol $symbol,
-        \ILIAS\UI\Component\Legacy\Legacy $content
+        \ILIAS\UI\Component\Legacy\Content $content
     ): Legacy;
 
 

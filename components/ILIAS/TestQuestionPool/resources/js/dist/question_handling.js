@@ -1591,7 +1591,7 @@ jQuery(document).ready(function() {
 
 			map = jQuery('map[name="'+img.attr('usemap').substr(1)+'"]');
 
-			if(!(img.is('img') && img.attr('usemap') && map.size() > 0)) { return; }
+			if(!(img.is('img') && img.attr('usemap') && map.length > 0)) { return; }
 
 			if(img.hasClass('maphilighted_mod')) {
 				// We're redrawing an old map, probably to pick up changes to the options.

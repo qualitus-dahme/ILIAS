@@ -128,7 +128,7 @@ class DocumentTable implements OrderingBinding
     {
         $criterion_components = [];
         foreach ($document->criteria() as $criterion) {
-            $criterion_components[] = $this->ui->create()->legacy('<div style="display: flex; gap: 1rem;">');
+            $criterion_components[] = $this->ui->create()->legacy()->content('<div style="display: flex; gap: 1rem;">');
             $criterion_components[] = $this->criterionName($criterion);
 
             if ($this->edit_links) {
@@ -153,7 +153,7 @@ class DocumentTable implements OrderingBinding
                 $criterion_components[] = $dropdown;
             }
 
-            $criterion_components[] = $this->ui->create()->legacy('</div>');
+            $criterion_components[] = $this->ui->create()->legacy()->content('</div>');
         }
 
         $table_row = [

@@ -202,7 +202,7 @@ class ilECSUserConsentModalGUI
 
         $modal = $this->ui_factory->modal()->roundtrip(
             $this->lng->txt('ecs_consent_modal_title'),
-            $this->ui_factory->legacy(
+            $this->ui_factory->legacy()->content(
                 $error_html .
                 $form->getHTML()
             )

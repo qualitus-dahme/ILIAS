@@ -44,7 +44,7 @@ class ilAccessRBACOperationDeletedObjective implements Setup\Objective
     {
         $db = $environment->getResource(Environment::RESOURCE_DATABASE);
 
-        $type_id = ilObject::_getObjectTypeIdByTitle($this->type);
+        $type_id = ilObject::_getObjectTypeIdByTitle($this->type, $db);
 
         $sql =
             "DELETE FROM rbac_ta" . PHP_EOL
@@ -57,7 +57,7 @@ class ilAccessRBACOperationDeletedObjective implements Setup\Objective
         $sql =
             "DELETE FROM rbac_templates" . PHP_EOL
             . "WHERE type = " . $db->quote($this->type, "text") . PHP_EOL
-            . "ops_id = " . $db->quote($this->ops_id, "integer") . PHP_EOL
+            . "AND ops_id = " . $db->quote($this->ops_id, "integer") . PHP_EOL
         ;
 
         $db->manipulate($sql);

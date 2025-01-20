@@ -12,7 +12,7 @@ use ILIAS\UI\Component\Chart\Bar\YAxis;
 /**
  * ---
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   ILIAS shows a base column-chart but with stacked bars in different colors.
  * ---
  */
 function partly_stacked()

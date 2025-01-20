@@ -227,17 +227,17 @@ class ilLocalUserPasswordSettingsGUI
         $form = $this->getPasswordForm()->withRequest($this->request);
         $section = $form->getInputs()['password'];
         /**
-         * @var PasswordInput $cp
+         * @var ?PasswordInput $cp
          * @var PasswordInput $np
          */
-        $cp = $section->getInputs()[self::CURRENT_PASSWORD];
+        $cp = $section->getInputs()[self::CURRENT_PASSWORD] ?? null;
         $np = $section->getInputs()[self::NEW_PASSWORD];
         $errors = [self::CURRENT_PASSWORD => [], self::NEW_PASSWORD => []];
 
         if (!$form->getError()) {
             $data = $form->getData();
             $error = false;
-            if ($cp->getError()) {
+            if ($cp && $cp->getError()) {
                 $error = true;
                 $errors[self::CURRENT_PASSWORD][] = $cp->getError();
             }
@@ -246,7 +246,7 @@ class ilLocalUserPasswordSettingsGUI
                 $errors[self::NEW_PASSWORD][] = $np->getError();
             }
 
-            $entered_current_password = $cp->getValue();
+            $entered_current_password = $cp ? $cp->getValue() : '';
             $entered_new_password = $np->getValue();
 
             if (

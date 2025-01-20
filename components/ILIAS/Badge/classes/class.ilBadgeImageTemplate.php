@@ -373,22 +373,22 @@ class ilBadgeImageTemplate
         $this->image_rid = $image_rid;
     }
 
-    public function getImageFromResourceId(?string $image_rid, int $badge_id = null, $size = ilBadgeImage::IMAGE_SIZE_XS): string
-    {
+    public function getImageFromResourceId(
+        int $size = ilBadgeImage::IMAGE_SIZE_XS
+    ): string {
         $image_src = '';
 
-        if ($image_rid !== null) {
-            $identification = $this->resource_storage->manage()->find($image_rid);
+        if ($this->getImageRid()) {
+            $identification = $this->resource_storage->manage()->find($this->getImageRid());
             if ($identification !== null) {
-                $flavour = $this->resource_storage->flavours()->get($identification, new \ilBadgePictureDefinition());
-                $urls = $this->resource_storage->consume()->flavourUrls($flavour)->getURLsAsArray(false);
-                if (sizeof($urls) === ilBadgeImage::IMAGE_URL_COUNT && isset($urls[$size])) {
+                $flavour = $this->resource_storage->flavours()->get($identification, new ilBadgePictureDefinition());
+                $urls = $this->resource_storage->consume()->flavourUrls($flavour)->getURLsAsArray();
+                if (count($urls) === ilBadgeImage::IMAGE_URL_COUNT && isset($urls[$size])) {
                     $image_src = $urls[$size];
                 }
             }
-        } elseif ($badge_id !== null) {
-            $badge = new ilBadge($badge_id);
-            $image_src = $badge->getImage();
+        } elseif ($this->getImage()) {
+            $image_src = ilWACSignedPath::signFile($this->getImagePath());
         }
 
         return $image_src;

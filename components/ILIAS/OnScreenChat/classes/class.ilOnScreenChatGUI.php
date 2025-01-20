@@ -98,7 +98,7 @@ class ilOnScreenChatGUI implements ilCtrlBaseClassInterface
             case 'inviteModal':
                 $this->dic->language()->loadLanguageModule('chatroom');
                 $txt = $this->dic->language()->txt(...);
-                $modal = $this->dic->ui()->factory()->modal()->roundtrip($txt('chat_osc_invite_to_conversation'), $this->dic->ui()->factory()->legacy($txt('chat_osc_search_modal_info')), [
+                $modal = $this->dic->ui()->factory()->modal()->roundtrip($txt('chat_osc_invite_to_conversation'), $this->dic->ui()->factory()->legacy()->content($txt('chat_osc_search_modal_info')), [
                     $this->dic->ui()->factory()->input()->field()->text($txt('chat_osc_user')),
                 ])->withSubmitLabel($txt('confirm'));
                 $response = $this->renderAsyncModal('inviteModal', $modal);

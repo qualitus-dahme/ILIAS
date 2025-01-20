@@ -15,8 +15,7 @@
 	},
 	"scripts": {
 		"post-autoload-dump": [
-			"@php cli/build_bootstrap.php components/ILIAS/Setup/resources/dependency_resolution.php setup",
-			"@php cli/build_bootstrap.php components/ILIAS/Init/resources/dependency_resolution.php default",
+			"@php cli/build_bootstrap.php components/ILIAS/Setup/resources/dependency_resolution.php setup components/ILIAS/Init/resources/dependency_resolution.php default",
 			"@php cli/setup.php build --yes"
 		],
 		"pre-install-cmd": [
@@ -107,9 +106,6 @@
 	},
 	"extra": {
 		"patches": {
-			"phpmailer/phpmailer": {
-				"ILIAS PhpMailer Patches": "./vendor/composer/patches/phpmailer.patch"
-			},
 			"imsglobal/lti": {
 				"ILIAS LTI Patches": "./vendor/composer/patches/lti.patch"
 			}

@@ -27,6 +27,7 @@ use ILIAS\UI\Renderer as UIRenderer;
 use ILIAS\Filesystem\Stream\Streams;
 use ILIAS\UI\Component\Input\Container\Form\Standard as StandardForm;
 use ILIAS\UI\Component\Input\Field\Section as Section;
+use ILIAS\Refinery\ConstraintViolationException;
 
 /**
  * class ilConditionHandlerGUI
@@ -799,10 +800,32 @@ class ilConditionHandlerGUI
             $this->refinery->byTrying(
                 [
                     $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->int()),
+                    // Actions for entire table sends a fixed token in an array, instead of all row ids
+                    $this->refinery->custom()->transformation(function ($var) {
+                        if (
+                            is_array($var) &&
+                            count($var) === 1 &&
+                            (string) $var[0] === 'ALL_OBJECTS'
+                        ) {
+                            return $var;
+                        }
+                        throw new UnexpectedValueException('Unexpected string in row_id array.');
+                    }),
                     $this->refinery->always([])
                 ]
             )
         );
+
+        if ($condition_trigger_ids === ['ALL_OBJECTS']) {
+            $condition_trigger_ids = [];
+            foreach (ilConditionHandler::_getPersistedConditionsOfTarget(
+                $this->getTargetRefId(),
+                $this->getTargetId(),
+                $this->getTargetType()
+            ) as $condition) {
+                $condition_trigger_ids[] = $condition['id'];
+            }
+        }
 
         $items = [];
         foreach ($condition_trigger_ids as $condition_trigger_id) {

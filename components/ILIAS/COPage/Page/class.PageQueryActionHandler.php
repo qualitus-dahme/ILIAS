@@ -626,7 +626,7 @@ class PageQueryActionHandler implements Server\QueryActionHandler
     public function getModalTemplate(): array
     {
         $ui = $this->ui;
-        $modal = $ui->factory()->modal()->roundtrip('#title#', $ui->factory()->legacy('#content#'))
+        $modal = $ui->factory()->modal()->roundtrip('#title#', $ui->factory()->legacy()->content('#content#'))
                     ->withActionButtons([
                         $ui->factory()->button()->standard('#button_title#', '#'),
                     ]);

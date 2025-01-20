@@ -14,7 +14,7 @@ use ILIAS\UI\Implementation\Component\ReplaceSignal;
  * expected output: >
  *   ILIAS shows a button titled "Signin". A click onto the button will open a modal with two buttons "Login" and
  *   "Registration". Depending on the button a click will switch betweeen the "Login Page" and "Registration Page"
- *   within the modal. You can close the modal by hitting the ESC key or by clicking "Cancel" or the "X" glyph.
+ *   within the modal.
  * ---
  */
 function show_multi_step_modal()
@@ -32,7 +32,7 @@ function show_multi_step_modal()
         $page = $request_wrapper->retrieve('page', $refinery->kindlyTo()->string());
     }
     if ($page == "") {
-        $modal = $f->modal()->roundtrip("Modal Title", $f->legacy("b"));
+        $modal = $f->modal()->roundtrip("Modal Title", $f->legacy()->content("b"));
         $asyncUrl = $url . '&page=login&replaceSignal=' . $modal->getReplaceSignal()->getId();
         $modal = $modal->withAsyncRenderUrl($asyncUrl);
         $button = $f->button()->standard("Sign In", '#')
@@ -51,11 +51,11 @@ function show_multi_step_modal()
 
         $modal = null;
         if ($page == "login") {
-            $legacy = $f->legacy("<p>The Login Page</p>");
+            $legacy = $f->legacy()->content("<p>The Login Page</p>");
             $modal = $f->modal()->roundtrip("Login", [$legacy])->withActionButtons([$button1, $button2]);
         }
         if ($page == "register") {
-            $legacy = $f->legacy("<p>The Registration Page</p>");
+            $legacy = $f->legacy()->content("<p>The Registration Page</p>");
             $modal = $f->modal()->roundtrip("Registration", [$legacy])->withActionButtons([$button1, $button2]);
         }
 

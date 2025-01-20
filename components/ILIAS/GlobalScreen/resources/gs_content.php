@@ -19,6 +19,7 @@
 namespace ILIAS\GlobalScreen\Client;
 
 require_once(__DIR__ . '/../vendor/composer/vendor/autoload.php');
+require_once(__DIR__ . '/../artifacts/bootstrap_default.php');
 
 use ILIAS\GlobalScreen\Scope\MainMenu\Collector\Renderer\Hasher;
 use ILIAS\GlobalScreen\Scope\MainMenu\Factory\Item\Lost;
@@ -29,8 +30,6 @@ class ContentRenderer
 
     public function run()
     {
-        \ilContext::init(\ilContext::CONTEXT_WAC);
-        \ilInitialisation::initILIAS();
         global $DIC;
 
         $GS = $DIC->globalScreen();
@@ -58,5 +57,7 @@ class ContentRenderer
 }
 
 if (php_sapi_name() !== 'cli') {
+    \ilContext::init(\ilContext::CONTEXT_WAC);
+    entry_point('ILIAS Legacy Initialisation Adapter');
     (new ContentRenderer())->run();
 }

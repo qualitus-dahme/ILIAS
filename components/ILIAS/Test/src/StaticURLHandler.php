@@ -46,6 +46,10 @@ class StaticURLHandler extends BaseHandler implements Handler
         $additional_params = $request->getAdditionalParameters();
         $context->ctrl()->setParameterByClass(\ilObjTestGUI::class, 'ref_id', $ref_id);
 
+        if (!$context->checkPermission('read', $ref_id) && !$context->isUserLoggedIn()) {
+            return $response_factory->can("login.php?target=tst_{$ref_id}&cmd=force_login");
+        }
+
         $uri = match ($additional_params[0] ?? 'default') {
             self::QUESTION_OPERATIONS => $this->buildQuestionURL($additional_params[1], $context->ctrl()),
             default => $context->ctrl()->getLinkTargetByClass([\ilRepositoryGUI::class, \ilObjTestGUI::class]),

@@ -80,6 +80,7 @@ IndexMaxFileSizeMB = 500
 [Client1]
 ClientId = ACMECorp
 NicId = 0
+IliasMajorVersion = 10
 IliasIniPath = /var/www/html/ilias/ilias.ini.php
 ```
 
@@ -94,6 +95,7 @@ IliasIniPath = /var/www/html/ilias/ilias.ini.php
 
 - ClientId: ClientId of ILIAS installation
 - NicId: NicID of ILIAS installation
+- IliasMajorVersion: the ILIAS major version the client is based on
 - IliasIniPath: absolute path to ilias.ini.php
 
 ### Configure the ILIAS RPC connection settings

@@ -11,8 +11,7 @@ namespace ILIAS\UI\examples\Card\RepositoryObject;
  *   repository object type is needed.
  *
  * expected output: >
- *   ILIAS shows a ILIAS-Logo. The logo's size will change accordingly to the size of the browser/desktop. A title
- *   "RepositoryObject Card Title" is displayed below the logo.
+ *   ILIAS shows a ILIAS-Logo with a title below. The logo's size will change accordingly to the size of the browser/desktop.
  * ---
  */
 function base()

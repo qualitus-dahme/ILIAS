@@ -127,11 +127,11 @@ EOT;
     public function getUIFactory(): NoUIFactory
     {
         return new class () extends NoUIFactory {
-            public function button(): C\Button\Factory
+            public function button(): I\Component\Button\Factory
             {
                 return new I\Component\Button\Factory();
             }
-            public function dropdown(): C\Dropdown\Factory
+            public function dropdown(): I\Component\Dropdown\Factory
             {
                 return new I\Component\Dropdown\Factory();
             }

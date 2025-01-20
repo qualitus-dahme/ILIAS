@@ -329,7 +329,7 @@ final class Metric
     public function toUIReport(Factory $f, string $name): Report
     {
         $yaml = $this->toYAML();
-        $sub = $f->panel()->sub("", $f->legacy("<pre>" . $yaml . "</pre>"));
+        $sub = $f->panel()->sub("", $f->legacy()->content("<pre>" . $yaml . "</pre>"));
         return $f->panel()->report($name, [$sub]);
     }
 }

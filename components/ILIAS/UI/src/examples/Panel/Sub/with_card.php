@@ -10,10 +10,8 @@ namespace ILIAS\UI\Examples\Panel\Sub;
  *   Example for rendering a sub panel with a card.
  *
  * expected output: >
- *   ILIAS shows a Panel including a large title "Panel Title" and a sub panel as content. The sub panel is titled
- *   "Sub Panel Title" and owns a text content "Some Content". Additionally it displays a card titled "Card Heading" and
- *   including the content "Card Content". On bigger desktops the card is displayed on the right side. On smaller desktops
- *   the card is displayed below the sub panel text content.
+ *   ILIAS shows a standard panel with a sub panel. Additionally a card is displayed on the right side of the sub panel
+ *   content.
  * ---
  */
 function with_card()
@@ -24,8 +22,8 @@ function with_card()
 
     $block = $f->panel()->standard(
         "Panel Title",
-        $f->panel()->sub("Sub Panel Title", $f->legacy("Some Content"))
-            ->withFurtherInformation($f->card()->standard("Card Heading")->withSections(array($f->legacy("Card Content"))))
+        $f->panel()->sub("Sub Panel Title", $f->legacy()->content("Some Content"))
+            ->withFurtherInformation($f->card()->standard("Card Heading")->withSections(array($f->legacy()->content("Card Content"))))
     );
 
     return $renderer->render($block);

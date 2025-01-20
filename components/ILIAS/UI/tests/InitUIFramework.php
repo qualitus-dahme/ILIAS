@@ -36,6 +36,7 @@ class InitUIFramework
                 $c["ui.factory.button"],
                 $c["ui.factory.listing"],
                 $c["ui.factory.image"],
+                new \ILIAS\UI\Implementation\Component\Player\Factory(),
                 $c["ui.factory.panel"],
                 $c["ui.factory.modal"],
                 $c["ui.factory.progress"],
@@ -92,13 +93,20 @@ class InitUIFramework
             return new ILIAS\UI\Implementation\Component\Button\Factory();
         };
         $c["ui.factory.listing"] = function ($c) {
-            return new ILIAS\UI\Implementation\Component\Listing\Factory();
+            return new ILIAS\UI\Implementation\Component\Listing\Factory(
+                new ILIAS\UI\Implementation\Component\Listing\Workflow\Factory(),
+                new ILIAS\UI\Implementation\Component\Listing\CharacteristicValue\Factory(),
+                new ILIAS\UI\Implementation\Component\Listing\Entity\Factory(),
+            );
         };
         $c["ui.factory.image"] = function ($c) {
             return new ILIAS\UI\Implementation\Component\Image\Factory();
         };
         $c["ui.factory.panel"] = function ($c) {
-            return new ILIAS\UI\Implementation\Component\Panel\Factory($c["ui.factory.panel.listing"]);
+            return new ILIAS\UI\Implementation\Component\Panel\Factory(
+                $c["ui.factory.panel.listing"],
+                new ILIAS\UI\Implementation\Component\Panel\Secondary\Factory(),
+            );
         };
         $c["ui.factory.interruptive_item"] = function ($c) {
             return new ILIAS\UI\Implementation\Component\Modal\InterruptiveItem\Factory();
@@ -197,7 +205,10 @@ class InitUIFramework
             return new ILIAS\UI\Implementation\Component\Card\Factory();
         };
         $c["ui.factory.layout"] = function ($c) {
-            return new ILIAS\UI\Implementation\Component\Layout\Factory();
+            return new ILIAS\UI\Implementation\Component\Layout\Factory(
+                new ILIAS\UI\Implementation\Component\Layout\Page\Factory(),
+                new ILIAS\UI\Implementation\Component\Layout\Alignment\Factory(),
+            );
         };
         $c["ui.factory.maincontrols.slate"] = function ($c) {
             return new ILIAS\UI\Implementation\Component\MainControls\Slate\Factory(
@@ -368,7 +379,9 @@ class InitUIFramework
         };
 
         $c["ui.factory.tree"] = function ($c) {
-            return new ILIAS\UI\Implementation\Component\Tree\Factory();
+            return new ILIAS\UI\Implementation\Component\Tree\Factory(
+                new ILIAS\UI\Implementation\Component\Tree\Node\Factory(),
+            );
         };
 
         $c["ui.factory.legacy"] = function ($c) {

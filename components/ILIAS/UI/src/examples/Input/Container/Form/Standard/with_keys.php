@@ -51,6 +51,7 @@ function with_keys()
 
     //Step 6: Define some data processing.
     if ($request->getMethod() == "POST"
+            && array_key_exists('example_name', $request->getQueryParams())
             && $request->getQueryParams()['example_name'] == 'keys') {
         $form = $form->withRequest($request);
         $result = $form->getData();

@@ -340,7 +340,7 @@ class ilPresentationTableGUI
                     ->withHeadline($record["term"])
                     ->withImportantFields([$record["short_txt"]])
                     ->withContent(
-                        $ui_factory->legacy($record["definition"])
+                        $ui_factory->legacy()->content($record["definition"])
                     )
                     ->withFurtherFieldsHeadline($this->lng->txt("md_advanced"))
                     ->withFurtherFields($adv_data)

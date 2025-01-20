@@ -11,7 +11,7 @@ namespace ILIAS\UI\examples\ViewControl\Sortation;
  *   reload of the page.
  *
  * expected output: >
- *   ILIAS shows a control labeled "Default Ordering". Clicking the control will open a dropdown menu with three shy
+ *   ILIAS shows a control symbol. Clicking the control will open a dropdown menu with three shy
  *   buttons "Default Ordering", "Most Recent Ordering" and "Oldest Ordering". Clicking the buttons will reload the page.
  *   The control now is labeled the same as the clicked button.
  * ---

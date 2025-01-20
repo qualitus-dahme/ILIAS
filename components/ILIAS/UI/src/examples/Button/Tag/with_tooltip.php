@@ -10,7 +10,7 @@ namespace ILIAS\UI\examples\Button\Tag;
  *   Example for rendering Tag Buttons with tooltips.
  *
  * expected output: >
- *   ILIAS shows two buttons titled "simple tag." Hovering over those buttons will show a tooltip.
+ *   Hovering over the rendered buttons will show a tooltip.
  * ---
  */
 function with_tooltip()

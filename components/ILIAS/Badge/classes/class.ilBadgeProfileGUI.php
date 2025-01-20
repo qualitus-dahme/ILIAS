@@ -113,22 +113,11 @@ class ilBadgeProfileGUI
 
     protected function getMultiSelection(): array
     {
-        global $DIC;
-        $lng = $this->lng;
-        $ilCtrl = $this->ctrl;
-        $ilUser = $this->user;
-        $action_parameter_token = 'badge_id';
-        $query = $DIC->http()->wrapper()->query();
-        if ($query->has($action_parameter_token)) {
-            if ($query->has($action_parameter_token)) {
-                $ids = $query->retrieve($action_parameter_token, $DIC->refinery()->kindlyTo()->listOf($DIC->refinery()->kindlyTo()->string()));
-            }
-        }
         $ids = $this->request->getBadgeIds();
         if (count($ids) > 0) {
-            $res = array();
+            $res = [];
             foreach ($ids as $id) {
-                $ass = new ilBadgeAssignment($id, $ilUser->getId());
+                $ass = new ilBadgeAssignment($id, $this->user->getId());
                 if ($ass->getTimestamp()) {
                     $res[] = $ass;
                 }
@@ -137,9 +126,8 @@ class ilBadgeProfileGUI
             return $res;
         }
 
-        $this->tpl->setOnScreenMessage('failure', $lng->txt('select_one'), true);
-        $ilCtrl->redirect($this, 'manageBadges');
-        return [];
+        $this->tpl->setOnScreenMessage('failure', $this->lng->txt('select_one'), true);
+        $this->ctrl->redirect($this, 'manageBadges');
     }
 
     protected function activate(): void

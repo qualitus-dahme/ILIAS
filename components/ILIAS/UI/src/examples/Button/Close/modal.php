@@ -24,7 +24,7 @@ function modal()
 
     $modal = $factory->modal()->roundtrip(
         'Close Button Demo',
-        $factory->legacy('See the Close Button in the top right corner.')
+        $factory->legacy()->content('See the Close Button in the top right corner.')
     );
     $button1 = $factory->button()->standard('Show Close Button Demo', '#')
         ->withOnClick($modal->getShowSignal());

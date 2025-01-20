@@ -51,8 +51,8 @@ to the corresponding patch files to the issue manager through a secure channel.
 The following process MUST be followed to hand in a fix for a security issue:
 * Create one patch file per supported branch needing the fix. The patch file MUST
 be named "<ilias_version>_<title_of_fix>.patch" (e.g. "9_my-very-important-fix.patch").
-To create the patch use `git format-patch` with the option `--stdout`
-(e.g. `git format-patch my-bug-fixing-branch --stdout > 9_my-very-important-fix.patch`)
+To create the patch use `git format-patch` with the option `--stdout` from the branch in which you made the fixes
+(e.g. `git format-patch release_9 --stdout > 9_my-very-important-fix.patch`)
 to ensure that all commits are in a single patch file, if multiple commits are
 needed to fix the issue. To make the application of the patches as easy as possible,
 **fixes for security issues MUST not contain any unrelated changes**.

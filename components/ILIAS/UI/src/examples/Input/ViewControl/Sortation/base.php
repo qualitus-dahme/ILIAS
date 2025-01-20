@@ -9,7 +9,10 @@ use ILIAS\Data\Order;
 /**
  * ---
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   There's a button with the sort glyph as a label.
+ *   Clicking the button will open a dropdown with three entries.
+ *   When you click an entry, the page will reload an the results will show the
+ *   selected option.
  * ---
  */
 function base()
@@ -31,7 +34,7 @@ function base()
         ->withRequest($DIC->http()->request());
 
     return $r->render([
-        $f->legacy('<pre>' . print_r($vc_container->getData(), true) . '</pre>'),
+        $f->legacy()->content('<pre>' . print_r($vc_container->getData(), true) . '</pre>'),
         $f->divider()->horizontal(),
         $vc_container
     ]);

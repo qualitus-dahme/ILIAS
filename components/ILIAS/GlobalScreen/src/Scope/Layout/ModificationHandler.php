@@ -29,7 +29,7 @@ use ILIAS\GlobalScreen\SingletonTrait;
 use ILIAS\UI\Component\Breadcrumbs\Breadcrumbs;
 use ILIAS\UI\Component\Image\Image;
 use ILIAS\UI\Component\Layout\Page\Page;
-use ILIAS\UI\Component\Legacy\Legacy;
+use ILIAS\UI\Component\Legacy\Content;
 use ILIAS\UI\Component\MainControls\Footer;
 use ILIAS\UI\Component\MainControls\MainBar;
 use ILIAS\UI\Component\MainControls\MetaBar;
@@ -84,7 +84,7 @@ class ModificationHandler
      */
     public function modifyContentWithClosure(Closure $closure_returning_content): void
     {
-        $this->replaceWithAutoWiredInstance(Legacy::class, $closure_returning_content);
+        $this->replaceWithAutoWiredInstance(Content::class, $closure_returning_content);
     }
 
     /**

@@ -12,9 +12,7 @@ namespace ILIAS\UI\examples\Link\Bulky;
  *   surrounding container.
  *
  * expected output: >
- *   ILIAS shows a bulky link: A glyph ("Comment") with the text "Link to ilias.de with Glyph".
- *   - Hovering over the link will show tooltips
- *   - Clicking the link will redirect you to ilias.de
+ *   ILIAS shows a bulky link. Hovering over the link will show tooltips
  * ---
  */
 function with_tooltip()

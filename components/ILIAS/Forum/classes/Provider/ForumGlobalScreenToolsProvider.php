@@ -47,7 +47,7 @@ class ForumGlobalScreenToolsProvider extends AbstractDynamicToolProvider
             return $this->identification_provider->contextAwareIdentifier($id);
         };
         $l = function (string $content): Component {
-            return $this->dic->ui()->factory()->legacy($content);
+            return $this->dic->ui()->factory()->legacy()->content($content);
         };
 
         $tools = [];

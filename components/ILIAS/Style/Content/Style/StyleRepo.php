@@ -22,26 +22,22 @@ namespace ILIAS\Style\Content\Style;
 
 use ilDBInterface;
 use ILIAS\Style\Content\InternalDataService;
-use ILIAS\Exercise\IRSS\IRSSWrapper;
+use ILIAS\Repository\IRSS\IRSSWrapper;
 use ILIAS\ResourceStorage\Stakeholder\ResourceStakeholder;
 use ILIAS\ResourceStorage\Identification\ResourceIdentification;
-use ILIAS\Filesystem\Stream\Stream;
 
 class StyleRepo
 {
-    protected IRSSWrapper $irss;
     protected ilDBInterface $db;
     protected InternalDataService $factory;
 
     public function __construct(
         ilDBInterface $db,
-        InternalDataService $factory
+        InternalDataService $factory,
+        protected IRSSWrapper $irss
     ) {
         $this->db = $db;
         $this->factory = $factory;
-        // to do: migrate this on merge
-        $data = new \ILIAS\Exercise\InternalDataService();
-        $this->irss = new IRSSWrapper($data);
     }
 
     public function readRid(int $style_id): string

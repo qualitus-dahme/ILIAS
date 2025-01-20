@@ -137,7 +137,7 @@ class ilObjChatroomGUI extends ilChatroomObjectGUI implements ilCtrlSecurityInte
             );
         }
 
-        $next_class = $this->ctrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass() ?? '';
 
         $tabFactory = null;
         if (!$this->getCreationMode()) {

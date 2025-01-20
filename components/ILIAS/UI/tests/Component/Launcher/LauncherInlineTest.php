@@ -68,13 +68,11 @@ class LauncherInlineTest extends ILIAS_UI_TestBase
             public I\SignalGenerator $sig_gen;
             public I\Input\Field\Factory $input_factory;
 
-            public function button(): C\Button\Factory
+            public function button(): I\Button\Factory
             {
-                return new I\Button\Factory(
-                    $this->sig_gen
-                );
+                return new I\Button\Factory();
             }
-            public function symbol(): C\Symbol\Factory
+            public function symbol(): I\Symbol\Factory
             {
                 return new I\Symbol\Factory(
                     new I\Symbol\Icon\Factory(),
@@ -82,7 +80,7 @@ class LauncherInlineTest extends ILIAS_UI_TestBase
                     new I\Symbol\Avatar\Factory()
                 );
             }
-            public function modal(): C\Modal\Factory
+            public function modal(): I\Modal\Factory
             {
                 return new I\Modal\Factory(
                     $this->sig_gen,
@@ -229,7 +227,7 @@ class LauncherInlineTest extends ILIAS_UI_TestBase
                         <h1 class="modal-title">different label</h1>
                     </div>
                     <div class="modal-body">$msg_html
-                        <form id="id_3" role="form" class="c-form c-form--horizontal" enctype="multipart/form-data" action="http://localhost/ilias.php" method="post">
+                        <form id="id_3" class="c-form c-form--horizontal" enctype="multipart/form-data" action="http://localhost/ilias.php" method="post">
                             <fieldset class="c-input" data-il-ui-component="checkbox-field-input" data-il-ui-input-name="form/input_0">
                                 <label for="id_2">Understood</label>
                                 <div class="c-input__field">

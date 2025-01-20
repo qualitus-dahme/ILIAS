@@ -5830,8 +5830,6 @@ common#:#tst_history_read#:#View History###26 08 2024 new variable
 common#:#tst_new#:#新テスト
 common#:#tst_results#:#Test テスト結果
 common#:#tst_run#:#実行
-common#:#tst_statistical_evaluation#:#統計値
-common#:#tst_statistics#:#テスト統計へアクセス
 common#:#tst_user_not_invited#:#このテストをする予定になっていません。
 common#:#tst_warning_test_not_complete#:#テストは完了していません!
 common#:#tutors#:#指導教員
@@ -14787,7 +14785,6 @@ rbac#:#tst_edit_permission#:#ユーザはアクセス権設定を変更できま
 rbac#:#tst_read#:#ユーザはテストを実行できます
 rbac#:#tst_read_learning_progress#:#ユーザは他のユーザの学習進捗を表示できます
 rbac#:#tst_tst_results#:#ユーザはテスト結果へアクセスできます
-rbac#:#tst_tst_statistics#:#ユーザはテスト統計へのアクセス権があります
 rbac#:#tst_visible#:#テストを表示
 rbac#:#tst_write#:#ユーザはテストの内容と設定を編集できます
 rbac#:#upload_blacklisted_files#:#ブラックリストをバイパス

@@ -31,8 +31,8 @@ class ilTestEvaluationUserData
     private ?int $user_id = null;
     private bool $submitted;
     private Mark $mark;
-    private \DateTimeImmutable $first_visit;
-    private \DateTimeImmutable $last_visit;
+    private ?\DateTimeImmutable $first_visit = null;
+    private ?\DateTimeImmutable $last_visit = null;
 
     /**
     * @var array<int, ilTestEvaluationPassData>
@@ -156,7 +156,7 @@ class ilTestEvaluationUserData
         return $time;
     }
 
-    public function getFirstVisit(): \DateTimeImmutable
+    public function getFirstVisit(): ?\DateTimeImmutable
     {
         return $this->first_visit;
     }
@@ -166,12 +166,12 @@ class ilTestEvaluationUserData
         $this->first_visit = $time;
     }
 
-    public function getLastVisit(): \DateTimeImmutable
+    public function getLastVisit(): ?\DateTimeImmutable
     {
         return $this->last_visit;
     }
 
-    public function setLastVisit(\DateTimeImmutable $time): void
+    public function setLastVisit(?\DateTimeImmutable $time): void
     {
         $this->last_visit = $time;
     }
@@ -341,11 +341,11 @@ class ilTestEvaluationUserData
     public function getAvailablePoints(int $pass = 0): float
     {
         $available = 0;
-        if (!is_object($this->passes[$pass])) {
+        if (!isset($this->passes[$pass]) || !is_object($this->passes[$pass])) {
             $pass = 0;
         }
-        if (!is_object($this->passes[$pass])) {
-            return 0;
+        if (!isset($this->passes[$pass]) || !is_object($this->passes[$pass])) {
+            return 0.0;
         }
         $available = $this->passes[$pass]->getMaxPoints();
         $available = round($available, 2);

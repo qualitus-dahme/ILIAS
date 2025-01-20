@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -18,7 +16,9 @@ declare(strict_types=1);
  *
  *********************************************************************/
 
-use ILIAS\UI\Implementation\Factory as UIImplementationFactory;
+declare(strict_types=1);
+
+use ILIAS\UI\Factory as UIFactory;
 use ILIAS\UI\Renderer as UIRenderer;
 
 /**
@@ -32,7 +32,7 @@ class ilCalendarManageTableGUI extends ilTable2GUI
     protected ilObjUser $user;
 
     private UIRenderer $renderer;
-    private UIImplementationFactory $uiFactory;
+    private UIFactory $uiFactory;
 
     public function __construct(object $a_parent_obj)
     {

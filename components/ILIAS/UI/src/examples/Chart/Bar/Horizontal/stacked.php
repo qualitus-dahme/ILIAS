@@ -12,7 +12,7 @@ use ILIAS\UI\Component\Chart\Bar\XAxis;
 /**
  * ---
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   ILIAS shows a base horizontal bar chart but with stacked bars in different colors.
  * ---
  */
 function stacked()

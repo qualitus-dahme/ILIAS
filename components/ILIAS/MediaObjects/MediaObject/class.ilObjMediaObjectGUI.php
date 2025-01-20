@@ -702,8 +702,8 @@ class ilObjMediaObjectGUI extends ilObjectGUI
 
         // determine and create mob directory, move uploaded file to directory
         //$mob_dir = ilFileUtils::getWebspaceDir()."/mobs/mm_".$a_mob->getId();
-        $a_mob->createDirectory();
-        $mob_dir = ilObjMediaObject::_getDirectory($a_mob->getId());
+        //$a_mob->createDirectory();
+        //$mob_dir = ilObjMediaObject::_getDirectory($a_mob->getId());
 
 
         if ($form->getInput("standard_type") == "File") {
@@ -740,6 +740,7 @@ class ilObjMediaObjectGUI extends ilObjectGUI
         }
 
         // determine width and height of known image types
+        /*
         $wh_input = $form->getInput("standard_width_height");
         $wh = ilObjMediaObject::_determineWidthHeight(
             $media_item->getFormat(),
@@ -755,7 +756,7 @@ class ilObjMediaObjectGUI extends ilObjectGUI
         $media_item->setHeight($wh["height"]);
         if ($wh["info"] != "") {
             $this->tpl->setOnScreenMessage('info', $wh["info"], true);
-        }
+        }*/
 
         if ($form->getInput("standard_caption") != "") {
             $media_item->setCaption($form->getInput("standard_caption"));
@@ -826,6 +827,7 @@ class ilObjMediaObjectGUI extends ilObjectGUI
             }
 
             // determine width and height of known image types
+            /*
             $wh_input = $form->getInput("full_width_height");
             $wh = ilObjMediaObject::_determineWidthHeight(
                 $format,
@@ -839,15 +841,15 @@ class ilObjMediaObjectGUI extends ilObjectGUI
             );
 
             $media_item2->setWidth($wh["width"]);
-            $media_item2->setHeight($wh["height"]);
+            $media_item2->setHeight($wh["height"]);*/
 
             if ($form->getInput("full_caption") != "") {
                 $media_item2->setCaption($form->getInput("full_caption"));
             }
         }
 
-        ilObjMediaObject::renameExecutables($mob_dir);
-        ilMediaSvgSanitizer::sanitizeDir($mob_dir);	// see #20339
+        //ilObjMediaObject::renameExecutables($mob_dir);
+        //ilMediaSvgSanitizer::sanitizeDir($mob_dir);	// see #20339
         $a_mob->update();
     }
 

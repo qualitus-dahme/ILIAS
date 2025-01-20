@@ -46,7 +46,7 @@ class StandardToastRenderer implements ToastRenderer
     public function getToastComponentForItem(isItem $item): Component
     {
         if (!$item instanceof isStandardItem) {
-            return $this->ui->factory()->legacy("Cannot render item of type " . get_class($item) . "");
+            return $this->ui->factory()->legacy()->content("Cannot render item of type " . get_class($item) . "");
         }
 
         // build empty UI\Toast

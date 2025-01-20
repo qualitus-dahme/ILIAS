@@ -44,6 +44,6 @@ class TreeToolItemRenderer extends BaseTypeRenderer
 
         $symbol = $this->getStandardSymbol($item);
 
-        return $this->ui_factory->mainControls()->slate()->legacy($item->getTitle(), $symbol, $this->ui_factory->legacy($DIC->ui()->renderer()->render([$item->getTree()])));
+        return $this->ui_factory->mainControls()->slate()->legacy($item->getTitle(), $symbol, $this->ui_factory->legacy()->content($DIC->ui()->renderer()->render([$item->getTree()])));
     }
 }

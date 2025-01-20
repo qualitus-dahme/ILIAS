@@ -3150,7 +3150,7 @@ class ilObjectListGUI
 
         $sections = [];
         if ($description !== '') {
-            $sections[] = $ui->factory()->legacy('<div class="il-multi-line-cap-3">' . $description . '</div>');
+            $sections[] = $ui->factory()->legacy()->content('<div class="il-multi-line-cap-3">' . $description . '</div>');
         }
 
         $this->populateCommands(false);

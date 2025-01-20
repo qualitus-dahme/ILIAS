@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -18,6 +16,8 @@ declare(strict_types=1);
  *
  *********************************************************************/
 
+declare(strict_types=1);
+
 namespace ILIAS\UI\Implementation\Component\Layout\Page;
 
 use ILIAS\UI\Component\Breadcrumbs\Breadcrumbs;
@@ -28,9 +28,6 @@ use ILIAS\UI\Component\Toast\Container;
 
 class Factory implements Page\Factory
 {
-    /**
-     * @inheritdoc
-     */
     public function standard(
         array $content,
         MainControls\MetaBar $metabar = null,
@@ -44,7 +41,7 @@ class Factory implements Page\Factory
         string $title = '',
         string $short_title = '',
         string $view_title = ''
-    ): Page\Standard {
+    ): Standard {
         return new Standard(
             $content,
             $metabar,

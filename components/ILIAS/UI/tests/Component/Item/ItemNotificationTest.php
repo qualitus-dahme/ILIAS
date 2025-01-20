@@ -47,22 +47,22 @@ class ItemNotificationTest extends ILIAS_UI_TestBase
         $factory = new class () extends NoUIFactory {
             public I\Component\SignalGenerator $sig_gen;
 
-            public function item(): C\Item\Factory
+            public function item(): I\Component\Item\Factory
             {
                 return new I\Component\Item\Factory();
             }
 
-            public function Link(): C\Link\Factory
+            public function Link(): I\Component\Link\Factory
             {
                 return new I\Component\Link\Factory();
             }
 
-            public function button(): C\Button\Factory
+            public function button(): I\Component\Button\Factory
             {
                 return new I\Component\Button\Factory();
             }
 
-            public function symbol(): C\Symbol\Factory
+            public function symbol(): I\Component\Symbol\Factory
             {
                 return new I\Component\Symbol\Factory(
                     new I\Component\Symbol\Icon\Factory(),
@@ -71,7 +71,7 @@ class ItemNotificationTest extends ILIAS_UI_TestBase
                 );
             }
 
-            public function mainControls(): C\MainControls\Factory
+            public function mainControls(): I\Component\MainControls\Factory
             {
                 return new I\Component\MainControls\Factory(
                     $this->sig_gen,
@@ -167,7 +167,7 @@ class ItemNotificationTest extends ILIAS_UI_TestBase
     {
         $f = $this->getUIFactory()->item();
 
-        $content = new I\Component\Legacy\Legacy("someContent", $this->sig_gen);
+        $content = new I\Component\Legacy\Content("someContent", $this->sig_gen);
         $c = $f->notification("title", $this->getIcon())->withAdditionalContent($content);
 
         $this->assertEquals($c->getAdditionalContent(), $content);
@@ -207,7 +207,7 @@ class ItemNotificationTest extends ILIAS_UI_TestBase
         });
 
         $props = array("prop1" => "val1", "prop2" => "val2");
-        $content = new I\Component\Legacy\Legacy("someContent", $this->sig_gen);
+        $content = new I\Component\Legacy\Content("someContent", $this->sig_gen);
         $actions = new I\Component\Dropdown\Standard(array(
             new I\Component\Button\Shy("ILIAS", "https://www.ilias.de"),
             new I\Component\Button\Shy("GitHub", "https://www.github.com")

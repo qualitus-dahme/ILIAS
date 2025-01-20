@@ -746,8 +746,8 @@ class ilExerciseManagementGUI
             $card_tpl->parseCurrentBlock();
         }
 
-        $main_panel = $this->ui_factory->panel()->sub($a_data['uname'], $this->ui_factory->legacy($a_data['utext']))
-            ->withFurtherInformation($this->ui_factory->card()->standard($this->lng->txt('text_assignment'))->withSections(array($this->ui_factory->legacy($card_tpl->get()))))->withActions($actions_dropdown);
+        $main_panel = $this->ui_factory->panel()->sub($a_data['uname'], $this->ui_factory->legacy()->content($a_data['utext']))
+            ->withFurtherInformation($this->ui_factory->card()->standard($this->lng->txt('text_assignment'))->withSections(array($this->ui_factory->legacy()->content($card_tpl->get()))))->withActions($actions_dropdown);
 
         $feedback_tpl = new ilTemplate("tpl.exc_report_feedback.html", true, true, "components/ILIAS/Exercise");
         //if no feedback filter the feedback is displayed. Can be list submissions or compare submissions.
@@ -790,7 +790,7 @@ class ilExerciseManagementGUI
             : $a_data['comment'];
         $feedback_tpl->setVariable("COMMENT", $this->lng->txt('exc_comment') . ": <br>" . $comment);
 
-        $feedback_panel = $this->ui_factory->panel()->sub("", $this->ui_factory->legacy($feedback_tpl->get()));
+        $feedback_panel = $this->ui_factory->panel()->sub("", $this->ui_factory->legacy()->content($feedback_tpl->get()));
 
         $report = $this->ui_factory->panel()->report("", array($main_panel, $feedback_panel));
 
@@ -831,7 +831,7 @@ class ilExerciseManagementGUI
                 return "$('#$id').click(function() { $('#$form_id').submit(); return false; });";
             });
 
-        return  $this->ui_factory->modal()->roundtrip(strtoupper($this->lng->txt("grade_evaluate")), $this->ui_factory->legacy($modal_tpl->get()))->withActionButtons([$submit_btn]);
+        return  $this->ui_factory->modal()->roundtrip(strtoupper($this->lng->txt("grade_evaluate")), $this->ui_factory->legacy()->content($modal_tpl->get()))->withActionButtons([$submit_btn]);
     }
 
     public function getEvaluationModalForm(
@@ -1844,7 +1844,7 @@ class ilExerciseManagementGUI
         // prepare modal
         $modal = $this->ui_factory->modal()->roundtrip(
             $lng->txt("exc_individual_deadline"),
-            $this->ui_factory->legacy('<div id="ilExcIDlBody"></div>')
+            $this->ui_factory->legacy()->content('<div id="ilExcIDlBody"></div>')
         );
 
         $ajax_url = $this->ctrl->getLinkTarget($this, "handleIndividualDeadlineCalls", "", true, false);

@@ -18,7 +18,7 @@
 
 namespace ILIAS\BookingManager\Objects;
 
-use ILIAS\Exercise\IRSS\IRSSWrapper;
+use ILIAS\Repository\IRSS\IRSSWrapper;
 use ILIAS\ResourceStorage\Stakeholder\ResourceStakeholder;
 
 /**

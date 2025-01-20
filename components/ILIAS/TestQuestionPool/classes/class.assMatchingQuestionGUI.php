@@ -720,7 +720,7 @@ class assMatchingQuestionGUI extends assQuestionGUI implements ilGuiQuestionScor
             $template->setVariable('IMAGE_HREF', $this->object->getImagePathWeb() . $definition->getPicture());
             $thumbweb = $this->object->getImagePathWeb() . $this->object->getThumbPrefix() . $definition->getPicture();
             $thumb = $this->object->getImagePath() . $this->object->getThumbPrefix() . $definition->getPicture();
-            if (!@file_exists($thumb)) {
+            if (!file_exists($thumb)) {
                 $this->object->rebuildThumbnails();
             }
             $template->setVariable('THUMBNAIL_HREF', $thumbweb);
@@ -857,12 +857,14 @@ class assMatchingQuestionGUI extends assQuestionGUI implements ilGuiQuestionScor
     protected function sortDefinitionsBySolution(array $solutions, array $definitions): array
     {
         $neworder = [];
+        $handled_definitions = [];
         foreach (array_keys($solutions) as $definition_id) {
             $neworder[] = $this->object->getDefinitionWithIdentifier($definition_id);
+            $handled_definitions[$definition_id] = $definition_id;
         }
 
         foreach ($definitions as $definition) {
-            if (!array_key_exists($definition->getIdentifier(), $neworder)) {
+            if (!isset($handled_definitions[$definition->getIdentifier()])) {
                 $neworder[] = $definition;
             }
         }

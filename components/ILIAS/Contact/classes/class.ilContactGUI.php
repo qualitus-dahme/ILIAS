@@ -372,7 +372,7 @@ class ilContactGUI
 
         $table = new ilBuddySystemRelationsTableGUI($this, 'showContacts');
         $table->populate();
-        $content[] = $this->ui_factory->legacy($table->getHTML());
+        $content[] = $this->ui_factory->legacy()->content($table->getHTML());
 
         $this->tpl->setContent($this->ui_renderer->render($content));
         $this->tpl->printToStdout();

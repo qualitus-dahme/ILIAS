@@ -26,7 +26,6 @@ use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use ILIAS\GlobalScreen\Services;
 use ILIAS\GlobalScreen\Provider\ProviderFactory;
 use ILIAS\UI\Component as C;
-
 use PHPUnit\Framework\TestCase;
 use ILIAS\UI\Implementation\Component as I;
 use ILIAS\UI\Implementation\Component\Counter\Factory;
@@ -60,7 +59,6 @@ abstract class BaseNotificationSetUp extends TestCase
      */
     protected $factory;
 
-
     /**
      * @inheritDoc
      */
@@ -80,11 +78,12 @@ abstract class BaseNotificationSetUp extends TestCase
     public function getUIFactory(): NoUIFactory
     {
         $factory = new class () extends NoUIFactory {
-            public function item(): ILIAS\UI\Component\Item\Factory
+            public function item(): I\Item\Factory
             {
                 return new I\Item\Factory();
             }
-            public function symbol(): ILIAS\UI\Component\Symbol\Factory
+
+            public function symbol(): I\Symbol\Factory
             {
                 return new I\Symbol\Factory(
                     new I\Symbol\Icon\Factory(),
@@ -92,7 +91,8 @@ abstract class BaseNotificationSetUp extends TestCase
                     new I\Symbol\Avatar\Factory()
                 );
             }
-            public function mainControls(): C\MainControls\Factory
+
+            public function mainControls(): I\MainControls\Factory
             {
                 return new I\MainControls\Factory(
                     $this->sig_gen,
@@ -134,6 +134,7 @@ abstract class BaseNotificationSetUp extends TestCase
         $dic = $this->getDIC();
         $provider = new class ($dic) extends AbstractNotificationProvider {
             public array $notifications = [];
+
             public function getNotifications(): array
             {
                 return $this->notifications;

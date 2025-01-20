@@ -28,7 +28,7 @@ use ILIAS\UI\Component\Input\Field;
 use ILIAS\Data;
 use ILIAS\UI\Implementation\Component\Input\Field\Factory;
 use ILIAS\UI\Implementation\Component\Input\NameSource;
-use ILIAS\UI\Implementation\Component\Input\InputData;
+use ILIAS\UI\Component\Input\InputData;
 
 class LinkInputTest extends ILIAS_UI_TestBase
 {

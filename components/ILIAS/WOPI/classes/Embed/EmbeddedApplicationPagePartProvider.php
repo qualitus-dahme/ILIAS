@@ -23,7 +23,7 @@ namespace ILIAS\components\WOPI\Embed;
 use ILIAS\UI\Component\MainControls\MainBar;
 use ILIAS\UI\Component\MainControls\MetaBar;
 use ILIAS\GlobalScreen\Scope\Layout\Provider\PagePart\PagePartProvider;
-use ILIAS\UI\Component\Legacy\Legacy;
+use ILIAS\UI\Component\Legacy\Content;
 use ILIAS\UI\Component\Breadcrumbs\Breadcrumbs;
 use ILIAS\UI\Component\Image\Image;
 use ILIAS\UI\Component\MainControls\Footer;
@@ -40,7 +40,7 @@ class EmbeddedApplicationPagePartProvider implements PagePartProvider
     ) {
     }
 
-    public function getContent(): ?Legacy
+    public function getContent(): ?Content
     {
         return $this->page_part_provider->getContent();
     }

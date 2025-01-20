@@ -385,14 +385,6 @@ class ilCertificateGUI
         $new_background_rid = $current_background_rid && !$should_delete_background ? $current_background_rid :
             $this->global_certificate_settings->getBackgroundImageIdentification();
         if (
-            $new_background_rid instanceof ResourceIdentification &&
-            $this->global_certificate_settings->getBackgroundImageIdentification() instanceof ResourceIdentification &&
-            $current_template->getCurrentBackgroundImageUsed() === $old_background_image &&
-            $new_background_rid->serialize() === $this->global_certificate_settings->getBackgroundImageIdentification()->serialize()
-        ) {
-            $new_background_rid = null;
-        }
-        if (
             is_string($new_background_rid) &&
             is_string($this->global_certificate_settings->getBackgroundImageIdentification()) &&
             $new_background_rid === $this->global_certificate_settings->getBackgroundImageIdentification()

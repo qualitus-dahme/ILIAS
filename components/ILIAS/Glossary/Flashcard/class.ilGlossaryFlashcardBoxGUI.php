@@ -163,7 +163,7 @@ class ilGlossaryFlashcardBoxGUI
         if ($this->glossary->getFlashcardsMode() === "term") {
             $flashcard = $this->ui_fac->panel()->standard(
                 $this->lng->txt("term") . ": " . $this->getTermText(),
-                $this->ui_fac->legacy("???")
+                $this->ui_fac->legacy()->content("???")
             );
         } else {
             $flashcard = $this->ui_fac->panel()->standard(

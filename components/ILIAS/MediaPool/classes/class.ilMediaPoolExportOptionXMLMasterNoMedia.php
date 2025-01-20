@@ -54,6 +54,7 @@ class ilMediaPoolExportOptionXMLMasterNoMedia extends ilBasicLegacyExportOption
 
     public function getLabel(): string
     {
+        $this->lng->loadLanguageModule('exp');
         return "XML (" . $this->lng->txt("mep_master_language_only_no_media") . ")";
     }
 

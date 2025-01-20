@@ -437,6 +437,7 @@ class ilObjMediaPoolGUI extends ilObject2GUI
                 $this->checkPermission("write");
                 $this->prepareOutput();
                 $this->addHeaderAction();
+                $this->setSettingsSubTabs("settings");
                 $ilTabs->activateTab("settings");
                 $gui = $this->gui->settings()->settingsGUI(
                     $this->object->getId()
@@ -1399,12 +1400,12 @@ class ilObjMediaPoolGUI extends ilObject2GUI
 
         $modal = $internal_gui->ui()->factory()->modal()->roundtrip(
             $lng->txt("preview"),
-            $internal_gui->ui()->factory()->legacy("<iframe id='ilMepPreviewContent'></iframe>")
+            $internal_gui->ui()->factory()->legacy()->content("<iframe id='ilMepPreviewContent'></iframe>")
         );
         $html = $internal_gui->ui()->renderer()->render($modal);
         $html = str_replace(
             "<iframe id='ilMepPreviewContent'",
-            "<iframe data-signal='".$modal->getShowSignal()->getId()."' id='ilMepPreviewContent'",
+            "<iframe data-signal='" . $modal->getShowSignal()->getId() . "' id='ilMepPreviewContent'",
             $html
         );
 

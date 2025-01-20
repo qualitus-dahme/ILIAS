@@ -11,10 +11,7 @@ namespace ILIAS\UI\examples\Popover\Listing;
  *
  * expected output: >
  *   ILIAS shows a button titled "Show Listing".
- *   A click onto the button opens the popover including...
- *   - a popover title: Listing
- *   - two subtitles
- *   - three items with titles and dummy text / more informations (Origin, Last Update, Location)
+ *   A click onto the button opens the popover including a panel listing with sub items and some content.
  *   You can close the popover by clicking onto the ILIAS background outside of the popover.
  * ---
  */

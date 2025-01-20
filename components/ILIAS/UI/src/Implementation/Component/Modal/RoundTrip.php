@@ -24,8 +24,9 @@ use ILIAS\UI\Implementation\Component\SignalGeneratorInterface;
 use ILIAS\UI\Implementation\Component\Input\Container\Form\Standard as Form;
 use ILIAS\UI\Implementation\Component\Input\NameSource;
 use ILIAS\UI\Implementation\Component\ReplaceSignal;
-use ILIAS\UI\Component\Input\Field\Factory as FieldFactory;
+use ILIAS\UI\Implementation\Component\Input\Field\Factory as FieldFactory;
 use ILIAS\UI\Component\Input\Container\Form\FormInput;
+use ILIAS\UI\Component\Input\InputData;
 use ILIAS\UI\Component\Component;
 use ILIAS\UI\Component\Button;
 use ILIAS\UI\Component\Signal;
@@ -179,6 +180,13 @@ class RoundTrip extends Modal implements M\RoundTrip
     {
         $clone = clone $this;
         $clone->form = $clone->form->withRequest($request);
+        return $clone;
+    }
+
+    public function withInput(InputData $input_data): self
+    {
+        $clone = clone $this;
+        $clone->form = $clone->form->withInput($request);
         return $clone;
     }
 

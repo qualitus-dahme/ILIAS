@@ -92,17 +92,19 @@ class assLongMenuImport extends assQuestionImport
                 $correctness = 1;
                 $conditionvar = $respcondition->getConditionvar();
                 foreach ($conditionvar->order as $order) {
-                    switch ($order["field"]) {
-                        case "varequal":
+                    switch ($order['field']) {
+                        case 'varequal':
                             $equals = $conditionvar->varequal[$order["index"]]->getContent();
                             $gapident = $conditionvar->varequal[$order["index"]]->getRespident();
                             $id = $this->getIdFromGapIdent($gapident);
-                            $answers[$id][] = $equals;
+                            if (!isset($answers[$id]) || !in_array($equals, $answers[$id])) {
+                                $answers[$id][] = $equals;
+                            }
                             break;
                     }
                 }
                 foreach ($respcondition->setvar as $setvar) {
-                    if (strcmp($gapident, "") != 0) {
+                    if ($gapident !== '') {
                         if ($setvar->getContent() > 0) {
                             $id = $this->getIdFromGapIdent($gapident);
                             $correct_answers[$id][0][] = $equals;
@@ -113,56 +115,39 @@ class assLongMenuImport extends assQuestionImport
                         }
                     }
                 }
-                if (count($respcondition->displayfeedback)) {
-                    foreach ($respcondition->displayfeedback as $feedbackpointer) {
-                        if (strlen($feedbackpointer->getLinkrefid())) {
-                            foreach ($item->itemfeedback as $ifb) {
-                                if (strcmp($ifb->getIdent(), "response_allcorrect") == 0) {
-                                    // found a feedback for the identifier
-                                    if (count($ifb->material)) {
-                                        foreach ($ifb->material as $material) {
+                foreach ($respcondition->displayfeedback as $feedbackpointer) {
+                    if (strlen($feedbackpointer->getLinkrefid())) {
+                        foreach ($item->itemfeedback as $ifb) {
+                            if ($ifb->getIdent() === 'response_allcorrect') {
+                                foreach ($ifb->material as $material) {
+                                    $feedbacksgeneric[1] = $material;
+                                }
+                                foreach ($ifb->flow_mat as $fmat) {
+                                    if (count($fmat->material)) {
+                                        foreach ($fmat->material as $material) {
                                             $feedbacksgeneric[1] = $material;
                                         }
                                     }
-                                    if ((count($ifb->flow_mat) > 0)) {
-                                        foreach ($ifb->flow_mat as $fmat) {
-                                            if (count($fmat->material)) {
-                                                foreach ($fmat->material as $material) {
-                                                    $feedbacksgeneric[1] = $material;
-                                                }
-                                            }
-                                        }
-                                    }
-                                } elseif (strcmp($ifb->getIdent(), "response_onenotcorrect") == 0) {
-                                    // found a feedback for the identifier
-                                    if (count($ifb->material)) {
-                                        foreach ($ifb->material as $material) {
+                                }
+                            } elseif ($ifb->getIdent() === 'response_onenotcorrect') {
+                                foreach ($ifb->material as $material) {
+                                    $feedbacksgeneric[0] = $material;
+                                }
+                                foreach ($ifb->flow_mat as $fmat) {
+                                    if (count($fmat->material)) {
+                                        foreach ($fmat->material as $material) {
                                             $feedbacksgeneric[0] = $material;
                                         }
                                     }
-                                    if ((count($ifb->flow_mat) > 0)) {
-                                        foreach ($ifb->flow_mat as $fmat) {
-                                            if (count($fmat->material)) {
-                                                foreach ($fmat->material as $material) {
-                                                    $feedbacksgeneric[0] = $material;
-                                                }
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    // found a feedback for the identifier
-                                    if (count($ifb->material)) {
-                                        foreach ($ifb->material as $material) {
+                                }
+                            } else {
+                                foreach ($ifb->material as $material) {
+                                    $feedbacks[$ifb->getIdent()] = $material;
+                                }
+                                foreach ($ifb->flow_mat as $fmat) {
+                                    if (count($fmat->material)) {
+                                        foreach ($fmat->material as $material) {
                                             $feedbacks[$ifb->getIdent()] = $material;
-                                        }
-                                    }
-                                    if ((count($ifb->flow_mat) > 0)) {
-                                        foreach ($ifb->flow_mat as $fmat) {
-                                            if (count($fmat->material)) {
-                                                foreach ($fmat->material as $material) {
-                                                    $feedbacks[$ifb->getIdent()] = $material;
-                                                }
-                                            }
                                         }
                                     }
                                 }
@@ -199,8 +184,8 @@ class assLongMenuImport extends assQuestionImport
         $this->object->setAuthor($item->getAuthor());
         $this->object->setOwner($user_id);
         $this->object->setObjId($questionpool_id);
-        $this->object->setMinAutoComplete((int) $item->getMetadataEntry("minAutoCompleteLength"));
-        $this->object->setIdenticalscoring((int) $item->getMetadataEntry("identical_scoring"));
+        $this->object->setMinAutoComplete((int) ($item->getMetadataEntry('minAutoCompleteLength') ?? assLongMenu::MIN_LENGTH_AUTOCOMPLETE));
+        $this->object->setIdenticalscoring((int) $item->getMetadataEntry('identical_scoring'));
         $this->object->setCorrectAnswers($correct_answers);
         $this->object->setPoints($sum);
         // additional content editing mode information

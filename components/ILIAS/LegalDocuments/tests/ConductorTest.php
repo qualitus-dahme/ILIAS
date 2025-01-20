@@ -34,7 +34,7 @@ use ILIAS\LegalDocuments\PageFragment;
 use ILIAS\UI\Component\MainControls\Footer;
 use ILIAS\UI\Renderer;
 use ILIAS\UI\Component\Component;
-use ILIAS\UI\Component\Legacy\Legacy;
+use ILIAS\UI\Component\Legacy\Content;
 use ILIAS\HTTP\Wrapper\ArrayBasedRequestWrapper;
 use ILIAS\LegalDocuments\Provide;
 use ILIAS\LegalDocuments\Internal;
@@ -74,7 +74,7 @@ class ConductorTest extends TestCase
             $this->mock(Component::class),
         ];
 
-        $space = $this->mock(Legacy::class);
+        $space = $this->mock(Content::class);
 
         $container = $this->mockTree(Container::class, [
             'ui' => [

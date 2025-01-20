@@ -92,7 +92,7 @@ class ilTestToplistGUI
 
         return $this->ui_factory->panel()->standard(
             $title,
-            $this->ui_factory->legacy($content)
+            $this->ui_factory->legacy()->content($content)
         );
     }
 

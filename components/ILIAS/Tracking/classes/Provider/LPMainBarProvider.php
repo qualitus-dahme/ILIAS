@@ -67,22 +67,23 @@ class LPMainBarProvider extends AbstractStaticMainMenuProvider
                         ]
                     )
                 )
-                ->withParent(
-                    StandardTopItemsProvider::getInstance()->getAchievementsIdentification()
-                )
-                ->withPosition(30)
-                ->withSymbol($icon)
-                ->withNonAvailableReason(
-                    $this->dic->ui()->factory()->legacy(
-                        "{$this->dic->language()->txt('component_not_active')}"
-                    )
-                )
-                ->withAvailableCallable(
-                    function () {
-                        return ilObjUserTracking::_enabledLearningProgress() &&
-                            ilObjUserTracking::_hasLearningProgressLearner();
-                    }
-                ),
-            ];
+                           ->withParent(
+                               StandardTopItemsProvider::getInstance(
+                               )->getAchievementsIdentification()
+                           )
+                           ->withPosition(30)
+                           ->withSymbol($icon)
+                           ->withNonAvailableReason(
+                               $this->dic->ui()->factory()->legacy()->content(
+                                   "{$this->dic->language()->txt('component_not_active')}"
+                               )
+                           )
+                           ->withAvailableCallable(
+                               function () {
+                                   return ilObjUserTracking::_enabledLearningProgress() &&
+                                       ilObjUserTracking::_hasLearningProgressLearner();
+                               }
+                           ),
+        ];
     }
 }

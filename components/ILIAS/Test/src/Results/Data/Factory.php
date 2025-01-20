@@ -285,8 +285,8 @@ class Factory
             );
 
             if ($show_question_only) {
-                $usr_solution = $this->ui_renderer->render($this->ui_factory->legacy('<div class="ilc_question_Standard">' . $usr_solution . '</div>'));
-                $best_solution = $this->ui_renderer->render($this->ui_factory->legacy('<div class="ilc_question_Standard">' . $best_solution . '</div>'));
+                $usr_solution = $this->ui_renderer->render($this->ui_factory->legacy()->content('<div class="ilc_question_Standard">' . $usr_solution . '</div>'));
+                $best_solution = $this->ui_renderer->render($this->ui_factory->legacy()->content('<div class="ilc_question_Standard">' . $best_solution . '</div>'));
             }
 
             $feedback = $question_gui->getGenericFeedbackOutput($active_id, $attempt_id);

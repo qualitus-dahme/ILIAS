@@ -13,7 +13,8 @@ use ILIAS\UI\Component\MainControls\SystemInfo;
  *   example use the example of the UI-Component Layout\Page\Standard.
  *
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   Instead of but one message, ILIAS will display three messages in differently
+ *   colored boxes. The intensity of the colors decreases from top to bottom.
  * ---
  */
 function multiple()

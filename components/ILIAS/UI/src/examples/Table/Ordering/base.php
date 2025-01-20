@@ -152,7 +152,7 @@ function base()
         && $request_wrapper->retrieve('ordering_example', $refinery->kindlyTo()->int()) === 1
     ) {
         if ($data = $table->getData()) {
-            $out[] = $f->legacy('<pre>' . print_r($data, true) . '</pre>');
+            $out[] = $f->legacy()->content('<pre>' . print_r($data, true) . '</pre>');
         }
         $data_retrieval->setOrder($data);
     }

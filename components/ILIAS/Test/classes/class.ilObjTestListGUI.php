@@ -225,10 +225,9 @@ class ilObjTestListGUI extends ilObjectListGUI
             }
         }
 
-        $this->ctrl->setParameterByClass("ilrepositorygui", 'ref_id', $parent_crs_ref_id);
-        $this->ctrl->setParameterByClass("ilrepositorygui", 'tid', $this->ref_id);
-        $cmd_link = $this->ctrl->getLinkTargetByClass("ilrepositorygui", 'redirectLocToTest');
-        $this->ctrl->setParameterByClass("ilrepositorygui", "ref_id", $this->ref_id);
+        $this->ctrl->setParameterByClass(ilObjCourseGUI::class, 'ref_id', $parent_crs_ref_id);
+        $this->ctrl->setParameterByClass(ilObjCourseGUI::class, 'tid', $this->ref_id);
+        $cmd_link = $this->ctrl->getLinkTargetByClass([ilRepositoryGUI::class, ilObjCourseGUI::class], 'redirectLocToTest');
         $this->ctrl->clearParametersByClass('ilrepositorygui');
 
         return parent::modifyTitleLink($cmd_link);

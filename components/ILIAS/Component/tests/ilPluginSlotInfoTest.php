@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -119,7 +120,7 @@ class ilPluginSlotInfoTest extends TestCase
     public function testGetPath(): void
     {
         $this->assertEquals(
-            ilComponentRepository::PLUGIN_BASE_PATH . "/" . "components/ILIAS/Module1/Slot1",
+            ilComponentRepository::PLUGIN_BASE_PATH . "/Module1/Slot1",
             $this->pluginslot->getPath()
         );
     }

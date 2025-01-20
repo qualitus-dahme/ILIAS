@@ -14,281 +14,296 @@
  *
  ******************************************************************** */
 
-(function ($, $scope) {
-  $scope.il.BuddySystem = {
+((global) => {
+  const BuddySystem = {
     config: {},
 
     setConfig(config) {
-      const bs = $scope.il.BuddySystem;
-      bs.config = config;
+      this.config = config;
     },
   };
 
-  $scope.il.BuddySystemButton = {
+  const BuddySystemButton = {
     config: {},
 
     setConfig(config) {
-      const btn = $scope.il.BuddySystemButton;
-      btn.config = config;
+      this.config = config;
     },
 
     init() {
-      const toggle = '[data-toggle="dropdown"]';
-      const btn = $scope.il.BuddySystemButton;
-      const bs = $scope.il.BuddySystem;
-      const trigger_selector = 'a[data-target-state], button[data-target-state]';
+      const toggleSelector = '[data-toggle="dropdown"]';
+      const triggerSelector = 'a[data-target-state], button[data-target-state]';
 
-      const onWidgetClick = function onWidgetClick(e) {
-        const $trigger = $(this);
+      const onWidgetClick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
 
-        if ($trigger.data('submitted') === true) {
-          // Prevent concurrent requests
+        const triggerButton = e.target.closest(triggerSelector);
+        const container = triggerButton.closest(`.${this.config.bnt_class}`);
+        if (triggerButton.dataset.submitted === 'true') return Promise.resolve();
+
+        const values = new FormData();
+        values.append('usr_id', container.dataset.buddyId);
+        values.append('action', triggerButton.dataset.action);
+        values.append(`cmd[${BuddySystem.config.transition_state_cmd}]`, 1);
+
+        return disableButtons(container)
+          .then(() => fetch(BuddySystem.config.http_post_url, {
+            method: 'POST',
+            headers: { Accept: 'application/json' },
+            body: values,
+          }))
+          .then((response) => {
+            if (!response.ok) throw new Error('Request failed');
+            return response.json();
+          })
+          .then((data) => processResponse(container, data))
+          .then(() => {
+            container.querySelector(toggleSelector).focus();
+          })
+          .catch((error) => {
+            console.error(error);
+            enableButtons(container);
+            container.querySelector(toggleSelector).focus();
+          });
+      };
+
+      const disableButtons = (container) => new Promise((resolve) => {
+        document.querySelectorAll(`.${this.config.bnt_class}`).forEach((btnContainer) => {
+          if (btnContainer.dataset.buddyId === container.dataset.buddyId) {
+            btnContainer.querySelectorAll(triggerSelector).forEach((btn) => {
+              btn.dataset.submitted = 'true';
+              btn.disabled = true;
+            });
+          }
+        });
+        resolve();
+      });
+
+      const enableButtons = (container) => new Promise((resolve) => {
+        document.querySelectorAll(`.${this.config.bnt_class}`).forEach((btnContainer) => {
+          if (btnContainer.dataset.buddyId === container.dataset.buddyId) {
+            btnContainer.querySelectorAll(triggerSelector).forEach((btn) => {
+              btn.dataset.submitted = 'false';
+              btn.disabled = false;
+            });
+          }
+        });
+        resolve();
+      });
+
+      const processResponse = (container, data) => {
+        const { currentState } = container.dataset;
+
+        if (data.success) {
+          if (data.state && data.state_html) {
+            if (currentState !== data.state) {
+              return triggerEvent('il.bs.stateChange.beforeButtonWidgetReRendered', {
+                buddyId: container.dataset.buddyId,
+                newState: data.state,
+                oldState: currentState,
+              })
+                .then(() => updateContainers(container.dataset.buddyId, data.state, data.state_html))
+                .then(() => triggerEvent('il.bs.stateChange.afterButtonWidgetReRendered', {
+                  buddyId: container.dataset.buddyId,
+                  newState: data.state,
+                  oldState: currentState,
+                }));
+            }
+          }
+        }
+
+        return enableButtons(container)
+          .then(() => showPopover(container, data.message))
+          .then(() => triggerEvent('il.bs.stateChange.afterStateChangePerformed', {
+            buddyId: container.dataset.buddyId,
+            newState: container.dataset.currentState,
+            oldState: currentState,
+          }));
+      };
+
+      const updateContainers = (buddyId, newState, stateHtml) => new Promise((resolve) => {
+        document.querySelectorAll(`.${this.config.bnt_class}`).forEach((container) => {
+          if (container.dataset.buddyId === buddyId) {
+            container.querySelector('.button-container').innerHTML = stateHtml;
+            container.dataset.currentState = newState;
+          }
+        });
+        resolve();
+      });
+
+      const showPopover = (container, message) => new Promise((resolve) => {
+        if (message) {
+          // We currently don't have a nice way to present errors with client-side APIs
+          alert(message);
+          resolve();
+        } else {
+          resolve();
+        }
+      });
+
+      const clearAllDropdowns = (e) => new Promise((resolve) => {
+        const triggerButtons = document.querySelectorAll(toggleSelector);
+
+        triggerButtons.forEach((triggerButton) => {
+          const parent = triggerButton.parentElement;
+
+          if (!parent.classList.contains('open')) return;
+
+          if (e && e.defaultPrevented) return;
+
+          triggerButton.setAttribute('aria-expanded', 'false');
+          parent.classList.remove('open');
+
+          const dropdownMenu = parent.querySelector(':scope > .dropdown-menu');
+          if (dropdownMenu) dropdownMenu.style.display = 'none';
+        });
+
+        if (global.il && global.il.UI && global.il.UI.dropdown && global.il.UI.dropdown.opened) {
+          global.il.UI.dropdown.opened.hide();
+        }
+
+        resolve();
+      });
+
+      const toggleDropdown = (triggerButton, isActive, e) => new Promise((resolve) => {
+        const parent = triggerButton.parentElement;
+
+        if (!isActive) {
+          const dropdownMenu = parent.querySelector(':scope > .dropdown-menu');
+          if (dropdownMenu) dropdownMenu.style.display = 'block';
+
+          const availableWidth = parent.ownerDocument.documentElement.clientWidth;
+          const buttonPosition = triggerButton.getBoundingClientRect().left;
+          const listWidth = dropdownMenu.getBoundingClientRect().width;
+
+          if (buttonPosition + listWidth > availableWidth) {
+            dropdownMenu.classList.remove('dropdown-menu__right');
+            dropdownMenu.classList.add('dropdown-menu__left');
+          } else {
+            dropdownMenu.classList.remove('dropdown-menu__left');
+            dropdownMenu.classList.add('dropdown-menu__right');
+          }
+
+          triggerButton.setAttribute('aria-expanded', 'true');
+          parent.classList.add('open');
+        } else {
+          triggerButton.setAttribute('aria-expanded', 'false');
+          parent.classList.remove('open');
+
+          const dropdownMenu = parent.querySelector(':scope > .dropdown-menu');
+          if (dropdownMenu) dropdownMenu.style.display = 'none';
+        }
+
+        resolve();
+      });
+
+      const onKeydownSelection = (e) => {
+        if (!['Enter', ' '].includes(e.key)) return;
+        onWidgetClick(e);
+      };
+
+      const onKeydownDropdown = (container, e) => {
+        if (!['ArrowUp', 'ArrowDown', 'Escape', 'Enter', ' '].includes(e.key)) return;
+
+        const actedOnOption = !!e.target.closest(triggerSelector);
+
+        if (actedOnOption && ['Enter', ' '].includes(e.key)) {
+          onKeydownSelection(e);
           return;
         }
 
+        const triggerButton = container.querySelector(toggleSelector);
+        const parent = triggerButton.parentElement;
+        const isActive = parent.classList.contains('open');
+
+        if (!isActive) {
+          clearAllDropdowns(e);
+        }
+
         e.preventDefault();
         e.stopPropagation();
 
-        const $container = $trigger.closest(`.${btn.config.bnt_class}`);
+        if (!isActive && e.key !== 'Escape') {
+          return toggleDropdown(triggerButton, false, e);
+        }
 
-        const values = {};
-        values.usr_id = $container.data('buddy-id');
-        values.action = $trigger.data('action');
-        values[`cmd[${bs.config.transition_state_cmd}]`] = 1;
+        if (isActive && e.key === 'Escape') {
+          return toggleDropdown(triggerButton, true, e).then(() => triggerButton.focus());
+        }
 
-        const promise = $.ajax({
-          url: bs.config.http_post_url,
-          type: 'POST',
-          data: values,
-          dataType: 'json',
-          beforeSend() {
-            $(`.${btn.config.bnt_class}`).filter(function () {
-              return $(this).data('buddy-id') == $container.data('buddy-id');
-            }).each(function () {
-              const container = $(this);
-              container.find(trigger_selector)
-                .data('submitted', true)
-                .attr('disabled', true);
-            });
-          },
-        });
+        const items = Array.from(parent.querySelectorAll('.dropdown-menu li a')).filter((item) => item.offsetParent !== null);
+        if (!items.length) return;
 
-        promise.done((response) => {
-          const state = $container.data('current-state');
+        let index = items.indexOf(e.target);
+        if (e.key === 'ArrowUp' && index > 0) index--;
+        if (e.key === 'ArrowDown' && index < items.length - 1) index++;
+        if (index === -1) index = 0;
 
-          if (response.success !== undefined) {
-            if (response.state !== undefined && response.state_html !== undefined) {
-              if (state != response.state) {
-                $($scope).trigger('il.bs.stateChange.beforeButtonWidgetReRendered', [$container.data('buddy-id'), response.state, state]);
-
-                $(`.${btn.config.bnt_class}`).filter(function () {
-                  return $(this).data('buddy-id') == $container.data('buddy-id');
-                }).each(function () {
-                  const container = $(this);
-                  container.find('.button-container').html(response.state_html);
-                  container.data('current-state', response.state);
-                });
-
-                $($scope).trigger('il.bs.stateChange.afterButtonWidgetReRendered', [$container.data('buddy-id'), response.state, state]);
-              }
-            }
-          }
-
-          $(`.${btn.config.bnt_class}`).filter(function () {
-            return $(this).data('buddy-id') == $container.data('buddy-id');
-          }).each(function () {
-            const container = $(this);
-            container.find(trigger_selector)
-              .data('submitted', false)
-              .attr('disabled', false);
-          });
-
-          if (response.message !== undefined) {
-            $container.find('button').popover({
-              container: 'body',
-              content: response.message,
-              placement: 'auto',
-              trigger: 'focus',
-            }).popover('show');
-            $container.find('button').focus().on('hidden.bs.popover', function () {
-              $(this).popover('destroy');
-            });
-          }
-
-          $($scope).trigger('il.bs.stateChange.afterStateChangePerformed', [$container.data('buddy-id'), $container.data('current-state'), state]);
-        }).fail(() => {
-          $(`.${btn.config.bnt_class}`).filter(function () {
-            return $(this).data('buddy-id') == $container.data('buddy-id');
-          }).each(function () {
-            const container = $(this);
-            container.find(trigger_selector)
-              .data('submitted', false)
-              .attr('disabled', false);
-          });
-        });
+        items[index].focus();
       };
 
-      $($scope).on('il.bs.stateChange.afterStateChangePerformed', (event, usr_id, is_state, was_state) => {
-        if (
-          (was_state === 'ilBuddySystemLinkedRelationState' || was_state === 'ilBuddySystemRequestedRelationState') && is_state !== was_state
-        ) {
-          if (typeof il.Awareness !== 'undefined') {
-            il.Awareness.reload();
-          }
-        }
-        return true;
-      });
+      const onClickDropdown = (triggerButton, e) => {
+        if (e.button === 2) return; // Ignore right clicks
 
-      // This is is a listener for the case, that the "Buddy System Widget" is asynchronously added to the DOM (currently not used in the ILIAS core)
-      $($scope).on('il.bs.domelement.added', (ev, id) => {
-        $(`#${id}`).find(`.${btn.config.bnt_class}`).on('click', trigger_selector, onWidgetClick);
-      });
+        const parent = triggerButton.parentElement;
+        const isActive = parent.classList.contains('open');
 
-      const clearAllDropDowns = function (e) {
-        const trigger_buttons = document.querySelectorAll(toggle);
-        trigger_buttons.forEach((trigger_button) => {
-          const parent = trigger_button.parentElement;
+        clearAllDropdowns(e)
+          .then(() => toggleDropdown(triggerButton, isActive, e))
+          .catch(console.error);
 
-          if (!parent.classList.contains('open')) {
-            return;
-          }
-
-          if (e && e.defaultPrevented) {
-            return;
-          }
-
-          trigger_button.setAttribute('aria-expanded', 'false');
-          parent.classList.remove('open');
-          parent.querySelector(':scope > .dropdown-menu').style.display = 'none';
-        });
-
-        // Hide UI dropdowns
-        if (il && il.UI && il.UI.dropdown) {
-          il.UI.dropdown.opened?.hide();
-        }
+        e.preventDefault();
       };
 
-      $(`.${btn.config.bnt_class}`)
-        .attr('aria-live', 'polite')
-        .on('keydown', toggle, function (e) {
-          if (!/(38|40|27|32)/.test(e.which)) {
-            return;
+      const onClickSelection = (e) => {
+        if (e.button === 2) return; // Ignore right clicks
+        onWidgetClick(e);
+      };
+
+      document.querySelectorAll(`.${this.config.bnt_class}`).forEach((element) => {
+        element.addEventListener('keydown', (e) => {
+          const container = e.target.closest(`.${this.config.bnt_class}`);
+          if (container) {
+            onKeydownDropdown(container, e);
           }
+        });
 
-          e.preventDefault();
-          e.stopPropagation();
-
-          const trigger_button = $(this).get(0);
-          const parent = trigger_button.parentElement;
-          const is_active = parent.classList.contains('open');
-
-          if (!is_active && e.which !== 27 || is_active && e.which === 27) {
-            if (e.which === 27) {
-              parent.querySelector(toggle).focus();
+        element.addEventListener('click', (e) => {
+          if (e.target.closest(triggerSelector)) {
+            onClickSelection(e);
+          } else {
+            const triggerButton = e.target.closest(toggleSelector);
+            if (triggerButton) {
+              onClickDropdown(triggerButton, e);
             }
-
-            trigger_button.click();
-            return;
           }
+        });
+      });
 
-          const items = Array.from(parent.querySelectorAll('.dropdown-menu li a')).filter((item) => item.offsetParent !== null);
-          if (!items.length) {
-            return;
-          }
-
-          let index = Array.prototype.indexOf.call(items, e.target);
-          if (e.which === 38 && index > 0) {
-            index--; // up
-          }
-          if (e.which === 40 && index < items.length - 1) {
-            index++; // down
-          }
-          if (index === -1) {
-            index = 0;
-          }
-
-          items[index].focus();
-        })
-        .on('click', toggle, function (e) {
-          if (e && e.which === 3) {
-            // Do nothing on right clicks
-            return;
-          }
-
-          const trigger_button = $(this).get(0);
-          const parent = trigger_button.parentElement;
-          const is_active = parent.classList.contains('open');
-
-          clearAllDropDowns();
-
-          if (!is_active) {
-            if (e.defaultPrevented) {
-              return;
-            }
-
-            const drop_down = parent.querySelector(':scope > .dropdown-menu');
-            drop_down.style.display = 'block';
-
-            const available_width = parent.ownerDocument.documentElement.clientWidth;
-            const button_position = trigger_button.getBoundingClientRect().left;
-            const list_width = drop_down.getBoundingClientRect().width;
-
-            if (button_position + list_width > available_width) {
-              drop_down.classList.remove('dropdown-menu__right');
-              drop_down.classList.add('dropdown-menu__left');
-            } else {
-              drop_down.classList.remove('dropdown-menu__left');
-              drop_down.classList.add('dropdown-menu__right');
-            }
-
-            trigger_button.focus();
-            trigger_button.setAttribute('aria-expanded', 'true');
-            parent.classList.toggle('open');
-          }
-
-          return false;
-        })
-        .on('click', trigger_selector, onWidgetClick);
-
-      document.addEventListener('click', clearAllDropDowns, true);
+      document.addEventListener('click', clearAllDropdowns);
     },
   };
 
-  $(document).ready(() => {
-    $('#awareness_trigger').on('awrn:shown', (event) => {
-      $('#awareness-content').find('a[data-target-state]').off('click').on('click', function (e) {
-        const bs = $scope.il.BuddySystem;
-        const $elm = $(this);
-        const usr_id = $elm.data('buddy-id');
-
-        e.preventDefault();
-        e.stopPropagation();
-
-        const values = {};
-        values.usr_id = usr_id;
-        values.action = $elm.data('action');
-        values[`cmd[${bs.config.transition_state_cmd}]`] = 1;
-
-        const promise = $.ajax({
-          url: bs.config.http_post_url,
-          type: 'POST',
-          data: values,
-          dataType: 'json',
-          beforeSend() {
-          },
-        });
-
-        promise.done((response) => {
-          const state = $elm.data('current-state');
-          if (response.success !== undefined) {
-            if (response.state !== undefined) {
-              if (state !== response.state) {
-                $($scope).trigger('il.bs.stateChange.afterStateChangePerformed', [usr_id, response.state, state]);
-              }
-            }
-          }
-        });
-      });
-    });
+  const triggerEvent = (eventName, details) => new Promise((resolve) => {
+    document.dispatchEvent(new CustomEvent(eventName, { detail: details, bubbles: true }));
+    resolve();
   });
-}(jQuery, window));
+
+  global.il.BuddySystem = BuddySystem;
+  global.il.BuddySystemButton = BuddySystemButton;
+
+  document.addEventListener('il.bs.stateChange.afterStateChangePerformed', (event) => {
+    const { buddyId, newState, oldState } = event.detail;
+
+    const shouldReloadAwarenessTool = (
+      ['ilBuddySystemLinkedRelationState', 'ilBuddySystemRequestedRelationState'].includes(oldState)
+      && newState !== oldState
+    );
+    if (shouldReloadAwarenessTool) {
+      if (typeof global.il.Awareness !== 'undefined') {
+        global.il.Awareness.updateList('');
+      }
+    }
+  });
+})(window);

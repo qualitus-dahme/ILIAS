@@ -144,6 +144,23 @@ class CreatorTest extends TestCase
         $this->assertContains($expected_title_changes, $prepared_changes);
     }
 
+    public function testCreateSetWithEmptyTitle(): void
+    {
+        $creator = $this->getCreator();
+
+        $set = $creator->createSet('');
+
+        $expected_title_changes = [
+            'path' => '~start~%general%title%string',
+            'values' => ['some title']
+        ];
+        $prepared_changes = $set->prepared_changes;
+        $this->assertCount(1, $prepared_changes);
+        $this->assertSame('~start~%general%title%string', $prepared_changes[0]['path']);
+        $this->assertCount(1, $prepared_changes[0]['values']);
+        $this->assertNotSame('', $prepared_changes[0]['values'][0]);
+    }
+
     public function testCreateSetWithLanguage(): void
     {
         $creator = $this->getCreator();

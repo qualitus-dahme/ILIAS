@@ -42,6 +42,6 @@ class Renderer
         $tpl->setVariable('TOKEN', (string) $this->embedded_application->getToken());
         $tpl->setVariable('TTL', (string) (time() + $this->embedded_application->getTTL()) * 1000); // in milliseconds
 
-        return $this->ui_factory->legacy($tpl->get());
+        return $this->ui_factory->legacy()->content($tpl->get());
     }
 }

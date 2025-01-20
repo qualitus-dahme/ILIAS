@@ -1,6 +1,5 @@
 <?php
 
-declare(strict_types=1);
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -15,14 +14,17 @@ declare(strict_types=1);
  * https://www.ilias.de
  * https://github.com/ILIAS-eLearning
  *
- *********************************************************************/
-/**
+ *********************************************************************
+ *
  * Entry Point for Async calls from the Notification Center
  */
+
+declare(strict_types=1);
 
 namespace ILIAS\GlobalScreen\Client;
 
 /** @noRector  */
 require_once(__DIR__ . '/../vendor/composer/vendor/autoload.php');
-\ilInitialisation::initILIAS();
+require_once __DIR__ . '/../artifacts/bootstrap_default.php';
+entry_point('ILIAS Legacy Initialisation Adapter');
 (new Notifications())->run();

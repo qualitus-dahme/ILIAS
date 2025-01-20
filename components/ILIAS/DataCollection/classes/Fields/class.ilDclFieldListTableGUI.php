@@ -242,9 +242,9 @@ class ilDclFieldListTableGUI extends ilTable2GUI
 
         if (!$a_set->isStandardField()) {
             if ($a_set->isUnique()) {
-                $icon = $this->ui_factory->symbol()->icon()->custom(ilUtil::getImagePath('standard/icon_ok_monochrome.svg'), $this->lng->txt("yes"));
+                $icon = $this->ui_factory->symbol()->icon()->custom(ilUtil::getImagePath('standard/icon_checked.svg'), $this->lng->txt("yes"));
             } else {
-                $icon = $this->ui_factory->symbol()->icon()->custom(ilUtil::getImagePath('standard/icon_not_ok_monochrome.svg'), $this->lng->txt("no"));
+                $icon = $this->ui_factory->symbol()->icon()->custom(ilUtil::getImagePath('standard/icon_unchecked.svg'), $this->lng->txt("no"));
             }
             $this->tpl->setVariable('ICON_UNIQUE', $this->renderer->render($icon));
         } else {

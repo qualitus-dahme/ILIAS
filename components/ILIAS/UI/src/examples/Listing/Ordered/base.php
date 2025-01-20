@@ -10,11 +10,7 @@ namespace ILIAS\UI\examples\Listing\Ordered;
  *   Example for rendering an ordered list.
  *
  * expected output: >
- *   ILIAS shows a list in the following format:
- *
- *   1. Point 1
- *   2. Point 2
- *   3. Point 3
+ *   ILIAS shows a numbered list.
  * ---
  */
 function base()

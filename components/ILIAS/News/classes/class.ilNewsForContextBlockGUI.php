@@ -779,7 +779,7 @@ class ilNewsForContextBlockGUI extends ilBlockGUI
         } else {
             $title = $lng->txt("news_internal_news");
         }
-        $panel = $this->ui->factory()->panel()->standard($title, $this->ui->factory()->legacy($content));
+        $panel = $this->ui->factory()->panel()->standard($title, $this->ui->factory()->legacy()->content($content));
 
         $parameter_name = 'news_page';
 
@@ -1190,7 +1190,7 @@ class ilNewsForContextBlockGUI extends ilBlockGUI
 
         $panel = $this->ui->factory()->panel()->standard(
             $lng->txt("news_internal_news"),
-            $this->ui->factory()->legacy($tpl->get())
+            $this->ui->factory()->legacy()->content($tpl->get())
         );
 
         return $this->ui->renderer()->render($panel);

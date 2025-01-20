@@ -22,6 +22,7 @@ use ILIAS\ResourceStorage\Services;
 use ILIAS\components\WOPI\Discovery\ActionDBRepository;
 use ILIAS\File\Capabilities\Capabilities;
 use ILIAS\File\Capabilities\CapabilityBuilder;
+use ILIAS\File\Capabilities\CoreTypeResolver;
 
 /**
  * Class ilObjFileListGUI
@@ -54,6 +55,7 @@ class ilObjFileListGUI extends ilObjectListGUI
             $this->ctrl,
             new ActionDBRepository($DIC->database()),
             $DIC->http(),
+            new CoreTypeResolver(),
             $DIC['static_url.uri_builder']
         );
 

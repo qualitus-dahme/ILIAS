@@ -26,6 +26,7 @@ use ILIAS\Data\Factory as DataFactory;
 use ILIAS\Data\Result;
 use ILIAS\Data\Result\Ok;
 use ILIAS\Language\Language;
+use ILIAS\UI\Component\Input\InputData;
 
 /**
  * @author Thibeau Fuhrer <thibeau@sr.solutions>

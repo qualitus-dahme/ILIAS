@@ -34,6 +34,6 @@ class BaseMetaBarItemRenderer extends AbstractMetaBarItemRenderer implements Met
      */
     protected function getSpecificComponentForItem(isItem $item): Component
     {
-        return $this->ui->factory()->legacy("no renderer found");
+        return $this->ui->factory()->legacy()->content("no renderer found");
     }
 }

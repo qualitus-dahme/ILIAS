@@ -31,5 +31,5 @@ interface Legacy extends Secondary
     /**
      * Get item list
      */
-    public function getLegacyComponent(): Component\Legacy\Legacy;
+    public function getLegacyComponent(): Component\Legacy\Content;
 }

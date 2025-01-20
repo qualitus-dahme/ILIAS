@@ -7,7 +7,16 @@ namespace ILIAS\UI\Examples\Entity\Standard;
 /**
  * ---
  * expected output: >
- *   ILIAS shows the rendered Component.
+ *   This example shows/identifies the semantic groups of entites;
+ *   from top to bottom, left to right, the order of groups is this:
+ *   - blocking conditions (left) and actions in a dropdown (right)
+ *   - secondary indentifier (it indents all the latter) and featured properties
+ *   - primary identifier
+ *   - personal status
+ *   - main details
+ *   - availability
+ *   - details
+ *   - reactions (the tag) and prioritized reactions (the 'like' glyph)
  * ---
  */
 function semantic_groups()
@@ -17,12 +26,12 @@ function semantic_groups()
     $renderer = $DIC->ui()->renderer();
 
     $entity = $f->entity()->standard('Primary Identifier', 'Secondary Identifier')
-        ->withBlockingAvailabilityConditions($f->legacy('Blocking Conditions'))
-        ->withFeaturedProperties($f->legacy('Featured_properties'))
-        ->withPersonalStatus($f->legacy('Personal Status'))
-        ->withMainDetails($f->legacy('Main Details'))
-        ->withAvailability($f->legacy('Availability'))
-        ->withDetails($f->legacy('Details'))
+        ->withBlockingAvailabilityConditions($f->legacy()->content('Blocking Conditions'))
+        ->withFeaturedProperties($f->legacy()->content('Featured_properties'))
+        ->withPersonalStatus($f->legacy()->content('Personal Status'))
+        ->withMainDetails($f->legacy()->content('Main Details'))
+        ->withAvailability($f->legacy()->content('Availability'))
+        ->withDetails($f->legacy()->content('Details'))
         ->withReactions($f->button()->tag('reaction', '#'))
         ->withPrioritizedReactions($f->symbol()->glyph()->like())
         ->withActions($f->button()->shy('action', '#'))

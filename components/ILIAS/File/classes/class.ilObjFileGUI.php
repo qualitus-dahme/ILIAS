@@ -38,6 +38,7 @@ use ILIAS\MetaData\Services\ServicesInterface as LOMServices;
 use ILIAS\File\Capabilities\Capabilities;
 use ILIAS\File\Capabilities\CapabilityBuilder;
 use ILIAS\File\Capabilities\CapabilityCollection;
+use ILIAS\File\Capabilities\CoreTypeResolver;
 
 /**
  * GUI class for file objects.
@@ -132,6 +133,7 @@ class ilObjFileGUI extends ilObject2GUI
             $this->ctrl,
             $this->action_repo,
             $DIC->http(),
+            new CoreTypeResolver(),
             $DIC['static_url.uri_builder']
         );
         $this->capabilities = $capability_builder->get($a_id);

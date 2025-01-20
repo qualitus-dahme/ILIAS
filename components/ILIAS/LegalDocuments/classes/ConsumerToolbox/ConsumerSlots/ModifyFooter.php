@@ -64,7 +64,7 @@ final class ModifyFooter
     public function renderModal(DocumentContent $content): Modal
     {
         return $this->ui->create()->modal()->roundtrip($content->title(), [
-            $this->ui->create()->legacy($this->ui->txt('usr_agreement_footer_intro')),
+            $this->ui->create()->legacy()->content($this->ui->txt('usr_agreement_footer_intro')),
             $this->ui->create()->divider()->horizontal(),
             $this->legal_documents->document()->contentAsComponent($content),
             $this->ui->create()->divider()->horizontal(),
@@ -84,7 +84,7 @@ final class ModifyFooter
             )
         );
 
-        return $this->ui->create()->legacy($template->get());
+        return $this->ui->create()->legacy()->content($template->get());
     }
 
     /**

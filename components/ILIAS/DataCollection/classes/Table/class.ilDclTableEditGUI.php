@@ -212,6 +212,9 @@ class ilDclTableEditGUI
         $data = $form->getData();
 
         if ($data !== null) {
+            if ($a_mode === 'create') {
+                $this->table = new ilDclTable();
+            }
             foreach (ilObjectFactory::getInstanceByObjId($this->obj_id)->getTables() as $table) {
                 if ($table->getTitle() === $data['edit']['title'] && $table->getId() !== $this->table->getId()) {
                     $this->tpl->setOnScreenMessage($this->tpl::MESSAGE_TYPE_FAILURE, $this->lng->txt('dcl_table_title_unique'));

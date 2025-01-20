@@ -25,6 +25,7 @@ use ILIAS\StaticURL\Handler\BaseHandler;
 use ILIAS\File\Capabilities\CapabilityBuilder;
 use ILIAS\components\WOPI\Discovery\ActionDBRepository;
 use ILIAS\File\Capabilities\Capabilities;
+use ILIAS\File\Capabilities\CoreTypeResolver;
 
 /**
  * @author Fabian Schmid <fabian@sr.solutions>
@@ -47,6 +48,7 @@ class ilFileStaticURLHandler extends BaseHandler implements Handler
             $DIC->ctrl(),
             new ActionDBRepository($DIC->database()),
             $DIC->http(),
+            new CoreTypeResolver(),
             $DIC['static_url.uri_builder']
         );
     }

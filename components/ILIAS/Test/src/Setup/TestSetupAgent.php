@@ -50,7 +50,8 @@ class TestSetupAgent extends NullAgent
                 'object',
                 7200,
                 ['tst']
-            )
+            ),
+            new \ilAccessRBACOperationDeletedObjective('tst', 56)
         );
     }
 

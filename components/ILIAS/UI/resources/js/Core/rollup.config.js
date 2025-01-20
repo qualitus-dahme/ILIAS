@@ -19,7 +19,6 @@ export default {
   external: [
     'il',
     'jquery',
-    'crypto',
   ],
   input: './src/core.js',
   output: {
@@ -29,7 +28,6 @@ export default {
     globals: {
       il: 'il',
       jquery: '$',
-      crypto: 'crypto',
     },
   },
 };

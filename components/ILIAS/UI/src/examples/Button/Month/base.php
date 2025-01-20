@@ -12,8 +12,8 @@ namespace ILIAS\UI\examples\Button\Month;
  *
  * expected output: >
  *   ILIAS shows a button including a month and year. Clicking the button will open a selection of other months and years
- *   which can be selected. Another click onto a month opens a dialog which confirms the click. In this dialog you can see
- *   a long combination of numbers/letters and additionally the selected month (e.g. 03-2020).
+ *   which can be selected. Another click onto a month opens a dialog which confirms the click. In this dialog the selected
+ *   month (e.g. 03-2020) is included.
  * ---
  */
 function base()

@@ -10,7 +10,7 @@ namespace ILIAS\UI\examples\MessageBox\Confirmation;
  *   Example for rendering a confirmation message box.
  *
  * expected output: >
- *   ILIAS shows a yellow box with a dummy text ("Lorem ipsum...") and two buttons "Confirm" and "Cancel".
+ *   ILIAS shows a yellow box with a dummy text and two buttons.
  *   Clicking the buttons does not do anything.
  * ---
  */

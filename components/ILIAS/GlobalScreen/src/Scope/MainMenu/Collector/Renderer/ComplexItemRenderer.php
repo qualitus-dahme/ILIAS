@@ -43,7 +43,7 @@ class ComplexItemRenderer extends BaseTypeRenderer
          * @var $item Complex
          */
         global $DIC;
-        $content = $this->ui_factory->legacy($DIC->ui()->renderer()->render($item->getContent()));
+        $content = $this->ui_factory->legacy()->content($DIC->ui()->renderer()->render($item->getContent()));
 
         return $this->ui_factory->mainControls()->slate()->legacy($item->getTitle(), $this->getStandardSymbol($item), $content);
     }

@@ -139,7 +139,7 @@ class ilObjStudyProgrammeAutoMembershipsGUI
 
         $modal = $this->ui_factory->modal()->roundtrip(
             $this->txt('modal_member_auto_select_title'),
-            $this->ui_factory->legacy($form->getHtml())
+            $this->ui_factory->legacy()->content($form->getHtml())
         );
 
         $submit = $this->ui_factory->button()->primary($this->txt('add'), "#")->withOnLoadCode(
@@ -169,7 +169,7 @@ class ilObjStudyProgrammeAutoMembershipsGUI
         $data = [];
         foreach ($this->getObject()->getAutomaticMembershipSources() as $ams) {
             $title = $this->getTitleRepresentation($ams);
-            $usr = $this->getUserRepresentation($ams->getLastEditorId()) ?? $this->ui_factory->legacy('-');
+            $usr = $this->getUserRepresentation($ams->getLastEditorId()) ?? $this->ui_factory->legacy()->content('-');
             $modal = $this->getModal($ams->getSourceType(), $ams->getSourceId(), $ams->isSearchRecursive());
             $collected_modals[] = $modal;
             $src_id = $ams->getSourceType() . '-' . $ams->getSourceId() . '-' . $ams->isSearchRecursive();
@@ -401,7 +401,7 @@ class ilObjStudyProgrammeAutoMembershipsGUI
 
         $modal = $this->ui_factory->modal()->roundtrip(
             $this->txt('modal_member_auto_select_title'),
-            $this->ui_factory->legacy($form->getHtml())
+            $this->ui_factory->legacy()->content($form->getHtml())
         );
 
         $this->ctrl->setParameter($this, self::F_ORIGINAL_SOURCE_TYPE, $current_src_type);
@@ -706,7 +706,7 @@ class ilObjStudyProgrammeAutoMembershipsGUI
             case ilStudyProgrammeAutoMembershipSource::TYPE_ROLE:
                 $title = ilObjRole::_lookupTitle($src_id) ?? "-";
 
-                if($this->rbac_review->isGlobalRole($src_id)) {
+                if ($this->rbac_review->isGlobalRole($src_id)) {
                     $parent_ref = self::ROLEFOLDER_REF_ID;
                     $path = ['ilAdministrationGUI'];
                     $this->ctrl->setParameterByClass('ilObjRoleGUI', 'admin_mode', 'settings');
@@ -714,7 +714,7 @@ class ilObjStudyProgrammeAutoMembershipsGUI
                     $parent_ref = $this->rbac_review->getObjectReferenceOfRole($src_id);
                     $parent_type = ilObject::_lookupType($parent_ref, true);
                     $path = ['ilRepositoryGUI','ilObjCategoryGUI'];
-                    if($parent_type == 'orgu') {
+                    if ($parent_type == 'orgu') {
                         $path = ['ilAdministrationGUI','ilObjOrgUnitGUI'];
                     }
                     $path[] = 'ilPermissionGUI';

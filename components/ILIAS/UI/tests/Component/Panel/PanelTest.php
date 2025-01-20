@@ -63,7 +63,7 @@ class PanelTest extends ILIAS_UI_TestBase
             {
                 return new I\Component\Button\Factory();
             }
-            public function symbol(): C\Symbol\Factory
+            public function symbol(): I\Component\Symbol\Factory
             {
                 return new I\Component\Symbol\Factory(
                     new I\Component\Symbol\Icon\Factory(),
@@ -77,7 +77,8 @@ class PanelTest extends ILIAS_UI_TestBase
     public function getPanelFactory(): I\Component\Panel\Factory
     {
         return new I\Component\Panel\Factory(
-            $this->createMock(C\Panel\Listing\Factory::class)
+            $this->createMock(I\Component\Panel\Listing\Factory::class),
+            $this->createMock(I\Component\Panel\Secondary\Factory::class),
         );
     }
 
@@ -168,7 +169,7 @@ class PanelTest extends ILIAS_UI_TestBase
 
         $p = $fp->sub("Title", array(new ComponentDummy()));
 
-        $legacy = new I\Component\Legacy\Legacy("Legacy content", new SignalGenerator());
+        $legacy = new I\Component\Legacy\Content("Legacy content", new SignalGenerator());
         $secondary = new I\Component\Panel\Secondary\Legacy("Legacy panel title", $legacy);
 
         $p = $p->withFurtherInformation($secondary);
@@ -295,7 +296,7 @@ EOT;
         $r = $this->getDefaultRenderer();
 
         $p = $fp->sub("Title", array());
-        $legacy = new I\Component\Legacy\Legacy("Legacy content", new SignalGenerator());
+        $legacy = new I\Component\Legacy\Content("Legacy content", new SignalGenerator());
         $secondary = new I\Component\Panel\Secondary\Legacy("Legacy panel title", $legacy);
         $p = $p->withFurtherInformation($secondary);
         $html = $r->render($p);

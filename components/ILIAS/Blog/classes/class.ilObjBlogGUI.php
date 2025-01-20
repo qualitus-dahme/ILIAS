@@ -1787,7 +1787,7 @@ class ilObjBlogGUI extends ilObject2GUI implements ilDesktopItemHandling
 
                 $content = $block[1];
 
-                $secondary_panel = $ui_factory->panel()->secondary()->legacy($title, $ui_factory->legacy($content));
+                $secondary_panel = $ui_factory->panel()->secondary()->legacy($title, $ui_factory->legacy()->content($content));
 
                 if (isset($block[2]) && is_array($block[2])) {
                     $link = $ui_factory->button()->shy($block[2][1], $block[2][0]);

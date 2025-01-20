@@ -11,7 +11,7 @@ namespace ILIAS\UI\examples\Input\Field\Hidden;
  *   attach it to a form. This example does not contain any data processing.
  *
  * expected output: >
- *   ILIAS shows an empty white field. Clicking "Save" reloads the page.
+ *   ILIAS shows an empty white field.
  * ---
  */
 function base()

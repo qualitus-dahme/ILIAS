@@ -145,7 +145,7 @@ class ilObjStudyProgrammeAutoCategoriesGUI
                 continue;
             }
             [$title, $link] = $this->getItemPath($ref_id);
-            $usr = $this->getUserRepresentation($ac->getLastEditorId()) ?? $this->ui_factory->legacy('-');
+            $usr = $this->getUserRepresentation($ac->getLastEditorId()) ?? $this->ui_factory->legacy()->content('-');
             $modal = $this->getModal($ref_id);
             $collected_modals[] = $modal;
             $actions = $this->getItemAction(
@@ -322,7 +322,7 @@ class ilObjStudyProgrammeAutoCategoriesGUI
         $modal = $this->ui_factory->modal()
             ->roundtrip(
                 $this->lng->txt('modal_categories_title'),
-                $this->ui_factory->legacy($form->getHtml())
+                $this->ui_factory->legacy()->content($form->getHtml())
             )
             ->withActionButtons([$submit])
             ->withAdditionalOnLoadCode(
@@ -361,7 +361,7 @@ class ilObjStudyProgrammeAutoCategoriesGUI
         $form->addItem($cat);
 
         $hi = new ilHiddenInputGUI(self::F_CATEGORY_ORIGINAL_REF);
-        $hi->setValue((string)$current_ref_id ?? "");
+        $hi->setValue((string) $current_ref_id ?? "");
         $form->addItem($hi);
 
         return $form;
@@ -403,7 +403,7 @@ class ilObjStudyProgrammeAutoCategoriesGUI
     protected function getUserRepresentation(int $usr_id): ?Link
     {
         $username = ilObjUser::_lookupName($usr_id);
-        if(array_filter($username) === []) {
+        if (array_filter($username) === []) {
             return null;
         }
 
@@ -431,7 +431,7 @@ class ilObjStudyProgrammeAutoCategoriesGUI
 
         $hops = array_map(
             static function (array $c): string {
-                return ilObject::_lookupTitle((int)$c["obj_id"]);
+                return ilObject::_lookupTitle((int) $c["obj_id"]);
             },
             $this->tree->getPathFull($cat_ref_id)
         );

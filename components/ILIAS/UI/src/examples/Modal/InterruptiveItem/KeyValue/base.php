@@ -11,12 +11,8 @@ namespace ILIAS\UI\examples\Modal\InterruptiveItem\KeyValue;
  *
  * expected output: >
  *   ILIAS shows a button titled "Show an interruptive Item".
- *   A click onto the button will grey out ILIAS, open a modal titled "My Title" and asks for confirmation to delete all
- *   contents.
- *   Two buttons "Delete" and "Cancel" will also be displayed.
- *   A click onto the button "Delete" will relaod the page.
- *   A click onto the button "Cancel" will hide the modal.
- *   You can also leave the modal by clicking onto the greyed out ILIAS in the background outside of the modal.
+ *   A click onto the button will grey out ILIAS, open a modal with some content (e.g. "First Key", "first value"). The
+ *   value is displayed differently to the label.
  * ---
  */
 function base()

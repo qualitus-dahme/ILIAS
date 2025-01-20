@@ -216,19 +216,19 @@ class RequestDataCollector
     }
 
     /**
-     * @return array<float|array>
+     * @return array<float>
      */
-    public function floatArray(string $key, int $depth = 1): array
+    public function floatArray(string $key): array
     {
-        return $this->retrieveArray($key, $depth, $this->refinery->kindlyTo()->float());
+        return $this->retrieveArray($key, 1, $this->refinery->kindlyTo()->float());
     }
 
     /**
-     * @return array<int|array>
+     * @return array<int>
      */
-    public function intArray(string $key, int $depth = 1): array
+    public function intArray(string $key): array
     {
-        return $this->retrieveArray($key, $depth, $this->refinery->kindlyTo()->int());
+        return $this->retrieveArray($key, 1, $this->refinery->kindlyTo()->int());
     }
 
     /**

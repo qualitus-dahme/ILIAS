@@ -10,7 +10,7 @@ namespace ILIAS\UI\examples\Panel\Secondary\Legacy;
  *  Example for rendering a secondary legacy panel listing.
  *
  * expected output: >
- *   ILIAS shows a panel titled "Legacy Panel Title" and including an action menu. The panel's content is set to "Legacy Content".
+ *   ILIAS shows a panel with a title, some content and an action menu.
  * ---
  */
 function base()
@@ -24,7 +24,7 @@ function base()
         $factory->button()->shy("GitHub", "https://www.github.com")
     ));
 
-    $legacy = $factory->legacy("Legacy content");
+    $legacy = $factory->legacy()->content("Legacy content");
 
     $panel = $factory->panel()->secondary()->legacy(
         "Legacy panel title",

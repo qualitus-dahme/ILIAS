@@ -10,9 +10,8 @@ namespace ILIAS\UI\examples\Dropzone\File\Wrapper;
  *   Example for rendering a file dropzone wrapper.
  *
  * expected output: >
- *   ILIAS shows a blue box titled "Drag and drop files onto me!". If you drag a file into the box a small window opens
- *   including two buttons named "Save" and "Close". The file will be shown too. You can remove an uploaded file by clicking
- *   onto the "X" on the right side.
+ *   ILIAS shows a blue box titled "Drag and drop files onto me!". If you drag a file into the box a small window opens.
+ *   The file will be shown too. You can remove an uploaded file by clicking onto the "X" on the right side.
  * ---
  */
 function base()

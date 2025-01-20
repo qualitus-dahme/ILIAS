@@ -500,7 +500,7 @@ class ilObjLinkResourceGUI extends ilObject2GUI
 
         $modal = $f->modal()->roundtrip(
             $this->lng->txt('webr_new_list'),
-            $f->legacy($r->render($info) . $this->form->getHTML())
+            $f->legacy()->content($r->render($info) . $this->form->getHTML())
         )
                    ->withActionButtons([$submit]);
 

@@ -228,7 +228,7 @@ class ScoreSettingsTest extends ilTestBaseTestCase
     public function getUIFactory(): NoUIFactory
     {
         return new class () extends NoUIFactory {
-            public function symbol(): C\Symbol\Factory
+            public function symbol(): S\Factory
             {
                 return new S\Factory(
                     new S\Icon\Factory(),

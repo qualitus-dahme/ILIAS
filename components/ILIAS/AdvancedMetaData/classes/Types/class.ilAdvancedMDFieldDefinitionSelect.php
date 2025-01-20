@@ -179,14 +179,14 @@ class ilAdvancedMDFieldDefinitionSelect extends ilAdvancedMDFieldDefinition
         foreach ($options->getOptions() as $option) {
             $position_identifiers[(string) ($option->getPosition() + 1)] = sprintf(
                 $this->lng->txt('meta_advmd_select_position_identifier'),
-                $option->getTranslationInLanguage($this->default_language)->getValue()
+                $option->getTranslationInLanguage($this->default_language)?->getValue() ?? ''
             );
         }
 
         $disabled_checkbox_overwrites = [];
 
         foreach ($options->getOptions() as $option) {
-            $option_value = $option->getTranslationInLanguage($this->default_language)->getValue();
+            $option_value = $option->getTranslationInLanguage($this->default_language)?->getValue() ?? '';
             $hidden = $this->addRadioToEntriesGroup(
                 $entries,
                 $position_identifiers,

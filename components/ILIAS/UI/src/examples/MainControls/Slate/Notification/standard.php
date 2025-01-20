@@ -34,7 +34,7 @@ function standard()
     $mail_notification_item = $f->item()->notification($mail_title, $mail_icon)
                                 ->withDescription("You have 23 unread mails in your inbox")
                                 ->withProperties(["Time" => "3 days ago"])
-                                ->withAdditionalContent($f->legacy("<b>Additional Content</b>"));
+                                ->withAdditionalContent($f->legacy()->content("<b>Additional Content</b>"));
 
     //Creating a badge Notification Item with a specific close action here.
     $close_url = $_SERVER['REQUEST_URI'] . '&badge_closed=true';

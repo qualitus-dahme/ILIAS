@@ -22,7 +22,7 @@ declare(strict_types=1);
 use ILIAS\GlobalScreen\Scope\Tool\Provider\AbstractDynamicToolProvider;
 use ILIAS\GlobalScreen\ScreenContext\Stack\CalledContexts;
 use ILIAS\GlobalScreen\ScreenContext\Stack\ContextCollection;
-use ILIAS\UI\Component\Legacy\Legacy;
+use ILIAS\UI\Component\Legacy\Content;
 
 /**
  * Workspace GS tool provider
@@ -66,8 +66,8 @@ class ilSkillGSToolProvider extends AbstractDynamicToolProvider
             $tools[] = $this->factory->tool($this->identification_provider->contextAwareIdentifier("tree"))
                 ->withTitle($title)
                 ->withSymbol($icon)
-                ->withContentWrapper(function () use ($tree_id): Legacy {
-                    return $this->dic->ui()->factory()->legacy($this->getSkillTree($tree_id));
+                ->withContentWrapper(function () use ($tree_id): Content {
+                    return $this->dic->ui()->factory()->legacy()->content($this->getSkillTree($tree_id));
                 });
         }
 
@@ -79,8 +79,8 @@ class ilSkillGSToolProvider extends AbstractDynamicToolProvider
             $tools[] = $this->factory->tool($this->identification_provider->contextAwareIdentifier("tree"))
                 ->withTitle("Templates")
                 ->withSymbol($icon)
-                ->withContentWrapper(function () use ($tree_id): Legacy {
-                    return $this->dic->ui()->factory()->legacy($this->getTemplateTree($tree_id));
+                ->withContentWrapper(function () use ($tree_id): Content {
+                    return $this->dic->ui()->factory()->legacy()->content($this->getTemplateTree($tree_id));
                 });
         }
         return $tools;

@@ -1569,7 +1569,7 @@ class ilLMPresentationGUI implements ilCtrlBaseClassInterface, ilCtrlSecurityInt
 
         $modal = $this->ui->factory()->modal()->roundtrip(
             $this->lng->txt("cont_print_view"),
-            $this->ui->factory()->legacy($tpl->get())
+            $this->ui->factory()->legacy()->content($tpl->get())
         );
         echo $this->ui->renderer()->render($modal);
         exit();
@@ -2162,7 +2162,7 @@ class ilLMPresentationGUI implements ilCtrlBaseClassInterface, ilCtrlSecurityInt
 
         $modal = $this->ui->factory()->modal()->roundtrip(
             $this->lng->txt("download"),
-            $this->ui->factory()->legacy($tpl->get())
+            $this->ui->factory()->legacy()->content($tpl->get())
         );
         echo $this->ui->renderer()->render($modal);
         exit();

@@ -43,9 +43,10 @@ use ilLink;
 use ilObjBadgeAdministrationGUI;
 use ILIAS\Filesystem\Stream\Streams;
 use ILIAS\UI\Component\Table\Action\Action;
-use ilAccess;
+use ilAccessHandler;
+use ILIAS\UI\Component\Table\Column\Column;
 
-class ilObjectBadgeTableGUI
+class ilObjectBadgeTableGUI implements DataRetrieval
 {
     private readonly Factory $factory;
     private readonly Renderer $renderer;
@@ -54,11 +55,14 @@ class ilObjectBadgeTableGUI
     private readonly Services $http;
     private readonly ilLanguage $lng;
     private readonly ilGlobalTemplateInterface $tpl;
-    private ilObjBadgeAdministrationGUI $parent_obj;
-    private ilAccess $access;
+    private readonly ilObjBadgeAdministrationGUI $parent_obj;
+    private readonly ilAccessHandler $access;
+    private readonly ilBadgeImage $badge_image_service;
 
-    public function __construct(ilObjBadgeAdministrationGUI $parentObj)
-    {
+    public function __construct(
+        ilObjBadgeAdministrationGUI $parentObj,
+        protected bool $has_write = false
+    ) {
         global $DIC;
 
         $this->lng = $DIC->language();
@@ -70,218 +74,209 @@ class ilObjectBadgeTableGUI
         $this->http = $DIC->http();
         $this->access = $DIC->access();
         $this->parent_obj = $parentObj;
-
+        $this->badge_image_service = new ilBadgeImage(
+            $DIC->resourceStorage(),
+            $DIC->upload(),
+            $DIC->ui()->mainTemplate()
+        );
     }
 
-    private function buildDataRetrievalObject(
-        Factory $f,
-        Renderer $r,
-        ilObjBadgeAdministrationGUI $p
-    ): DataRetrieval {
-        return new class ($f, $r, $p) implements DataRetrieval {
-            private ilBadgeImage $badge_image_service;
-            private Factory $factory;
-            private Renderer $renderer;
-            private \ilCtrlInterface $ctrl;
-            private ilLanguage $lng;
-            private \ilAccessHandler $access;
+    public function getRows(
+        DataRowBuilder $row_builder,
+        array $visible_column_ids,
+        Range $range,
+        Order $order,
+        ?array $filter_data,
+        ?array $additional_parameters
+    ): Generator {
+        $records = $this->getRecords($range, $order);
+        foreach ($records as $record) {
+            yield $row_builder->buildDataRow((string) $record['id'], $record);
+        }
+    }
 
-            public function __construct(
-                private Factory $ui_factory,
-                private Renderer $ui_renderer,
-                private ilObjBadgeAdministrationGUI $parent
-            ) {
-                global $DIC;
+    public function getTotalRowCount(
+        ?array $filter_data,
+        ?array $additional_parameters
+    ): ?int {
+        return \count($this->getRecords());
+    }
 
-                $this->badge_image_service = new ilBadgeImage(
-                    $DIC->resourceStorage(),
-                    $DIC->upload(),
-                    $DIC->ui()->mainTemplate()
+    /**
+     * @return list<array{
+     *     id: int,
+     *     active: bool,
+     *     type: string,
+     *     image: string,
+     *     title: string,
+     *     title_sortable: string,
+     *     container: string,
+     *     container_sortable: string
+     * }>
+     */
+    private function getRecords(Range $range = null, Order $order = null): array
+    {
+        $container_deleted_title_part = '<span class="il_ItemAlertProperty">' . $this->lng->txt('deleted') . '</span>';
+        $modal_container = new ModalBuilder();
+
+        // A filter is not implemented, yet
+        $filter = [
+            'type' => '',
+            'title' => '',
+            'object' => ''
+        ];
+
+        $types = ilBadgeHandler::getInstance()->getAvailableTypes(false);
+        $rows = [];
+        foreach (ilBadge::getObjectInstances($filter) as $badge_item) {
+            $type_caption = ilBadge::getExtendedTypeCaption($types[$badge_item['type_id']]);
+
+            $badge = new ilBadge(0);
+            $badge->setId($badge_item['id']);
+            $badge->setImageRid($badge_item['image_rid']);
+            $badge->setImage($badge_item['image']);
+
+            $images = [
+                'rendered' => null,
+                'large' => null,
+            ];
+            $image_src = $this->badge_image_service->getImageFromResourceId($badge);
+            if ($image_src !== '') {
+                $images['rendered'] = $this->renderer->render(
+                    $this->factory->image()->responsive(
+                        $image_src,
+                        $badge_item['title']
+                    )
                 );
-                $this->factory = $this->ui_factory;
-                $this->renderer = $this->ui_renderer;
-                $this->ctrl = $DIC->ctrl();
-                $this->lng = $DIC->language();
-                $this->access = $DIC->access();
-            }
 
-            public function getRows(
-                DataRowBuilder $row_builder,
-                array $visible_column_ids,
-                Range $range,
-                Order $order,
-                ?array $filter_data,
-                ?array $additional_parameters
-            ): Generator {
-                $records = $this->getRecords($range, $order);
-                foreach ($records as $record) {
-                    $row_id = (string) $record['id'];
-                    yield $row_builder->buildDataRow($row_id, $record);
+                $image_src_large = $this->badge_image_service->getImageFromResourceId(
+                    $badge,
+                    ilBadgeImage::IMAGE_SIZE_XL
+                );
+                if ($image_src_large !== '') {
+                    $images['large'] = $this->factory->image()->responsive(
+                        $image_src_large,
+                        $badge_item['title']
+                    );
                 }
             }
 
-            public function getTotalRowCount(
-                ?array $filter_data,
-                ?array $additional_parameters
-            ): ?int {
-                return \count($this->getRecords());
+            $sortable_container_title_parts = [
+                'title' => $badge_item['parent_title'] ?? ''
+            ];
+            $container_title_parts = [
+                'icon' => $this->renderer->render(
+                    $this->factory->symbol()->icon()->custom(
+                        ilObject::_getIcon($badge_item['parent_id'], 'big', $badge_item['parent_type'] ?? ''),
+                        $this->lng->txt('obj_' . ($badge_item['parent_type'] ?? ''))
+                    )
+                ),
+                'title' => $sortable_container_title_parts['title'],
+            ];
+
+            if ($badge_item['deleted']) {
+                $container_title_parts['suffix'] = $container_deleted_title_part;
+                $sortable_container_title_parts['suffix'] = $container_deleted_title_part;
+            } else {
+                $ref_ids = ilObject::_getAllReferences($badge_item['parent_id']);
+                $ref_id = array_shift($ref_ids);
+                if ($ref_id && $this->access->checkAccess('read', '', $ref_id)) {
+                    $container_title_parts['title'] = $this->renderer->render(
+                        new Standard(
+                            $container_title_parts['title'],
+                            (string) new URI(ilLink::_getLink($ref_id))
+                        )
+                    );
+                } else {
+                    $container_title_parts['suffix'] = $container_deleted_title_part;
+                    $sortable_container_title_parts['suffix'] = $container_deleted_title_part;
+                }
             }
 
-            /**
-             * @return list<array{
-             *     id: int,
-             *     active: bool,
-             *     type: string,
-             *     image: string,
-             *     image_sortable: string,
-             *     title: string,
-             *     title_sortable: string,
-             *     container: string,
-             *     container_sortable: string
-             * }>
-             */
-            private function getRecords(Range $range = null, Order $order = null): array
-            {
-                $container_deleted_title_part = '<span class="il_ItemAlertProperty">' . $this->lng->txt('deleted') . '</span>';
-                $modal_container = new ModalBuilder();
+            $modal = $modal_container->constructModal(
+                $images['large'],
+                $badge_item['title'],
+                [
+                    'active' => $badge_item['active'] ? $this->lng->txt('yes') : $this->lng->txt('no'),
+                    'type' => $type_caption,
+                    'container' => implode(' ', \array_slice($container_title_parts, 1, null, true)),
+                ]
+            );
 
-                // A filter is not implemented, yet
-                $filter = [
-                    'type' => '',
-                    'title' => '',
-                    'object' => ''
-                ];
+            $rows[] = [
+                'id' => $badge_item['id'],
+                'active' => (bool) $badge_item['active'],
+                'type' => $type_caption,
+                'image' => $images['rendered'] ? ($modal_container->renderShyButton(
+                    $images['rendered'],
+                    $modal
+                ) . ' ') : '',
+                'title' => implode('', [
+                    $modal_container->renderShyButton($badge_item['title'], $modal),
+                    $modal_container->renderModal($modal)
+                ]),
+                'title_sortable' => $badge_item['title'],
+                'container' => implode(' ', $container_title_parts),
+                'container_sortable' => implode(' ', $sortable_container_title_parts),
+            ];
+        }
 
-                $types = ilBadgeHandler::getInstance()->getAvailableTypes(false);
-                $rows = [];
-                foreach (ilBadge::getObjectInstances($filter) as $badge_item) {
-                    $type_caption = ilBadge::getExtendedTypeCaption($types[$badge_item['type_id']]);
+        if ($order) {
+            [$order_field, $order_direction] = $order->join(
+                [],
+                fn($ret, $key, $value) => [$key, $value]
+            );
 
-                    $images = [
-                        'rendered' => '',
-                        'rendered_large' => '',
-                    ];
-                    $image_src = $this->badge_image_service->getImageFromResourceId(
-                        $badge_item,
-                        $badge_item['image_rid']
-                    );
-                    if ($image_src !== '') {
-                        $images['rendered'] = $this->renderer->render(
-                            $this->factory->image()->responsive(
-                                $image_src,
-                                $badge_item['title']
-                            )
-                        );
-
-                        $image_html_large = $this->badge_image_service->getImageFromResourceId(
-                            $badge_item,
-                            $badge_item['image_rid'],
-                            ilBadgeImage::IMAGE_SIZE_XL
-                        );
-                        if ($image_html_large !== '') {
-                            $images['rendered_large'] = $this->ui_factory->image()->responsive(
-                                $image_html_large,
-                                $badge_item['title']
-                            );
-                        }
+            usort($rows, static function (array $left, array $right) use ($order_field): int {
+                if (\in_array($order_field, ['container', 'title', 'type'], true)) {
+                    if (\in_array($order_field, ['container', 'title'], true)) {
+                        $order_field .= '_sortable';
                     }
 
-                    $sortable_container_title_parts = [
-                        'title' => $badge_item['parent_title'] ?? ''
-                    ];
-                    $container_title_parts = [
-                        'icon' => $this->ui_renderer->render($this->ui_factory->symbol()->icon()->custom(
-                            ilObject::_getIcon($badge_item['parent_id'], 'big', $badge_item['parent_type'] ?? ''),
-                            $this->lng->txt('obj_' . ($badge_item['parent_type'] ?? ''))
-                        )),
-                        'title' => $sortable_container_title_parts['title'],
-                    ];
-
-                    if ($badge_item['deleted']) {
-                        $container_title_parts['suffix'] = $container_deleted_title_part;
-                        $sortable_container_title_parts['suffix'] = $container_deleted_title_part;
-                    } else {
-                        $ref_ids = ilObject::_getAllReferences($badge_item['parent_id']);
-                        $ref_id = array_shift($ref_ids);
-                        if ($ref_id && $this->access->checkAccess('read', '', $ref_id)) {
-                            $container_title_parts['title'] = $this->renderer->render(
-                                new Standard(
-                                    $container_title_parts['title'],
-                                    (string) new URI(ilLink::_getLink($ref_id))
-                                )
-                            );
-                        } else {
-                            $container_title_parts['suffix'] = $container_deleted_title_part;
-                            $sortable_container_title_parts['suffix'] = $container_deleted_title_part;
-                        }
-                    }
-
-                    $badge_information = [
-                        'active' => $badge_item['active'] ? $this->lng->txt('yes') : $this->lng->txt('no'),
-                        'type' => $type_caption,
-                        'container' => implode(' ', \array_slice($container_title_parts, 1, null, true)),
-                    ];
-
-                    $modal = $modal_container->constructModal(
-                        $images['rendered_large'] ?: null,
-                        $badge_item['title'],
-                        $badge_information
+                    return \ilStr::strCmp(
+                        $left[$order_field],
+                        $right[$order_field]
                     );
-
-                    $rows[] = [
-                        'id' => $badge_item['id'],
-                        'active' => (bool) $badge_item['active'],
-                        'type' => $type_caption,
-                        'image' => $images['rendered'] ? ($modal_container->renderShyButton(
-                            $images['rendered'],
-                            $modal
-                        ) . ' ') : '',
-                        // Just an boolean-like indicator for sorting
-                        'image_sortable' => $images['rendered'] ? 'A' : 'Z',
-                        'title' => implode('', [
-                            $modal_container->renderShyButton($badge_item['title'], $modal),
-                            $modal_container->renderModal($modal)
-                        ]),
-                        'title_sortable' => $badge_item['title'],
-                        'container' => implode(' ', $container_title_parts),
-                        'container_sortable' => implode(' ', $sortable_container_title_parts),
-                    ];
                 }
 
-                if ($order) {
-                    [$order_field, $order_direction] = $order->join(
-                        [],
-                        fn($ret, $key, $value) => [$key, $value]
-                    );
-                    usort(
-                        $rows,
-                        static function (array $left, array $right) use ($order_field): int {
-                            if (\in_array($order_field, ['image', 'container', 'title'], true)) {
-                                return \ilStr::strCmp(
-                                    $left[$order_field . '_sortable'],
-                                    $right[$order_field . '_sortable']
-                                );
-                            }
-
-                            return $left[$order_field] <=> $right[$order_field];
-                        }
-                    );
-                    if ($order_field === 'active') {
-                        if ($order_direction === 'ASC') {
-                            $rows = array_reverse($rows);
-                        }
-                    } elseif ($order_direction === 'DESC') {
-                        $rows = array_reverse($rows);
-                    }
+                if ($order_field === 'active') {
+                    return $right[$order_field] <=> $left[$order_field];
                 }
 
-                if ($range) {
-                    $rows = \array_slice($rows, $range->getStart(), $range->getLength());
-                }
+                return $left[$order_field] <=> $right[$order_field];
+            });
 
-                return $rows;
+            if ($order_direction === Order::DESC) {
+                $rows = array_reverse($rows);
             }
-        };
+        }
+
+        if ($range) {
+            $rows = \array_slice($rows, $range->getStart(), $range->getLength());
+        }
+
+        return $rows;
+    }
+
+    /**
+     * @return array<string, Column>
+     */
+    public function getColumns(): array
+    {
+        return [
+            'image' => $this->factory->table()->column()->text($this->lng->txt('image'))->withIsSortable(false),
+            'title' => $this->factory->table()->column()->text($this->lng->txt('title')),
+            'type' => $this->factory->table()->column()->text($this->lng->txt('type')),
+            'container' => $this->factory->table()->column()->text($this->lng->txt('container')),
+            'active' => $this->factory->table()->column()->boolean(
+                $this->lng->txt('active'),
+                $this->lng->txt('yes'),
+                $this->lng->txt('no')
+            )->withOrderingLabels(
+                $this->lng->txt('badge_sort_active_badges_first'),
+                $this->lng->txt('badge_sort_active_badges_last')
+            )
+        ];
     }
 
     /**
@@ -292,91 +287,81 @@ class ilObjectBadgeTableGUI
         URLBuilderToken $action_parameter_token,
         URLBuilderToken $row_id_token
     ): array {
-        $f = $this->factory;
-        $actions = [
-            'obj_badge_activate' => $f->table()->action()->multi(
+        return $this->has_write ? [
+            'obj_badge_activate' => $this->factory->table()->action()->multi(
                 $this->lng->txt('activate'),
                 $url_builder->withParameter($action_parameter_token, 'obj_badge_activate'),
                 $row_id_token
             ),
             'obj_badge_deactivate' =>
-                $f->table()->action()->multi(
+                $this->factory->table()->action()->multi(
                     $this->lng->txt('deactivate'),
                     $url_builder->withParameter($action_parameter_token, 'obj_badge_deactivate'),
                     $row_id_token
                 ),
             'obj_badge_delete' =>
-                $f->table()->action()->multi(
+                $this->factory->table()->action()->multi(
                     $this->lng->txt('delete'),
                     $url_builder->withParameter($action_parameter_token, 'obj_badge_delete'),
                     $row_id_token
                 ),
             'obj_badge_show_users' =>
-                $f->table()->action()->single(
+                $this->factory->table()->action()->single(
                     $this->lng->txt('user'),
                     $url_builder->withParameter($action_parameter_token, 'obj_badge_show_users'),
                     $row_id_token
                 )
-        ];
-
-        return $actions;
+        ] : [];
     }
 
     public function renderTable(): void
     {
-        $f = $this->factory;
-        $r = $this->renderer;
-        $refinery = $this->refinery;
-        $request = $this->request;
         $df = new \ILIAS\Data\Factory();
 
-        $columns = [
-            'image' => $f->table()->column()->text($this->lng->txt('image')),
-            'title' => $f->table()->column()->text($this->lng->txt('title')),
-            'type' => $f->table()->column()->text($this->lng->txt('type')),
-            'container' => $f->table()->column()->text($this->lng->txt('container')),
-            'active' => $f->table()->column()->boolean(
-                $this->lng->txt('active'),
-                $this->lng->txt('yes'),
-                $this->lng->txt('no')
-            ),
-        ];
-
-        $table_uri = $df->uri($request->getUri()->__toString());
+        $table_uri = $df->uri($this->request->getUri()->__toString());
         $url_builder = new URLBuilder($table_uri);
         $query_params_namespace = ['tid'];
 
-        [$url_builder, $action_parameter_token, $row_id_token] =
-            $url_builder->acquireParameters(
-                $query_params_namespace,
-                'table_action',
-                'id'
-            );
+        [$url_builder, $action_parameter_token, $row_id_token] = $url_builder->acquireParameters(
+            $query_params_namespace,
+            'table_action',
+            'id',
+        );
 
-        $data_retrieval = $this->buildDataRetrievalObject($f, $r, $this->parent_obj);
-
-        $actions = $this->getActions($url_builder, $action_parameter_token, $row_id_token);
-
-        $table = $f->table()
-                   ->data($this->lng->txt('badge_object_badges'), $columns, $data_retrieval)
-                   ->withOrder(new Order('title', Order::ASC))
-                   ->withActions($actions)
-                   ->withRequest($request);
+        $table = $this->factory
+            ->table()
+            ->data($this->lng->txt('badge_object_badges'), $this->getColumns(), $this)
+            ->withId(self::class)
+            ->withOrder(new Order('title', Order::ASC))
+            ->withActions($this->getActions($url_builder, $action_parameter_token, $row_id_token))
+            ->withRequest($this->request);
 
         $out = [$table];
 
         $query = $this->http->wrapper()->query();
         if ($query->has($action_parameter_token->getName())) {
-            $action = $query->retrieve($action_parameter_token->getName(), $refinery->kindlyTo()->string());
-            $ids = $query->retrieve($row_id_token->getName(), $refinery->custom()->transformation(fn($v) => $v));
+            $action = $query->retrieve($action_parameter_token->getName(), $this->refinery->kindlyTo()->string());
+            $ids = $query->retrieve($row_id_token->getName(), $this->refinery->custom()->transformation(fn($v) => $v));
 
             if ($action === 'obj_badge_delete') {
                 $items = [];
                 if (\is_array($ids) && \count($ids) > 0) {
+                    if ($ids === ['ALL_OBJECTS']) {
+                        $filter = [
+                            'type' => '',
+                            'title' => '',
+                            'object' => ''
+                        ];
+                        $ids = [];
+                        foreach (ilBadge::getObjectInstances($filter) as $badge_item) {
+                            $ids[] = $badge_item['id'];
+                        }
+                    }
+
                     foreach ($ids as $id) {
                         $badge = new ilBadge((int) $id);
-                        $items[] = $f->modal()->interruptiveItem()->keyValue(
-                            $id,
+                        $items[] = $this->factory->modal()->interruptiveItem()->keyValue(
+                            (string) $id,
                             (string) $badge->getId(),
                             $badge->getTitle()
                         );
@@ -386,8 +371,8 @@ class ilObjectBadgeTableGUI
                         $this->http
                             ->response()
                             ->withBody(
-                                Streams::ofString($r->renderAsync([
-                                    $f->modal()->interruptive(
+                                Streams::ofString($this->renderer->renderAsync([
+                                    $this->factory->modal()->interruptive(
                                         $this->lng->txt('badge_deletion'),
                                         $this->lng->txt('badge_deletion_confirmation'),
                                         '#'
@@ -401,6 +386,6 @@ class ilObjectBadgeTableGUI
             }
         }
 
-        $this->tpl->setContent($r->render($out));
+        $this->tpl->setContent($this->renderer->render($out));
     }
 }

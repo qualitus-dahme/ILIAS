@@ -10,10 +10,9 @@ namespace ILIAS\UI\examples\Player\Video;
  *   Example for rendering a vimeo video player.
  *
  * expected output: >
- *   ILIAS shows a rendered video player with a vimeo video. On the left side you will see a Start/Stop
- *   symbol, followed by a time bar and on the right side a symbol for volume control and for the the full screen.
- *   A big start symbol is shown in the middle of the start screen. Clicking the Start/Stop symbol will start playing
- *   the video. Clicking the symbol again will stop the video.
+ *   ILIAS shows a base video player with a vimeo video including all functions like stop/start icons. The subtitle
+ *   symbol (CC) is missing. Clicking the Start/Stop symbol will start playing the video. Clicking the symbol again will
+ *   stop the video.
  *
  *   In addition following functions have to be tested:
  *   - The video starts playing if clicking the start/stop symbol in the middle of the image. The video stops after another click.

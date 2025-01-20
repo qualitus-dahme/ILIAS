@@ -35,7 +35,7 @@ class Renderer extends AbstractComponentRenderer
      */
     public function render(Component\Component $component, RendererInterface $default_renderer): string
     {
-        if (!$component instanceof Component\Legacy\Legacy) {
+        if (!$component instanceof Component\Legacy\Content) {
             $this->cannotHandleComponent($component);
         }
 
@@ -44,7 +44,7 @@ class Renderer extends AbstractComponentRenderer
         return $component->getContent();
     }
 
-    protected function registerSignals(Legacy $component): Component\JavaScriptBindable
+    protected function registerSignals(Content $component): Component\JavaScriptBindable
     {
         $custom_signals = $component->getAllCustomSignals();
 

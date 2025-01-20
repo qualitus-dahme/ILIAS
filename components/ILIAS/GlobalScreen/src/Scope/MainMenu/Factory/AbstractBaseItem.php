@@ -24,7 +24,7 @@ use ILIAS\GlobalScreen\Identification\IdentificationInterface;
 use ILIAS\GlobalScreen\Identification\NullIdentification;
 use ILIAS\GlobalScreen\Scope\ComponentDecoratorTrait;
 use ILIAS\GlobalScreen\Scope\MainMenu\Collector\Information\TypeInformation;
-use ILIAS\UI\Component\Legacy\Legacy;
+use ILIAS\UI\Component\Legacy\Content;
 use Closure;
 use ILIAS\GlobalScreen\Scope\VisibilityAvailabilityTrait;
 use ILIAS\GlobalScreen\Scope\isDecorateable;
@@ -41,7 +41,7 @@ abstract class AbstractBaseItem implements isItem, isDecorateable
     protected ?Closure $active_callable = null;
     protected bool $is_always_available = false;
     protected ?TypeInformation $type_information = null;
-    protected ?Legacy $non_available_reason = null;
+    protected ?Content $non_available_reason = null;
 
     /**
      * AbstractBaseItem constructor.
@@ -59,7 +59,7 @@ abstract class AbstractBaseItem implements isItem, isDecorateable
         return $this->provider_identification;
     }
 
-    public function withNonAvailableReason(Legacy $element): isItem
+    public function withNonAvailableReason(Content $element): isItem
     {
         $clone = clone $this;
         $clone->non_available_reason = $element;
@@ -70,11 +70,11 @@ abstract class AbstractBaseItem implements isItem, isDecorateable
     /**
      * @inheritDoc
      */
-    public function getNonAvailableReason(): Legacy
+    public function getNonAvailableReason(): Content
     {
         global $DIC;
 
-        return $this->non_available_reason instanceof Legacy ? $this->non_available_reason : $DIC->ui()->factory()->legacy("");
+        return $this->non_available_reason instanceof Legacy ? $this->non_available_reason : $DIC->ui()->factory()->legacy()->content("");
     }
 
     /**

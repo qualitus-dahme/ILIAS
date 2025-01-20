@@ -99,7 +99,7 @@ class RequestDataCollector
 
     public function retrieveBoolFromPost(string $key): ?bool
     {
-        if ($this->http->wrapper()->post()->has($key)) {
+        if (!$this->http->wrapper()->post()->has($key)) {
             return null;
         }
 

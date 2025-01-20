@@ -7649,6 +7649,9 @@ button .minimize, button .close {
 .c-drilldown header.c-drilldown__header--showbacknav .c-drilldown__filter {
   display: none;
 }
+.c-drilldown .c-drilldown__menulevel--trigger:focus-visible {
+  z-index: 100;
+}
 .c-drilldown .c-drilldown__menu .c-drilldown__menulevel--trigger,
 .c-drilldown .c-drilldown__menu .btn-bulky,
 .c-drilldown .c-drilldown__menu .link-bulky,
@@ -8005,7 +8008,7 @@ div.alert ul > li:before {
   font-size: 1rem;
   margin: 0;
   line-height: 1.428571429;
-  padding: 0px 39px;
+  padding: 0px;
 }
 
 .modal-body {
@@ -8284,7 +8287,7 @@ div.alert ul > li:before {
   vertical-align: middle;
 }
 .panel-secondary .il-panel-listing-std-container > h2, .panel-secondary .panel-body h4 {
-  display: block;
+  display: inline-block;
   padding: 3px 0;
   font-size: 0.875rem;
   color: #161616;
@@ -11744,6 +11747,7 @@ tbody.collapse.in {
 .img-responsive {
   display: block;
   max-width: 100%;
+  max-height: 100%;
   height: auto;
 }
 
@@ -14622,6 +14626,9 @@ li.ilWikiBlockItem {
 .il_VAccordionContent, .il_HAccordionContent {
   padding-top: 9px;
 }
+.il_VAccordionContent > .c-form.c-form--horizontal, .il_HAccordionContent > .c-form.c-form--horizontal {
+  padding: 0px 15px;
+}
 
 .il_HAccordionHeadActive, .il_VAccordionHeadActive {
   background-image: url("../images/nav/tree_exp.svg");
@@ -17077,7 +17084,6 @@ div.ilHFormFooter .ilFormCmds {
 }
 .btn-file:focus-within {
   outline: 3px solid #0078D7;
-  box-shadow: inset 0px 0px 0px 2px #FFFFFF, 0px 0px 0px 7px red;
 }
 
 .btn-file input[type=file] {

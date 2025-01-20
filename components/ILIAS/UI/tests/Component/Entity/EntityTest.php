@@ -24,7 +24,7 @@ use ILIAS\UI\Implementation\Component\Button;
 use ILIAS\UI\Implementation\Component\Link;
 use ILIAS\UI\Implementation\Component\Image;
 use ILIAS\UI\Implementation\Component\Dropdown;
-use ILIAS\UI\Implementation\Component\Legacy\Legacy;
+use ILIAS\UI\Implementation\Component\Legacy\Content;
 use ILIAS\UI\Implementation\Component\SignalGenerator;
 use ILIAS\UI\Component as I;
 use ILIAS\UI\Factory as UIFactory;
@@ -36,9 +36,9 @@ class EntityTest extends ILIAS_UI_TestBase
         return new Entity\Factory();
     }
 
-    protected function legacy(string $string): Legacy
+    protected function legacy(string $string): Content
     {
-        return new Legacy($string, (new SignalGenerator()));
+        return new Content($string, (new SignalGenerator()));
     }
 
     public function testEntityFactory(): void
@@ -119,7 +119,7 @@ class EntityTest extends ILIAS_UI_TestBase
     public function getUIFactory(): NoUIFactory
     {
         return new class () extends NoUIFactory {
-            public function dropdown(): I\Dropdown\Factory
+            public function dropdown(): Dropdown\Factory
             {
                 return new Dropdown\Factory();
             }

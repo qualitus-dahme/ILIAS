@@ -14,7 +14,6 @@ namespace ILIAS\UI\examples\Input\Field\Text;
  *
  * expected output: >
  *   ILIAS shows a text field titled "Disabled Input". You cannot activate and type anything into the field.
- *   Clicking "Save" will reload the page.
  * ---
  */
 function disabled()

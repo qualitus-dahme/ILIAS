@@ -22,7 +22,7 @@ namespace ILIAS\MetaData\Services\CopyrightHelper;
 
 use ILIAS\UI\Component\Image\Image;
 use ILIAS\UI\Component\Link\Link;
-use ILIAS\UI\Component\Legacy\Legacy;
+use ILIAS\UI\Component\Legacy\Content;
 
 interface CopyrightInterface
 {
@@ -40,7 +40,7 @@ interface CopyrightInterface
      * The copyright as UI Components, as it should be presented in the
      * UI almost everywhere.
      * If only a string can be returned, it is returned in a legacy UI component.
-     * @return Image[]|Link[]|Legacy[]
+     * @return Image[]|Link[]|Content[]
      */
     public function presentAsUIComponents(): array;
 

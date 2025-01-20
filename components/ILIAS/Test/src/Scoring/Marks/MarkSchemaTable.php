@@ -83,7 +83,7 @@ class MarkSchemaTable implements DataRetrieval
                     $this->url_builder->withParameter($this->action_parameter_token, self::EDIT_ACTION_NAME),
                     $this->row_id_token
                 )->withAsync(),
-                self::DELETE_ACTION_NAME => $f->action()->standard(
+                self::DELETE_ACTION_NAME => $f->action()->single(
                     $this->lng->txt('delete'),
                     $this->url_builder->withParameter($this->action_parameter_token, self::DELETE_ACTION_NAME),
                     $this->row_id_token
@@ -110,7 +110,12 @@ class MarkSchemaTable implements DataRetrieval
                     'passed' => $mark->getPassed()
                 ]
             )->withDisabledAction('edit', !$this->marks_editable)
-            ->withDisabledAction('delete', !$this->marks_editable);
+            ->withDisabledAction(
+                'delete',
+                !$this->marks_editable
+                || $mark->getMinimumLevel() === 0.0 && $this->mark_schema->hasSingleZeroPercentageMark()
+                || $mark->getPassed() && $this->mark_schema->hasSinglePassedMark()
+            );
         }
     }
 

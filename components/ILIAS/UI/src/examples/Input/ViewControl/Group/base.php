@@ -42,7 +42,7 @@ function base(): string
     );
 
     return $r->render([
-        $f->legacy('<pre>' . print_r($vc_container->getData(), true) . '</pre>'),
+        $f->legacy()->content('<pre>' . print_r($vc_container->getData(), true) . '</pre>'),
         $vc_container
     ]);
 }

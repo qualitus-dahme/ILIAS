@@ -304,7 +304,7 @@ class TestScoringByQuestionGUI extends TestScoringByParticipantGUI
         $available_points = $question_gui->getObject()->getMaximumPoints();
         $content[] = $this->ui_factory->panel()->standard(
             $this->lng->txt('scoring'),
-            $this->ui_factory->legacy(
+            $this->ui_factory->legacy()->content(
                 sprintf(
                     $this->lng->txt('part_received_a_of_b_points'),
                     $reached_points,
@@ -315,7 +315,7 @@ class TestScoringByQuestionGUI extends TestScoringByParticipantGUI
 
         $suggested_solution = \assQuestion::_getSuggestedSolutionOutput($question_id);
         if ($this->object->getShowSolutionSuggested() && $suggested_solution !== '') {
-            $content[] = $this->ui_factory->legacy(
+            $content[] = $this->ui_factory->legacy()->content(
                 $this->ui_factory->panel()->standard(
                     $this->lng->txt('solution_hint'),
                     $suggested_solution
@@ -323,7 +323,7 @@ class TestScoringByQuestionGUI extends TestScoringByParticipantGUI
             );
         }
 
-        $content[] = $this->ui_factory->legacy(($form ?? $this->buildForm(
+        $content[] = $this->ui_factory->legacy()->content(($form ?? $this->buildForm(
             $attempt,
             $active_id,
             $question_id,
@@ -344,7 +344,7 @@ class TestScoringByQuestionGUI extends TestScoringByParticipantGUI
     ): StandardPanel {
         return $this->ui_factory->panel()->standard(
             $question_gui->getObject()->getTitle(),
-            $this->ui_factory->legacy(
+            $this->ui_factory->legacy()->content(
                 $question_gui->getSolutionOutput(
                     $active_id,
                     $attempt,
@@ -364,7 +364,7 @@ class TestScoringByQuestionGUI extends TestScoringByParticipantGUI
     ): StandardPanel {
         return $this->ui_factory->panel()->standard(
             $this->lng->txt('autosavecontent'),
-            $this->ui_factory->legacy(
+            $this->ui_factory->legacy()->content(
                 $question_gui->getAutoSavedSolutionOutput(
                     $active_id,
                     $attempt,

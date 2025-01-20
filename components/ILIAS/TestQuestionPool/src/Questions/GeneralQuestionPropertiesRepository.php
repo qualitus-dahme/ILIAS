@@ -412,7 +412,7 @@ class GeneralQuestionPropertiesRepository
         }
 
         $plugin_slot = !$this->component_repository->getComponentByTypeAndName(
-            ilComponentInfo::TYPE_MODULES,
+            \ilComponentInfo::TYPE_MODULES,
             'TestQuestionPool'
         )->getPluginSlotById('qst');
 

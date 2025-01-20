@@ -103,7 +103,7 @@ class StandardTopItemsProvider extends AbstractStaticMainMenuProvider
             ->withTitle($title)
             ->withAction("ilias.php?baseClass=ilDashboardGUI&cmd=jumpToMemberships")
             ->withPosition(10)
-            ->withNonAvailableReason($this->dic->ui()->factory()->legacy("{$this->dic->language()->txt('component_not_active')}"))
+            ->withNonAvailableReason($this->dic->ui()->factory()->legacy()->content("{$this->dic->language()->txt('component_not_active')}"))
             ->withAvailableCallable(
                 function () {
                     return true;

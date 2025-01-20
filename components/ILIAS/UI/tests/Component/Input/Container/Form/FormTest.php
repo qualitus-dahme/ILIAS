@@ -24,7 +24,7 @@ use ILIAS\UI\Implementation\Component as I;
 use ILIAS\UI\Implementation\Component\Input;
 use ILIAS\UI\Component\Input\Container\Form\FormInput;
 use ILIAS\UI\Implementation\Component\Input\NameSource;
-use ILIAS\UI\Implementation\Component\Input\InputData;
+use ILIAS\UI\Component\Input\InputData;
 use ILIAS\UI\Implementation\Component\Input\Container\Form\Form;
 use ILIAS\UI\Implementation\Component\SignalGenerator;
 use ILIAS\Data;
@@ -46,7 +46,7 @@ class FixedNameSource implements NameSource
 
 class ConcreteForm extends Form
 {
-    public ?Input\InputData $input_data = null;
+    public ?InputData $input_data = null;
     protected Input\Field\Factory $input_factory;
     protected Group $input_group;
     protected array $inputs;
@@ -57,12 +57,12 @@ class ConcreteForm extends Form
         parent::__construct($input_factory, $name_source, $inputs);
     }
 
-    public function _extractRequestData(ServerRequestInterface $request): Input\InputData
+    public function _extractRequestData(ServerRequestInterface $request): InputData
     {
         return $this->extractRequestData($request);
     }
 
-    public function extractRequestData(ServerRequestInterface $request): Input\InputData
+    public function extractRequestData(ServerRequestInterface $request): InputData
     {
         if ($this->input_data !== null) {
             return $this->input_data;

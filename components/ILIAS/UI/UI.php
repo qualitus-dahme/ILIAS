@@ -35,13 +35,16 @@ class UI implements Component\Component
         $define[] = UI\Factory::class;
         $define[] = UI\Renderer::class;
         $define[] = UI\HelpTextRetriever::class;
-        $define[] = UI\Component\Table\Storage::class;
+        $define[] = UI\Storage::class;
         $define[] = UI\Component\Progress\AsyncRefreshInterval::class;
         $define[] = UI\Component\Input\Field\PhpUploadLimit::class;
         $define[] = UI\Component\Input\Field\GlobalUploadLimit::class;
+        $define[] = UI\Implementation\FactoryInternal::class;
         $define[] = UI\Implementation\Render\ImagePathResolver::class;
 
         $implement[UI\Factory::class] = static fn() =>
+            $use[UI\Implementation\FactoryInternal::class];
+        $implement[UI\Implementation\FactoryInternal::class] = static fn() =>
             $internal[UI\Implementation\Factory::class];
         $implement[UI\Renderer::class] = static fn() =>
             $internal[UI\Implementation\DefaultRenderer::class];
@@ -58,8 +61,16 @@ class UI implements Component\Component
             $internal[UI\Implementation\Component\Button\Factory::class];
         $provide[UI\Implementation\Component\Listing\Factory::class] = static fn() =>
             $internal[UI\Implementation\Component\Listing\Factory::class];
+        $provide[UI\Implementation\Component\Listing\Workflow\Factory::class] = static fn() =>
+            $internal[UI\Implementation\Component\Listing\Workflow\Factory::class];
+        $provide[UI\Implementation\Component\Listing\CharacteristicValue\Factory::class] = static fn() =>
+            $internal[UI\Implementation\Component\Listing\CharacteristicValue\Factory::class];
+        $provide[UI\Implementation\Component\Listing\Entity\Factory::class] = static fn() =>
+            $internal[UI\Implementation\Component\Listing\Entity\Factory::class];
         $provide[UI\Implementation\Component\Image\Factory::class] = static fn() =>
             $internal[UI\Implementation\Component\Image\Factory::class];
+        $provide[UI\Implementation\Component\Player\Factory::class] = static fn() =>
+            $internal[UI\Implementation\Component\Player\Factory::class];
         $provide[UI\Implementation\Component\Panel\Factory::class] = static fn() =>
             $internal[UI\Implementation\Component\Panel\Factory::class];
         $provide[UI\Implementation\Component\Modal\Factory::class] = static fn() =>
@@ -96,10 +107,16 @@ class UI implements Component\Component
             $internal[UI\Implementation\Component\Card\Factory::class];
         $provide[UI\Implementation\Component\Layout\Factory::class] = static fn() =>
             $internal[UI\Implementation\Component\Layout\Factory::class];
+        $provide[UI\Implementation\Component\Layout\Page\Factory::class] = static fn() =>
+            $internal[UI\Implementation\Component\Layout\Page\Factory::class];
+        $provide[UI\Implementation\Component\Layout\Alignment\Factory::class] = static fn() =>
+            $internal[UI\Implementation\Component\Layout\Alignment\Factory::class];
         $provide[UI\Implementation\Component\MainControls\Factory::class] = static fn() =>
             $internal[UI\Implementation\Component\MainControls\Factory::class];
         $provide[UI\Implementation\Component\Tree\Factory::class] = static fn() =>
             $internal[UI\Implementation\Component\Tree\Factory::class];
+        $provide[UI\Implementation\Component\Tree\Node\Factory::class] = static fn() =>
+            $internal[UI\Implementation\Component\Tree\Node\Factory::class];
         $provide[UI\Implementation\Component\Menu\Factory::class] = static fn() =>
             $internal[UI\Implementation\Component\Menu\Factory::class];
         $provide[UI\Implementation\Component\Symbol\Factory::class] = static fn() =>
@@ -112,6 +129,8 @@ class UI implements Component\Component
             $internal[UI\Implementation\Component\Launcher\Factory::class];
         $provide[UI\Implementation\Component\Entity\Factory::class] = static fn() =>
             $internal[UI\Implementation\Component\Entity\Factory::class];
+        $provide[UI\Implementation\Component\Panel\Secondary\Factory::class] = static fn() =>
+            $internal[UI\Implementation\Component\Panel\Secondary\Factory::class];
         $provide[UI\Implementation\Component\Panel\Listing\Factory::class] = static fn() =>
             $internal[UI\Implementation\Component\Panel\Listing\Factory::class];
         $provide[UI\Implementation\Component\Modal\InterruptiveItem\Factory::class] = static fn() =>
@@ -154,6 +173,7 @@ class UI implements Component\Component
                 $internal[UI\Implementation\Component\Button\Factory::class],
                 $internal[UI\Implementation\Component\Listing\Factory::class],
                 $internal[UI\Implementation\Component\Image\Factory::class],
+                $internal[UI\Implementation\Component\Player\Factory::class],
                 $internal[UI\Implementation\Component\Panel\Factory::class],
                 $internal[UI\Implementation\Component\Modal\Factory::class],
                 $internal[UI\Implementation\Component\Progress\Factory::class],
@@ -188,17 +208,33 @@ class UI implements Component\Component
             new UI\Implementation\Component\Button\Factory();
 
         $internal[UI\Implementation\Component\Listing\Factory::class] = static fn() =>
-            new UI\Implementation\Component\Listing\Factory();
+            new UI\Implementation\Component\Listing\Factory(
+                $internal[UI\Implementation\Component\Listing\Workflow\Factory::class],
+                $internal[UI\Implementation\Component\Listing\CharacteristicValue\Factory::class],
+                $internal[UI\Implementation\Component\Listing\Entity\Factory::class],
+            );
+        $internal[UI\Implementation\Component\Listing\Workflow\Factory::class] = static fn() =>
+            new UI\Implementation\Component\Listing\Workflow\Factory();
+        $internal[UI\Implementation\Component\Listing\CharacteristicValue\Factory::class] = static fn() =>
+            new UI\Implementation\Component\Listing\CharacteristicValue\Factory();
+        $internal[UI\Implementation\Component\Listing\Entity\Factory::class] = static fn() =>
+            new UI\Implementation\Component\Listing\Entity\Factory();
 
         $internal[UI\Implementation\Component\Image\Factory::class] = static fn() =>
             new UI\Implementation\Component\Image\Factory();
 
+        $internal[UI\Implementation\Component\Player\Factory::class] = static fn() =>
+            new UI\Implementation\Component\Player\Factory();
+
         $internal[UI\Implementation\Component\Panel\Factory::class] = static fn() =>
             new UI\Implementation\Component\Panel\Factory(
                 $internal[UI\Implementation\Component\Panel\Listing\Factory::class],
+                $internal[UI\Implementation\Component\Panel\Secondary\Factory::class],
             );
         $internal[UI\Implementation\Component\Panel\Listing\Factory::class] = static fn() =>
             new UI\Implementation\Component\Panel\Listing\Factory();
+        $internal[UI\Implementation\Component\Panel\Secondary\Factory::class] = static fn() =>
+            new UI\Implementation\Component\Panel\Secondary\Factory();
 
         $internal[UI\Implementation\Component\Modal\Factory::class] = static fn() =>
             new UI\Implementation\Component\Modal\Factory(
@@ -326,7 +362,7 @@ class UI implements Component\Component
                 $pull[Data\Factory::class],
                 $internal[UI\Implementation\Component\Table\Column\Factory::class],
                 $internal[UI\Implementation\Component\Table\Action\Factory::class],
-                $use[UI\Component\Table\Storage::class],
+                $use[UI\Storage::class],
                 $internal[UI\Implementation\Component\Table\DataRowBuilder::class],
                 $internal[UI\Implementation\Component\Table\OrderingRowBuilder::class],
             );
@@ -348,7 +384,14 @@ class UI implements Component\Component
             new UI\Implementation\Component\Card\Factory();
 
         $internal[UI\Implementation\Component\Layout\Factory::class] = static fn() =>
-            new UI\Implementation\Component\Layout\Factory();
+            new UI\Implementation\Component\Layout\Factory(
+                $internal[UI\Implementation\Component\Layout\Page\Factory::class],
+                $internal[UI\Implementation\Component\Layout\Alignment\Factory::class],
+            );
+        $internal[UI\Implementation\Component\Layout\Page\Factory::class] = static fn() =>
+            new UI\Implementation\Component\Layout\Page\Factory();
+        $internal[UI\Implementation\Component\Layout\Alignment\Factory::class] = static fn() =>
+            new UI\Implementation\Component\Layout\Alignment\Factory();
 
         $internal[UI\Implementation\Component\MainControls\Factory::class] = static fn() =>
             new UI\Implementation\Component\MainControls\Factory(
@@ -363,7 +406,11 @@ class UI implements Component\Component
             );
 
         $internal[UI\Implementation\Component\Tree\Factory::class] = static fn() =>
-            new UI\Implementation\Component\Tree\Factory();
+            new UI\Implementation\Component\Tree\Factory(
+                $internal[UI\Implementation\Component\Tree\Node\Factory::class],
+            );
+        $internal[UI\Implementation\Component\Tree\Node\Factory::class] = static fn() =>
+            new UI\Implementation\Component\Tree\Node\Factory();
 
         $internal[UI\Implementation\Component\Menu\Factory::class] = static fn() =>
             new UI\Implementation\Component\Menu\Factory(
@@ -420,7 +467,7 @@ class UI implements Component\Component
                     $internal[UI\Implementation\Render\ResourceRegistry::class],
                     new UI\Implementation\Render\FSLoader(
                         new UI\Implementation\Render\DefaultRendererFactory(
-                            $use[UI\Factory::class],
+                            $use[UI\Implementation\FactoryInternal::class],
                             $internal[UI\Implementation\Render\TemplateFactory::class],
                             $use[Language\Language::class],
                             $internal[UI\Implementation\Render\JavaScriptBinding::class],
@@ -430,7 +477,7 @@ class UI implements Component\Component
                             $internal[UI\Implementation\Component\Input\UploadLimitResolver::class],
                         ),
                         new UI\Implementation\Component\Symbol\Glyph\GlyphRendererFactory(
-                            $use[UI\Factory::class],
+                            $use[UI\Implementation\FactoryInternal::class],
                             $internal[UI\Implementation\Render\TemplateFactory::class],
                             $use[Language\Language::class],
                             $internal[UI\Implementation\Render\JavaScriptBinding::class],
@@ -440,7 +487,7 @@ class UI implements Component\Component
                             $internal[UI\Implementation\Component\Input\UploadLimitResolver::class],
                         ),
                         new UI\Implementation\Component\Input\Field\FieldRendererFactory(
-                            $use[UI\Factory::class],
+                            $use[UI\Implementation\FactoryInternal::class],
                             $internal[UI\Implementation\Render\TemplateFactory::class],
                             $use[Language\Language::class],
                             $internal[UI\Implementation\Render\JavaScriptBinding::class],
@@ -450,7 +497,7 @@ class UI implements Component\Component
                             $internal[UI\Implementation\Component\Input\UploadLimitResolver::class],
                         ),
                         new UI\Implementation\Component\MessageBox\MessageBoxRendererFactory(
-                            $use[UI\Factory::class],
+                            $use[UI\Implementation\FactoryInternal::class],
                             $internal[UI\Implementation\Render\TemplateFactory::class],
                             $use[Language\Language::class],
                             $internal[UI\Implementation\Render\JavaScriptBinding::class],
@@ -460,7 +507,7 @@ class UI implements Component\Component
                             $internal[UI\Implementation\Component\Input\UploadLimitResolver::class],
                         ),
                         new UI\Implementation\Component\Input\Container\Form\FormRendererFactory(
-                            $use[UI\Factory::class],
+                            $use[UI\Implementation\FactoryInternal::class],
                             $internal[UI\Implementation\Render\TemplateFactory::class],
                             $use[Language\Language::class],
                             $internal[UI\Implementation\Render\JavaScriptBinding::class],
@@ -551,6 +598,8 @@ class UI implements Component\Component
             new Component\Resource\NodeModule("chart.js/dist/chart.umd.js");
         $contribute[Component\Resource\PublicAsset::class] = fn() =>
             new Component\Resource\ComponentJS($this, "js/Progress/dist/progress.min.js");
+        $contribute[Component\Resource\PublicAsset::class] = fn() =>
+            new Component\Resource\ComponentJS($this, "js/MainControls/dist/footer.min.js");
         /*
         those are contributed by MediaObjects
         $contribute[Component\Resource\PublicAsset::class] = fn() =>

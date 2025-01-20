@@ -114,9 +114,7 @@ class ilDataCollectionDataSet extends ilDataSet
     ): void {
         foreach ($a_rec as $key => &$value) {
             $array = json_decode($value, true);
-            if ($key === 'title' || $key === 'description') {
-                $value = strip_tags($value, ilObjectGUI::ALLOWED_TAGS_IN_TITLE_AND_DESCRIPTION);
-            } elseif (is_array($array)) {
+            if (is_array($array)) {
                 $value = json_encode($this->escapeArray($array));
             } else {
                 $value = $this->refinery->encode()->htmlSpecialCharsAsEntities()->transform($value);

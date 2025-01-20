@@ -10,10 +10,9 @@ namespace ILIAS\UI\examples\Panel\Secondary\Listing;
  *   Example for rendering a panel secondary listing.
  *
  * expected output: >
- *   ILIAS shows a panel titled "Listing Panel Title", an action menu and two item groups titled "Listing Subtitle 1" and
- *   "Listing Subtitle 2". The first item group includes two items which displays action menu symbols (arrows on the right).
- *   The menu opens weblinks to ilias.de and GitHub. The second item group displays one item.
- *   The whole display is more compact in comparison to the standard listing panel.
+ *   ILIAS shows a panel with a title, an action menu and two item groups. The first item group includes two items and
+ *   action menu symbols. The menu opens weblinks. The second item group displays one item. The whole display is more
+ *   compact in comparison to the standard listing panel.
  * ---
  */
 function base()

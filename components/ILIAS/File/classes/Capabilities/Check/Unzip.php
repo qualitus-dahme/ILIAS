@@ -43,7 +43,7 @@ class Unzip extends BaseCheck implements Check
             return $capability;
         }
 
-        return $capability->withUnlocked($this->hasPermission($helpers, $ref_id, $capability->getPermission()));
+        return $capability->withUnlocked($this->hasPermission($helpers, $ref_id, ...$capability->getPermissions()));
     }
 
     public function maybeBuildURI(Capability $capability, CheckHelpers $helpers, int $ref_id): Capability

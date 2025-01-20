@@ -12,7 +12,7 @@ namespace ILIAS\UI\examples\Input\Field\Url;
  *
  * expected output: >
  *   ILIAS shows an input field titled "Basic Input". You can enter numbers and letters. The colored error message "Some
- *   error" is displayed above the field. Clicking "Save" will relaod the page.
+ *   error" is displayed above the field.
  * ---
  */
 function with_error()

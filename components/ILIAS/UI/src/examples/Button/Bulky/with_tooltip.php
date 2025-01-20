@@ -10,7 +10,7 @@ namespace ILIAS\UI\examples\Button\Bulky;
  *   Example for rendering a bulky button with tooltips
  *
  * expected output: >
- *   ILIAS shows an icon titled "Goto ILIAS". Hovering over the text will show you the following tooltips: "tooltip: ilias"
+ *   Hovering over the rendered text will show you the following tooltips: "tooltip: ilias"
  *   and "tooltip: learning management system".
  * ---
  */

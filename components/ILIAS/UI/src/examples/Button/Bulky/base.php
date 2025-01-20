@@ -13,10 +13,7 @@ namespace ILIAS\UI\examples\Button\Bulky;
  *   The exact look of the Bulky Buttons is mostly defined by the surrounding container.
  *
  * expected output: >
- *   ILIAS shows a button with an icon and titled "Icon". The button's size is almost as wide as the width of the box
- *   in the background. Clicking the button won't activate any actions.
- *   Additionally ILIAS shows a button with a glyph and the title "Glyph". The button's size is also almost as wide as
- *   the width of the box in the background. Clicking the button won't activate any actions.
+ *   ILIAS shows buttons with icons, glyphs and in some cases a title. Clicking the button won't activate any actions.
  * ---
  */
 function base()

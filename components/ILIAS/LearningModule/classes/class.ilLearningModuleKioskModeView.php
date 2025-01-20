@@ -248,6 +248,6 @@ class ilLearningModuleKioskModeView extends ilKioskModeView
         $content = $this->uiRenderer->render($this->messages);
         $content .= $this->ctrl->getHTML($this->lm_pres, ["cmd" => "layout"], ["illmpresentationgui"]);
         $content .= $this->uiRenderer->render($additional_content);
-        return $factory->legacy($content);
+        return $factory->legacy()->content($content);
     }
 }

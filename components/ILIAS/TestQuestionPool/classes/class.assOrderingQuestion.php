@@ -1309,6 +1309,9 @@ class assOrderingQuestion extends assQuestion implements ilObjQuestionScoringAdj
         AdditionalInformationGenerator $additional_info,
         array $solution_values
     ): array {
+        if ($solution_values === []) {
+            return [];
+        }
         return $this->getElementArrayWithIdentationsForTextOutput(
             $this->getSolutionOrderingElementList(
                 $this->fetchIndexedValuesFromValuePairs($solution_values)

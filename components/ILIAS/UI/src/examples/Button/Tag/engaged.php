@@ -10,7 +10,7 @@ namespace ILIAS\UI\examples\Button\Tag;
  *   Example for rendering an engaged Tag Button
  *
  * expected output: >
- *   ILIAS shows five buttons titled "simple tag". Those buttons look different from the base Tag Buttons.
+ *   ILIAS shows five buttons titled "simple tag". Clicking the button won't activate any actions.
  * ---
  */
 function engaged()

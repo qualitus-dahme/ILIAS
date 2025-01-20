@@ -24,7 +24,7 @@ require_once(__DIR__ . "/CommonFieldRendering.php");
 
 use ILIAS\UI\Implementation\Component as I;
 use ILIAS\UI\Implementation\Component\SignalGenerator;
-use ILIAS\UI\Implementation\Component\Input\InputData;
+use ILIAS\UI\Component\Input\InputData;
 use ILIAS\UI\Implementation\Component\Input\NameSource;
 use ILIAS\UI\Component\Input\Field;
 use ILIAS\Data;

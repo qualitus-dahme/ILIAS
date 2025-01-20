@@ -141,7 +141,7 @@ final class ilSamlIdpTableGUI implements \ILIAS\UI\Component\Table\DataRetrieval
             return (int) $left->isActive() <=> (int) $right->isActive();
         });
 
-        if ($order_direction === 'DESC') {
+        if ($order_direction === \ILIAS\Data\Order::DESC) {
             $records = array_reverse($records);
         }
 

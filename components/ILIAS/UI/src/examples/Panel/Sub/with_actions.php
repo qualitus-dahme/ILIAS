@@ -10,9 +10,8 @@ namespace ILIAS\UI\Examples\Panel\Sub;
  *   Example for rendering a sub panel with actions.
  *
  * expected output: >
- *   ILIAS shows a Panel including a large title "Panel Title" and a sub panel as content. The sub panel is titled
- *   "Sub Panel Title" and owns a text content "Some Content". Additionally the sub panel displays a triangle menu symbol
- *   pointing down. You can open the menu. It shows links which are pointing to ilias.de and GitHub.
+ *   ILIAS shows a standard panel including a sub panel. Additionally an action menu is displayed on the right side of the
+ *   sub-panel title.
  * ---
  */
 function with_actions()
@@ -28,7 +27,7 @@ function with_actions()
 
     $block = $f->panel()->standard(
         "Panel Title",
-        $f->panel()->sub("Sub Panel Title", $f->legacy("Some Content"))->withActions($actions)
+        $f->panel()->sub("Sub Panel Title", $f->legacy()->content("Some Content"))->withActions($actions)
     );
 
     return $renderer->render($block);

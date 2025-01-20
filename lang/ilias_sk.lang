@@ -5830,8 +5830,6 @@ common#:#tst_history_read#:#View History###26 08 2024 new variable
 common#:#tst_new#:#Nový test
 common#:#tst_results#:#Test Results###10 11 2018 new variable
 common#:#tst_run#:#Spustit
-common#:#tst_statistical_evaluation#:#Statistiky
-common#:#tst_statistics#:#Access to Test Statistics###10 11 2011 new variable
 common#:#tst_user_not_invited#:#Nejste pozván(a) k této zkoušce.
 common#:#tst_warning_test_not_complete#:#Test není kompletní!
 common#:#tutors#:#Lektoři
@@ -14787,7 +14785,6 @@ rbac#:#tst_edit_permission#:#Změnit nastavení oprávnění
 rbac#:#tst_read#:#Přístup číst na test
 rbac#:#tst_read_learning_progress#:#User can view learning progress of other users###26 09 2014 new variable
 rbac#:#tst_tst_results#:#User has access to test results###10 11 2018 new variable
-rbac#:#tst_tst_statistics#:#Access to Test Statistics###18 01 2012 new variable
 rbac#:#tst_visible#:#Test je viditelný
 rbac#:#tst_write#:#Upravit test
 rbac#:#upload_blacklisted_files#:#Bypass blacklist###07 02 2020 new variable

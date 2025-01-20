@@ -61,8 +61,8 @@ interface Factory
      *
      * ---
      * @param string $title
-     * @param \ILIAS\UI\Component\Legacy\Legacy $legacy
+     * @param \ILIAS\UI\Component\Legacy\Content $legacy
      * @return \ILIAS\UI\Component\Panel\Secondary\Legacy
      */
-    public function legacy(string $title, Component\Legacy\Legacy $legacy): Component\Panel\Secondary\Legacy;
+    public function legacy(string $title, Component\Legacy\Content $legacy): Component\Panel\Secondary\Legacy;
 }

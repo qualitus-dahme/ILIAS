@@ -11,13 +11,8 @@ namespace ILIAS\UI\examples\Modal\Interruptive;
  *   modals action- and cancel-button.
  *
  * expected output: >
- *   ILIAS shows a button titled "I will interrupt you".
- *   A click onto the button will grey out ILIAS, opens a modal titled "Interrupting something" and displays the content
- *   "Am I interrupting you?".
- *   Additionally two buttons "Yeah you do!" and "Nah, not really" are rendered.
- *   A click onto "Yeah you do!" will reload the page.
- *   A click onto "Nah, not really" will hide the modal.
- *   You can also leave the modal by clicking onto the greyed out ILIAS in the background outside of the modal.
+ *   ILIAS shows a button titled "I will interrupt you". Clicking the button opens a modal with some content including
+ *   two buttons which labels were customized.
  * ---
  */
 function with_custom_labels()

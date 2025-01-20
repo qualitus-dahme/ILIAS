@@ -12,8 +12,7 @@ namespace ILIAS\UI\examples\Button\Standard;
  *   even if done by keyboard.
  *
  * expected output: >
- *   ILIAS shows a inactive button titled "Unavailable". The button is more prominent as compared to the base standard button.
- *   Clicking the button won't activate any actions.
+ *   ILIAS shows a inactive button with a title. Clicking the button won't activate any actions.
  * ---
  */
 function unavailable_action()

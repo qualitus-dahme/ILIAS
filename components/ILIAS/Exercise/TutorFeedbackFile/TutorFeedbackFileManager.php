@@ -21,7 +21,7 @@ declare(strict_types=1);
 namespace ILIAS\Exercise\TutorFeedbackFile;
 
 use ILIAS\ResourceStorage\Stakeholder\ResourceStakeholder;
-use ILIAS\Exercise\IRSS\ResourceInformation;
+use ILIAS\Repository\IRSS\ResourceInformation;
 use ILIAS\Exercise\InternalRepoService;
 use ILIAS\Exercise\InternalDomainService;
 use ILIAS\ResourceStorage\Events\Event;

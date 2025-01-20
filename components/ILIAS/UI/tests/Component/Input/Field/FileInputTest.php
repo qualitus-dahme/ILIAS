@@ -27,8 +27,8 @@ use ILIAS\Data;
 use ILIAS\UI\Component\Input\Field;
 use ILIAS\UI\Implementation\Component as I;
 use ILIAS\UI\Implementation\Component\SignalGenerator;
-use ILIAS\UI\Component\Button\Factory as ButtonFactory;
-use ILIAS\UI\Component\Symbol\Factory as SymbolFactory;
+use ILIAS\UI\Implementation\Component\Button\Factory as ButtonFactory;
+use ILIAS\UI\Implementation\Component\Symbol\Factory as SymbolFactory;
 use ILIAS\FileUpload\Handler\FileInfoResult;
 use ILIAS\UI\Component\Symbol\Glyph\Glyph;
 

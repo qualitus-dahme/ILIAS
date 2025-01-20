@@ -24,7 +24,6 @@ use ilCtrl;
 use ILIAS\Data\Factory;
 use ILIAS\LegalDocuments\EditLinks;
 use ILIAS\UI\Component\Component;
-use ILIAS\UI\Component\Legacy\Legacy;
 use ILIAS\UI\Factory as UIFactory;
 use ILIAS\LegalDocuments\Value\CriterionContent;
 use ILIAS\LegalDocuments\Value\Criterion;

@@ -457,7 +457,7 @@ class ilNewsTimelineGUI
 
         $modal = $this->gui->ui()->factory()->modal()->roundtrip(
             $this->lng->txt("edit"),
-            $this->ui->factory()->legacy($form->getHTML())
+            $this->ui->factory()->legacy()->content($form->getHTML())
         );
 
         return $modal;
@@ -468,7 +468,7 @@ class ilNewsTimelineGUI
         $mbox = $this->gui->ui()->factory()->messageBox()->confirmation(
             $this->lng->txt("news_really_delete_news")
         );
-        $title = $this->gui->ui()->factory()->legacy("<p id='news_delete_news_title'></p>");
+        $title = $this->gui->ui()->factory()->legacy()->content("<p id='news_delete_news_title'></p>");
         $modal = $this->gui->modal($this->lng->txt("delete"))
             ->content([$title, $mbox])
             ->button($this->lng->txt("delete"), "#", false, "il.News.remove(); return false;");

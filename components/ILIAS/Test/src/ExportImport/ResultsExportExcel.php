@@ -321,9 +321,7 @@ class ResultsExportExcel implements Exporter
 
                 $this->worksheet->setCell($current_row, $col++, $this->convertToUserDateFormat($user_data->getFirstVisit()));
                 $this->worksheet->setCell($current_row, $col++, $this->convertToUserDateFormat($user_data->getLastVisit()));
-                $this->worksheet->setCell($current_row, $col++, $this->secondsToHoursMinutesSecondsString(
-                    $user_data->getQuestionsWorkedThrough() ? $user_data->getTimeOnTask() / $user_data->getQuestionsWorkedThrough() : 0
-                ));
+                $this->worksheet->setCell($current_row, $col++, $this->secondsToHoursMinutesSecondsString($user_data->getTimeOnTask()));
 
                 if ($this->test_obj->isShowExamIdInTestResultsEnabled()) {
                     $this->worksheet->setCell($current_row, $col++, $test_attempt_data->getExamId());
@@ -337,15 +335,19 @@ class ResultsExportExcel implements Exporter
                 $this->worksheet->setCell($current_row, $col++, $test_attempt_data->getReachedPointsInPercent());
                 $this->worksheet->setCell($current_row, $col++, $this->secondsToHoursMinutesSecondsString($test_attempt_data->getWorkingTime()));
                 $this->worksheet->setCell($current_row, $col++, $this->secondsToHoursMinutesSecondsString(
-                    $test_attempt_data->getAnsweredQuestionCount() ? $test_attempt_data->getWorkingTime() / $test_attempt_data->getAnsweredQuestionCount() : 0
+                    $test_attempt_data->getAnsweredQuestionCount() !== 0 ? intdiv($test_attempt_data->getWorkingTime(), $test_attempt_data->getAnsweredQuestionCount()) : 0
                 ));
 
+                $ranking = '';
+                if ($is_scored_attempt) {
+                    $ranking = $this->getCompleteData()->getStatistics()->rank(
+                        $test_attempt_data->getReachedPoints()
+                    ) ?? '';
+                }
                 $this->worksheet->setCell(
                     $current_row,
                     $col++,
-                    $this->getCompleteData()->getStatistics()->rank(
-                        $test_attempt_data->getReachedPoints()
-                    ) ?? ''
+                    $ranking
                 );
 
                 $this->worksheet->setCell($current_row, $col++, $user_data->getPassCount());

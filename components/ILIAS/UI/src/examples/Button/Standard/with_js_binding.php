@@ -10,7 +10,7 @@ namespace ILIAS\UI\examples\Button\Standard;
  *   Example for rendering a standard button with JS binding
  *
  * expected output: >
- *   ILIAS shows an active button titled "Goto ILIAS". Clicking the button opens a dialog with a click-ID.
+ *   ILIAS shows an active button with a title. Clicking the button opens a dialog with a click-ID.
  * ---
  */
 function with_js_binding()

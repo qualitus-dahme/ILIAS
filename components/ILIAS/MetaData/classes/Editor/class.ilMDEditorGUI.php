@@ -350,7 +350,7 @@ class ilMDEditorGUI
             switch ($type) {
                 case FullContentType::MAIN:
                     if ($entity instanceof Table) {
-                        $entity = $this->ui_factory->legacy(
+                        $entity = $this->ui_factory->legacy()->content(
                             $entity->getHTML()
                         );
                     }

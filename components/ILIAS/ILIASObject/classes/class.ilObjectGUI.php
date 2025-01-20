@@ -158,6 +158,8 @@ class ilObjectGUI implements ImplementsCreationCallback
         $this->call_by_reference = $call_by_reference;
         $this->prepare_output = $prepare_output;
 
+        $this->lng->loadLanguageModule('obj');
+
         $params = ["ref_id"];
         if (!$call_by_reference) {
             $params = ["ref_id","obj_id"];
@@ -671,7 +673,7 @@ class ilObjectGUI implements ImplementsCreationCallback
             $form->setTitle('');
             $form->setTitleIcon('');
             $form->setTableWidth('100%');
-            $content = $this->ui_factory->legacy($form->getHTML());
+            $content = $this->ui_factory->legacy()->content($form->getHTML());
         }
 
         return $this->ui_renderer->render(
@@ -1319,7 +1321,6 @@ class ilObjectGUI implements ImplementsCreationCallback
             );
         } catch (ilException $e) {
             $this->tmp_import_dir = $imp->getTemporaryImportDir();
-            $this->lng->loadLanguageModule('obj');
             $this->tpl->setOnScreenMessage(
                 'failure',
                 $this->lng->txt('obj_import_file_error') . ' <br />' . $e->getMessage()
@@ -1330,7 +1331,7 @@ class ilObjectGUI implements ImplementsCreationCallback
 
         if ($new_id === null
             || $new_id === 0) {
-            $this->tpl->setOnScreenMessage('failure', $this->lng->txt('import_file_not_valid'));
+            $this->tpl->setOnScreenMessage('failure', $this->lng->txt('import_file_not_valid_here'));
             $this->deleteUploadedImportFile($path_to_uploaded_file_in_temp_dir);
             return;
         }
@@ -1732,16 +1733,20 @@ class ilObjectGUI implements ImplementsCreationCallback
     protected function checkPermission(string $perm, string $cmd = "", string $type = "", ?int $ref_id = null): void
     {
         if (!$this->checkPermissionBool($perm, $cmd, $type, $ref_id)) {
-            if (!is_int(strpos($_SERVER["PHP_SELF"], "goto.php"))) {
-                if ($perm != "create" && !is_object($this->object)) {
+            if (!is_int(strpos($_SERVER['PHP_SELF'], 'goto.php'))) {
+                if ($perm != 'create' && !is_object($this->object)) {
                     return;
                 }
 
-                ilSession::clear("il_rep_ref_id");
+                ilSession::clear('il_rep_ref_id');
 
                 $this->tpl->setOnScreenMessage('failure', $this->lng->txt('msg_no_perm_read'), true);
-                $parent_ref_id = (int) $this->tree->getParentNodeData($this->object->getRefId())['ref_id'];
-                $this->ctrl->redirectToURL(ilLink::_getLink($parent_ref_id));
+                $parent_ref_id = $this->tree->getParentId($this->object->getRefId());
+                if ($parent_ref_id > 0) {
+                    $this->ctrl->redirectToURL(ilLink::_getLink($parent_ref_id));
+                } else {
+                    $this->ctrl->redirectToURL('login.php?cmd=force_login');
+                }
             }
 
             $this->tpl->setOnScreenMessage('failure', $this->lng->txt('msg_no_perm_read'), true);

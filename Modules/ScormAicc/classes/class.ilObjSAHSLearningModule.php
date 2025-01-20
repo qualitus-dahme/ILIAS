@@ -213,7 +213,7 @@ class ilObjSAHSLearningModule extends ilObject
         if ($obj_rec == null || $obj_rec["c_type"] == null) {
             return '';
         }
-	return $obj_rec["c_type"];
+        return $obj_rec["c_type"];
     }
 
     //    /**

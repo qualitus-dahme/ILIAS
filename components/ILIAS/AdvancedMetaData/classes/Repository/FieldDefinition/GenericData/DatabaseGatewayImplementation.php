@@ -42,6 +42,11 @@ class DatabaseGatewayImplementation implements Gateway
         return $this->insert($data, true, true);
     }
 
+    public function createWithNewPosition(GenericData $data): int
+    {
+        return $this->insert($data, true, false);
+    }
+
     public function insert(
         GenericData $data,
         bool $increment_position,

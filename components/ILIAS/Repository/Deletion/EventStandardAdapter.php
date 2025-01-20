@@ -47,7 +47,7 @@ class EventStandardAdapter implements EventInterface
             " to trash");
 
         $this->event_handler->raise(
-            "components/ILIAS/Object",
+            "components/ILIAS/ILIASObject",
             "toTrash",
             [
                 "obj_id" => \ilObject::_lookupObjId($ref_id),
@@ -105,7 +105,7 @@ class EventStandardAdapter implements EventInterface
         int $old_parent_ref_id
     ): void {
         $this->event_handler->raise(
-            "components/ILIAS/Object",
+            "components/ILIAS/ILIASObject",
             "delete",
             [
                 "obj_id" => $obj_id,

@@ -92,9 +92,11 @@ class StyleRepo
     public function createContainerFromLocalDir(
         int $style_id,
         string $local_dir_path,
-        ResourceStakeholder $stakeholder
+        ResourceStakeholder $stakeholder,
+        string $container_path = "",
+        bool $recursive = true
     ): string {
-        $rid = $this->irss->createContainerFromLocalDir($local_dir_path, $stakeholder);
+        $rid = $this->irss->createContainerFromLocalDir($local_dir_path, $stakeholder, $container_path, $recursive);
         $this->db->update(
             "style_data",
             [
@@ -169,4 +171,25 @@ class StyleRepo
         }
         return null;
     }
+
+    public function cloneResourceContainer(
+        int $from_style_id,
+        int $to_style_id
+    ): void {
+        $from_rid = $this->readRid($from_style_id);
+        $to_rid = $this->irss->cloneContainer($from_rid);
+        var_dump($to_rid);
+        if ($to_rid !== "") {
+            $this->db->update(
+                "style_data",
+                [
+                    "rid" => ["string", $to_rid]
+                ],
+                [    // where
+                     "id" => ["integer", $to_style_id]
+                ]
+            );
+        }
+    }
+
 }

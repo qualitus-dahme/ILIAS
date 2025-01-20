@@ -24,6 +24,9 @@ use ILIAS\Export\ExportHandler\I\Repository\Element\HandlerInterface as ilExport
 use ILIAS\Filesystem\Stream\FileStream;
 use ILIAS\ResourceStorage\Collection\ResourceCollection;
 use ILIAS\ResourceStorage\Identification\ResourceIdentification;
+use ILIAS\ResourceStorage\Resource\StorableContainerResource;
+use ILIAS\ResourceStorage\Resource\StorableResource;
+use ILIAS\Dataset\IRSSContainerExportConfig;
 
 interface HandlerInterface
 {
@@ -57,6 +60,10 @@ interface HandlerInterface
         ResourceCollection $collection,
         string $dir_path_in_container
     );
+
+    public function addContainerToContainerByContainerResource(
+        IRSSContainerExportConfig $config
+    ): void;
 
     public function writeZip(
         FileStream $zip_stream,

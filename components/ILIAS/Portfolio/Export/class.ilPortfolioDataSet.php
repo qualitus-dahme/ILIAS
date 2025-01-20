@@ -197,7 +197,7 @@ class ilPortfolioDataSet extends ilDataSet
                 }
 
                 $a_mapping->addMapping("components/ILIAS/Portfolio", "prtt", $a_rec["Id"], $newObj->getId());
-                $a_mapping->addMapping("components/ILIAS/Object", "obj", $a_rec["Id"], $newObj->getId());
+                $a_mapping->addMapping("components/ILIAS/ILIASObject", "obj", $a_rec["Id"], $newObj->getId());
                 break;
 
             case "portfolio_page":

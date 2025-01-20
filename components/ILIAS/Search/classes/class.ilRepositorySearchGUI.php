@@ -262,33 +262,25 @@ class ilRepositorySearchGUI
         }
 
         $clip = ilUserClipboard::getInstance($user->getId());
+
+        $add_button = ilSubmitButton::getInstance();
+        $add_button->setCaption($a_options['submit_name'], false);
+        $add_button->setCommand('addUserFromAutoComplete');
+
+        if (!$a_sticky || $clip->hasContent()) {
+            $toolbar->addButtonInstance($add_button);
+        } else {
+            $toolbar->addStickyItem($add_button);
+        }
+
         if ($clip->hasContent()) {
-            $action_button = ilSplitButtonGUI::getInstance();
-
-            $add_button = ilSubmitButton::getInstance();
-            $add_button->setCaption($a_options['submit_name'], false);
-            $add_button->setCommand('addUserFromAutoComplete');
-
-            $action_button->setDefaultButton($add_button);
-
             $clip_button = ilSubmitButton::getInstance();
             $clip_button->addCSSClass('btn btndefault');
             $lng->loadLanguageModule('user');
             $clip_button->setCaption($lng->txt('clipboard_add_from_btn'), false);
             $clip_button->setCommand('showClipboard');
 
-            $action_button->addMenuItem(new ilButtonToSplitButtonMenuItemAdapter($clip_button));
-
-            $toolbar->addButtonInstance($action_button);
-        } else {
-            $button = ilSubmitButton::getInstance();
-            $button->setCaption($a_options['submit_name'], false);
-            $button->setCommand('addUserFromAutoComplete');
-            if (!$a_sticky) {
-                $toolbar->addButtonInstance($button);
-            } else {
-                $toolbar->addStickyItem($button);
-            }
+            $toolbar->addButtonInstance($clip_button);
         }
 
         if ($a_options['add_search'] ||

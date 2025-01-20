@@ -38,7 +38,7 @@ class ilTaggingAppEventListener
     ): void {
         // PHP8 Review: 'switch' with single 'case'
         switch ($a_component) {
-            case "components/ILIAS/Object":
+            case "components/ILIAS/ILIASObject":
                 switch ($a_event) {
                     case "toTrash":
                         if (!ilObject::_hasUntrashedReference($a_parameter["obj_id"])) {

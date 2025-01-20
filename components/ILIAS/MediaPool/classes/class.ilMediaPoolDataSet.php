@@ -273,7 +273,7 @@ class ilMediaPoolDataSet extends ilDataSet
 
                 $this->current_obj = $newObj;
                 $a_mapping->addMapping("components/ILIAS/MediaPool", "mep", $a_rec["Id"], $newObj->getId());
-                $a_mapping->addMapping("components/ILIAS/Object", "obj", $a_rec["Id"], $newObj->getId());
+                $a_mapping->addMapping("components/ILIAS/ILIASObject", "obj", $a_rec["Id"], $newObj->getId());
                 $a_mapping->addMapping(
                     "components/ILIAS/MetaData",
                     "md",

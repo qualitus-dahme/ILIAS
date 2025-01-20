@@ -87,7 +87,7 @@ class ilSurveyExporter extends ilXmlExporter
                     "ids" => $a_ids
                 ],
                 [
-                    "component" => "components/ILIAS/Object",
+                    "component" => "components/ILIAS/ILIASObject",
                     "entity" => "common",
                     "ids" => $a_ids
                 ]

@@ -426,6 +426,8 @@ class ilObjStyleSheetGUI extends ilObjectGUI
             $newObj = new ilObjStyleSheet($new_id);
         } else {
             // ... import from basic zip file
+            // called from creation in the administration
+            // or creation in a repository object
             $imp = new ilImport();
             $style_id = $imp->importObject(
                 null,

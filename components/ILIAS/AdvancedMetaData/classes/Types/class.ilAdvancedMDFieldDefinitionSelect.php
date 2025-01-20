@@ -694,9 +694,9 @@ class ilAdvancedMDFieldDefinitionSelect extends ilAdvancedMDFieldDefinition
         parent::delete();
     }
 
-    public function save(bool $a_keep_pos = false): void
+    public function save(bool $keep_pos_and_import_id = false, bool $keep_import_id = false): void
     {
-        parent::save($a_keep_pos);
+        parent::save($keep_pos_and_import_id, $keep_import_id);
         $this->saveOptions();
     }
 

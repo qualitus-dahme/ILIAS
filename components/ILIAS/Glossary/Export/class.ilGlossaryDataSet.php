@@ -293,7 +293,7 @@ class ilGlossaryDataSet extends ilDataSet
                 $this->current_obj = $newObj;
                 $this->old_glo_id = $a_rec["Id"];
                 $a_mapping->addMapping("components/ILIAS/Glossary", "glo", $a_rec["Id"], $newObj->getId());
-                $a_mapping->addMapping("components/ILIAS/Object", "obj", $a_rec["Id"], $newObj->getId());
+                $a_mapping->addMapping("components/ILIAS/ILIASObject", "obj", $a_rec["Id"], $newObj->getId());
                 $a_mapping->addMapping(
                     "components/ILIAS/MetaData",
                     "md",

@@ -67,7 +67,7 @@ class ilSkillAppEventListener implements ilAppEventListener
                 }
                 break;
 
-            case "components/ILIAS/Object":
+            case "components/ILIAS/ILIASObject":
                 switch ($a_event) {
                     case "beforeDeletion":
                         $handler = new ilSkillObjDeletionHandler($a_parameter["object"]->getId(), $a_parameter["object"]->getType());

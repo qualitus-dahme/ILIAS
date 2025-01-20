@@ -27,6 +27,11 @@ use ILIAS\Filesystem\Stream\FileStream;
 use ILIAS\ResourceStorage\Collection\ResourceCollection;
 use ILIAS\ResourceStorage\Identification\ResourceIdentification;
 use ILIAS\ResourceStorage\Services as ResourcesStorageService;
+use ILIAS\ResourceStorage\Resource\StorableContainerResource;
+use ILIAS\Filesystem\Stream\ZIPStream;
+use ILIAS\Filesystem\Stream\Streams;
+use ILIAS\ResourceStorage\Resource\StorableResource;
+use ILIAS\Dataset\IRSSContainerExportConfig;
 
 class Handler implements ilExportHandlerRepositoryElementIRSSWrapperInterface
 {
@@ -121,6 +126,49 @@ class Handler implements ilExportHandlerRepositoryElementIRSSWrapperInterface
             );
         }
     }
+
+    public function addContainerToContainerByContainerResource(
+        IRSSContainerExportConfig $config
+    ) : void {
+        $source_container = $config->getSourceContainer();
+        $target_path = $config->getTargetPath();
+        $target_container_rid = $this->getResourceId();
+        if (is_null($target_container_rid)) {
+            return;
+        }
+        $source_container_id = $source_container->getIdentification();
+        $reader = new ZipReader(
+            $this->irss->consume()->stream($source_container_id)->getStream()
+        );
+        foreach ($reader->getStructure() as $path => $entry) {
+            if (!$entry['is_dir']) {
+                if ($config->getSourcePath() !== "" && $config->getSourcePath() !== "/") {
+                    if (!str_starts_with($path, $config->getSourcePath())) {
+                        continue;
+                    }
+                }
+                $file_stream = $this->getStreamOfContainerEntry($source_container_id, $path);
+                $this->irss->manageContainer()->addStreamToContainer(
+                    $target_container_rid,
+                    $file_stream,
+                    $target_path . "/" . substr($path, strlen($config->getSourcePath())),
+                );
+            }
+        }
+    }
+
+    public function getStreamOfContainerEntry(
+        ResourceIdentification $id,
+        string $entry
+    ): ZIPStream {
+        $zip_path = $this->irss->consume()->stream($id)->getStream()->getMetadata("uri");
+        return Streams::ofFileInsideZIP(
+            $zip_path,
+            $entry
+        );
+    }
+
+
 
     public function writeZip(
         FileStream $zip_stream,

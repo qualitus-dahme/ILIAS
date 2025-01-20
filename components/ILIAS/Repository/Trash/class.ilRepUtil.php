@@ -165,7 +165,7 @@ class ilRepUtil
         // send global events
         foreach ($affected_ids as $aid) {
             $ilAppEventHandler->raise(
-                "components/ILIAS/Object",
+                "components/ILIAS/ILIASObject",
                 "delete",
                 [
                     "obj_id" => $aid["obj_id"],
@@ -316,7 +316,7 @@ class ilRepUtil
         foreach ($affected_ids as $id) {
             // send global event
             $ilAppEventHandler->raise(
-                "components/ILIAS/Object",
+                "components/ILIAS/ILIASObject",
                 "undelete",
                 ["obj_id" => ilObject::_lookupObjId($id), "ref_id" => $id]
             );

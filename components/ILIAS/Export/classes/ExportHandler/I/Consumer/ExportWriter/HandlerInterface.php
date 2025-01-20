@@ -23,6 +23,9 @@ namespace ILIAS\Export\ExportHandler\I\Consumer\ExportWriter;
 use ILIAS\Data\ObjectId;
 use ILIAS\Filesystem\Stream\FileStream;
 use ILIAS\ResourceStorage\Collection\ResourceCollection;
+use ILIAS\ResourceStorage\Resource\StorableContainerResource;
+use ILIAS\ResourceStorage\Resource\StorableResource;
+use ILIAS\Dataset\IRSSContainerExportConfig;
 
 interface HandlerInterface
 {
@@ -66,6 +69,10 @@ interface HandlerInterface
     public function writeFilesByResourceCollection(
         ResourceCollection $collection,
         string $path_in_container
+    ): void;
+
+    public function writeFilesByResourceContainer(
+        IRSSContainerExportConfig $config
     ): void;
 
     public function writeFilesByResourceId(

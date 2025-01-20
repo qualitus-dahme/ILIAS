@@ -88,17 +88,17 @@ class ilMediaPoolExporter extends ilXmlExporter
 
         if (!$this->config->getMasterLanguageOnly()) {
             $deps[] = array(
-                "component" => "components/ILIAS/Object",
+                "component" => "components/ILIAS/ILIASObject",
                 "entity" => "transl",
                 "ids" => $a_ids);
             $deps[] = array(
-                "component" => "components/ILIAS/Object",
+                "component" => "components/ILIAS/ILIASObject",
                 "entity" => "transl_entry",
                 "ids" => $a_ids);
         }
 
         $deps[] = array(
-            "component" => "components/ILIAS/Object",
+            "component" => "components/ILIAS/ILIASObject",
             "entity" => "tile",
             "ids" => $a_ids);
 

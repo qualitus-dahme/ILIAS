@@ -787,24 +787,13 @@ class ilObjStyleSheet extends ilObject
 
         if ($a_from_style == 0) {
             if (!$a_import_mode) {
-                // copy styles from basic style
-                $this->createFromXMLFile(self::$basic_style_file, true);
-
-                // copy images from basic style
-                $this->createImagesDirectory();
-
-                // cross filesystem (lib -> web) rCopy
-                ilFileUtils::rCopy(
-                    self::$basic_style_image_dir,
-                    $this->getImagesDirectory()
-                );
+                throw new Exception("Can't create style without a from style in non-import mode.");
             } else {
                 // add style_data record
                 $q = "INSERT INTO style_data (id, uptodate, category) VALUES " .
                     "(" . $ilDB->quote($this->getId(), "integer") . ", 0," .
                     $ilDB->quote($this->getScope(), "integer") . ")";
                 $ilDB->manipulate($q);
-                ilObjStyleSheet::_createImagesDirectory($this->getId());
             }
         } else {
             // get style parameter records
@@ -856,12 +845,7 @@ class ilObjStyleSheet extends ilObject
             $ilDB->manipulate($q);
 
             // copy images
-            $this->createImagesDirectory();
-            ilFileUtils::rCopy(
-                $from_style->getImagesDirectory(),
-                $this->getImagesDirectory()
-            );
-
+            $this->domain->style($this->getId())->cloneResourceContainer($from_style->getId());
             // copy colors
             $colors = $from_style->getColors();
             foreach ($colors as $c) {
@@ -1897,7 +1881,6 @@ class ilObjStyleSheet extends ilObject
     public function import($a_file): void
     {
         parent::create();
-
         $subdir = "";
         $im_dir = $this->createImportDirectory();
 
@@ -1931,15 +1914,6 @@ class ilObjStyleSheet extends ilObject
         // load information from xml file
         //echo "-$xml_file-";
         $this->createFromXMLFile($xml_file, true);
-
-        // copy images
-        $this->createImagesDirectory();
-        if (is_dir($im_dir . "/" . $subdir . "/images")) {
-            ilFileUtils::rCopy(
-                $im_dir . "/" . $subdir . "/images",
-                $this->getImagesDirectory()
-            );
-        }
 
         ilObjStyleSheet::_addMissingStyleClassesToStyle($this->getId());
         $this->read();

@@ -90,6 +90,7 @@ class ilImportExportFactory
         # Compatibility with older exports
         # Object changed to ILIASObject with the component revision
         $a_component = ($a_component === "components/ILIAS/Object") ? "components/ILIAS/ILIASObject" : $a_component;
+        $a_component = ($a_component === "Services/Object") ? "components/ILIAS/ILIASObject" : $a_component;
         /**
          * @var $objDefinition ilObjectDefinition
          */

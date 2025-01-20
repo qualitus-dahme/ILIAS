@@ -28,6 +28,9 @@ use ILIAS\Export\ExportHandler\I\Repository\Key\FactoryInterface as ilExportHand
 use ILIAS\Filesystem\Stream\FileStream;
 use ILIAS\Filesystem\Stream\Streams;
 use ILIAS\ResourceStorage\Collection\ResourceCollection;
+use ILIAS\ResourceStorage\Resource\StorableContainerResource;
+use ILIAS\ResourceStorage\Resource\StorableResource;
+use ILIAS\Dataset\IRSSContainerExportConfig;
 
 class Handler implements ilExportHandlerConsumerExportWriterInterface
 {
@@ -157,6 +160,11 @@ class Handler implements ilExportHandlerConsumerExportWriterInterface
         $this->getElement()->getIRSS()->addResourceCollectionToContaierByCollection($collection, $path_in_container);
     }
 
+    public function writeFilesByResourceContainer(
+        IRSSContainerExportConfig $config
+    ): void {
+        $this->getElement()?->getIRSS()->addContainerToContainerByContainerResource($config);
+    }
     public function writeFilesByResourceId(
         string $resource_id_serialized,
         string $path_in_container

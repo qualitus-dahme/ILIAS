@@ -119,7 +119,7 @@ class ilGlossaryExporter extends ilXmlExporter
 
             // service settings
             $deps[] = array(
-                "component" => "components/ILIAS/Object",
+                "component" => "components/ILIAS/ILIASObject",
                 "entity" => "common",
                 "ids" => $a_ids);
 

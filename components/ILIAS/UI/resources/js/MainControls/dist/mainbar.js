@@ -1033,7 +1033,7 @@ var persistence = function() {
             return (
                 (   element instanceof HTMLInputElement
                     || element instanceof HTMLSelectElement
-                    || element instanceof HTMLTextareaElement
+                    || element instanceof HTMLTextAreaElement
                     || element instanceof HTMLButtonElement
                 )
                 && element.getAttribute('disabled') === null

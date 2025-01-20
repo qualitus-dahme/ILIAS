@@ -729,7 +729,7 @@ abstract class ilAdvancedMDFieldDefinition
     /**
      * Create new field entry
      */
-    public function save(bool $a_keep_pos = false): void
+    public function save(bool $keep_pos_and_import_id = false, bool $keep_import_id = false): void
     {
         if ($this->getFieldId()) {
             $this->update();
@@ -743,8 +743,10 @@ abstract class ilAdvancedMDFieldDefinition
          */
         $this->generic_data->setFieldValues($this->getFieldDefinition());
 
-        if ($a_keep_pos) {
+        if ($keep_pos_and_import_id) {
             $field_id = $this->db_gateway->create($this->generic_data);
+        } elseif ($keep_import_id) {
+            $field_id = $this->db_gateway->createWithNewPosition($this->generic_data);
         } else {
             $field_id = $this->db_gateway->createFromScratch($this->generic_data);
         }

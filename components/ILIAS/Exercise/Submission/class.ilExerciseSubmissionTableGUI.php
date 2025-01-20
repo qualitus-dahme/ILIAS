@@ -72,8 +72,6 @@ abstract class ilExerciseSubmissionTableGUI extends ilTable2GUI
 
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
-        $this->setShowTemplates(true);
-
         $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.exc_members_row.html", "components/ILIAS/Exercise");
 

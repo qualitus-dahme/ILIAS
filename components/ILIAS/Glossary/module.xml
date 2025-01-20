@@ -25,7 +25,7 @@
 	</copage>
 	<logging />
 	<events>
-		<event type="listen" id="components/ILIAS/Object" />
+		<event type="listen" id="components/ILIAS/ILIASObject" />
 		<event type="raise" id="deleteTerm" />
 		<event type="listen" id="components/ILIAS/Glossary" />
 	</events>

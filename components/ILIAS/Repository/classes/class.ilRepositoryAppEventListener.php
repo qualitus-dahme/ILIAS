@@ -31,7 +31,7 @@ class ilRepositoryAppEventListener implements ilAppEventListener
     public static function handleEvent(string $a_component, string $a_event, array $a_parameter): void
     {
         switch ($a_component) {
-            case "components/ILIAS/Object":
+            case "components/ILIAS/ILIASObject":
                 switch ($a_event) {
                     case "deleteReference":
                         // remove recommended content

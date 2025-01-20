@@ -92,21 +92,21 @@ class ilLearningModuleExporter extends ilXmlExporter
 
             if (!$this->config->getMasterLanguageOnly()) {
                 $deps[] = array(
-                    "component" => "components/ILIAS/Object",
+                    "component" => "components/ILIAS/ILIASObject",
                     "entity" => "transl",
                     "ids" => $md_ids);
                 $deps[] = array(
-                    "component" => "components/ILIAS/Object",
+                    "component" => "components/ILIAS/ILIASObject",
                     "entity" => "transl_entry",
                     "ids" => $a_ids);
             }
             $deps[] = array(
-                "component" => "components/ILIAS/Object",
+                "component" => "components/ILIAS/ILIASObject",
                 "entity" => "tile",
                 "ids" => $a_ids);
 
             $deps[] = array(
-                "component" => "components/ILIAS/Object",
+                "component" => "components/ILIAS/ILIASObject",
                 "entity" => "service_settings",
                 "ids" => $a_ids);
 

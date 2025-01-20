@@ -605,7 +605,7 @@ class ilExerciseDataSet extends ilDataSet
                 $this->current_exc = $newObj;
 
                 $a_mapping->addMapping("components/ILIAS/Exercise", "exc", $a_rec["Id"], $newObj->getId());
-                $a_mapping->addMapping('components/ILIAS/Object', 'objs', $a_rec['Id'], $newObj->getId());
+                $a_mapping->addMapping('components/ILIAS/ILIASObject', 'objs', $a_rec['Id'], $newObj->getId());
                 $a_mapping->addMapping('components/ILIAS/AdvancedMetaData', 'parent', $a_rec['Id'], $newObj->getId());
                 $a_mapping->addMapping(
                     "components/ILIAS/MetaData",

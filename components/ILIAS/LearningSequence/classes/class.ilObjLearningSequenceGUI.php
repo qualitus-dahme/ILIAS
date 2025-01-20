@@ -860,12 +860,20 @@ class ilObjLearningSequenceGUI extends ilContainerGUI implements ilCtrlBaseClass
 
     public function showPossibleSubObjects(): void
     {
+        $this->ctrl->setParameterByClass(ilRepositoryGUI::class, 'ref_id', $this->ref_id);
         $gui = new ILIAS\ILIASObject\Creation\AddNewItemGUI(
             $this->buildAddNewItemElements(
-                $this->getCreatableObjectTypes()
+                $this->getCreatableObjectTypes(),
+                ilRepositoryGUI::class,
+                $this->ref_id
             )
         );
         $gui->render();
+        $this->ctrl->clearParametersByClass(ilRepositoryGUI::class);
+    }
+
+    public function afterSaveCallback(): void
+    {
     }
 
     protected function enableDragDropFileUpload(): void

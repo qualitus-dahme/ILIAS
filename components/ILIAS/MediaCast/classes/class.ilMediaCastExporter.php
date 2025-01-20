@@ -56,7 +56,7 @@ class ilMediaCastExporter extends ilXmlExporter
 
         // common object properties
         $deps[] = array(
-            "component" => "components/ILIAS/Object",
+            "component" => "components/ILIAS/ILIASObject",
             "entity" => "common",
             "ids" => $a_ids);
 

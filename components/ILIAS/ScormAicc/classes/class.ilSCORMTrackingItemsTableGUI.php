@@ -100,7 +100,6 @@ class ilSCORMTrackingItemsTableGUI extends ilTable2GUI
         //		$this->setDefaultOrderField("cp_node_id, user_id");
         $this->setDefaultOrderField("");
         $this->setDefaultOrderDirection("asc");
-        $this->setShowTemplates(true);
 
         $this->setExportFormats(array(self::EXPORT_CSV, self::EXPORT_EXCEL));
         //		$this->initFilter();

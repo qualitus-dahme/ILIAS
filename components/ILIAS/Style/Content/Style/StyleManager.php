@@ -80,12 +80,16 @@ class StyleManager
     }
 
     public function createContainerFromLocalDir(
-        string $local_dir_path
+        string $local_dir_path,
+        string $container_path = "",
+        bool $recursive = true
     ): string {
         return $this->repo->createContainerFromLocalDir(
             $this->style_id,
             $local_dir_path,
-            $this->stakeholder
+            $this->stakeholder,
+            $container_path,
+            $recursive
         );
     }
 

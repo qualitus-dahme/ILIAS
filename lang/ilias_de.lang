@@ -17003,11 +17003,6 @@ tax#:#tax_tax_settings#:#Taxonomieeinstellungen
 tax#:#tax_taxonomy#:#Taxonomie
 tbl#:#tbl_export_csv#:#.CSV-Export
 tbl#:#tbl_export_excel#:#Excel-Export
-tbl#:#tbl_template_create#:#Aktuelle Ansicht speichern
-tbl#:#tbl_template_created#:#Die aktuelle Ansicht wurde gespeichert.
-tbl#:#tbl_template_delete#:#Gespeicherte Ansicht löschen
-tbl#:#tbl_template_deleted#:#Die gespeicherte Ansicht wurde gelöscht.
-tbl#:#tbl_templates#:#Ansicht
 tos#:#tos_accept_usr_agreement_anonymous#:#Nutzungsvereinbarung
 tos#:#tos_accept_usr_agreement_anonymous_intro#:#Bevor Sie zu ILIAS wechseln, akzeptieren Sie die folgenden Nutzungsvereinbarungen.
 tos#:#tos_account_reg_not_possible#:#Eine Selbstregistrierung ist aktuell nicht möglich, da keine Nutzungsvereinbarung angeboten wird. Bitte kontaktieren Sie Ihre <a href="%1$s">ILIAS-Administration</a> für weitere Informationen.

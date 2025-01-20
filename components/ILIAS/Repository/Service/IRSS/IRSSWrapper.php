@@ -521,21 +521,30 @@ class IRSSWrapper
 
     public function createContainerFromLocalDir(
         string $local_dir_path,
-        ResourceStakeholder $stakeholder
+        ResourceStakeholder $stakeholder,
+        string $container_path = "",
+        bool $recursive = true
     ): string {
         $real_dir_path = realpath($local_dir_path);
         $rid = $this->createContainer($stakeholder);
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($local_dir_path, \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::SELF_FIRST
-        );
+        if ($recursive) {
+            $iterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($local_dir_path, \RecursiveDirectoryIterator::SKIP_DOTS),
+                \RecursiveIteratorIterator::SELF_FIRST
+            );
+        } else {
+            $iterator = new \DirectoryIterator($local_dir_path);
+        }
+        if ($container_path !== "") {
+            $container_path = $container_path . "/";
+        }
         foreach ($iterator as $file) {
-            if (!$file->isDir()) {
+            if (!$file->isDir() && !$file->isDot()) {
                 $file->getRealPath();
                 $this->addLocalFileToContainer(
                     $rid,
                     $file->getRealPath(),
-                    substr($file->getRealPath(), strlen($real_dir_path) + 1)
+                    $container_path . substr($file->getRealPath(), strlen($real_dir_path) + 1)
                 );
             }
         }

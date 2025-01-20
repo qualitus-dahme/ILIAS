@@ -105,7 +105,7 @@ class ilExerciseExporter extends ilXmlExporter
         if ($a_entity == "exc") {
             // service settings
             $deps[] = array(
-                "component" => "components/ILIAS/Object",
+                "component" => "components/ILIAS/ILIASObject",
                 "entity" => "common",
                 "ids" => $a_ids
             );
@@ -141,7 +141,7 @@ class ilExerciseExporter extends ilXmlExporter
 
             // service settings
             $deps[] = array(
-                "component" => "components/ILIAS/Object",
+                "component" => "components/ILIAS/ILIASObject",
                 "entity" => "service_settings",
                 "ids" => $a_ids
             );

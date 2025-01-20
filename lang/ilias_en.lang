@@ -17003,11 +17003,6 @@ tax#:#tax_tax_settings#:#Taxonomy Settings
 tax#:#tax_taxonomy#:#Taxonomy
 tbl#:#tbl_export_csv#:#Export CSV
 tbl#:#tbl_export_excel#:#Export Excel
-tbl#:#tbl_template_create#:#Save Current View
-tbl#:#tbl_template_created#:#The current view has been saved.
-tbl#:#tbl_template_delete#:#Delete Saved View
-tbl#:#tbl_template_deleted#:#The saved view has been deleted.
-tbl#:#tbl_templates#:#View
 tos#:#tos_accept_usr_agreement_anonymous#:#Terms of Service
 tos#:#tos_accept_usr_agreement_anonymous_intro#:#Before you proceed to ILIAS you accept the following Terms of Service.
 tos#:#tos_account_reg_not_possible#:#Self-registration is currently not possible because there is no Terms of Service agreement available. Please contact your <a href="%1$s">system administrator</a> for further information.

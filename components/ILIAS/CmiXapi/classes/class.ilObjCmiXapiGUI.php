@@ -166,6 +166,39 @@ class ilObjCmiXapiGUI extends ilObject2GUI
         return $form;
     }
 
+    public function save(): void
+    {
+        // create permission is already checked in createObject. This check here is done to prevent hacking attempts
+        if (!$this->checkPermissionBool("create", "", $this->requested_new_type)) {
+            $this->error->raiseError($this->lng->txt("no_create_permission"), $this->error->MESSAGE);
+        }
+
+        $this->lng->loadLanguageModule($this->requested_new_type);
+        $this->ctrl->setParameter($this, "new_type", $this->requested_new_type);
+
+        $form = $this->initCreateForm($this->requested_new_type);
+
+        $this->ctrl->setParameter($this, 'new_type', '');
+
+        $class_name = 'ilObj' . $this->obj_definition->getClassName($this->requested_new_type);
+
+        $new_obj = new $class_name();
+        $new_obj->setType($this->requested_new_type);
+        $new_obj->processAutoRating();
+        $new_obj->create();
+
+        $this->putObjectInTree($new_obj);
+
+        $dtpl = $data['didactic_templates'] ?? null;
+        if ($dtpl !== null) {
+            $dtpl_id = $this->parseDidacticTemplateVar($dtpl, 'dtpl');
+            $new_obj->applyDidacticTemplate($dtpl_id);
+        }
+
+        $this->afterSave($new_obj);
+    }
+
+
     protected function afterSave(ilObject $newObject): void
     {
         /* @var ilObjCmiXapi $newObject */
@@ -588,20 +621,17 @@ class ilObjCmiXapiGUI extends ilObject2GUI
         );
     }
 
-    public function infoScreen(): void
+    public function infoScreenObject(): void
     {
         global $DIC;
         /* @var \ILIAS\DI\Container $DIC */
 
         $DIC->tabs()->activateTab(self::TAB_ID_INFO);
 
-        // @todo: removed deprecated ilCtrl methods, this needs inspection by a maintainer.
-        // $DIC->ctrl()->setCmd("showSummary");
-        // $DIC->ctrl()->setCmdClass("ilinfoscreengui");
-        $this->infoScreenForward();
+        $this->ctrl->redirectByClass(ilInfoScreenGUI::class, "showSummary");
     }
 
-    public function infoScreenForward(): void
+    public function infoScreen(): string
     {
         global $DIC;
         /* @var \ILIAS\DI\Container $DIC */
@@ -691,10 +721,13 @@ class ilObjCmiXapiGUI extends ilObject2GUI
                 nl2br($this->object->getLrsType()->getPrivacyCommentDefault())
             );
         }
-
-        // FINISHED INFO SCREEN, NOW FORWARD
-
-        $this->ctrl->forwardCommand($info);
+        // forward the command
+        if ($DIC->ctrl()->getNextClass() === "ilinfoscreengui") {
+            $DIC->ctrl()->forwardCommand($info);
+        } else {
+            return $DIC->ctrl()->getHTML($info);
+        }
+        return "";
     }
 
     protected function initInfoScreenToolbar(): void

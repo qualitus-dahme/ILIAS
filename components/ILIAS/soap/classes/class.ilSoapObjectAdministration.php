@@ -373,7 +373,7 @@ class ilSoapObjectAdministration extends ilSoapAdministration
     /**
      * @return soap_fault|SoapFault|string|null
      */
-    public function getTreeChilds(string $sid, int $ref_id, ?array $types, ?int $user_id = null)
+    public function getTreeChilds(string $sid, int $ref_id, ?array $types = null, ?int $user_id = null)
     {
         $this->initAuth($sid);
         $this->initIlias();
@@ -401,7 +401,7 @@ class ilSoapObjectAdministration extends ilSoapAdministration
             );
         }
 
-        if (!is_array($types)) {
+        if (!is_array($types) || empty($types)) {
             $all = true;
         }
 
@@ -432,7 +432,7 @@ class ilSoapObjectAdministration extends ilSoapAdministration
     /**
      * @return soap_fault|SoapFault|string|null
      */
-    public function getXMLTree(string $sid, int $ref_id, ?array $types, ?int $user_id =null)
+    public function getXMLTree(string $sid, int $ref_id, ?array $types = null, ?int $user_id = null)
     {
         $this->initAuth($sid);
         $this->initIlias();
@@ -449,6 +449,11 @@ class ilSoapObjectAdministration extends ilSoapAdministration
         $nodedata = $tree->getNodeData($ref_id);
         $nodearray = $tree->getSubTree($nodedata);
 
+        $all = false;
+        if (!is_array($types) || empty($types)) {
+            $all = true;
+        }
+
         $filter = $types;
 
         global $DIC;
@@ -459,7 +464,7 @@ class ilSoapObjectAdministration extends ilSoapAdministration
             if (
                 !$objDefinition->isAdministrationObject($node['type']) &&
                 !$objDefinition->isSystemObject($node['type']) &&
-                !in_array($node['type'], $filter, true) &&
+                ($all || !in_array($node['type'], $filter, true)) &&
                 $access->checkAccess("read", "", (int) $node['ref_id']) &&
                 ($tmp = ilObjectFactory::getInstanceByRefId($node['ref_id'], false))) {
                 $nodes[] = $tmp;

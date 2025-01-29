@@ -29,7 +29,7 @@ declare(strict_types=1);
  */
 class ilCmiXapiLaunchGUI
 {
-    public const XAPI_PROXY_ENDPOINT = 'components/ILIAS/CmiXapi/xapiproxy.php';
+    public const XAPI_PROXY_ENDPOINT = 'xapiproxy.php';
 
     protected ilObjCmiXapi $object;
 

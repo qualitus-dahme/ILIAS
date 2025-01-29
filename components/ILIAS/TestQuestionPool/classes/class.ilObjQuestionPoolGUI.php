@@ -1803,10 +1803,11 @@ class ilObjQuestionPoolGUI extends ilObjectGUI implements ilCtrlBaseClassInterfa
             $this->lng,
             $this->component_repository,
             $this->rbac_system,
+            $this->user,
             $this->object->getShowTaxonomies() ? $this->taxonomy->domain() : null,
             $this->notes_service,
             $this->object->getId(),
-            (int) $this->request_data_collector->getRefId()
+            $this->request_data_collector->getRefId()
         );
 
         /**

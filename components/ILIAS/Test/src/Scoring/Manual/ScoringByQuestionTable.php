@@ -112,7 +112,7 @@ class ScoringByQuestionTable
             self::COLUMN_ATTEMPT => $field_factory->select(
                 $this->lng->txt('tst_attempt'),
                 $this->buildTestAttemptsOptions($max_attempts)
-            ),
+            )->withValue(''),
             self::FILTER_FIELD_ONLY_ANSWERED => $field_factory->select(
                 $this->lng->txt('tst_man_scoring_only_answered'),
                 [

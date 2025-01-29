@@ -1169,10 +1169,16 @@ class ilObjTest extends ilObject
         }
     }
 
-    public function removeTestResults(ilTestParticipantData $participant_data)
+    public function removeTestResults(ilTestParticipantData $participant_data): void
     {
         if ($participant_data->getAnonymousActiveIds() !== []) {
             $this->removeTestResultsByActiveIds($participant_data->getAnonymousActiveIds());
+
+            $user_ids = array_map(
+                static fn($active_id) => $participant_data->getUserIdByActiveId($active_id),
+                $participant_data->getAnonymousActiveIds(),
+            );
+            $this->participant_repository->removeExtraTimeByUserId($this->getTestId(), $user_ids);
         }
 
         if ($participant_data->getUserIds() !== []) {
@@ -1182,10 +1188,18 @@ class ilObjTest extends ilObject
                 $test_lp->setTestObject($this);
                 $test_lp->resetLPDataForUserIds($participant_data->getUserIds(), false);
             }
+
+            $this->participant_repository->removeExtraTimeByUserId($this->getTestId(), $participant_data->getUserIds());
         }
 
         if ($participant_data->getActiveIds() !== []) {
             $this->removeTestActives($participant_data->getActiveIds());
+
+            $user_ids = array_map(
+                static fn($active_id) => $participant_data->getUserIdByActiveId($active_id),
+                $participant_data->getActiveIds(),
+            );
+            $this->participant_repository->removeExtraTimeByUserId($this->getTestId(), $user_ids);
         }
 
         if ($this->logger->isLoggingEnabled()) {
@@ -1203,7 +1217,7 @@ class ilObjTest extends ilObject
         }
     }
 
-    public function removeTestResultsByUserIds($user_ids)
+    public function removeTestResultsByUserIds(array $user_ids): void
     {
         $participantData = new ilTestParticipantData($this->db, $this->lng);
         $participantData->setUserIdsFilter($user_ids);
@@ -1221,7 +1235,7 @@ class ilObjTest extends ilObject
         }
     }
 
-    private function removeTestResultsByActiveIds($active_ids)
+    private function removeTestResultsByActiveIds(array $active_ids): void
     {
         $in_active_ids = $this->db->in('active_fi', $active_ids, false, 'integer');
 
@@ -2557,25 +2571,24 @@ class ilObjTest extends ilObject
     * @access public
     */
     public function buildName(
-        int $user_id,
-        string $firstname,
-        string $lastname,
-        string $title
+        ?int $user_id,
+        ?string $firstname,
+        ?string $lastname
     ): string {
-        $name = "";
-        if ($firstname . $lastname . $title !== '') {
-            $name = $this->lng->txt('deleted_user');
-        } else {
-            if ($user_id == ANONYMOUS_USER_ID) {
-                $name = $lastname;
-            } else {
-                $name = trim($lastname . ', ' . $firstname . ' ' . $title);
-            }
-            if ($this->getAnonymity()) {
-                $name = $this->lng->txt('anonymous');
-            }
+        if ($user_id === null
+            || $firstname . $lastname === '') {
+            return $this->lng->txt('deleted_user');
         }
-        return $name;
+
+        if ($this->getAnonymity()) {
+            return $this->lng->txt('anonymous');
+        }
+
+        if ($user_id == ANONYMOUS_USER_ID) {
+            return $lastname;
+        }
+
+        return trim($lastname . ', ' . $firstname);
     }
 
     public function evalTotalStartedAverageTime(?array $active_ids_to_filter = null): int
@@ -3976,7 +3989,7 @@ class ilObjTest extends ilObject
         $total = $this->evalTotalPersons();
         $results_summary_settings = $this->getScoreSettings()->getResultSummarySettings();
         if ($total === 0
-            || !$results_summary_settings->getScoreReporting()->isReportingEnabled() === null) {
+            || $results_summary_settings->getScoreReporting()->isReportingEnabled() === false) {
             return true;
         }
 

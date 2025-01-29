@@ -11779,6 +11779,7 @@ tbody.collapse.in {
 .carousel-inner > .item .item-content > a > img {
   display: block;
   max-width: 100%;
+  max-height: 100%;
   height: auto;
   line-height: 1;
 }
@@ -14396,6 +14397,27 @@ div.ilc_Page.readonly textarea[disabled] {
 
 .draggableDisabled {
   background-color: #b0b0b0;
+}
+
+.c-test__longmenu__selectionlist {
+  position: relative;
+  display: inline-block;
+}
+.c-test__longmenu__selectionlist ul {
+  position: absolute;
+  background-color: white;
+  border-left: 1px solid #dddddd;
+  border-right: 1px solid #dddddd;
+  border-bottom: 1px solid #dddddd;
+  margin: 0;
+  min-width: 100%;
+  padding: 3px;
+  list-style: none;
+  z-index: 1;
+  cursor: default;
+}
+.c-test__longmenu__selectionlist li:hover {
+  background-color: #e2e8ef;
 }
 
 #tst_output {

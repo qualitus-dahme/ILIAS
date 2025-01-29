@@ -131,8 +131,6 @@ class CertificateExport implements Exporter
             }
         }
 
-        $components = [];
-
         $zip_file_dir = null;
         if ($num_pdfs > 0) {
             try {
@@ -148,48 +146,66 @@ class CertificateExport implements Exporter
             }
         }
 
+        $components = [];
         if ($ignored_usr_ids !== []) {
-            $user_logins = array_map(
-                static fn($usr_id): string => \ilObjUser::_lookupLogin((int) $usr_id),
-                $ignored_usr_ids
-            );
-            if (count($ignored_usr_ids) === 1) {
-                $components[] = sprintf(
-                    $this->lng->txt('export_cert_ignored_for_users_s'),
-                    implode(', ', $user_logins)
-                );
-            } else {
-                $components[] = sprintf(
-                    $this->lng->txt('export_cert_ignored_for_users_p'),
-                    count($ignored_usr_ids),
-                    implode(', ', $user_logins)
-                );
-            }
+            $components[] = $this->buildIgnoredUsersMessage($ignored_usr_ids);
         }
-
         if ($failed_pdf_generation_usr_ids !== []) {
-            $user_logins = array_map(
-                static fn($usr_id): string => \ilObjUser::_lookupLogin((int) $usr_id),
-                $failed_pdf_generation_usr_ids
-            );
-            if (count($failed_pdf_generation_usr_ids) === 1) {
-                $components[] = sprintf(
-                    $this->lng->txt('export_cert_failed_for_users_s'),
-                    implode(', ', $user_logins)
-                );
-            } else {
-                $components[] = sprintf(
-                    $this->lng->txt('export_cert_failed_for_users_p'),
-                    count($ignored_usr_ids),
-                    implode(', ', $user_logins)
-                );
-            }
+            $components[] = $this->buildFailedGenerationMessage($failed_pdf_generation_usr_ids);
         }
-
         if ($components !== []) {
             $this->tpl->setOnScreenMessage('info', implode('<br>', $components), true);
         }
 
         return $zip_file_dir;
+    }
+
+    private function buildIgnoredUsersMessage(array $ignored_user_ids): string
+    {
+        $ignored_user_logins = $this->getLoginsForIds($ignored_user_ids);
+        $nr_ignored_users = count($ignored_user_ids);
+        if ($nr_ignored_users === 1) {
+            return sprintf(
+                $this->lng->txt('export_cert_ignored_for_users_s'),
+                $ignored_user_logins[0]
+            );
+        }
+        return sprintf(
+            $this->lng->txt('export_cert_ignored_for_users_p'),
+            $nr_ignored_users,
+            implode(', ', $ignored_user_logins)
+        );
+    }
+
+    private function buildFailedGenerationMessage(array $failed_pdf_generation_ids): string
+    {
+        $failed_pdf_generation_logins = $this->getLoginsForIds($failed_pdf_generation_ids);
+        $nr_failed_pdf_generation = count($failed_pdf_generation_ids);
+        if ($nr_failed_pdf_generation === 1) {
+            return sprintf(
+                $this->lng->txt('export_cert_failed_for_users_s'),
+                $failed_pdf_generation_logins[0]
+            );
+        }
+
+        return sprintf(
+            $this->lng->txt('export_cert_failed_for_users_p'),
+            $nr_failed_pdf_generation,
+            implode(', ', $failed_pdf_generation_logins)
+        );
+    }
+
+    private function getLoginsForIds(array $user_ids): array
+    {
+        return array_map(
+            function ($usr_id): string {
+                $login = \ilObjUser::_lookupLogin((int) $usr_id);
+                if ($login !== '') {
+                    return $login;
+                }
+                return $this->lng->txt('deleted_user');
+            },
+            $user_ids
+        );
     }
 }

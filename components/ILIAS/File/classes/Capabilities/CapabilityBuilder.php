@@ -52,8 +52,9 @@ class CapabilityBuilder
         private readonly \ilCtrlInterface $ctrl,
         private readonly ActionRepository $action_repository,
         private readonly Services $http,
-        private readonly TypeResolver $type_resolver,
-        private readonly URIBuilder $static_url
+        private readonly URIBuilder $static_url,
+        private readonly TypeResolver $type_resolver = new CoreTypeResolver(),
+        private readonly \ilWorkspaceAccessHandler $workspace_access_handler = new \ilWorkspaceAccessHandler()
     ) {
         $this->checks = [
             new ForcedInfo(),
@@ -68,10 +69,10 @@ class CapabilityBuilder
         ];
     }
 
-    public function get(int $ref_id, bool $do_checks = true): CapabilityCollection
+    public function get(Context $context): CapabilityCollection
     {
-        if (isset($this->cache[$ref_id])) {
-            return $this->cache[$ref_id];
+        if (isset($this->cache[$context->getNode()])) {
+            return $this->cache[$context->getNode()];
         }
 
         /**
@@ -91,29 +92,35 @@ class CapabilityBuilder
             new Capability(Capabilities::UNZIP, Permissions::WRITE),
         ];
 
-        if ($this->type_resolver->resolveType($ref_id) !== 'file') {
+        if ($this->type_resolver->resolveTypeByObjectId($context->getObjectId()) !== 'file') {
             return new CapabilityCollection($capabilities);
         }
 
-        $info = $this->file_info_repository->getByRefId($ref_id);
+        $info = $this->file_info_repository->getByObjectId($context->getObjectId());
         $helpers = new CheckHelpers(
             $this->access,
             $this->ctrl,
             $this->action_repository,
             $this->http,
-            $this->static_url
+            $this->static_url,
+            $this->workspace_access_handler
         );
-        $this->ctrl->setParameterByClass(\ilObjFileGUI::class, 'ref_id', $ref_id);
+
+        $calling_id = $context->getCallingId();
+
+        if ($calling_id > 0) {
+            $this->ctrl->setParameterByClass(\ilObjFileGUI::class, 'ref_id', $calling_id);
+        }
 
         foreach ($capabilities as $capability) {
             foreach ($this->checks as $check) {
                 if ($check->canUnlock() === $capability->getCapability()) {
-                    $capability = $check->maybeUnlock($capability, $helpers, $info, $ref_id);
-                    $capability = $check->maybeBuildURI($capability, $helpers, $ref_id);
+                    $capability = $check->maybeUnlock($capability, $helpers, $info, $context);
+                    $capability = $check->maybeBuildURI($capability, $helpers, $context);
                 }
             }
         }
-        return $this->cache[$ref_id] = new CapabilityCollection($capabilities);
+        return $this->cache[$context->getNode()] = new CapabilityCollection($capabilities);
     }
 
 }

@@ -627,7 +627,11 @@ class ilContainerRenderer
                             break;
                     }
 
-                    $html = $renderer->render($deck);
+                    if ($this->ctrl->isAsynch()) {
+                        $html = $renderer->renderAsync($deck);
+                    } else {
+                        $html = $renderer->render($deck);
+                    }
                     $a_block_tpl->setCurrentBlock("tile_rows");
                     $a_block_tpl->setVariable("TILE_ROWS", $html);
                     $a_block_tpl->parseCurrentBlock();
@@ -851,7 +855,7 @@ class ilContainerRenderer
         $block_tpl = $this->initBlockTemplate();
 
         $preloader = new ilObjectListGUIPreloader(ilObjectListGUI::CONTEXT_REPOSITORY);
-        foreach($this->item_presentation->getAllRefIds() as $ref_id) {
+        foreach ($this->item_presentation->getAllRefIds() as $ref_id) {
             $rd = $this->item_presentation->getRawDataByRefId($ref_id);
             $preloader->addItem($rd["obj_id"], $rd["type"], $ref_id);
             if ($rd["type"] === "sess") {

@@ -114,8 +114,6 @@ abstract class assQuestionGUI
     protected GeneralQuestionPropertiesRepository $questionrepository;
     protected GUIService $notes_gui;
     protected ilCtrl $ctrl;
-    private array $new_id_listeners = [];
-    private int $new_id_listener_cnt = 0;
     private ?ilAssQuestionPreviewSession $preview_session = null;
     protected assQuestion $object;
     protected ilGlobalPageTemplate $tpl;
@@ -150,7 +148,7 @@ abstract class assQuestionGUI
 
     private bool $previousSolutionPrefilled = false;
 
-    protected ilPropertyFormGUI $editForm;
+    protected ?ilPropertyFormGUI $editForm = null;
     protected readonly ilTestLegacyFormsHelper $forms_helper;
     protected readonly RequestDataCollector $request_data_collector;
     protected bool $parent_type_is_lm = false;
@@ -736,6 +734,7 @@ abstract class assQuestionGUI
     {
         $this->setAdditionalContentEditingModeFromPost();
         $result = $this->writePostData();
+        $this->tabs_gui->activateTab('edit_question');
 
         if ($result !== 0) {
             return  false;
@@ -749,7 +748,6 @@ abstract class assQuestionGUI
                 $this->object->createNewQuestion();
             }
             $this->setQuestionTabs();
-            $this->tabs_gui->activateTab('edit_question');
         }
 
         if ($this->needsSyncQuery()) {

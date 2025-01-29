@@ -54,8 +54,7 @@ class ilAssMatchingPairCorrectionsInputGUI extends ilMatchingPairWizardInputGUI
             return false;
         }
 
-        $sum = array_sum(array_filter($result, fn($points) => $points > 0));
-        if ($sum <= 0) {
+        if (max($result) <= 0) {
             $this->setAlert($this->lng->txt('enter_enough_positive_points'));
             return false;
         }

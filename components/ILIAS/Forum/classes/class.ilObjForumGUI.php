@@ -967,8 +967,8 @@ class ilObjForumGUI extends ilObjectGUI implements ilDesktopItemHandling, ilForu
         $authorinfo = new ilForumAuthorInformation(
             $forum_topic->getThrAuthorId(),
             $forum_topic->getDisplayUserId(),
-            $forum_topic->getUserAlias(),
-            $forum_topic->getImportName()
+            (string) $forum_topic->getUserAlias(),
+            (string) $forum_topic->getImportName()
         );
 
         $properties = [

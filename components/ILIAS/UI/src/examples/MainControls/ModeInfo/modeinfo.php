@@ -68,10 +68,14 @@ function renderModeInfoFullscreenMode(\ILIAS\DI\Container $dic)
     );
 
     $page = $f->layout()->page()->standard(
-        [$f->panel()->standard(
-            'Mode Info Example',
-            $panel_content
-        )],
+        [
+            $f->legacy("<div id='mainspacekeeper'><div style='padding: 15px;'>"),
+            $f->panel()->standard(
+                'Mode Info Example',
+                $panel_content
+            ),
+            $f->legacy("</div></div>")
+        ],
         $f->mainControls()->metaBar()->withAdditionalEntry(
             'help',
             $f->button()->bulky($f->symbol()->glyph()->help(), 'Help', '#')

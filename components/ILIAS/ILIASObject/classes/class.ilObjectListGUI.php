@@ -2777,7 +2777,9 @@ class ilObjectListGUI
                 $dropdown = $this->getCommandsDropdown($title);
                 $this->tpl->setVariable(
                     'COMMAND_SELECTION_LIST',
-                    $this->ui->renderer()->render($dropdown)
+                    $this->ctrl->isAsynch()
+                        ? $this->ui->renderer()->renderAsync($dropdown)
+                        : $this->ui->renderer()->render($dropdown)
                 );
             }
         }

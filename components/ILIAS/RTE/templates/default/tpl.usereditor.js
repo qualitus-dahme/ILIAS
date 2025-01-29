@@ -5,6 +5,7 @@ function ilTinyMceInitCallback(ed) { // Add hook for onContextMenu so that Inser
 }
 
 tinymce.init({
+    license_key: 'gpl',
     menubar: false,
     branding: false,
     selector: "{SELECTOR}",

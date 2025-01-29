@@ -36,5 +36,8 @@ class CmiXapi implements Component\Component
             new \ilCmiXapiSetupAgent(
                 $pull[\ILIAS\Refinery\Factory::class]
             );
+        $contribute[Component\Resource\PublicAsset::class] = fn() =>
+        new Component\Resource\Endpoint($this, "xapiproxy.php");
+
     }
 }

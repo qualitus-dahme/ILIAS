@@ -811,29 +811,7 @@ class assImagemapQuestionGUI extends assQuestionGUI implements ilGuiQuestionScor
         return [];
     }
 
-    protected function renderAggregateView($answeringFequencies): string
-    {
-        $tpl = new ilTemplate('tpl.il_as_aggregated_answers_table.html', true, true, "components/ILIAS/TestQuestionPool");
-
-        $tpl->setCurrentBlock('headercell');
-        $tpl->setVariable('HEADER', $this->lng->txt('tst_answer_aggr_answer_header'));
-        $tpl->parseCurrentBlock();
-
-        $tpl->setCurrentBlock('headercell');
-        $tpl->setVariable('HEADER', $this->lng->txt('tst_answer_aggr_frequency_header'));
-        $tpl->parseCurrentBlock();
-
-        foreach ($answeringFequencies as $answerIndex => $answeringFrequency) {
-            $tpl->setCurrentBlock('aggregaterow');
-            $tpl->setVariable('OPTION', $this->object->getAnswer($answerIndex)->getAnswerText());
-            $tpl->setVariable('COUNT', $answeringFrequency);
-            $tpl->parseCurrentBlock();
-        }
-
-        return $tpl->get();
-    }
-
-    protected function aggregateAnswers($givenSolutionRows, $existingAnswerOptions): array
+    private function aggregateAnswers($givenSolutionRows, $existingAnswerOptions): array
     {
         $answeringFequencies = [];
 
@@ -846,19 +824,6 @@ class assImagemapQuestionGUI extends assQuestionGUI implements ilGuiQuestionScor
         }
 
         return $answeringFequencies;
-    }
-
-    /**
-     * Returns an html string containing a question specific representation of the answers so far
-     * given in the test for use in the right column in the scoring adjustment user interface.
-     * @param array $relevant_answers
-     * @return string
-     */
-    public function getAggregatedAnswersView(array $relevant_answers): string
-    {
-        return $this->renderAggregateView(
-            $this->aggregateAnswers($relevant_answers, $this->object->getAnswers())
-        );
     }
 
     protected function getPreviousSolutionConfirmationCheckboxHtml(): string

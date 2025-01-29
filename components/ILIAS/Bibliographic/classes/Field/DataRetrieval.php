@@ -21,12 +21,13 @@ namespace ILIAS\Bibliographic\Field;
 use ILIAS\Data\Order;
 use ILIAS\Data\Range;
 use ILIAS\UI\Component\Table as I;
+use ILIAS\UI\Component\Table\OrderingRowBuilder;
 
 /**
  * Class DataRetrieval
  *
  */
-class DataRetrieval implements I\DataRetrieval
+class DataRetrieval implements I\OrderingBinding
 {
     private \ilLanguage $lng;
 
@@ -38,6 +39,20 @@ class DataRetrieval implements I\DataRetrieval
     }
 
     public function getRows(
+        OrderingRowBuilder $row_builder,
+        array $visible_column_ids
+    ): \Generator {
+        $records = $this->getRecords(new Order('position', 'ASC'));
+        foreach ($records as $idx => $record) {
+            $row_id = (string) $record['id'];
+            $field = $this->facade->fieldFactory()->findById($record['id']);
+            $record['data_type'] = $this->facade->translationFactory()->translate($field);
+            $record['is_standard_field'] = $field->isStandardField() ? $this->lng->txt('standard') : $this->lng->txt('custom');
+            yield $row_builder->buildOrderingRow($row_id, $record);
+        }
+    }
+
+    public function getRows22(
         I\DataRowBuilder $row_builder,
         array $visible_column_ids,
         Range $range,

@@ -3071,12 +3071,12 @@ chatroom#:#settings_title#:#Einstellungen des Chats
 chatroom#:#start_private_chat#:#Privaten Chat starten
 chatroom#:#unable_to_connect#:#Die Verbindung zum Chat-Server konnte nicht hergestellt werden.
 chatroom#:#unban#:#Entsperren
-chatroom#:#user_banned#:#Der Benutzer #user# wurde aus dem Chatraum gebannt.
+chatroom#:#user_banned#:##user# wurde für den Chatraum gesperrt.
 chatroom#:#user_in_ilias#:#Benutzer in ILIAS suchen und einladen
 chatroom#:#user_in_room#:#Benutzer im aktuellen Chatraum einladen
 chatroom#:#user_invited#:#Der Benutzer wurde eingeladen.
 chatroom#:#user_invited_self#:#Sie wurden von #user# in den Chatraum #room# eingeladen.
-chatroom#:#user_kicked#:#Der Benutzer #user# wurde aus dem Chatraum geworfen.
+chatroom#:#user_kicked#:##user# wurde aus dem Chatraum geworfen.
 chatroom#:#users#:#Benutzer
 chatroom#:#welcome_to_chat#:#Willkommen im Chatraum.
 chatroom#:#write_message#:#Neue Nachricht
@@ -3535,7 +3535,7 @@ common#:#adve_assessment_settings#:#Test und Assessment-Einstellungen
 common#:#adve_frm_post_settings#:#Forenbeiträge
 common#:#adve_general_settings#:#Allgemeine Einstellungen
 common#:#adve_survey_settings#:#Umfrage-Einstellungen
-common#:#agree_date#:#Zugestimmt am
+common#:#agree_date#:#NV zugestimmt am
 common#:#all#:#Alle
 common#:#all_global_roles#:#Globale Rollen
 common#:#all_local_roles#:#Lokale Rollen (alle)
@@ -3973,6 +3973,7 @@ common#:#download_selected_items#:#Herunterladen
 common#:#downloading_settings#:#Einstellungen
 common#:#dpro_accept_usr_agreement#:#Datenschutzerklärung akzeptieren?
 common#:#dpro_accept_usr_agreement_intro#:#Es liegt eine neue Datenschutzerklärung vor. Sie müssen diese akzeptieren, bevor Sie mit der Nutzung von ILIAS fortfahren können. Lesen Sie das folgende Dokument sorgfältig durch und geben Sie unten auf der Seite Ihre Zustimmung oder Ablehnung.
+common#:#dpro_agreed_on#:#DS zugestimmt am
 common#:#dpro_force_accept_usr_agreement#:#Sie müssen die Datenschutzerklärung akzeptieren!
 common#:#dpro_no_agreement_description#:#Aktuell wird in dieser Installation keine Datenschutzerklärung angeboten. Bitte kontaktieren Sie die <a href="%1$s">ILIAS-Administration</a>.
 common#:#dpro_refuse_acceptance#:#Wiederruf der Akzeptanz der Datenschutzerklärung
@@ -9802,8 +9803,6 @@ export#:#export_resource#:#Ressource
 export#:#export_save_selection#:#Export starten
 export#:#export_select_resources#:#Objekte auswählen
 export#:#no_file#:#Keine Datei
-file#:#action_download#:#Datei herunterladen oder Inhalt anzeigen
-file#:#action_show#:#Zunächst Reiter „Info“ anzeigen
 file#:#add_icon#:#Icon hinzufügen
 file#:#amount_of_downloads#:#Downloads
 file#:#amount_of_downloads_since#:#%d seit %s
@@ -9815,6 +9814,10 @@ file#:#could_not_create_file_objs#:#Beim Erstellen der Datei-Objekte ist ein Feh
 file#:#de_activate_icon#:#(De-)Aktivieren
 file#:#download_ascii_filename#:#Nur ASCII-Zeichen im Download
 file#:#download_ascii_filename_info#:#Die Namen heruntergeladener Dateien enthalten nur ASCII-Zeichen und können so auf allen Systemen problemlos genutzt werden. Andere Zeichen werden durch Unterstriche ersetzt. Auf Installationen, die Dateinamen mit nicht-lateinischen Schriftzeichen nutzen, muss diese Option deaktiviert werden.
+file#:#file_action_download#:#Datei herunterladen oder Inhalt anzeigen
+file#:#file_action_download_info#:#Wenn WOPI aktiviert ist und die Berechtigung „Inhalt anzeigen“ erteilt wurde, wird die Datei auf der Registerkarte „Inhalt“ angezeigt. Wenn nicht, wird die Datei zum direkten Download angeboten.
+file#:#file_action_show#:#Zunächst Reiter „Info“ anzeigen
+file#:#file_action_show_info#:#Der Reiter „Info“ wird angezeigt, wo die Datei in einem zweiten Schritt heruntergeladen werden kann.
 file#:#file_btn_lp_toggle_state_completed#:#Auf „Nicht bearbeitet“ setzen
 file#:#file_btn_lp_toggle_state_not_completed#:#Auf „Bearbeitet“ setzen
 file#:#file_copy#:#Datei kopieren
@@ -9840,7 +9843,7 @@ file#:#input_desc_active#:#Dieses Icon aktivieren.
 file#:#input_desc_icon#:#Bild welches als Icon für Dateien mit den spezifizierten Suffixen verwendet werden soll.
 file#:#input_desc_suffixes#:#Liste Komma-separierter Suffixe (Nur Buchstaben und Zahlen ohne vorangehenden Punkt).
 file#:#input_icon#:#Icon
-file#:#input_suffixes#:#Suffixe
+file#:#input_suffixes#:#Suffix(e)
 file#:#migrated#:#Status
 file#:#mime_type#:#MIME-Type
 file#:#msg_cant_unpublish#:#Aktion konnte nicht ausgeführt werden
@@ -9876,7 +9879,7 @@ file#:#show_amount_of_downloads#:#Anzahl Downloads anzeigen
 file#:#show_amount_of_downloads_info#:#Die Anzahl der Downloads wird im Reiter „Info“ des Dateiobjekts angezeigt.
 file#:#storage_id#:#Storage ID
 file#:#suffix_specific_icons#:#Suffix-spezifische Icons
-file#:#suffixes#:#Suffixe
+file#:#suffixes#:#Suffix(e)
 file#:#upload_files#:#Dateien hochladen
 file#:#upload_files_limit#:#Die maximale Größe einer Datei beträgt %s.
 file#:#upload_files_title#:#Dateien hochladen
@@ -13023,6 +13026,7 @@ obj#:#copy_container_page_yes_label#:#Seitengestaltung übernehmen
 obj#:#custom_icon#:#Angepasstes Icon
 obj#:#edit_availability_period#:#Zeitliche Verfügbarkeit
 obj#:#edit_questions#:#Fragen bearbeiten
+obj#:#multiple_reference_deletion_info#:#Für die folgenden Objekte existieren weitere Referenzen.
 obj#:#no_objects_selected#:#Es muss mindestens ein Objekt ausgewählt werden.
 obj#:#obj_activate_content_lang#:#Mehrsprachigkeit für die Bearbeitung aktivieren
 obj#:#obj_activate_multilang#:#Mehrsprachigkeit aktivieren

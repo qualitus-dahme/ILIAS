@@ -102,7 +102,8 @@ class ilTestEvaluationDataTest extends ilTestBaseTestCase
             "firstname" => "root",
             "lastname" => "user",
             "title" => "",
-            "login" => "root"
+            "login" => "root",
+            "finalized_by" => null
         ];
         $records[] = ['first_access' => '2024-12-11 17:54:26'];
         $records[] = null;

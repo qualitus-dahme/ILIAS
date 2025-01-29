@@ -117,7 +117,7 @@ class ilObjBibliographic extends ilObject2
     protected function doCreate(bool $clone_mode = false): void
     {
         if ($this->upload_service->hasUploads()) {
-            if(!$this->upload_service->hasBeenProcessed()) {
+            if (!$this->upload_service->hasBeenProcessed()) {
                 $this->upload_service->process();
             }
             $this->setResourceId($this->handleUpload());
@@ -344,6 +344,16 @@ class ilObjBibliographic extends ilObject2
         $this->parseFileToDatabase();
         $this->setMigrated($original->isMigrated());
         $this->doUpdate();
+
+        // copy filters
+
+        $filters = new ilBiblFieldFilterFactory();
+        foreach ($filters->getAllForObjectId($original_id) as $filter) {
+            $cloned_filter = clone $filter;
+            $cloned_filter->setId(0);
+            $cloned_filter->setObjectId($this->getId());
+            $cloned_filter->create();
+        }
     }
 
     /**

@@ -128,9 +128,14 @@ class Data extends AbstractTable implements T\Data
             $view_controls = $this->applyValuesToViewcontrols($view_controls, $request);
             $data = $view_controls->getData();
             $range = $data[self::VIEWCONTROL_KEY_PAGINATION];
-            $range = ($range instanceof Range) ? $range->croppedTo($total_count ?? PHP_INT_MAX) : null;
+            $range = ($range instanceof Range) ? $range : null;
             $order = $data[self::VIEWCONTROL_KEY_ORDERING];
             $order = ($order instanceof Order) ? $order : null;
+
+            if ($range instanceof Range) {
+                $range = $range->withStart($range->getStart() <= $total_count ? $range->getStart() : 0);
+                $range = $range->croppedTo($total_count ?? PHP_INT_MAX);
+            }
 
             $table = $table
                 ->withRange($range)

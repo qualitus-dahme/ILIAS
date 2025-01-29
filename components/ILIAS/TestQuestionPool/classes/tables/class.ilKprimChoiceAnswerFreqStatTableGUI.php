@@ -53,7 +53,6 @@ class ilKprimChoiceAnswerFreqStatTableGUI extends ilAnswerFrequencyStatisticTabl
         foreach ($this->getData() as $row) {
             if (isset($row['addable'])) {
                 $this->setActionsColumnEnabled(true);
-                $this->addColumn('', '', '1%');
                 break;
             }
         }

@@ -154,7 +154,7 @@ class ParticipantTableExtraTimeAction implements TableAction
 
     public function allowActionForRecord(Participant $record): bool
     {
-        return true;
+        return $record->getUserId() !== ANONYMOUS_USER_ID;
     }
 
     private function resolveInfoMessage(

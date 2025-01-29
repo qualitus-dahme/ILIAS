@@ -301,11 +301,8 @@ class ilPCQuestionGUI extends ilPageContentGUI
             $ilCtrl->setParameterByClass("ilQuestionEditGUI", "q_id", $q_id);
             $ilCtrl->redirectByClass(array(get_class($this->pg_obj) . "GUI", "ilQuestionEditGUI"), "editQuestion");
         } else {	// behaviour in question pool
-            $q_gui = assQuestionGUI::_getQuestionGUI(
-                "",
-                $this->request->getInt("q_id")
-            );
-            $this->ctrl->redirectByClass(array("ilobjquestionpoolgui", get_class($q_gui)), "editQuestion");
+            $q_gui = assQuestionGUI::_getQuestionGUI('', $this->request->getInt('q_id'));
+            $this->ctrl->redirectByClass($q_gui::class, 'editQuestion');
         }
     }
 

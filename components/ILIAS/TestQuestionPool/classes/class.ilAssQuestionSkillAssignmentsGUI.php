@@ -47,10 +47,10 @@ class ilAssQuestionSkillAssignmentsGUI
 
     public const PARAM_SKILL_SELECTION = 'skill_ids';
 
-    private ilAssQuestionList $questionList;
-    private int $questionContainerId;
-    private bool $assignmentEditingEnabled;
-    private ?string $assignmentConfigurationHintMessage = null;
+    private ilAssQuestionList $question_list;
+    private int $question_container_id;
+    private bool $assignment_editing_enabled;
+    private ?string $assignment_configuration_hint_message = null;
 
     /**
      * @var array
@@ -91,12 +91,12 @@ class ilAssQuestionSkillAssignmentsGUI
 
     public function getAssignmentConfigurationHintMessage(): ?string
     {
-        return $this->assignmentConfigurationHintMessage;
+        return $this->assignment_configuration_hint_message;
     }
 
     public function setAssignmentConfigurationHintMessage(?string $assignmentConfigurationHintMessage): void
     {
-        $this->assignmentConfigurationHintMessage = $assignmentConfigurationHintMessage;
+        $this->assignment_configuration_hint_message = $assignmentConfigurationHintMessage;
     }
 
     /**
@@ -112,7 +112,7 @@ class ilAssQuestionSkillAssignmentsGUI
      */
     public function getQuestionList(): ilAssQuestionList
     {
-        return $this->questionList;
+        return $this->question_list;
     }
 
     /**
@@ -120,7 +120,7 @@ class ilAssQuestionSkillAssignmentsGUI
      */
     public function setQuestionList($questionList): void
     {
-        $this->questionList = $questionList;
+        $this->question_list = $questionList;
     }
 
     /**
@@ -128,7 +128,7 @@ class ilAssQuestionSkillAssignmentsGUI
      */
     public function getQuestionContainerId(): int
     {
-        return $this->questionContainerId;
+        return $this->question_container_id;
     }
 
     /**
@@ -136,7 +136,7 @@ class ilAssQuestionSkillAssignmentsGUI
      */
     public function setQuestionContainerId($questionContainerId): void
     {
-        $this->questionContainerId = $questionContainerId;
+        $this->question_container_id = $questionContainerId;
     }
 
     /**
@@ -144,7 +144,7 @@ class ilAssQuestionSkillAssignmentsGUI
      */
     public function isAssignmentEditingEnabled(): bool
     {
-        return $this->assignmentEditingEnabled;
+        return $this->assignment_editing_enabled;
     }
 
     /**
@@ -152,7 +152,7 @@ class ilAssQuestionSkillAssignmentsGUI
      */
     public function setAssignmentEditingEnabled($assignmentEditingEnabled): void
     {
-        $this->assignmentEditingEnabled = $assignmentEditingEnabled;
+        $this->assignment_editing_enabled = $assignmentEditingEnabled;
     }
 
     public function executeCommand(): void
@@ -411,10 +411,10 @@ class ilAssQuestionSkillAssignmentsGUI
             }
 
             if ($assignment->hasEvalModeBySolution()) {
-                $solCmpExprInput = $form->getItemByPostVar('solution_compare_expressions');
+                $sol_cmp_expr_input = $form->getItemByPostVar('solution_compare_expressions');
 
-                if (!$this->checkSolutionCompareExpressionInput($solCmpExprInput, $question_gui->getObject())) {
-                    $this->tpl->setOnScreenMessage('failure', $this->lng->txt("form_input_not_valid"));
+                if (!$this->checkSolutionCompareExpressionInput($sol_cmp_expr_input, $question_gui->getObject())) {
+                    $this->tpl->setOnScreenMessage('failure', $this->lng->txt('form_input_not_valid'));
                     $this->showSkillQuestionAssignmentPropertiesFormCmd($question_gui, $assignment, $form);
                     return;
                 }
@@ -422,7 +422,7 @@ class ilAssQuestionSkillAssignmentsGUI
                 $assignment->initSolutionComparisonExpressionList();
                 $assignment->getSolutionComparisonExpressionList()->reset();
 
-                foreach ($solCmpExprInput->getValues() as $expression) {
+                foreach ($sol_cmp_expr_input->getValues() as $expression) {
                     $assignment->getSolutionComparisonExpressionList()->add($expression);
                 }
             } else {
@@ -472,14 +472,14 @@ class ilAssQuestionSkillAssignmentsGUI
         $assignmentList->loadFromDb();
         $assignmentList->loadAdditionalSkillData();
         $table->setSkillQuestionAssignmentList($assignmentList);
-        $table->setData($this->orderQuestionData($this->questionList->getQuestionDataArray()));
+        $table->setData($this->orderQuestionData($this->question_list->getQuestionDataArray()));
 
         $this->tpl->setContent($table->getHTML());
     }
 
     private function isSyncOriginalPossibleAndAllowed($questionId): bool
     {
-        $questionData = $this->questionList->getDataArrayForQuestionId($questionId);
+        $questionData = $this->question_list->getDataArrayForQuestionId($questionId);
 
         if (!$questionData['original_id']) {
             return false;
@@ -637,7 +637,7 @@ class ilAssQuestionSkillAssignmentsGUI
 
     private function isTestQuestion($questionId): bool
     {
-        return $this->questionList->isInList($questionId);
+        return $this->question_list->isInList($questionId);
     }
 
     private function checkSolutionCompareExpressionInput($input, assQuestion $question): bool
@@ -664,8 +664,13 @@ class ilAssQuestionSkillAssignmentsGUI
 
     private function checkPointsAreInt(ilPropertyFormGUI $form): bool
     {
-        $points = $form->getInput('q_res_skill_points');
-        if ($points == (int) $points) {
+        $points_result = $form->getInput('q_res_skill_points');
+        $invalid_values_solution = array_filter(
+            $form->getInput('solution_compare_expressions')['points'],
+            fn(string $v): bool => $v != (int) $v
+        );
+        if ($points_result == (int) $points_result
+            && $invalid_values_solution === []) {
             return true;
         }
         $this->tpl->setOnScreenMessage('failure', $this->lng->txt('numeric_only'));
@@ -675,12 +680,11 @@ class ilAssQuestionSkillAssignmentsGUI
     private function validateSolutionCompareExpression(ilAssQuestionSolutionComparisonExpression $expression, $question): bool
     {
         try {
-            $conditionParser = new ilAssLacConditionParser();
-            $conditionComposite = $conditionParser->parse($expression->getExpression());
-            $questionProvider = new ilAssLacQuestionProvider();
-            $questionProvider->setQuestion($question);
-            $conditionValidator = new ilAssLacCompositeValidator($questionProvider);
-            $conditionValidator->validate($conditionComposite);
+            $question_provider = new ilAssLacQuestionProvider();
+            $question_provider->setQuestion($question);
+            (new ilAssLacCompositeValidator($question_provider))->validate(
+                (new ilAssLacConditionParser())->parse($expression->getExpression())
+            );
         } catch (ilAssLacException $e) {
             if ($e instanceof ilAssLacFormAlertProvider) {
                 return $e->getFormAlert($this->lng);
@@ -733,7 +737,7 @@ class ilAssQuestionSkillAssignmentsGUI
 
     private function getSkillSelectorHeader($questionId): string
     {
-        $questionData = $this->questionList->getDataArrayForQuestionId($questionId);
+        $questionData = $this->question_list->getDataArrayForQuestionId($questionId);
 
         return sprintf($this->lng->txt('qpl_qst_skl_selection_for_question_header'), $questionData['title']);
     }

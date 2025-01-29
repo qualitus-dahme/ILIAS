@@ -60,8 +60,8 @@ abstract class ilAdvancedMDFieldDefinitionGroupBased extends ilAdvancedMDFieldDe
 
     protected function importFieldDefinition(array $a_def): void
     {
-        $this->setOptions($a_def["options"]);
-        $this->complex = $a_def["complex"];
+        $this->setOptions($a_def["options"] ?? []);
+        $this->complex = $a_def["complex"] ?? [];
     }
 
     protected function getFieldDefinition(): array

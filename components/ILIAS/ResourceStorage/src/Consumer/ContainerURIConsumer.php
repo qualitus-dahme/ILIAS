@@ -58,12 +58,15 @@ class ContainerURIConsumer implements ContainerConsumer
             $filename = null;
         }
 
+        $startfile = urlencode($this->start_file); // e.g. for files with " " (spaces)
+        $startfile = str_replace(urlencode("/"), "/", $startfile); // we must keep directory sepparators
+
         $uri_string = $this->src_builder->getRevisionURL(
             $this->stream_access->populateRevision($this->getRevision()),
             true,
             $this->valid_for_at_least_minutes,
             $filename
-        ) . StreamDelivery::SUBREQUEST_SEPARATOR . urlencode($this->start_file);
+        ) . StreamDelivery::SUBREQUEST_SEPARATOR . $startfile;
 
         try {
             return new URI($uri_string);

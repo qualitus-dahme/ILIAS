@@ -122,9 +122,9 @@ final class ZipReader
 
         //$stream = Streams::ofString($this->zip->getFromName($path_inside_zip));
 
-        $stream = Streams::ofResource(
-            fopen('zip://' . $this->stream->getMetadata()['uri'] . '#' . $path_inside_zip, 'rb'),
-            true
+        $stream = Streams::ofFileInsideZIP(
+            $this->stream->getMetadata()['uri'],
+            $path_inside_zip
         );
 
         return [$stream, $info];

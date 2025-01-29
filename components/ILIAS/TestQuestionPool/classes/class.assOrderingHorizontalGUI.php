@@ -373,52 +373,6 @@ class assOrderingHorizontalGUI extends assQuestionGUI implements ilGuiQuestionSc
         return $form;
     }
 
-    /**
-     * Returns an html string containing a question specific representation of the answers so far
-     * given in the test for use in the right column in the scoring adjustment user interface.
-     * @param array $relevant_answers
-     * @return string
-     */
-    public function getAggregatedAnswersView(array $relevant_answers): string
-    {
-        return  $this->renderAggregateView(
-            $this->aggregateAnswers($relevant_answers, $this->object->getOrderText())
-        )->get();
-    }
-
-    public function aggregateAnswers($relevant_answers_chosen, $answer_defined_on_question): array
-    {
-        $aggregate = [];
-        foreach ($relevant_answers_chosen as $answer) {
-            $answer = str_replace($this->object->getAnswerSeparator(), '&nbsp;&nbsp;-&nbsp;&nbsp;', $answer);
-            if (in_array($answer['value1'], $aggregate)) {
-                $aggregate[$answer['value1']] = $aggregate[$answer['value1']] + 1;
-            } else {
-                $aggregate[$answer['value1']] = 1;
-            }
-        }
-
-        return $aggregate;
-    }
-
-    /**
-     * @param $aggregate
-     *
-     * @return ilTemplate
-     */
-    public function renderAggregateView($aggregate): ilTemplate
-    {
-        $tpl = new ilTemplate('tpl.il_as_aggregated_answers_table.html', true, true, "components/ILIAS/TestQuestionPool");
-
-        foreach ($aggregate as $key => $line_data) {
-            $tpl->setCurrentBlock('aggregaterow');
-            $tpl->setVariable('COUNT', $line_data);
-            $tpl->setVariable('OPTION', $key);
-            $tpl->parseCurrentBlock();
-        }
-        return $tpl;
-    }
-
     public function getAnswersFrequency($relevantAnswers, $questionIndex): array
     {
         $answers = [];

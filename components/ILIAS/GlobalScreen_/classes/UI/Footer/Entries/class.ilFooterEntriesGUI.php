@@ -31,6 +31,7 @@ use ILIAS\GlobalScreen\UI\Footer\Groups\Group;
 use ILIAS\GlobalScreen\Scope\MainMenu\Collector\Renderer\Hasher;
 use ILIAS\GlobalScreen\UI\Footer\Groups\GroupsRepository;
 use ILIAS\GlobalScreen\UI\Footer\Translation\TranslationsRepositoryDB;
+use ILIAS\GlobalScreen_\UI\UIHelper;
 
 /**
  * @author            Fabian Schmid <fabian@sr.solutions>
@@ -40,6 +41,7 @@ use ILIAS\GlobalScreen\UI\Footer\Translation\TranslationsRepositoryDB;
 final class ilFooterEntriesGUI
 {
     use Hasher;
+    use UIHelper;
 
     public const CMD_DEFAULT = 'index';
     public const CMD_ADD = 'add';
@@ -254,17 +256,23 @@ final class ilFooterEntriesGUI
         $items = [];
 
         foreach ($this->ui_handling->getIdentificationsFromRequest(self::GSFO_ID) as $id) {
-            $item = $this->repository->get($id);
-            if ($item === null) {
+            $entry = $this->repository->get($id);
+            if ($entry === null) {
                 continue;
             }
-            if ($item->isCore()) {
+            if ($entry->isCore()) {
+                $items[] = $this->ui_factory->modal()->interruptiveItem()->keyValue(
+                    $id,
+                    $entry->getTitle(),
+                    $this->translator->translate('info_not_deletable_core') .
+                    $this->ui_handling->render($this->nok($this->ui_factory))
+                );
                 continue;
             }
             $items[] = $this->ui_factory->modal()->interruptiveItem()->keyValue(
                 $id,
-                $this->translator->translate('entry_title'),
-                $item->getTitle()
+                $entry->getTitle(),
+                $this->ui_handling->render($this->ok($this->ui_factory))
             );
         }
 

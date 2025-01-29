@@ -38,6 +38,7 @@ class Table
     private \ilLanguage $lng;
     private URLBuilder $url_builder;
     private URLBuilderToken $id_token;
+    private \ILIAS\UI\Component\Table\Ordering $table;
 
     protected array $components = [];
 
@@ -61,10 +62,13 @@ class Table
             $facade
         );
 
-        $this->components[] = $this->ui_factory->table()->data(
+        $this->components[] = $this->table = $this->ui_factory->table()->ordering(
             $this->lng->txt('filter'),
             $columns,
-            $data_retrieval
+            $data_retrieval,
+            new URI(
+                ILIAS_HTTP_PATH . "/" . $this->ctrl->getLinkTarget($this->calling_gui, \ilBiblAdminFieldGUI::CMD_SAVE_ORDERING)
+            )
         )->withActions($actions)->withRequest(
             $DIC->http()->request()
         );
@@ -132,6 +136,11 @@ class Table
     public function getHTML(): string
     {
         return $this->ui_renderer->render($this->components);
+    }
+
+    public function getOrdering(): array
+    {
+        return $this->table->getData();
     }
 
     public function getUrlBuilder(): URLBuilder

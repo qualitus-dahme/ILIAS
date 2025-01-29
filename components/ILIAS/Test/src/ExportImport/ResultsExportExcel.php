@@ -20,7 +20,7 @@ declare(strict_types=1);
 
 namespace ILIAS\Test\ExportImport;
 
-use ILIAS\Data\Factory as DataFactory;
+use ILIAS\TestQuestionPool\Questions\GeneralQuestionPropertiesRepository;
 use ILIAS\Data\DateFormat\DateFormat;
 
 /**
@@ -44,6 +44,7 @@ class ResultsExportExcel implements Exporter
         private readonly \ilLanguage $lng,
         private readonly \ilObjUser $current_user,
         private readonly \ilObjTest $test_obj,
+        private readonly GeneralQuestionPropertiesRepository $question_repository,
         private readonly string $filename = '',
         private readonly bool $scoredonly = true,
     ) {
@@ -74,10 +75,7 @@ class ResultsExportExcel implements Exporter
     public function withResultsPage(): self
     {
         $this->worksheet->addSheet($this->lng->txt('tst_results'));
-
-        $cols_for_question_ids = $this->addResultsHeader();
-        $this->addResultsContent($cols_for_question_ids);
-
+        $this->addResultsContent($this->addResultsHeader());
         return $this;
     }
 
@@ -263,9 +261,9 @@ class ResultsExportExcel implements Exporter
         $this->worksheet->setCell(1, $col++, $this->lng->txt('pass'));
 
         $question_cols = [];
-        foreach ($this->test_obj->getQuestions() as $question_id) {
-            $question_cols[$question_id] = $col;
-            $this->worksheet->setCell(1, $col++, $this->getCompleteData()->getQuestionTitle($question_id));
+        foreach ($this->question_repository->getForParentObjectId($this->test_obj->getId()) as $question_properties) {
+            $question_cols[$question_properties->getQuestionId()] = $col;
+            $this->worksheet->setCell(1, $col++, $question_properties->getTitle());
         }
 
         $this->worksheet->setBold('A1:' . $this->worksheet->getColumnCoord($col - 1) . '1');

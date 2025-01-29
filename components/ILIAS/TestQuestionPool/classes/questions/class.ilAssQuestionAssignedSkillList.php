@@ -36,7 +36,7 @@ class ilAssQuestionAssignedSkillList implements Iterator
         return (bool) count($this->skills);
     }
 
-    public function current(): ?array
+    public function current(): ?string
     {
         $current = current($this->skills);
         return $current !== false ? $current : null;

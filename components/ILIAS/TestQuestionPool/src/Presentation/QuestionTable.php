@@ -47,6 +47,7 @@ class QuestionTable extends \ilAssQuestionList implements Table\DataRetrieval
         protected \ilLanguage $lng,
         protected \ilComponentRepository $component_repository,
         protected \ilRbacSystem $rbac,
+        protected \ilObjUser $current_user,
         protected ?TaxonomyService $taxonomy,
         protected NotesService $notes_service,
         protected int $parent_obj_id,
@@ -151,7 +152,6 @@ class QuestionTable extends \ilAssQuestionList implements Table\DataRetrieval
     {
         $f = $this->ui_factory->table()->column();
         $df = $this->data_factory->dateFormat();
-        $date_format = $df->withTime24($this->data_factory->dateFormat()->germanShort());
         $icon_yes = $this->ui_factory->symbol()->icon()->custom(\ilUtil::getImagePath('standard/icon_checked.svg'), 'yes');
         $icon_no = $this->ui_factory->symbol()->icon()->custom(\ilUtil::getImagePath('standard/icon_unchecked.svg'), 'no');
 
@@ -169,8 +169,14 @@ class QuestionTable extends \ilAssQuestionList implements Table\DataRetrieval
         $cols = array_merge($cols, [
             'feedback' => $f->boolean($this->lng->txt('feedback'), $icon_yes, $icon_no)->withIsOptional(true, true),
             'hints' => $f->boolean($this->lng->txt('hints'), $icon_yes, $icon_no)->withIsOptional(true, true),
-            'created' => $f->date($this->lng->txt('create_date'), $date_format)->withIsOptional(true, true),
-            'tstamp' => $f->date($this->lng->txt('last_update'), $date_format)->withIsOptional(true, true),
+            'created' => $f->date(
+                $this->lng->txt('create_date'),
+                $this->current_user->getDateTimeFormat()
+            )->withIsOptional(true, true),
+            'tstamp' => $f->date(
+                $this->lng->txt('last_update'),
+                $this->current_user->getDateTimeFormat()
+            )->withIsOptional(true, true),
             'comments' => $f->number($this->lng->txt('comments'))->withIsOptional(true, false),
         ]);
         return $cols;
@@ -284,10 +290,11 @@ class QuestionTable extends \ilAssQuestionList implements Table\DataRetrieval
         ?array $additional_parameters
     ): \Generator {
         $no_write_access = !($this->rbac->checkAccess('write', $this->request_ref_id));
+        $timezone = new \DateTimeZone($this->current_user->getTimeZone());
         foreach ($this->getData($order, $range) as $record) {
             $row_id = (string) $record['question_id'];
-            $record['created'] = (new \DateTimeImmutable())->setTimestamp($record['created']);
-            $record['tstamp'] = (new \DateTimeImmutable())->setTimestamp($record['tstamp']);
+            $record['created'] = (new \DateTimeImmutable("@{$record['created']}"))->setTimezone($timezone);
+            $record['tstamp'] = (new \DateTimeImmutable("@{$record['tstamp']}"))->setTimezone($timezone);
             $lifecycle = \ilAssQuestionLifecycle::getInstance($record['lifecycle']);
             $record['lifecycle'] = $lifecycle->getTranslation($this->lng);
 

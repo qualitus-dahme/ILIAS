@@ -18,6 +18,7 @@
 
 use ILIAS\Setup\Environment;
 use ILIAS\Setup\Objective;
+use ILIAS\Data;
 
 /**
  * This class attempt to achieve a set of database update steps. Look into the
@@ -67,6 +68,7 @@ class ilDatabaseUpdateStepsExecutedObjective implements Objective
     public function getPreconditions(Environment $environment): array
     {
         return [
+            new ilNoMajorVersionSkippedConditionObjective(new Data\Factory()),
             new ilDBStepExecutionDBExistsObjective(),
             new ilDatabaseUpdatedObjective(),
             new ilDBStepReaderExistsObjective()

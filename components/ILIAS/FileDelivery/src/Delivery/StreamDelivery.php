@@ -173,6 +173,7 @@ final class StreamDelivery extends BaseDelivery
                 $this->notFound($r);
             }
             $file_inside_zip_uri = $file_inside_ZIP->getMetadata()['uri'];
+            $file_inside_zip_stream = fopen($file_inside_zip_uri, 'rb');
 
             if ($file_inside_zip_stream === false) {
                 $this->notFound($r);

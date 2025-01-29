@@ -95,6 +95,7 @@ var ilTinyMceInitCallbackRegistry = new _ilTinyMceInitCallbackRegistry();
 window.ilTinyMceInitCallbackRegistry = ilTinyMceInitCallbackRegistry;
 
 tinymce.init({
+    license_key: 'gpl',
     selector: "textarea.RTEditor",
     branding: false,
     language: "{LANG}",

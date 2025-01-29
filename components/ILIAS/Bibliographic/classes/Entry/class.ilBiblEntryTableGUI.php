@@ -116,6 +116,25 @@ class ilBiblEntryTableGUI
         );
     }
 
+    private function renderLibraryButtons(int $entry_id): array
+    {
+        $entry = $this->facade->entryFactory()->findByIdAndTypeString($entry_id, $this->facade->type()->getStringRepresentation());
+
+        $settings = $this->facade->libraryFactory()->getAll();
+        if (count($settings) === 0) {
+            return [];
+        }
+
+        $buttons = [];
+
+        foreach ($settings as $set) {
+            $presentation = new ilBiblLibraryPresentationGUI($set, $this->facade, $this->ctrl, $this->lng, $this->ui);
+            $buttons[$set->getName()] = $presentation->getButton($this->facade, $entry);
+        }
+
+        return $buttons;
+    }
+
     protected function buildTable(): PresentationTable
     {
         $records = $this->getData();
@@ -137,6 +156,7 @@ class ilBiblEntryTableGUI
           ->withTotalEntries(count($records))
           ->withPageSize($this->entries_per_page)
             ->withCurrentPage($this->current_page);
+
         return $this->ui_factory->table()->presentation(
             "",
             $view_controls,
@@ -146,16 +166,23 @@ class ilBiblEntryTableGUI
                 UIFactory $ui_factory
             ): PresentationRow {
                 // Create row with fields and actions
-                $author = $record['author'] ?? '';
-                $title = $record['title'] ?? '';
-                $year = $record['year'] ?? '';
-                unset($record['author'], $record['title']);
+                $record['author'] = empty($record['author']) ? null : $record['author'];
+                $record['title'] = empty($record['title']) ? null : $record['title'];
+                $record['year'] = empty($record['year']) ? null : $record['year'];
+
+                $author = $record['autor'] = $record['author'] ?? $record['AU'] ?? '';
+                $title = $record['title'] = $record['title'] ?? $record['TI'] ?? '';
+                $year = $record['year'] = $record['year'] ?? $record['PY'] ?? '';
+                $entry_id = $record['entry_id'];
+
+                unset($record['author'], $record['title'], $record['AU'], $record['TI'], $record['entry_id']);
                 $translated_record = $this->getRecordWithTranslatedKeys($record);
 
                 return $row
                     ->withHeadline($title)
                     ->withSubheadline($author)
                     ->withImportantFields([$year])
+                    ->withFurtherFields($this->renderLibraryButtons($entry_id))
                     ->withContent($ui_factory->listing()->descriptive($translated_record));
             }
         )->withData($records_current_page);
@@ -205,6 +232,7 @@ class ilBiblEntryTableGUI
             $entry_attributes = $this->facade->attributeFactory()->getAttributesForEntry($bibl_entry);
             $sorted_attributes = $this->facade->attributeFactory()->sortAttributes($entry_attributes);
             $entry_data = [];
+            $entry_data['entry_id'] = $entry['entry_id'];
             foreach ($sorted_attributes as $sorted_attribute) {
                 $entry_data[$sorted_attribute->getName()] = $sorted_attribute->getValue();
             }

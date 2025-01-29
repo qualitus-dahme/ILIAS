@@ -102,9 +102,7 @@ class ParticipantTable implements DataRetrieval
             $status_of_attempt = $record->getAttemptOverviewInformation()?->getStatusOfAttempt() ?? StatusOfAttempt::NOT_YET_STARTED;
 
             $row = [
-                'name' => $this->test_object->getAnonymity()
-                    ? $this->lng->txt('anonymous')
-                    : sprintf('%s, %s', $record->getLastname(), $record->getFirstname()),
+                'name' => $this->test_object->buildName($record->getUserId(), $record->getLastname(), $record->getFirstname()),
                 'login' => $record->getLogin(),
                 'matriculation' => $record->getMatriculation(),
                 'status_of_attempt' => $this->lng->txt($status_of_attempt->value),
@@ -229,8 +227,15 @@ class ParticipantTable implements DataRetrieval
             'mark' => static fn(
                 Participant $a,
                 Participant $b
-            ) => $a->getAttemptOverviewInformation()?->getMark() <=> $b->getAttemptOverviewInformation()?->getMark()
-
+            ) => $a->getAttemptOverviewInformation()?->getMark() <=> $b->getAttemptOverviewInformation()?->getMark(),
+            'matriculation' => static fn(
+                Participant $a,
+                Participant $b
+            ) => $a->getMatriculation() <=> $b->getMatriculation(),
+            'id_of_attempt' => static fn(
+                Participant $a,
+                Participant $b
+            ) => $a->getAttemptOverviewInformation()?->getExamId() <=> $b->getAttemptOverviewInformation()?->getExamId()
         ];
     }
 
@@ -337,7 +342,7 @@ class ParticipantTable implements DataRetrieval
         $columns += [
             'matriculation' => $column_factory->text($this->lng->txt('matriculation'))
                 ->withIsOptional(true, false)
-                ->withIsSortable(false),
+                ->withIsSortable(true),
             'ip_range' => $column_factory->text($this->lng->txt('client_ip_range'))
                 ->withIsOptional(true, false)
                 ->withIsSortable(true),
@@ -365,7 +370,7 @@ class ParticipantTable implements DataRetrieval
         if ($this->test_object->getMainSettings()->getTestBehaviourSettings()->getExamIdInTestAttemptEnabled()) {
             $columns['id_of_attempt'] = $column_factory->text($this->lng->txt('exam_id_of_attempt'))
                 ->withIsOptional(true, false)
-                ->withIsSortable(false);
+                ->withIsSortable(true);
         }
 
         if ($this->test_access->checkParticipantsResultsAccess()) {

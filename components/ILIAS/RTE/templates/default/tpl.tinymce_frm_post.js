@@ -73,6 +73,7 @@ function ilTinyMceInitCallback(ed) {
 }
 
 tinymce.init({
+    license_key: 'gpl',
     selector: "textarea.RTEditor",
     branding: false,
     language: "{LANG}",

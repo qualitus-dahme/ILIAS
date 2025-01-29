@@ -1583,8 +1583,8 @@ abstract class assQuestion implements Question
             }
             if (!is_file($filepath_original . $solution->getFilename())
                 || !copy($filepath_original . $solution->getFilename(), $filepath . $solution->getFilename())) {
-                $this->log->root()->error("File could not be duplicated!!!!");
-                $this->log->root()->error("object: " . print_r($this, true));
+                $this->log->root()->error('File for suggested solutions could not be duplicated:');
+                $this->log->root()->error("Question-Id: {$this->id}; Question-Title: {$this->title}; File: {$filepath_original}{$solution->getFilename()}");
             }
         }
     }
@@ -1608,8 +1608,8 @@ abstract class assQuestion implements Question
 
             if (!is_file($filepath_original . $solution->getFilename())
                 || copy($filepath_target . $solution->getFilename(), $filepath_target . $solution->getFilename())) {
-                $this->log->root()->error("File could not be duplicated!!!!");
-                $this->log->root()->error("object: " . print_r($this, true));
+                $this->log->root()->error('File for suggested solutions could not be cloned:');
+                $this->log->root()->error("Question-Id: {$this->id}; Question-Title: {$this->title}; File: {$filepath_original}{$solution->getFilename()}");
             }
         }
     }

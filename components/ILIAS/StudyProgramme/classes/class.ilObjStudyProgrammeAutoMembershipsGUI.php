@@ -48,8 +48,8 @@ class ilObjStudyProgrammeAutoMembershipsGUI
     private const CMD_SAVE = 'save';
     private const CMD_DELETE = 'delete';
     private const CMD_DELETE_CONFIRMATION = 'deleteConfirmation';
-    private const CMD_GET_ASYNC_MODAL_OUTPUT = 'getAsynchModalOutput';
-    private const CMD_NEXT_STEP = 'nextStep';
+    public const CMD_GET_ASYNC_MODAL_OUTPUT = 'getAsynchModalOutput';
+    public const CMD_NEXT_STEP = 'nextStep';
     private const CMD_ENABLE = 'enable';
     private const CMD_DISABLE = 'disable';
     private const CMD_PROFILE_NOT_PUBLIC = 'profile_not_public';
@@ -102,6 +102,8 @@ class ilObjStudyProgrammeAutoMembershipsGUI
                 break;
             case self::CMD_PROFILE_NOT_PUBLIC:
                 $this->view(true);
+                break;
+            case 'handleExplorerCommand':
                 break;
             default:
                 throw new ilException("ilObjStudyProgrammeAutoMembershipsGUI: Command not supported: $cmd");
@@ -706,7 +708,7 @@ class ilObjStudyProgrammeAutoMembershipsGUI
             case ilStudyProgrammeAutoMembershipSource::TYPE_ROLE:
                 $title = ilObjRole::_lookupTitle($src_id) ?? "-";
 
-                if($this->rbac_review->isGlobalRole($src_id)) {
+                if ($this->rbac_review->isGlobalRole($src_id)) {
                     $parent_ref = self::ROLEFOLDER_REF_ID;
                     $path = ['ilAdministrationGUI'];
                     $this->ctrl->setParameterByClass('ilObjRoleGUI', 'admin_mode', 'settings');
@@ -714,7 +716,7 @@ class ilObjStudyProgrammeAutoMembershipsGUI
                     $parent_ref = $this->rbac_review->getObjectReferenceOfRole($src_id);
                     $parent_type = ilObject::_lookupType($parent_ref, true);
                     $path = ['ilRepositoryGUI','ilObjCategoryGUI'];
-                    if($parent_type == 'orgu') {
+                    if ($parent_type == 'orgu') {
                         $path = ['ilAdministrationGUI','ilObjOrgUnitGUI'];
                     }
                     $path[] = 'ilPermissionGUI';

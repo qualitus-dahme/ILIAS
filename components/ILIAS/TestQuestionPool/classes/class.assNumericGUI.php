@@ -416,59 +416,6 @@ class assNumericGUI extends assQuestionGUI implements ilGuiQuestionScoringAdjust
         return [];
     }
 
-    /**
-     * Returns an html string containing a question specific representation of the answers so far
-     * given in the test for use in the right column in the scoring adjustment user interface.
-     * @param array $relevant_answers
-     * @return string
-     */
-    public function getAggregatedAnswersView(array $relevant_answers): string
-    {
-        return  $this->renderAggregateView(
-            $this->aggregateAnswers($relevant_answers)
-        )->get();
-    }
-
-    public function aggregateAnswers($relevant_answers_chosen): array
-    {
-        $aggregate = [];
-
-        foreach ($relevant_answers_chosen as $relevant_answer) {
-            if (array_key_exists($relevant_answer['value1'], $aggregate)) {
-                $aggregate[$relevant_answer['value1']]++;
-            } else {
-                $aggregate[$relevant_answer['value1']] = 1;
-            }
-        }
-        return $aggregate;
-    }
-
-    /**
-     * @param $aggregate
-     *
-     * @return ilTemplate
-     */
-    public function renderAggregateView($aggregate): ilTemplate
-    {
-        $tpl = new ilTemplate('tpl.il_as_aggregated_answers_table.html', true, true, "components/ILIAS/TestQuestionPool");
-
-        $tpl->setCurrentBlock('headercell');
-        $tpl->setVariable('HEADER', $this->lng->txt('tst_answer_aggr_answer_header'));
-        $tpl->parseCurrentBlock();
-
-        $tpl->setCurrentBlock('headercell');
-        $tpl->setVariable('HEADER', $this->lng->txt('tst_answer_aggr_frequency_header'));
-        $tpl->parseCurrentBlock();
-
-        foreach ($aggregate as $key => $value) {
-            $tpl->setCurrentBlock('aggregaterow');
-            $tpl->setVariable('OPTION', $key);
-            $tpl->setVariable('COUNT', $value);
-            $tpl->parseCurrentBlock();
-        }
-        return $tpl;
-    }
-
     public function getAnswersFrequency($relevantAnswers, $questionIndex): array
     {
         $answers = [];

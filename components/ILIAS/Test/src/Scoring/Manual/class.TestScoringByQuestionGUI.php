@@ -47,10 +47,12 @@ class TestScoringByQuestionGUI extends TestScoringByParticipantGUI
         parent::__construct($object);
         $this->lng->loadLanguageModule('form');
 
+        $this->ctrl->saveParameterByClass(self::class, 'q_id');
         $uri = ILIAS_HTTP_PATH . '/' . $this->ctrl->getLinkTargetByClass(
             [\ilObjTestGUI::class, self::class],
             $this->getDefaultCommand()
         );
+        $this->ctrl->clearParameterByClass(self::class, 'q_id');
         $url_builder = new URLBuilder(
             (new DataFactory())->uri($uri)
         );

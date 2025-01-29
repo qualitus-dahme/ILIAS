@@ -43,7 +43,7 @@ class ilObjStudyProgrammeAutoCategoriesGUI
 
     private const CMD_VIEW = 'view';
     private const CMD_SAVE = 'save';
-    private const CMD_GET_ASYNC_MODAL = 'getAsyncModalOutput';
+    public const CMD_GET_ASYNC_MODAL = 'getAsyncModalOutput';
     private const CMD_DELETE = 'delete';
     private const CMD_DELETE_CONFIRMATION = 'deleteConfirmation';
     private const CMD_PROFILE_NOT_PUBLIC = 'profile_not_public';
@@ -293,7 +293,7 @@ class ilObjStudyProgrammeAutoCategoriesGUI
         if (!is_null($current_ref_id)) {
             $this->ctrl->setParameter($this, self::CHECKBOX_CATEGORY_REF_IDS, (string) $current_ref_id);
         }
-        $link = $this->ctrl->getLinkTarget($this, "getAsyncModalOutput", "", true);
+        $link = $this->ctrl->getLinkTarget($this, self::CMD_GET_ASYNC_MODAL, "", true);
         $this->ctrl->setParameter($this, self::CHECKBOX_CATEGORY_REF_IDS, null);
         return $this->ui_factory->modal()->roundtrip(
             '',
@@ -333,7 +333,6 @@ class ilObjStudyProgrammeAutoCategoriesGUI
                 }
             );
 
-
         echo $this->ui_renderer->renderAsync($modal);
         exit;
     }
@@ -357,7 +356,7 @@ class ilObjStudyProgrammeAutoCategoriesGUI
             $cat->setValue($current_ref_id);
         }
         $cat->getExplorerGUI()->setRootId(ROOT_FOLDER_ID);
-        $cat->getExplorerGUI()->setAjax(false);
+        $cat->getExplorerGUI()->setAjax(true);
         $form->addItem($cat);
 
         $hi = new ilHiddenInputGUI(self::F_CATEGORY_ORIGINAL_REF);

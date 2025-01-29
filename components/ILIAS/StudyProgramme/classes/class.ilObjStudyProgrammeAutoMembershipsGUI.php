@@ -48,8 +48,8 @@ class ilObjStudyProgrammeAutoMembershipsGUI
     private const CMD_SAVE = 'save';
     private const CMD_DELETE = 'delete';
     private const CMD_DELETE_CONFIRMATION = 'deleteConfirmation';
-    private const CMD_GET_ASYNC_MODAL_OUTPUT = 'getAsynchModalOutput';
-    private const CMD_NEXT_STEP = 'nextStep';
+    public const CMD_GET_ASYNC_MODAL_OUTPUT = 'getAsynchModalOutput';
+    public const CMD_NEXT_STEP = 'nextStep';
     private const CMD_ENABLE = 'enable';
     private const CMD_DISABLE = 'disable';
     private const CMD_PROFILE_NOT_PUBLIC = 'profile_not_public';
@@ -102,6 +102,8 @@ class ilObjStudyProgrammeAutoMembershipsGUI
                 break;
             case self::CMD_PROFILE_NOT_PUBLIC:
                 $this->view(true);
+                break;
+            case 'handleExplorerCommand':
                 break;
             default:
                 throw new ilException("ilObjStudyProgrammeAutoMembershipsGUI: Command not supported: $cmd");

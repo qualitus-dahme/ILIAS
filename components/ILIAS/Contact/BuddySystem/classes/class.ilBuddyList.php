@@ -53,7 +53,7 @@ class ilBuddyList
         return self::$instances[$usrId];
     }
 
-    public static function getInstanceByGlobalUser(ilObjUser $user = null): self
+    public static function getInstanceByGlobalUser(?ilObjUser $user = null): self
     {
         global $DIC;
 
@@ -64,7 +64,7 @@ class ilBuddyList
         return self::getInstanceByUserId($user->getId());
     }
 
-    protected function __construct(int $ownerId, ilAppEventHandler $event_handler = null)
+    protected function __construct(int $ownerId, ?ilAppEventHandler $event_handler = null)
     {
         global $DIC;
 

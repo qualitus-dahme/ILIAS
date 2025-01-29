@@ -71,17 +71,17 @@ class ilCertificateGUI
         ilCertificatePlaceholderValues $placeholderValuesObject,
         private readonly int $objectId,
         string $certificatePath,
-        ilCertificateFormRepository $settingsFormFactory = null,
-        ilCertificateDeleteAction $deleteAction = null,
-        ilCertificateTemplateRepository $templateRepository = null,
-        ilPageFormats $pageFormats = null,
-        ilXlsFoParser $xlsFoParser = null,
-        ilCertificateTemplateExportAction $exportAction = null,
-        ilCertificateTemplatePreviewAction $previewAction = null,
-        FileUpload $fileUpload = null,
+        ?ilCertificateFormRepository $settingsFormFactory = null,
+        ?ilCertificateDeleteAction $deleteAction = null,
+        ?ilCertificateTemplateRepository $templateRepository = null,
+        ?ilPageFormats $pageFormats = null,
+        ?ilXlsFoParser $xlsFoParser = null,
+        ?ilCertificateTemplateExportAction $exportAction = null,
+        ?ilCertificateTemplatePreviewAction $previewAction = null,
+        ?FileUpload $fileUpload = null,
         private readonly ilSetting $settings = new ilSetting('certificate'),
-        Filesystem $file_system = null,
-        Filesystem $tmp_file_system = null
+        ?Filesystem $file_system = null,
+        ?Filesystem $tmp_file_system = null
     ) {
         global $DIC;
 

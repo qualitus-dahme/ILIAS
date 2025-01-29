@@ -34,7 +34,8 @@ class CheckHelpers
         public \ilCtrlInterface $ctrl,
         public ActionRepository $action_repository,
         public Services $http,
-        public URIBuilder $static_url
+        public URIBuilder $static_url,
+        public \ilWorkspaceAccessHandler $workspace_access_handler
     ) {
     }
 

@@ -477,7 +477,7 @@ final class ilSamlSettingsGUI
         $this->showUserAttributeMappingForm($form);
     }
 
-    private function showUserAttributeMappingForm(ilPropertyFormGUI $form = null): void
+    private function showUserAttributeMappingForm(?ilPropertyFormGUI $form = null): void
     {
         $this->tabs->setSubTabActive(self::LNG_AUTH_SAML_USER_MAPPING);
 
@@ -555,7 +555,7 @@ final class ilSamlSettingsGUI
         $this->showSettings($form);
     }
 
-    private function showSettings(ilPropertyFormGUI $form = null): void
+    private function showSettings(?ilPropertyFormGUI $form = null): void
     {
         if (!($form instanceof ilPropertyFormGUI)) {
             $form = $this->getSettingsForm();
@@ -621,7 +621,7 @@ final class ilSamlSettingsGUI
         return $form;
     }
 
-    private function showIdpSettings(ilPropertyFormGUI $form = null): void
+    private function showIdpSettings(?ilPropertyFormGUI $form = null): void
     {
         $this->tabs->setSubTabActive('auth_saml_idp_settings');
 
@@ -693,7 +693,7 @@ final class ilSamlSettingsGUI
         $this->showNewIdpForm($form);
     }
 
-    private function showNewIdpForm(ilPropertyFormGUI $form = null): void
+    private function showNewIdpForm(?ilPropertyFormGUI $form = null): void
     {
         $this->ensureWriteAccess();
 

@@ -25,7 +25,6 @@ use GuzzleHttp\Psr7\ServerRequest;
 use ILIAS\Data\Factory as DataFactory;
 use ILIAS\Data\Order;
 use ILIAS\Data\Range;
-use ILIAS\Test\RequestDataCollector;
 use ILIAS\UI\Component\Table\Action\Standard as TableAction;
 use ILIAS\UI\Component\Table\Column\Column;
 use ILIAS\UI\Component\Table\DataRetrieval;
@@ -41,21 +40,17 @@ class QuestionsBrowserTable implements DataRetrieval
 {
     public const ACTION_INSERT = 'insert';
 
-    private ?array $records = null;
-
     public function __construct(
-        protected readonly string $table_id,
-        protected UIFactory $ui_factory,
-        protected UIRenderer $ui_renderer,
-        protected \ilLanguage $lng,
-        protected \ilCtrl $ctrl,
-        protected DataFactory $data_factory,
-        protected \ilAssQuestionList $question_list,
-        protected \ilObjTest $test_obj,
-        protected \ilTree $tree,
-        protected RequestDataCollector $testrequest,
-        protected TaxonomyService $taxonomy,
-        protected string $parent_title
+        private readonly string $table_id,
+        private readonly \ilObjUser $current_user,
+        private readonly UIFactory $ui_factory,
+        private readonly UIRenderer $ui_renderer,
+        private readonly \ilLanguage $lng,
+        private readonly \ilCtrl $ctrl,
+        private readonly DataFactory $data_factory,
+        private readonly \ilAssQuestionList $question_list,
+        private readonly TaxonomyService $taxonomy,
+        private readonly string $parent_title
     ) {
     }
 
@@ -65,11 +60,10 @@ class QuestionsBrowserTable implements DataRetrieval
             $this->lng->txt('list_of_questions'),
             $this->getColumns(),
             $this
-        )
-            ->withId($this->table_id)
-            ->withActions($this->getActions())
-            ->withRequest($request)
-            ->withFilter($filter);
+        )->withId($this->table_id)
+        ->withActions($this->getActions())
+        ->withRequest($request)
+        ->withFilter($filter);
     }
 
     public function getColumns(): array
@@ -78,7 +72,6 @@ class QuestionsBrowserTable implements DataRetrieval
         $icon_factory = $this->ui_factory->symbol()->icon();
         $iconYes = $icon_factory->custom('assets/images/standard/icon_checked.svg', 'yes');
         $iconNo = $icon_factory->custom('assets/images/standard/icon_unchecked.svg', 'no');
-        $dateFormat = $this->data_factory->dateFormat()->withTime24($this->data_factory->dateFormat()->germanShort());
 
         $columns = [
             'title' => $column_factory->text(
@@ -117,11 +110,11 @@ class QuestionsBrowserTable implements DataRetrieval
             )->withIsOptional(true, false),
             'created' => $column_factory->date(
                 $this->lng->txt('created'),
-                $dateFormat
+                $this->current_user->getDateTimeFormat()
             )->withIsOptional(true, false),
             'tstamp' => $column_factory->date(
                 $this->lng->txt('updated'),
-                $dateFormat
+                $this->current_user->getDateTimeFormat()
             )->withIsOptional(true, false)
         ];
 
@@ -159,15 +152,16 @@ class QuestionsBrowserTable implements DataRetrieval
         ?array $filter_data,
         ?array $additional_parameters
     ): \Generator {
-        foreach ($this->getViewControlledRecords($filter_data, $range, $order) as $record) {
+        $timezone = new \DateTimeZone($this->current_user->getTimeZone());
+        foreach ($this->loadRecords($filter_data ?? [], $order, $range) as $record) {
             $question_id = $record['question_id'];
 
             $record['type_tag'] = $this->lng->txt($record['type_tag']);
             $record['complete'] = (bool) $record['complete'];
             $record['lifecycle'] = \ilAssQuestionLifecycle::getInstance($record['lifecycle'])->getTranslation($this->lng) ?? '';
 
-            $record['created'] = (new \DateTimeImmutable())->setTimestamp($record['created']);
-            $record['tstamp'] = (new \DateTimeImmutable())->setTimestamp($record['tstamp']);
+            $record['created'] = (new \DateTimeImmutable("@{$record['created']}"))->setTimezone($timezone);
+            $record['tstamp'] = (new \DateTimeImmutable("@{$record['tstamp']}"))->setTimezone($timezone);
             $record['taxonomies'] = $this->resolveTaxonomiesRowData($record['obj_fi'], $question_id);
 
             yield $row_builder->buildDataRow((string) $question_id, $record);
@@ -176,132 +170,32 @@ class QuestionsBrowserTable implements DataRetrieval
 
     public function getTotalRowCount(?array $filter_data, ?array $additional_parameters): int
     {
-        return count($this->loadRecords($filter_data));
+        $filter_data ??= [];
+        $this->addFiltersToQuestionList($filter_data);
+        return $this->question_list->getTotalRowCount($filter_data, $additional_parameters);
     }
 
-    private function getViewControlledRecords(?array $filter_data, Range $range, Order $order): array
+    public function loadRecords(array $filters = [], ?Order $order = null, ?Range $range = null): array
     {
-        return $this->limitRecords($this->sortRecords($this->loadRecords($filter_data), $order), $range);
-    }
+        $this->addFiltersToQuestionList($filters);
 
-    public function loadRecords(?array $filter): array
-    {
-        $filter ??= [];
-        if ($this->records !== null) {
-            return $this->records;
-        }
-
-        if ($this->testrequest->raw(ilTestQuestionBrowserTableGUI::MODE_PARAMETER) === ilTestQuestionBrowserTableGUI::MODE_BROWSE_TESTS) {
-            $this->question_list->setParentObjectType('tst');
-            $this->question_list->setQuestionInstanceTypeFilter(\ilAssQuestionList::QUESTION_INSTANCE_TYPE_ALL);
-            $this->question_list->setExcludeQuestionIdsFilter($this->test_obj->getQuestions());
-        } else {
-            $this->question_list->setParentObjIdsFilter($this->getQuestionParentObjIds(ilTestQuestionBrowserTableGUI::REPOSITORY_ROOT_NODE_ID));
-            $this->question_list->setQuestionInstanceTypeFilter(\ilAssQuestionList::QUESTION_INSTANCE_TYPE_ORIGINALS);
-            $this->question_list->setExcludeQuestionIdsFilter($this->test_obj->getExistingQuestions());
-        }
-
-        foreach (array_filter($filter) as $item => $value) {
-            switch ($item) {
-                case 'title':
-                case 'description':
-                case 'type':
-                case 'author':
-                case 'lifecycle':
-                case 'parent_title':
-                case 'taxonomy_title':
-                case 'taxonomy_node_title':
-                    if ($value !== '') {
-                        $this->question_list->addFieldFilter($item, $value);
-                    }
-                    break;
-                case 'commented':
-                    if ($value !== '') {
-                        $this->question_list->setCommentFilter((int) $value);
-                    }
-                    break;
-                case 'taxonomies':
-                    if ($value === '') {
-                        $this->question_list->addTaxonomyFilterNoTaxonomySet(true);
-                        break;
-                    }
-
-                    $tax_nodes = explode('-', $value);
-                    $this->question_list->addTaxonomyFilter(
-                        array_shift($tax_nodes),
-                        $tax_nodes,
-                        $this->test_obj->getId(),
-                        $this->test_obj->getType()
-                    );
-                    break;
-                default:
-                    $this->question_list->addFieldFilter($item, $value);
-            }
-        }
-
+        $this->question_list->setOrder($order);
+        $this->question_list->setRange($range);
         $this->question_list->load();
-        $records = $this->filterRecordsByTaxonomyOrNodeTitle(
-            $this->question_list->getQuestionDataArray(),
-            $filter['taxonomy_title'] ?? '',
-            $filter['taxonomy_node_title'] ?? ''
-        );
 
-        return $this->records = $records;
+        return $this->question_list->getQuestionDataArray();
     }
 
-    private function filterRecordsByTaxonomyOrNodeTitle(array $records, string $taxonomyTitle = '', string $taxonomyNodeTitle = ''): array
+    private function addFiltersToQuestionList(array $filters): void
     {
-        if (empty($taxonomyTitle) && empty($taxonomyNodeTitle)) {
-            return $records;
-        }
-
-        foreach ($records as $key => $record) {
-            $obj_fi = $record['obj_fi'];
-            $data = $this->loadTaxonomyAssignmentData($obj_fi, $key, $this->taxonomy->getUsageOfObject($obj_fi));
-            $safe = false;
-
-            foreach ($data as $taxonomyId => $taxData) {
-                $titleCheck = empty($taxonomyTitle) || is_int(mb_stripos(\ilObject::_lookupTitle($taxonomyId), $taxonomyTitle));
-
-                if ($titleCheck) {
-                    foreach ($taxData as $node) {
-                        if (empty($taxonomyNodeTitle) || is_int(mb_stripos(\ilTaxonomyNode::_lookupTitle($node['node_id']), $taxonomyNodeTitle))) {
-                            $safe = true;
-                            break 2;
-                        }
-                    }
-                }
-            }
-
-            if (!$safe) {
-                unset($records[$key]);
-            }
-        }
-
-        return $records;
-    }
-
-    private function getQuestionParentObjIds(int $repositoryRootNode): array
-    {
-        $parents = $this->tree->getSubTree(
-            $this->tree->getNodeData($repositoryRootNode),
-            true,
-            ['qpl']
-        );
-
-        $parentIds = [];
-
-        foreach ($parents as $nodeData) {
-            if ((int) $nodeData['obj_id'] === $this->test_obj->getId()) {
+        foreach (array_filter($filters) as $key => $filter) {
+            if ($key === 'commented') {
+                $this->question_list->setCommentFilter((int) $filter);
                 continue;
             }
 
-            $parentIds[$nodeData['obj_id']] = $nodeData['obj_id'];
+            $this->question_list->addFieldFilter($key, $filter);
         }
-
-        $parentIds = array_map('intval', array_values($parentIds));
-        $available_pools = array_map('intval', array_keys(\ilObjQuestionPool::_getAvailableQuestionpools(true)));
-        return array_intersect($parentIds, $available_pools);
     }
 
     private function resolveTaxonomiesRowData(int $obj_fi, int $questionId): string
@@ -351,28 +245,5 @@ class QuestionsBrowserTable implements DataRetrieval
         }
 
         return $taxonomyAssignmentData;
-    }
-
-    private function sortRecords(array $records, Order $order): array
-    {
-        [$order_field, $order_direction] = $order->join(
-            '',
-            fn(string $index, string $key, string $value): array => [$key, $value]
-        );
-
-        usort($records, static function (array $a, array $b) use ($order_field): int {
-            if (is_numeric($a[$order_field]) || is_bool($a[$order_field]) || is_array($a[$order_field])) {
-                return $a[$order_field] <=> $b[$order_field];
-            }
-
-            return strcmp($a[$order_field] ?? '', $b[$order_field] ?? '');
-        });
-
-        return $order_direction === $order::DESC ? array_reverse($records) : $records;
-    }
-
-    private function limitRecords(array $records, Range $range): array
-    {
-        return \array_slice($records, $range->getStart(), $range->getLength());
     }
 }

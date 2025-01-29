@@ -24,27 +24,30 @@ use ILIAS\UI\Renderer;
 use ILIAS\Cron\Schedule\CronJobScheduleType;
 
 /**
- * Class ilCronManagerGUI
- * @author Jörg Lützenkirchen <luetzenkirchen@leifos.com>
  * @ilCtrl_Calls ilCronManagerGUI: ilPropertyFormGUI
  * @ilCtrl_isCalledBy ilCronManagerGUI: ilAdministrationGUI
- * @ingroup ServicesCron
  */
 class ilCronManagerGUI
 {
+    private const FORM_PARAM_SCHEDULE_PREFIX = 'schedule_';
+    public const FORM_PARAM_MAIN_SECTION = 'main';
+    public const FORM_PARAM_JOB_INPUT = 'additional_job_input';
+    public const FORM_PARAM_GROUP_SCHEDULE = 'schedule';
+
     private readonly ilLanguage $lng;
     private readonly ilCtrlInterface $ctrl;
     private readonly ilSetting $settings;
     private readonly ilGlobalTemplateInterface $tpl;
-    private readonly Factory $uiFactory;
-    private readonly Renderer $uiRenderer;
-    private readonly ilUIService $uiService;
-    private readonly ilCronJobRepository $cronRepository;
+    private readonly Factory $ui_factory;
+    private readonly Renderer $ui_renderer;
+    private readonly ilUIService $ui_service;
+    private readonly ilCronJobRepository $cron_repository;
     private readonly \ILIAS\DI\RBACServices $rbac;
     private readonly ilErrorHandling $error;
-    private readonly WrapperFactory $httpRequest;
+    private readonly WrapperFactory $http_wrapper;
+    private readonly \ILIAS\HTTP\GlobalHttpState $http_service;
     private readonly \ILIAS\Refinery\Factory $refinery;
-    private readonly ilCronManager $cronManager;
+    private readonly ilCronManager $cron_manager;
     private readonly ilObjUser $actor;
 
     public function __construct()
@@ -56,16 +59,17 @@ class ilCronManagerGUI
         $this->ctrl = $DIC->ctrl();
         $this->settings = $DIC->settings();
         $this->tpl = $DIC->ui()->mainTemplate();
-        $this->uiFactory = $DIC->ui()->factory();
-        $this->uiRenderer = $DIC->ui()->renderer();
-        $this->uiService = $DIC->uiService();
+        $this->ui_factory = $DIC->ui()->factory();
+        $this->ui_renderer = $DIC->ui()->renderer();
+        $this->ui_service = $DIC->uiService();
         $this->rbac = $DIC->rbac();
         $this->error = $DIC['ilErr'];
-        $this->httpRequest = $DIC->http()->wrapper();
+        $this->http_wrapper = $DIC->http()->wrapper();
+        $this->http_service = $DIC->http();
         $this->refinery = $DIC->refinery();
         $this->actor = $DIC->user();
-        $this->cronRepository = $DIC->cron()->repository();
-        $this->cronManager = $DIC->cron()->manager();
+        $this->cron_repository = $DIC->cron()->repository();
+        $this->cron_manager = $DIC->cron()->manager();
 
         $this->lng->loadLanguageModule('cron');
         $this->lng->loadLanguageModule('cmps');
@@ -84,16 +88,16 @@ class ilCronManagerGUI
         $exc = null;
 
         try {
-            if ($forceRetrieval || $this->httpRequest->query()->has($key)) {
-                return $this->httpRequest->query()->retrieve($key, $trafo);
+            if ($forceRetrieval || $this->http_wrapper->query()->has($key)) {
+                return $this->http_wrapper->query()->retrieve($key, $trafo);
             }
         } catch (OutOfBoundsException $e) {
             $exc = $e;
         }
 
         try {
-            if ($forceRetrieval || $this->httpRequest->post()->has($key)) {
-                return $this->httpRequest->post()->retrieve($key, $trafo);
+            if ($forceRetrieval || $this->http_wrapper->post()->has($key)) {
+                return $this->http_wrapper->post()->retrieve($key, $trafo);
             }
         } catch (OutOfBoundsException $e) {
             $exc = $e;
@@ -118,7 +122,8 @@ class ilCronManagerGUI
         switch (strtolower($class)) {
             case strtolower(ilPropertyFormGUI::class):
                 $job_id = $this->getRequestValue('jid', $this->refinery->kindlyTo()->string());
-                $form = $this->initEditForm(ilUtil::stripSlashes($job_id));
+                $job = $this->cron_repository->getJobInstanceById(ilUtil::stripSlashes($job_id));
+                $form = $this->initLegacyEditForm($job);
                 $this->ctrl->forwardCommand($form);
                 break;
         }
@@ -139,14 +144,14 @@ class ilCronManagerGUI
             );
         }
 
-        $message = $this->uiFactory->messageBox()->info($this->lng->txt('cronjob_last_start') . ': ' . $tstamp);
+        $message = $this->ui_factory->messageBox()->info($this->lng->txt('cronjob_last_start') . ': ' . $tstamp);
 
-        $cronJobs = $this->cronRepository->findAll();
+        $cronJobs = $this->cron_repository->findAll();
 
         $tableFilterMediator = new ilCronManagerTableFilterMediator(
             $cronJobs,
-            $this->uiFactory,
-            $this->uiService,
+            $this->ui_factory,
+            $this->ui_service,
             $this->lng
         );
         $filter = $tableFilterMediator->filter($this->ctrl->getFormAction(
@@ -158,12 +163,12 @@ class ilCronManagerGUI
 
         $tbl = new ilCronManagerTableGUI(
             $this,
-            $this->cronRepository,
+            $this->cron_repository,
             'render',
             $this->rbac->system()->checkAccess('write', SYSTEM_FOLDER_ID)
         );
         $this->tpl->setContent(implode('', [
-            $this->uiRenderer->render([$message, $filter]),
+            $this->ui_renderer->render([$message, $filter]),
             $tbl->populate(
                 $tableFilterMediator->filteredJobs(
                     $filter
@@ -172,7 +177,31 @@ class ilCronManagerGUI
         ]));
     }
 
-    public function edit(ilPropertyFormGUI $a_form = null): void
+    public function edit(?ILIAS\UI\Component\Input\Container\Form\Form $form = null): void
+    {
+        if (!$this->rbac->system()->checkAccess('write', SYSTEM_FOLDER_ID)) {
+            $this->error->raiseError($this->lng->txt('no_permission'), $this->error->WARNING);
+        }
+
+        $job_id = $this->getRequestValue('jid', $this->refinery->kindlyTo()->string());
+        if (!$job_id) {
+            $this->ctrl->redirect($this, 'render');
+        }
+
+        if ($form === null) {
+            $job = $this->cron_repository->getJobInstanceById($job_id);
+            if ($job && $job->usesLegacyForms()) {
+                $this->ctrl->setParameter($this, 'jid', $job->getId());
+                $this->ctrl->redirect($this, 'editLegacy');
+            }
+
+            $form = $this->initEditForm($job);
+        }
+
+        $this->tpl->setContent($this->ui_renderer->render($form));
+    }
+
+    public function editLegacy(?ilPropertyFormGUI $a_form = null): void
     {
         if (!$this->rbac->system()->checkAccess('write', SYSTEM_FOLDER_ID)) {
             $this->error->raiseError($this->lng->txt('no_permission'), $this->error->WARNING);
@@ -184,7 +213,8 @@ class ilCronManagerGUI
         }
 
         if ($a_form === null) {
-            $a_form = $this->initEditForm($job_id);
+            $job = $this->cron_repository->getJobInstanceById($job_id);
+            $a_form = $this->initLegacyEditForm($job);
         }
 
         $this->tpl->setContent($a_form->getHTML());
@@ -226,20 +256,125 @@ class ilCronManagerGUI
         ], true);
     }
 
-    protected function initEditForm(string $a_job_id): ilPropertyFormGUI
+    protected function initEditForm(?ilCronJob $job): ILIAS\UI\Component\Input\Container\Form\Form
     {
-        $job = $this->cronRepository->getJobInstanceById($a_job_id);
         if (!($job instanceof ilCronJob)) {
             $this->ctrl->redirect($this, 'render');
         }
 
-        $this->ctrl->setParameter($this, 'jid', $a_job_id);
+        $this->ctrl->setParameter($this, 'jid', $job->getId());
 
-        $jobs_data = $this->cronRepository->getCronJobData($job->getId());
+        $jobs_data = $this->cron_repository->getCronJobData($job->getId());
+        $job_data = $jobs_data[0];
+
+        $section_inputs = [];
+        if ($job->hasFlexibleSchedule()) {
+            $schedule_type_groups = [];
+            foreach ($job->getAllScheduleTypes() as $schedule_type) {
+                if (!in_array($schedule_type, $job->getValidScheduleTypes(), true)) {
+                    continue;
+                }
+
+                $schedule_type_inputs = [];
+                if (in_array($schedule_type, $job->getScheduleTypesWithValues(), true)) {
+                    $schedule_value_input = $this->ui_factory
+                        ->input()
+                        ->field()
+                        ->numeric(
+                            $this->lng->txt('cron_schedule_value')
+                        )->withAdditionalTransformation(
+                            $this->refinery->in()->series([
+                                $this->refinery->int()->isGreaterThanOrEqual(1)
+                            ])
+                        )->withRequired(true);
+
+                    if (is_numeric($job_data['schedule_type']) &&
+                        CronJobScheduleType::tryFrom((int) $job_data['schedule_type']) === $schedule_type) {
+                        $schedule_value_input = $schedule_value_input->withValue(
+                            $job_data['schedule_value'] === null ? null : (int) $job_data['schedule_value']
+                        );
+                    }
+
+                    $schedule_type_inputs = [
+                        $this->getScheduleValueFormElementName($schedule_type) => $schedule_value_input
+                    ];
+                }
+
+                $schedule_type_groups[self::FORM_PARAM_SCHEDULE_PREFIX . $schedule_type->value] = $this->ui_factory
+                    ->input()
+                    ->field()
+                    ->group(
+                        $schedule_type_inputs,
+                        $this->getScheduleTypeFormElementName($schedule_type)
+                    )
+                    ->withDedicatedName(self::FORM_PARAM_SCHEDULE_PREFIX . $schedule_type->value);
+            }
+
+            $default_schedule_type = current($job->getValidScheduleTypes())->value;
+
+            $section_inputs['schedule'] = $this->ui_factory
+                ->input()
+                ->field()
+                ->switchableGroup(
+                    $schedule_type_groups,
+                    $this->lng->txt('cron_schedule_type')
+                )
+                ->withRequired(true)
+                ->withValue(
+                    $job_data['schedule_type'] === null ?
+                        self::FORM_PARAM_SCHEDULE_PREFIX . $default_schedule_type :
+                        self::FORM_PARAM_SCHEDULE_PREFIX . $job_data['schedule_type']
+                );
+        }
+
+        $main_section = $this->ui_factory->input()->field()->section(
+            $section_inputs,
+            $this->lng->txt('cron_action_edit') . ': "' . $job->getTitle() . '"'
+        );
+
+        $inputs = [
+            self::FORM_PARAM_MAIN_SECTION => $main_section
+        ];
+
+        if ($job->hasCustomSettings()) {
+            $inputs = array_merge(
+                $inputs,
+                [
+                    self::FORM_PARAM_JOB_INPUT =>
+                    $job->getCustomConfigurationInput(
+                        $this->ui_factory,
+                        $this->refinery,
+                        $this->lng
+                    )
+                ]
+            );
+        }
+
+        return $this->ui_factory
+            ->input()
+            ->container()
+            ->form()
+            ->standard($this->ctrl->getFormAction($this, 'update'), $inputs)
+            ->withDedicatedName('cron_form');
+    }
+
+    /**
+     * @deprecated
+     */
+    #[\Deprecated('Will be removed without any alternative, KS/UI forms will be expected', since: '13.0')]
+    protected function initLegacyEditForm(?ilCronJob $job): ilPropertyFormGUI
+    {
+        if (!($job instanceof ilCronJob)) {
+            $this->ctrl->redirect($this, 'render');
+        }
+
+        $this->ctrl->setParameter($this, 'jid', $job->getId());
+
+        $jobs_data = $this->cron_repository->getCronJobData($job->getId());
         $job_data = $jobs_data[0];
 
         $form = new ilPropertyFormGUI();
-        $form->setFormAction($this->ctrl->getFormAction($this, 'update'));
+        $form->setFormAction($this->ctrl->getFormAction($this, 'updateLegacy'));
         $form->setTitle($this->lng->txt('cron_action_edit') . ': "' . $job->getTitle() . '"');
 
         if ($job->hasFlexibleSchedule()) {
@@ -281,7 +416,7 @@ class ilCronManagerGUI
             $job->addCustomSettingsToForm($form);
         }
 
-        $form->addCommandButton('update', $this->lng->txt('save'));
+        $form->addCommandButton('updateLegacy', $this->lng->txt('save'));
         $form->addCommandButton('render', $this->lng->txt('cancel'));
 
         return $form;
@@ -298,34 +433,91 @@ class ilCronManagerGUI
             $this->ctrl->redirect($this, 'render');
         }
 
-        $form = $this->initEditForm($job_id);
-        if ($form->checkInput()) {
-            $job = $this->cronRepository->getJobInstanceById($job_id);
-            if ($job instanceof ilCronJob) {
-                $valid = true;
-                if ($job->hasCustomSettings() && !$job->saveCustomSettings($form)) {
-                    $valid = false;
-                }
+        $job = $this->cron_repository->getJobInstanceById($job_id);
+        $form = $this->initEditForm($job);
 
-                if ($valid && $job->hasFlexibleSchedule()) {
-                    $type = CronJobScheduleType::from((int) $form->getInput('type'));
-                    $value = match (true) {
-                        $this->hasScheduleValue($type) => (int) $form->getInput($this->getScheduleValueFormElementName($type)),
-                        default => null,
-                    };
+        $form_valid = false;
+        $form_data = null;
+        if ($this->http_service->request()->getMethod() === 'POST') {
+            $form = $form->withRequest($this->http_service->request());
+            $form_data = $form->getData();
+            $form_valid = $form_data !== null;
+        }
 
-                    $this->cronRepository->updateJobSchedule($job, $type, $value);
-                }
+        if (!$form_valid) {
+            $this->edit($form);
+            return;
+        }
 
-                if ($valid) {
-                    $this->tpl->setOnScreenMessage('success', $this->lng->txt('cron_action_edit_success'), true);
-                    $this->ctrl->redirect($this, 'render');
-                }
+        if ($job instanceof ilCronJob) {
+            if ($job->hasFlexibleSchedule()) {
+                $schedule_group = $form_data[self::FORM_PARAM_MAIN_SECTION][self::FORM_PARAM_GROUP_SCHEDULE];
+
+                $type = CronJobScheduleType::from(
+                    (int) ltrim($schedule_group[0], self::FORM_PARAM_SCHEDULE_PREFIX)
+                );
+
+                $value = match (true) {
+                    $this->hasScheduleValue($type) => (int) $schedule_group[1][$this->getScheduleValueFormElementName($type)],
+                    default => null,
+                };
+
+                $this->cron_repository->updateJobSchedule($job, $type, $value);
+            }
+
+            if ($job->hasCustomSettings()) {
+                $job->saveCustomConfiguration($form_data[self::FORM_PARAM_JOB_INPUT]);
+            }
+
+            $this->tpl->setOnScreenMessage('success', $this->lng->txt('cron_action_edit_success'), true);
+            $this->ctrl->redirect($this, 'render');
+        }
+
+        $this->edit($form);
+    }
+
+    /**
+     * @deprecated
+     */
+    #[\Deprecated('Will be removed without any alternative, KS/UI forms will be expected', since: '12.0')]
+    public function updateLegacy(): void
+    {
+        if (!$this->rbac->system()->checkAccess('write', SYSTEM_FOLDER_ID)) {
+            $this->error->raiseError($this->lng->txt('no_permission'), $this->error->WARNING);
+        }
+
+        $job_id = $this->getRequestValue('jid', $this->refinery->kindlyTo()->string());
+        if (!$job_id) {
+            $this->ctrl->redirect($this, 'render');
+        }
+
+        $job = $this->cron_repository->getJobInstanceById($job_id);
+
+        $form = $this->initLegacyEditForm($job);
+        if ($job instanceof ilCronJob && $form->checkInput()) {
+            $valid = true;
+            if ($job->hasCustomSettings() && !$job->saveCustomSettings($form)) {
+                $valid = false;
+            }
+
+            if ($valid && $job->hasFlexibleSchedule()) {
+                $type = CronJobScheduleType::from((int) $form->getInput('type'));
+                $value = match (true) {
+                    $this->hasScheduleValue($type) => (int) $form->getInput($this->getScheduleValueFormElementName($type)),
+                    default => null,
+                };
+
+                $this->cron_repository->updateJobSchedule($job, $type, $value);
+            }
+
+            if ($valid) {
+                $this->tpl->setOnScreenMessage('success', $this->lng->txt('cron_action_edit_success'), true);
+                $this->ctrl->redirect($this, 'render');
             }
         }
 
         $form->setValuesByPost();
-        $this->edit($form);
+        $this->editLegacy($form);
     }
 
     public function run(): void
@@ -341,7 +533,7 @@ class ilCronManagerGUI
 
         $job_id = $this->getRequestValue('jid', $this->refinery->kindlyTo()->string());
         if ($job_id) {
-            if ($this->cronManager->runJobManual($job_id, $this->actor)) {
+            if ($this->cron_manager->runJobManual($job_id, $this->actor)) {
                 $this->tpl->setOnScreenMessage('success', $this->lng->txt('cron_action_run_success'), true);
             } else {
                 $this->tpl->setOnScreenMessage('failure', $this->lng->txt('cron_action_run_fail'), true);
@@ -365,8 +557,8 @@ class ilCronManagerGUI
         $jobs = $this->getMultiActionData();
         if ($jobs !== []) {
             foreach ($jobs as $job) {
-                if ($this->cronManager->isJobInactive($job->getId())) {
-                    $this->cronManager->resetJob($job, $this->actor);
+                if ($this->cron_manager->isJobInactive($job->getId())) {
+                    $this->cron_manager->resetJob($job, $this->actor);
                 }
             }
 
@@ -392,8 +584,8 @@ class ilCronManagerGUI
         $jobs = $this->getMultiActionData();
         if ($jobs !== []) {
             foreach ($jobs as $job) {
-                if ($this->cronManager->isJobActive($job->getId())) {
-                    $this->cronManager->deactivateJob($job, $this->actor, true);
+                if ($this->cron_manager->isJobActive($job->getId())) {
+                    $this->cron_manager->deactivateJob($job, $this->actor, true);
                 }
             }
 
@@ -419,7 +611,7 @@ class ilCronManagerGUI
         $jobs = $this->getMultiActionData();
         if ($jobs !== []) {
             foreach ($jobs as $job) {
-                $this->cronManager->resetJob($job, $this->actor);
+                $this->cron_manager->resetJob($job, $this->actor);
             }
             $this->tpl->setOnScreenMessage('success', $this->lng->txt('cron_action_reset_success'), true);
         } else {
@@ -449,7 +641,7 @@ class ilCronManagerGUI
         }
 
         foreach ($job_ids as $job_id) {
-            $job = $this->cronRepository->getJobInstanceById($job_id);
+            $job = $this->cron_repository->getJobInstanceById($job_id);
             if ($job instanceof ilCronJob) {
                 $res[$job_id] = $job;
             }
@@ -517,9 +709,9 @@ class ilCronManagerGUI
     {
         $form_elements = [];
         $fields = [];
-        $data = $this->cronRepository->getCronJobData();
+        $data = $this->cron_repository->getCronJobData();
         foreach ($data as $item) {
-            $job = $this->cronRepository->getJobInstance(
+            $job = $this->cron_repository->getJobInstance(
                 $item['job_id'],
                 $item['component'],
                 $item['class']

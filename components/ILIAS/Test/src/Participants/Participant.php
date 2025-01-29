@@ -31,7 +31,7 @@ class Participant
         private readonly int $user_id,
         private readonly ?int $active_id = null,
         private readonly ?int $test_id = null,
-        private readonly ?int $anonymous_id = null,
+        private readonly ?string $anonymous_id = null,
         private readonly string $firstname = '',
         private readonly string $lastname = '',
         private readonly string $login = '',
@@ -65,7 +65,7 @@ class Participant
         return $this->test_id;
     }
 
-    public function getAnonymousId(): ?int
+    public function getAnonymousId(): ?string
     {
         return $this->anonymous_id;
     }

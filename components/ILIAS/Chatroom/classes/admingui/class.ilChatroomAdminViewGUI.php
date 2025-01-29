@@ -155,7 +155,7 @@ class ilChatroomAdminViewGUI extends ilChatroomGUIHandler
         $this->ilCtrl->redirect($this->gui, 'view-clientsettings');
     }
 
-    public function clientsettings(ilPropertyFormGUI $form = null): void
+    public function clientsettings(?ilPropertyFormGUI $form = null): void
     {
         $this->redirectIfNoPermission(['visible','read']);
 

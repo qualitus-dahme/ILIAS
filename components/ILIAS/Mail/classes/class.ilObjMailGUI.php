@@ -168,7 +168,7 @@ class ilObjMailGUI extends ilObjectGUI
         $this->showGeneralSettingsForm();
     }
 
-    protected function showGeneralSettingsForm(ilPropertyFormGUI $form = null): void
+    protected function showGeneralSettingsForm(?ilPropertyFormGUI $form = null): void
     {
         if (!$this->isViewAllowed()) {
             $this->ilias->raiseError($this->lng->txt('msg_no_perm_write'), $this->ilias->error_obj->WARNING);
@@ -325,7 +325,7 @@ class ilObjMailGUI extends ilObjectGUI
         $this->showGeneralSettingsForm($form);
     }
 
-    protected function showExternalSettingsFormObject(ilPropertyFormGUI $form = null): void
+    protected function showExternalSettingsFormObject(?ilPropertyFormGUI $form = null): void
     {
         if (!$this->isViewAllowed()) {
             $this->ilias->raiseError($this->lng->txt('msg_no_perm_write'), $this->ilias->error_obj->WARNING);

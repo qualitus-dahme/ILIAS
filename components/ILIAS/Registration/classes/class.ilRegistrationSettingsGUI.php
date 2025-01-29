@@ -411,7 +411,7 @@ class ilRegistrationSettingsGUI
         return true;
     }
 
-    public function editEmailAssignments(ilPropertyFormGUI $form = null): void
+    public function editEmailAssignments(?ilPropertyFormGUI $form = null): void
     {
         $this->checkAccess('write');
         $this->tabs->clearTargets();
@@ -468,7 +468,7 @@ class ilRegistrationSettingsGUI
         return $role_assignment_form;
     }
 
-    public function editRoleAccessLimitations(ilPropertyFormGUI $form = null): void
+    public function editRoleAccessLimitations(?ilPropertyFormGUI $form = null): void
     {
         global $DIC;
 

@@ -33,9 +33,9 @@ class ilRoleMailboxAddress
     public function __construct(
         protected int $roleId,
         protected bool $localize = true,
-        ilMailRfc822AddressParserFactory $parserFactory = null,
-        ilDBInterface $db = null,
-        ilLanguage $lng = null
+        ?ilMailRfc822AddressParserFactory $parserFactory = null,
+        ?ilDBInterface $db = null,
+        ?ilLanguage $lng = null
     ) {
         global $DIC;
 

@@ -28,7 +28,7 @@ class ilGroupNameAsMailValidator
     /** @var callable */
     protected $groupNameCheckCallable;
 
-    public function __construct(protected string $host, callable $groupNameCheckCallable = null)
+    public function __construct(protected string $host, ?callable $groupNameCheckCallable = null)
     {
         if (null === $groupNameCheckCallable) {
             $groupNameCheckCallable = static function (string $groupName): bool {

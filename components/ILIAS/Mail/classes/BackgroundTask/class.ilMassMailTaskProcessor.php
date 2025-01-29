@@ -36,12 +36,12 @@ class ilMassMailTaskProcessor
 
     public function __construct(
         private readonly int $anonymousUserId = ANONYMOUS_USER_ID,
-        TaskManager $taskManager = null,
-        TaskFactory $taskFactory = null,
-        ilLanguage $language = null,
-        ilLogger $logger = null,
-        Container $dic = null,
-        ilMailValueObjectJsonService $objectJsonService = null
+        ?TaskManager $taskManager = null,
+        ?TaskFactory $taskFactory = null,
+        ?ilLanguage $language = null,
+        ?ilLogger $logger = null,
+        ?Container $dic = null,
+        ?ilMailValueObjectJsonService $objectJsonService = null
     ) {
         if (null === $dic) {
             global $DIC;

@@ -192,22 +192,6 @@ final class ilFooterGroupsGUI
             );
         }
 
-        /* $c = match (true) {
-             $group === null => $this->ui_factory->messageBox()->failure(
-                 $this->translator->translate('group_not_found')
-             ),
-             $group->isCore() => $this->ui_factory->messageBox()->failure(
-                 $this->translator->translate('group_core')
-             ),
-             $group->getItems() > 0 => $this->ui_factory->messageBox()->failure(
-                 $this->translator->translate('group_not_empty')
-             ),
-             default => $this->ui_factory->modal()->interruptiveItem()->keyValue(
-                 $id,
-                 $this->translator->translate('group_title'),
-                 $group->getTitle()
-             )
-         };*/
         $this->ui_handling->outAsyncAsModal(
             $this->translator->translate('group_delete'),
             $this->ctrl->getFormAction($this, 'delete'),

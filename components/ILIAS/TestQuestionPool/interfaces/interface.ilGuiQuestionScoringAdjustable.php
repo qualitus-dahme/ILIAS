@@ -58,10 +58,4 @@ interface ilGuiQuestionScoringAdjustable
      * @return string[]
      */
     public function getAfterParticipationSuppressionQuestionPostVars(): array;
-
-    /**
-     * Returns an html string containing a question specific representation of the answers so far
-     * given in the test for use in the right column in the scoring adjustment user interface.
-     */
-    public function getAggregatedAnswersView(array $relevant_answers): string;
 }

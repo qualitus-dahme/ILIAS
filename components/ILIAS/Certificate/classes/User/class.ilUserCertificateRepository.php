@@ -35,9 +35,9 @@ class ilUserCertificateRepository
     private readonly ?Factory $uuid_factory;
 
     public function __construct(
-        ilDBInterface $database = null,
-        ilLogger $logger = null,
-        string $defaultTitle = null,
+        ?ilDBInterface $database = null,
+        ?ilLogger $logger = null,
+        ?string $defaultTitle = null,
         ?Factory $uuid_factory = null,
     ) {
         if (null === $database) {

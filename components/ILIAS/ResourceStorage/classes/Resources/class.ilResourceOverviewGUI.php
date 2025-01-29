@@ -127,6 +127,10 @@ class ilResourceOverviewGUI
 
     private function gotoResource(): void
     {
+        // Store current page and sortation for possible back navigation
+        $this->ctrl->saveParameter($this, ResourceListingUI::P_PAGE);
+        $this->ctrl->saveParameter($this, ResourceListingUI::P_SORTATION);
+
         $rid = $this->getResourceIdFromRequest();
         $resource = $this->irss->manage()->getResource($rid);
         $stakeholders = $resource->getStakeholders();

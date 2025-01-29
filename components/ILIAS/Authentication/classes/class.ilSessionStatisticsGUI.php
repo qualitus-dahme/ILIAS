@@ -243,7 +243,7 @@ class ilSessionStatisticsGUI
     /**
      * @return array|int|string|null
      */
-    protected function importDate(string $a_incoming, int $a_default = null)
+    protected function importDate(string $a_incoming, ?int $a_default = null)
     {
         if (!$a_default) {
             $a_default = time();
@@ -523,7 +523,7 @@ class ilSessionStatisticsGUI
         return $data;
     }
 
-    protected function render(array $a_data, int $a_scale, string $a_measure = null): string
+    protected function render(array $a_data, int $a_scale, ?string $a_measure = null): string
     {
         $center = new ilTemplate("tpl.session_statistics_center.html", true, true, "components/ILIAS/Authentication");
 
@@ -563,8 +563,12 @@ class ilSessionStatisticsGUI
     /**
      * Build chart for active sessions
      */
-    protected function getChart(array $a_data, string $a_title, int $a_scale = self::SCALE_DAY, string $a_measure = null): string
-    {
+    protected function getChart(
+        array $a_data,
+        string $a_title,
+        int $a_scale = self::SCALE_DAY,
+        ?string $a_measure = null
+    ): string {
         $chart = ilChart::getInstanceByType(ilChart::TYPE_GRID, "objstacc");
         $chart->setSize("700", "500");
         $chart->setYAxisToInteger(true);

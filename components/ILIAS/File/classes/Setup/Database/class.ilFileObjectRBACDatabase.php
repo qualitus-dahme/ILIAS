@@ -26,6 +26,7 @@ use ILIAS\Setup;
 use ILIAS\Setup\Objective;
 use ILIAS\Setup\Environment;
 use ILIAS\BookingManager\Setup\AccessRBACOperationClonedObjective;
+use ILIAS\File\Capabilities\Permissions;
 
 /**
  * @author Fabian Schmid <fabian@sr.solutions>
@@ -38,23 +39,23 @@ class ilFileObjectRBACDatabase extends ilDatabaseUpdateStepsExecutedObjective
             parent::getPreconditions($environment),
             [
                 new ilAccessCustomRBACOperationAddedObjective(
-                    ilFileObjectRBACDatabaseSteps::EDIT_FILE,
+                    Permissions::EDIT_CONTENT->value,
                     "Edit File",
                     "object",
                     5990,
                     ["file"]
                 ),
                 new \ilAccessCustomRBACOperationAddedObjective(
-                    "view_content",
+                    Permissions::VIEW_CONTENT->value,
                     "View Content in external Editor",
                     "object",
-                    5991,
+                    2001,
                     ["file"]
                 ),
                 new AccessRBACOperationClonedObjective(
                     "file",
-                    "read",
-                    "view_content"
+                    Permissions::READ->value,
+                    Permissions::VIEW_CONTENT->value
                 ),
 
             ]

@@ -52,12 +52,12 @@ class ilForumCronNotification extends ilCronJob
     private readonly ilCronManager $cronManager;
 
     public function __construct(
-        ilDBInterface $database = null,
-        ilForumNotificationCache $notificationCache = null,
-        ilLanguage $lng = null,
-        ilSetting $settings = null,
-        \ILIAS\Refinery\Factory $refinery = null,
-        ilCronManager $cronManager = null
+        ?ilDBInterface $database = null,
+        ?ilForumNotificationCache $notificationCache = null,
+        ?ilLanguage $lng = null,
+        ?ilSetting $settings = null,
+        ?\ILIAS\Refinery\Factory $refinery = null,
+        ?ilCronManager $cronManager = null
     ) {
         global $DIC;
 

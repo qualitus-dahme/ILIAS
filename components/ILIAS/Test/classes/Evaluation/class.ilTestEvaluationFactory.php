@@ -18,7 +18,7 @@
 
 declare(strict_types=1);
 
-use ILIAS\Test\Scoring\Marks\MarkSchema;
+use ILIAS\Test\Results\Data\StatusOfAttempt;
 
 /**
  * @deprecated 11; Result/EvaluationData will be refined.
@@ -111,7 +111,7 @@ class ilTestEvaluationFactory
                 $user_eval_data = new ilTestEvaluationUserData($scoring_settings);
 
                 $user_eval_data->setName(
-                    $this->test_obj->buildName($row['usr_id'], $row['firstname'], $row['lastname'], $row['title'] ?? '')
+                    $this->test_obj->buildName($row['usr_id'], $row['firstname'], $row['lastname'])
                 );
 
                 if ($row['login'] !== null) {
@@ -155,6 +155,9 @@ class ilTestEvaluationFactory
                 $attempt->setExamId((string) $row['exam_id']);
                 $attempt->setRequestedHintsCount($row['hint_count']);
                 $attempt->setDeductedHintPoints($row['hint_points']);
+                $attempt->setStatusOfAttempt(
+                    $this->buildFinalizedBy($current_attempt, $row['last_finished_pass'], $row['finalized_by'])
+                );
             }
 
             if ($row['question_fi'] !== null) {
@@ -376,5 +379,18 @@ class ilTestEvaluationFactory
         );
 
         return $times['first_access'];
+    }
+
+    private function buildFinalizedBy(int $current_attempt, ?int $last_finished_attempt, ?string $finalized_by): StatusOfAttempt
+    {
+        if ($last_finished_attempt === null || $current_attempt > $last_finished_attempt) {
+            return StatusOfAttempt::RUNNING;
+        }
+
+        if ($finalized_by === null) {
+            return StatusOfAttempt::FINISHED_BY_UNKNOWN;
+        }
+
+        return StatusOfAttempt::tryFrom($finalized_by);
     }
 }

@@ -53,6 +53,11 @@ class ilObjStudyProgrammeGUI extends ilContainerGUI
     private const TAB_MEMBERS = "members";
     private const TAB_METADATA = "edit_advanced_settings";
     private const SUBTAB_PAGE_EDIT = "page";
+    private const ASYNC_CALLS = [
+        ilObjStudyProgrammeAutoCategoriesGUI::CMD_GET_ASYNC_MODAL,
+        ilObjStudyProgrammeAutoMembershipsGUI::CMD_GET_ASYNC_MODAL_OUTPUT,
+        ilObjStudyProgrammeAutoMembershipsGUI::CMD_NEXT_STEP,
+    ];
 
     protected ilLocatorGUI $ilLocator;
     protected ilComponentLogger $ilLog;
@@ -116,11 +121,11 @@ class ilObjStudyProgrammeGUI extends ilContainerGUI
         $cmd = $this->ctrl->getCmd(self::SUBTAB_VIEW_MANAGE);
         $next_class = $this->ctrl->getNextClass($this);
 
-        $this->addToNavigationHistory();
-
-        parent::prepareOutput();
-
-        $this->addHeaderAction();
+        if (!in_array($cmd, self::ASYNC_CALLS)) {
+            $this->addToNavigationHistory();
+            parent::prepareOutput();
+            $this->addHeaderAction();
+        }
 
         switch ($next_class) {
             case "ilinfoscreengui":

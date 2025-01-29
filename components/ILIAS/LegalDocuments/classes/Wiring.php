@@ -45,7 +45,7 @@ class Wiring implements UseSlot
 {
     private readonly Map $map;
 
-    public function __construct(private readonly SlotConstructor $slot, Map $map = null)
+    public function __construct(private readonly SlotConstructor $slot, ?Map $map = null)
     {
         $this->map = $map ?? new Map();
     }

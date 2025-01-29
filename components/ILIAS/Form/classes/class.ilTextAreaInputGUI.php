@@ -437,7 +437,7 @@ class ilTextAreaInputGUI extends ilSubEnabledFormPropertyGUI
      * @param bool $a_flag Use purifier or not
      * @return self|bool
      */
-    public function usePurifier(bool $a_flag = null)
+    public function usePurifier(?bool $a_flag = null)
     {
         if (null === $a_flag) {
             return $this->usePurifier;

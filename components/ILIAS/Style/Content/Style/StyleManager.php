@@ -106,4 +106,14 @@ class StyleManager
             true
         );
     }
+
+    public function cloneResourceContainer(
+        int $from_style_id
+    ): void {
+        $this->repo->cloneResourceContainer(
+            $from_style_id,
+            $this->style_id
+        );
+    }
+
 }

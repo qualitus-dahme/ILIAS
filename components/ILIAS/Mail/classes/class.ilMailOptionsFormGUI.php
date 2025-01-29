@@ -31,8 +31,12 @@ class ilMailOptionsFormGUI extends ilPropertyFormGUI
     protected object $parentGui;
     protected AutoResponderRepository $autoResponderRepository;
 
-    public function __construct(protected ilMailOptions $options, object $parentGui, protected string $positiveCmd, AutoresponderRepository $autoResponderRepository = null)
-    {
+    public function __construct(
+        protected ilMailOptions $options,
+        object $parentGui,
+        protected string $positiveCmd,
+        ?AutoresponderRepository $autoResponderRepository = null
+    ) {
         if (!method_exists($parentGui, 'executeCommand')) {
             throw new InvalidArgumentException(sprintf(
                 'Parameter $parentGui must be ilCtrlInterface enabled by implementing executeCommand(), %s given.',

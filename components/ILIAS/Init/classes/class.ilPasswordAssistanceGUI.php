@@ -229,7 +229,7 @@ class ilPasswordAssistanceGUI implements ilCtrlSecurityInterface
             ->withAdditionalTransformation($this->saniziteArrayElementsTrafo());
     }
 
-    private function showAssistanceForm(ILIAS\UI\Component\Input\Container\Form\Form $form = null): void
+    private function showAssistanceForm(?ILIAS\UI\Component\Input\Container\Form\Form $form = null): void
     {
         $this->help->setSubScreenId('password_assistance');
 
@@ -435,7 +435,7 @@ class ilPasswordAssistanceGUI implements ilCtrlSecurityInterface
         $mm->Send();
     }
 
-    private function getAssignPasswordForm(string $pwassist_id = null): ILIAS\UI\Component\Input\Container\Form\Form
+    private function getAssignPasswordForm(?string $pwassist_id = null): ILIAS\UI\Component\Input\Container\Form\Form
     {
         $field_factory = $this->ui_factory->input()->field();
 
@@ -517,7 +517,7 @@ class ilPasswordAssistanceGUI implements ilCtrlSecurityInterface
      * password assistance form will be shown instead of this form.
      */
     private function showAssignPasswordForm(
-        ILIAS\UI\Component\Input\Container\Form\Form $form = null,
+        ?ILIAS\UI\Component\Input\Container\Form\Form $form = null,
         string $pwassist_id = ''
     ): void {
         $this->help->setSubScreenId('password_input');
@@ -709,7 +709,7 @@ class ilPasswordAssistanceGUI implements ilCtrlSecurityInterface
             ->withAdditionalTransformation($this->saniziteArrayElementsTrafo());
     }
 
-    private function showUsernameAssistanceForm(ILIAS\UI\Component\Input\Container\Form\Form $form = null): void
+    private function showUsernameAssistanceForm(?ILIAS\UI\Component\Input\Container\Form\Form $form = null): void
     {
         $this->help->setSubScreenId('username_assistance');
 

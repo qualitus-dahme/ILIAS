@@ -261,9 +261,12 @@ class ilTestCorrectionsGUI
 
     protected function addAnswer()
     {
-        $form_builder = new ilAddAnswerFormBuilder($this, $this->ui_factory, $this->refinery, $this->language, $this->ctrl);
-
-        $form = $form_builder->buildAddAnswerForm()
+        $form = (new ilAddAnswerFormBuilder(
+            $this->ui_factory,
+            $this->refinery,
+            $this->language,
+            $this->ctrl
+        ))->buildAddAnswerModal('')
             ->withRequest($this->testrequest->getRequest());
 
         $data = $form->getData();

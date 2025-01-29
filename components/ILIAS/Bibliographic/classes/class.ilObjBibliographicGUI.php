@@ -420,6 +420,10 @@ class ilObjBibliographicGUI extends ilObject2GUI implements ilDesktopItemHandlin
 
     private function replaceBibliograficFileInit(): void
     {
+        if (!$DIC->access()->checkAccess('write', "", $this->object->getRefId())) {
+            $this->ctrl->redirect($this, self::CMD_SHOW_CONTENT);
+            return;
+        }
         $this->tabs()->clearTargets();
         $this->tabs()->setBackTarget(
             $this->lng->txt('back'),
@@ -704,11 +708,13 @@ class ilObjBibliographicGUI extends ilObject2GUI implements ilDesktopItemHandlin
             );
             $this->toolbar->addComponent($btn_download_original_file);
 
-            $btn_overwrite_bibliographic_file = $this->ui()->factory()->button()->standard(
-                $this->lng->txt('replace_bibliography_file'),
-                $this->ctrl()->getLinkTargetByClass(self::class, self::CMD_OVERWRITE_BIBLIOGRAPHIC_FILE)
-            );
-            $this->toolbar->addComponent($btn_overwrite_bibliographic_file);
+            if ($write_access) {
+                $btn_overwrite_bibliographic_file = $this->ui()->factory()->button()->standard(
+                    $this->lng->txt('replace_bibliography_file'),
+                    $this->ctrl()->getLinkTargetByClass(self::class, self::CMD_OVERWRITE_BIBLIOGRAPHIC_FILE)
+                );
+                $this->toolbar->addComponent($btn_overwrite_bibliographic_file);
+            }
 
             $table_gui = new ilBiblEntryTableGUI($this, $this->facade, $this->ui());
             $DIC->ui()->mainTemplate()->setContent($table_gui->getRenderedTableAndExistingFilters());

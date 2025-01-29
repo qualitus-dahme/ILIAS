@@ -101,7 +101,7 @@ class ilObjForumAdministrationGUI extends ilObjectGUI
         }
     }
 
-    public function editSettings(Form $form = null): void
+    public function editSettings(?Form $form = null): void
     {
         $this->tabs_gui->activateTab('settings');
 

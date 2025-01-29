@@ -16,45 +16,37 @@
  *
  *********************************************************************/
 
-use ILIAS\DI\UIServices;
+use ILIAS\UI\Factory as UIFactory;
+use ILIAS\UI\Renderer as UIRenderer;
 use ILIAS\Refinery\Factory as RefineryFactory;
 
-/**
- * Class ilAnswerFrequencyStatisticTableGUI
- *
- * @author    Björn Heyser <info@bjoernheyser.de>
- * @author    Stephan Kergomard <office@kergomard.ch>
- * @version    $Id$
- *
- * @package components\ILIAS/TestQuestionPool
- */
 class ilAnswerFrequencyStatisticTableGUI extends ilTable2GUI
 {
     protected ilLanguage $language;
-    protected UIServices $ui;
+    protected UIFactory $ui_factory;
+    protected UIRenderer $ui_renderer;
     protected RefineryFactory $refinery;
     protected ilCtrl $ctrl;
-    protected assQuestion $question;
     protected int $questionIndex;
     protected bool $actionsColumnEnabled = false;
     protected string $additionalHtml = '';
 
     /**
-     * ilAnswerFrequencyStatisticTableGUI constructor.
      * @param object $a_parent_obj
-     * @param string $a_parent_cmd
-     * @param string $question
      */
-    public function __construct($a_parent_obj, $a_parent_cmd = "", $question = "")
-    {
+    public function __construct(
+        ilTestCorrectionsGUI $a_parent_obj,
+        string $a_parent_cmd,
+        protected readonly assQuestion $question
+    ) {
         /** @var ILIAS\DI\Container $DIC */
         global $DIC;
 
-        $this->language = $DIC->language();
-        $this->ui = $DIC->ui();
-        $this->refinery = $DIC->refinery();
-        $this->ctrl = $DIC->ctrl();
-        $this->question = $question;
+        $this->language = $DIC['lng'];
+        $this->ui_factory = $DIC['ui.factory'];
+        $this->ui_renderer = $DIC['ui.renderer'];
+        $this->refinery = $DIC['refinery'];
+        $this->ctrl = $DIC['ilCtrl'];
 
         $this->setId('tstAnswerStatistic');
         $this->setPrefix('tstAnswerStatistic');
@@ -68,57 +60,36 @@ class ilAnswerFrequencyStatisticTableGUI extends ilTable2GUI
         $this->setDefaultOrderField('answer');
     }
 
-    /**
-     * @return bool
-     */
     public function isActionsColumnEnabled(): bool
     {
         return $this->actionsColumnEnabled;
     }
 
-    /**
-     * @param bool $actionsColumnEnabled
-     */
     public function setActionsColumnEnabled(bool $actionsColumnEnabled): void
     {
         $this->actionsColumnEnabled = $actionsColumnEnabled;
     }
 
-    /**
-     * @return string
-     */
     public function getAdditionalHtml(): string
     {
         return $this->additionalHtml;
     }
 
-    /**
-     * @param string $additionalHtml
-     */
-    public function setAdditionalHtml(string $additionalHtml): void
+    public function setAdditionalHtml(string $additional_html): void
     {
-        $this->additionalHtml = $additionalHtml;
+        $this->additionalHtml = $additional_html;
     }
 
-    /**
-     * @param string $additionalHtml
-     */
-    public function addAdditionalHtml(string $additionalHtml): void
+    public function addAdditionalHtml(string $additional_html): void
     {
-        $this->additionalHtml .= $additionalHtml;
+        $this->additionalHtml .= $additional_html;
     }
 
-    /**
-     * @return int
-     */
     public function getQuestionIndex(): int
     {
         return $this->questionIndex;
     }
 
-    /**
-     * @param int $questionIndex
-     */
     public function setQuestionIndex(int $questionIndex): void
     {
         $this->questionIndex = $questionIndex;
@@ -132,7 +103,7 @@ class ilAnswerFrequencyStatisticTableGUI extends ilTable2GUI
         foreach ($this->getData() as $row) {
             if (isset($row['addable'])) {
                 $this->setActionsColumnEnabled(true);
-                $this->addColumn('', '', '1%');
+                $this->addColumn('');
                 break;
             }
         }
@@ -163,24 +134,23 @@ class ilAnswerFrequencyStatisticTableGUI extends ilTable2GUI
 
     protected function buildAddAnswerAction($data): string
     {
-        $ui_factory = $this->ui->factory();
-        $ui_renderer = $this->ui->renderer();
-
-        $answer_form_builder = new ilAddAnswerFormBuilder($this->parent_obj, $ui_factory, $this->refinery, $this->language, $this->ctrl);
-
         $data['question_id'] = $this->question->getId();
         $data['question_index'] = $this->getQuestionIndex();
 
-        $form = $answer_form_builder->buildAddAnswerForm($data);
-        $modal = $ui_factory->modal()->roundtrip($this->question->getTitle(), $form);
+        $modal = (new ilAddAnswerFormBuilder(
+            $this->ui_factory,
+            $this->refinery,
+            $this->language,
+            $this->ctrl
+        ))->buildAddAnswerModal($this->question->getTitle(), $data);
 
-        $show_modal_button = $ui_factory->button()->standard(
+        $show_modal_button = $this->ui_factory->button()->standard(
             $this->language->txt('tst_corr_add_as_answer_btn'),
             $modal->getShowSignal()
         );
 
-        $this->addAdditionalHtml($ui_renderer->render($modal));
+        $this->addAdditionalHtml($this->ui_renderer->render($modal));
 
-        return $ui_renderer->render($show_modal_button);
+        return $this->ui_renderer->render($show_modal_button);
     }
 }

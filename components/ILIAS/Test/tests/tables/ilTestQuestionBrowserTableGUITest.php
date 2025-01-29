@@ -73,6 +73,7 @@ class ilTestQuestionBrowserTableGUITest extends ilTestBaseTestCase
             $this->createMock(ILIAS\Test\Logging\TestLogger::class),
             $component_repository,
             $this->getMockBuilder(ilObjTest::class)->disableOriginalConstructor()->getMock(),
+            $this->createMock(ilObjUser::class),
             $this->createMock(ilAccessHandler::class),
             $this->createMock(\ILIAS\HTTP\GlobalHttpState::class),
             new \ILIAS\Refinery\Factory(

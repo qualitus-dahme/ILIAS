@@ -145,7 +145,7 @@ final class AutoresponderArrayCollection implements AutoresponderCollection
         return new self($filtered);
     }
 
-    public function slice(int $offset, int $length = null): AutoresponderCollection
+    public function slice(int $offset, ?int $length = null): AutoresponderCollection
     {
         $sliced = array_slice($this->elements, $offset, $length, true);
         return new self($sliced);

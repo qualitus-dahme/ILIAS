@@ -319,8 +319,6 @@ class ilTestSkillEvaluation
         $this->logger->info(
             "refId={$this->refId} / usrId={$this->getUserId()} / levelId={$skillLevelId} / trefId={$skillTrefId}"
         );
-
-        //mail('bheyser@databay.de', "trigger skill level $skillLevelId for user {$this->getUserId()}", '');
     }
 
     public function getSkillsMatchingNumAnswersBarrier(): array

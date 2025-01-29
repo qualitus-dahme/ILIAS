@@ -26,5 +26,6 @@ namespace ILIAS\File\Capabilities;
 interface TypeResolver
 {
     public function resolveType(int $ref_id): string;
+    public function resolveTypeByObjectId(int $object_id): string;
 
 }

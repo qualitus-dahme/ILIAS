@@ -31,7 +31,7 @@ class ilMailMimeSenderFactory
     public function __construct(
         protected ilSetting $settings,
         protected ilMustacheFactory $mustache_factory,
-        int $anonymousUsrId = null
+        ?int $anonymousUsrId = null
     ) {
         if (null === $anonymousUsrId && defined('ANONYMOUS_USER_ID')) {
             $anonymousUsrId = ANONYMOUS_USER_ID;

@@ -56,14 +56,14 @@ class ilCertificateSettingsFormRepository implements ilCertificateFormRepository
         private readonly ilAccessHandler $access,
         private readonly ilToolbarGUI $toolbar,
         private readonly ilCertificatePlaceholderDescription $placeholderDescriptionObject,
-        UiFactory $ui_factory = null,
-        UiRenderer $ui_renderer = null,
-        ilPageFormats $pageFormats = null,
+        ?UiFactory $ui_factory = null,
+        ?UiRenderer $ui_renderer = null,
+        ?ilPageFormats $pageFormats = null,
         private readonly ilFormFieldParser $formFieldParser = new ilFormFieldParser(),
-        ilCertificateTemplateImportAction $importAction = null,
-        ilLogger $logger = null,
-        ilCertificateTemplateRepository $templateRepository = null,
-        Filesystem $filesystem = null,
+        ?ilCertificateTemplateImportAction $importAction = null,
+        ?ilLogger $logger = null,
+        ?ilCertificateTemplateRepository $templateRepository = null,
+        ?Filesystem $filesystem = null
     ) {
         global $DIC;
 

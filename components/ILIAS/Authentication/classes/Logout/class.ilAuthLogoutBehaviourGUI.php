@@ -72,7 +72,7 @@ class ilAuthLogoutBehaviourGUI
     }
 
     public function getForm(
-        ServerRequestInterface $request = null,
+        ?ServerRequestInterface $request = null,
         array $errors = []
     ): StandardForm {
         $logout_group = $this->ui_factory->input()->field()

@@ -46,15 +46,7 @@ class ilBibliographicExporter extends ilXmlExporter
 
     public function getValidSchemaVersions(string $a_entity): array
     {
-        return array(
-            '4.5.0' => array(
-                'namespace' => 'http://www.ilias.de/Modules/DataCollection/dcl/4_5',
-                'xsd_file" => "ilias_dcl_4_5.xsd',
-                'uses_dataset' => true,
-                'min' => '4.5.0',
-                'max' => '',
-            ),
-        );
+        return ['4.5.0' => ['namespace' => 'http://www.ilias.de/Modules/DataCollection/dcl/4_5', 'xsd_file" => "ilias_dcl_4_5.xsd', 'uses_dataset' => true, 'min' => '4.5.0', 'max' => '']];
     }
 
 
@@ -62,7 +54,7 @@ class ilBibliographicExporter extends ilXmlExporter
     {
         ilFileUtils::makeDirParents($this->getAbsoluteExportDirectory());
         $this->ds->initByExporter($this);
-        $this->ds->exportLibraryFile($a_id);
+        $this->ds->exportLibraryFile($a_id, $this->getAbsoluteExportDirectory());
 
         return $this->ds->getXmlRepresentation($a_entity, $a_schema_version, [$a_id], '', true, true);
     }
@@ -73,7 +65,7 @@ class ilBibliographicExporter extends ilXmlExporter
         array $a_ids
     ): array {
         $res = [];
-        if ($a_entity == "bibl") {
+        if ($a_entity === "bibl") {
             $res[] = [
                 "component" => "components/ILIAS/ILIASObject",
                 "entity" => "common",

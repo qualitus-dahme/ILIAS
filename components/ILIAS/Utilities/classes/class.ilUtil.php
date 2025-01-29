@@ -271,7 +271,7 @@ class ilUtil
      */
     public static function is_email(
         string $a_email,
-        ilMailRfc822AddressParserFactory $mailAddressParserFactory = null
+        ?ilMailRfc822AddressParserFactory $mailAddressParserFactory = null
     ): bool {
         if ($mailAddressParserFactory === null) {
             $mailAddressParserFactory = new ilMailRfc822AddressParserFactory();
@@ -1378,8 +1378,8 @@ class ilUtil
     protected static function fmtFloat(
         float $a_float,
         int $a_decimals = 0,
-        string $a_dec_point = null,
-        string $a_thousands_sep = null,
+        ?string $a_dec_point = null,
+        ?string $a_thousands_sep = null,
         bool $a_suppress_dot_zero = false
     ): string {
         global $DIC;

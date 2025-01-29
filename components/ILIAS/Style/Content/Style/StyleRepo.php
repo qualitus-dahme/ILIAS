@@ -171,4 +171,25 @@ class StyleRepo
         }
         return null;
     }
+
+    public function cloneResourceContainer(
+        int $from_style_id,
+        int $to_style_id
+    ): void {
+        $from_rid = $this->readRid($from_style_id);
+        $to_rid = $this->irss->cloneContainer($from_rid);
+        var_dump($to_rid);
+        if ($to_rid !== "") {
+            $this->db->update(
+                "style_data",
+                [
+                    "rid" => ["string", $to_rid]
+                ],
+                [    // where
+                     "id" => ["integer", $to_style_id]
+                ]
+            );
+        }
+    }
+
 }

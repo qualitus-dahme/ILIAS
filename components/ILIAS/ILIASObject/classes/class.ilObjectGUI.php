@@ -160,14 +160,14 @@ class ilObjectGUI implements ImplementsCreationCallback
 
         $this->lng->loadLanguageModule('obj');
 
-        $params = ["ref_id"];
+        $params = ['ref_id'];
         if (!$call_by_reference) {
-            $params = ["ref_id","obj_id"];
+            $params = ['ref_id','obj_id'];
         }
         $this->ctrl->saveParameter($this, $params);
 
-        if ($this->request_wrapper->has("ref_id")) {
-            $this->requested_ref_id = $this->request_wrapper->retrieve("ref_id", $this->refinery->kindlyTo()->int());
+        if ($this->request_wrapper->has('ref_id')) {
+            $this->requested_ref_id = $this->request_wrapper->retrieve('ref_id', $this->refinery->kindlyTo()->int());
         }
 
         $this->obj_id = $this->id;
@@ -176,8 +176,8 @@ class ilObjectGUI implements ImplementsCreationCallback
         if ($call_by_reference) {
             $this->ref_id = $this->id;
             $this->obj_id = 0;
-            if ($this->request_wrapper->has("obj_id")) {
-                $this->obj_id = $this->request_wrapper->retrieve("obj_id", $this->refinery->kindlyTo()->int());
+            if ($this->request_wrapper->has('obj_id')) {
+                $this->obj_id = $this->request_wrapper->retrieve('obj_id', $this->refinery->kindlyTo()->int());
             }
         }
 
@@ -271,9 +271,8 @@ class ilObjectGUI implements ImplementsCreationCallback
     }
 
     /**
-    * if true, a creation screen is displayed
-    * the current [ref_id] don't belong
-    * to the current class!
+    * If true, a creation screen is displayed
+    * the current [ref_id] does belong to the parent class
     * The mode is determined in ilRepositoryGUI
     */
     public function setCreationMode(bool $mode = true): void
@@ -301,7 +300,6 @@ class ilObjectGUI implements ImplementsCreationCallback
     public function prepareOutput(bool $show_sub_objects = true): bool
     {
         $this->tpl->loadStandardTemplate();
-        // administration prepare output
         $base_class = $this->request_wrapper->retrieve("baseClass", $this->refinery->kindlyTo()->string());
         if (strtolower($base_class) == "iladministrationgui") {
             $this->addAdminLocatorItems();
@@ -609,17 +607,53 @@ class ilObjectGUI implements ImplementsCreationCallback
     */
     public function confirmedDeleteObject(): void
     {
-        if ($this->post_wrapper->has('interruptive_items')) {
-            $ref_ids_to_be_deleted = $this->post_wrapper->retrieve(
-                'interruptive_items',
-                $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->int())
-            );
+        if (!$this->request_wrapper->has('id')) {
+            $this->tpl->setOnScreenMessage('failure', $this->lng->txt('no_checkbox'), true);
+            $this->ctrl->returnToParent($this);
+        }
+
+        $data = $this->buildDeleletionModal(
+            explode(
+                ',',
+                $this->request_wrapper->retrieve(
+                    'id',
+                    $this->refinery->kindlyTo()->string()
+                )
+            )
+        )->withRequest($this->request)->getData();
+
+        if ($data === null) {
+            $this->tpl->setOnScreenMessage('failure', $this->lng->txt('no_checkbox'), true);
+            $this->ctrl->returnToParent($this);
         }
 
         $ru = new ilRepositoryTrashGUI($this);
-        $ru->deleteObjects($this->requested_ref_id, $ref_ids_to_be_deleted);
+        $ru->deleteObjects($this->requested_ref_id, $this->buildRefIdsFromData($data));
 
-        $this->ctrl->redirect($this);
+        $this->ctrl->redirectByClass(static::class);
+    }
+
+    private function buildRefIdsFromData(array $data): array
+    {
+        return array_reduce(
+            $data,
+            function (array $c, array|int|null $v): array {
+                if ($v === null) {
+                    return $c;
+                }
+
+                if (is_array($v)) {
+                    return array_merge(
+                        $c,
+                        $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->int())->transform($v)
+                    );
+                }
+
+                $c[] = $this->refinery->kindlyTo()->int()->transform($v);
+                return $c;
+            },
+            []
+        );
     }
 
     /**
@@ -891,11 +925,13 @@ class ilObjectGUI implements ImplementsCreationCallback
 
     public function editAvailabilityPeriodObject(): void
     {
-        if (!$this->checkPermissionBool('write')) {
+        $item_ref_ids = $this->retriever->getSelectedIdsFromObjectList();
+        if (!$this->checkPermissionBool('write')
+            && !$this->checkWritePermissionOnRefIdArray($item_ref_ids)) {
             $this->tpl->setOnScreenMessage('failure', $this->lng->txt('msg_no_perm_write'));
             return;
         }
-        $item_ref_ids = $this->retriever->getSelectedIdsFromObjectList();
+
         $availability_period_modal = $this->getMultiObjectPropertiesManipulator()->getEditAvailabilityPeriodPropertiesModal(
             $item_ref_ids,
             $this
@@ -915,13 +951,15 @@ class ilObjectGUI implements ImplementsCreationCallback
 
     public function saveAvailabilityPeriodObject(): void
     {
-        if (!$this->checkPermissionBool('write')) {
-            $this->tpl->setOnScreenMessage('failure', $this->lng->txt('msg_no_perm_write'));
-            return;
-        }
-        $availability_period_modal = $this->getMultiObjectPropertiesManipulator()->saveEditAvailabilityPeriodPropertiesModal($this, $this->request);
-        if ($availability_period_modal === null) {
+        $availability_period_modal = $this->getMultiObjectPropertiesManipulator()->saveEditAvailabilityPeriodPropertiesModal(
+            $this,
+            fn($ref_ids): bool => $this->checkPermissionBool('write') || $this->checkWritePermissionOnRefIdArray($ref_ids),
+            $this->request
+        );
+        if ($availability_period_modal === true) {
             $this->tpl->setOnScreenMessage('success', $this->lng->txt('availability_period_changed'));
+        } elseif ($availability_period_modal === false) {
+            $this->tpl->setOnScreenMessage('failure', $this->lng->txt('msg_no_perm_write'));
         } else {
             $this->tpl->setVariable(
                 'IL_OBJECT_EPHEMRAL_MODALS',
@@ -1537,46 +1575,26 @@ class ilObjectGUI implements ImplementsCreationCallback
     public function deleteObject(bool $error = false): void
     {
         $request_ids = [];
-        if ($this->post_wrapper->has("id")) {
+        if ($this->post_wrapper->has('id')) {
             $request_ids = $this->post_wrapper->retrieve(
-                "id",
+                'id',
                 $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->int())
             );
         }
 
         if (
-            $this->request_wrapper->has("item_ref_id")
-            && $this->request_wrapper->retrieve("item_ref_id", $this->refinery->kindlyTo()->string()) !== ""
+            $this->request_wrapper->has('item_ref_id')
+            && $this->request_wrapper->retrieve('item_ref_id', $this->refinery->kindlyTo()->string()) !== ""
         ) {
-            $request_ids = [$this->request_wrapper->retrieve("item_ref_id", $this->refinery->kindlyTo()->int())];
+            $request_ids = [$this->request_wrapper->retrieve('item_ref_id', $this->refinery->kindlyTo()->int())];
         }
 
         if ($request_ids === []) {
-            $this->tpl->setOnScreenMessage('failure', $this->lng->txt("no_checkbox"), true);
+            $this->tpl->setOnScreenMessage('failure', $this->lng->txt('no_checkbox'), true);
             $this->ctrl->returnToParent($this);
         }
 
-        $modal_factory = $this->ui_factory->modal();
-        $items = [];
-        foreach (array_unique($request_ids) as $ref_id) {
-            $items[] = $modal_factory->interruptiveItem()->standard(
-                (string) $ref_id,
-                ilObject::_lookupTitle(
-                    ilObject::_lookupObjId($ref_id)
-                )
-            );
-        }
-
-        $msg = $this->lng->txt("info_delete_sure");
-        if (!$this->settings->get('enable_trash')) {
-            $msg .= "<br/>" . $this->lng->txt("info_delete_warning_no_trash");
-        }
-
-        $modal = $modal_factory->interruptive(
-            $this->lng->txt('confirm'),
-            $msg,
-            $this->ctrl->getFormAction($this, 'confirmedDelete')
-        )->withAffectedItems($items);
+        $modal = $this->buildDeleletionModal(array_unique($request_ids));
         $this->tpl->setVariable(
             'IL_OBJECT_EPHEMRAL_MODALS',
             $this->ui_renderer->render(
@@ -1584,6 +1602,84 @@ class ilObjectGUI implements ImplementsCreationCallback
             )
         );
         $this->renderObject();
+    }
+
+    private function buildDeleletionModal(array $request_ids): \ILIAS\UI\Component\Modal\RoundTrip
+    {
+        [$listing_items, $inputs, $has_additional_references] = $this->buildDeletionModalItems($request_ids);
+
+        $msg = $this->lng->txt('info_delete_sure');
+        if (!$this->settings->get('enable_trash')) {
+            $msg .= "<br/>" . $this->lng->txt('info_delete_warning_no_trash');
+        }
+
+        $content = [
+            $this->ui_factory->messageBox()->confirmation($msg),
+            $this->ui_factory->listing()->unordered($listing_items)
+        ];
+
+        if ($has_additional_references) {
+            $content[] = $this->ui_factory->messageBox()->confirmation(
+                $this->lng->txt('multiple_reference_deletion_info') . ' '
+                . $this->lng->txt('rep_multiple_reference_deletion_instruction')
+            );
+        }
+
+        $this->ctrl->setParameterByClass(static::class, 'id', implode(',', $request_ids));
+        $target_url = $this->ctrl->getFormActionByClass(static::class, 'confirmedDelete');
+        $this->ctrl->clearParameterByClass(static::class, 'id');
+
+        return $this->ui_factory->modal()->roundtrip(
+            $this->lng->txt('confirm'),
+            $content,
+            $inputs,
+            $target_url
+        )->withSubmitLabel($this->lng->txt('delete'));
+    }
+
+    private function buildDeletionModalItems(array $ref_ids): array
+    {
+        $path_gui = new ilPathGUI();
+        $path_gui->enableTextOnly(true);
+        $path_gui->enableHideLeaf(false);
+        return array_reduce(
+            $ref_ids,
+            function (array $c, int $v) use ($path_gui): array {
+                $c[0][] = ilObject::_lookupTitle(
+                    ilObject::_lookupObjId($v)
+                );
+                $c[1][] = $this->ui_factory->input()->field()->hidden()->withValue($v);
+
+                $other_references = $this->buildInputsForAdditionalDeletionReferences($v, $path_gui);
+                if ($other_references !== []) {
+                    $c[1][] = $this->ui_factory->input()->field()->multiSelect(
+                        ilObject::_lookupTitle(
+                            ilObject::_lookupObjId($v)
+                        ),
+                        $other_references
+                    );
+                    $c[2] = true;
+                }
+                return $c;
+            },
+            [[], [], false]
+        );
+    }
+
+    private function buildInputsForAdditionalDeletionReferences(int $ref_id, ilPathGUI $path_gui): array
+    {
+        return array_reduce(
+            ilObject::_getAllReferences(ilObject::_lookupObjId($ref_id)),
+            function (array $c, int $v) use ($ref_id, $path_gui): array {
+                if ($v !== $ref_id
+                    && !$this->tree->isDeleted($v)
+                    && $this->access->checkAccess('delete', '', $v)) {
+                    $c[$v] = $path_gui->getPath(ROOT_FOLDER_ID, $v);
+                }
+                return $c;
+            },
+            []
+        );
     }
 
     /**
@@ -1987,7 +2083,9 @@ class ilObjectGUI implements ImplementsCreationCallback
             $this->ctrl->setParameterByClass($create_target_class, 'new_type', $type);
             $add_new_items_content_array[$subitem['pos']] = new AddNewItemElement(
                 AddNewItemElementTypes::Object,
-                $this->lng->txt('obj_' . $type),
+                empty($subitem['plugin'])
+                    ? $this->lng->txt('obj_' . $type)
+                    : ilObjectPlugin::lookupTxtById($type, "obj_" . $type),
                 $this->ui_factory->symbol()->icon()->standard($type, ''),
                 new URI(
                     ILIAS_HTTP_PATH . '/' . $this->ctrl->getLinkTargetByClass($create_target_class, 'create')
@@ -1999,8 +2097,13 @@ class ilObjectGUI implements ImplementsCreationCallback
         return $add_new_items_content_array;
     }
 
-    private function maskTemplateMarkers(string $string): string
+    private function checkWritePermissionOnRefIdArray(array $ref_ids): bool
     {
-        return str_replace(['{', '}'], ['&#123;', '&#125;'], $string);
+        foreach ($ref_ids as $ref_id) {
+            if (!$this->access->checkAccess('write', '', $ref_id)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

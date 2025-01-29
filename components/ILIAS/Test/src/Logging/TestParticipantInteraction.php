@@ -21,10 +21,8 @@ declare(strict_types=1);
 namespace ILIAS\Test\Logging;
 
 use ILIAS\Test\Utilities\TitleColumnsBuilder;
-use ILIAS\TestQuestionPool\Questions\GeneralQuestionPropertiesRepository;
 use ILIAS\UI\Factory as UIFactory;
 use ILIAS\UI\Component\Listing\Descriptive as DescriptiveListing;
-use ILIAS\StaticURL\Services as StaticURLServices;
 use ILIAS\UI\Component\Table\DataRowBuilder;
 use ILIAS\UI\Component\Table\DataRow;
 

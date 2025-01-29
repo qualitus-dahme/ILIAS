@@ -417,4 +417,15 @@ class ParticipantRepository
 			WHERE		tinvited.test_fi = %s AND ta.active_id IS NULL
         ";
     }
+
+    public function removeExtraTimeByUserId(int $test_id, array $user_ids): void
+    {
+        $in_user_fis = $this->database->in(
+            'user_fi',
+            $user_ids,
+            false,
+            \ilDBConstants::T_INTEGER,
+        );
+        $this->database->manipulate("DELETE FROM tst_addtime WHERE test_fi = $test_id AND $in_user_fis");
+    }
 }

@@ -20,7 +20,6 @@ declare(strict_types=1);
 
 use ILIAS\User\Profile\GUIRequest;
 use ILIAS\User\Profile\VCard;
-
 use ILIAS\Language\Language;
 
 /**
@@ -568,6 +567,8 @@ class ilPublicUserProfileGUI implements ilCtrlBaseClassInterface
         }
 
         // badges
+        $this->tpl->addJavaScript('assets/js/PublicProfileBadges.js');
+        $this->tpl->addOnLoadCode('new BadgeToggle("ilbdgprcont", "ilbdgprfhdm", "ilbdgprfhdl", "ilNoDisplay");');
         $user_badges = ilBadgeAssignment::getInstancesByUserId($user->getId());
         if ($user_badges) {
             $has_public_badge = false;
@@ -583,13 +584,14 @@ class ilPublicUserProfileGUI implements ilCtrlBaseClassInterface
                     $renderer = new ilBadgeRenderer($ass);
 
                     // limit to 20, [MORE] link
-                    if ($cnt <= $cut) {
-                        $tpl->setCurrentBlock('badge_bl');
-                        $tpl->setVariable('BADGE', $renderer->getHTML());
-                    } else {
-                        $tpl->setCurrentBlock('badge_hidden_item_bl');
-                        $tpl->setVariable('BADGE_HIDDEN', $renderer->getHTML());
+                    if ($cnt > $cut) {
+                        $tpl->setCurrentBlock('hidden_badge');
+                        $tpl->touchBlock('hidden_badge');
+                        $tpl->parseCurrentBlock();
                     }
+
+                    $tpl->setCurrentBlock('badge_bl');
+                    $tpl->setVariable('BADGE', $renderer->getHTML());
                     $tpl->parseCurrentBlock();
 
                     $has_public_badge = true;
@@ -600,7 +602,6 @@ class ilPublicUserProfileGUI implements ilCtrlBaseClassInterface
                 $this->lng->loadLanguageModule('badge');
                 $tpl->setVariable('BADGE_HIDDEN_TXT_MORE', $this->lng->txt('badge_profile_more'));
                 $tpl->setVariable('BADGE_HIDDEN_TXT_LESS', $this->lng->txt('badge_profile_less'));
-                $tpl->touchBlock('badge_js_bl');
             }
 
             if ($has_public_badge) {

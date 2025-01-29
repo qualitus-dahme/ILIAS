@@ -59,10 +59,10 @@ class ilMailOptions
 
     public function __construct(
         protected int $usrId,
-        ilMailTransportSettings $mailTransportSettings = null,
-        ClockInterface $clockService = null,
-        ilSetting $settings = null,
-        ilDBInterface $db = null
+        ?ilMailTransportSettings $mailTransportSettings = null,
+        ?ClockInterface $clockService = null,
+        ?ilSetting $settings = null,
+        ?ilDBInterface $db = null
     ) {
         global $DIC;
         $this->db = $db ?? $DIC->database();

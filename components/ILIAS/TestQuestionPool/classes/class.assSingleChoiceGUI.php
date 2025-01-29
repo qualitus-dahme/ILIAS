@@ -701,20 +701,7 @@ class assSingleChoiceGUI extends assQuestionGUI implements ilGuiQuestionScoringA
         return [];
     }
 
-    /**
-     * Returns an html string containing a question specific representation of the answers so far
-     * given in the test for use in the right column in the scoring adjustment user interface.
-     * @param array $relevant_answers
-     * @return string
-     */
-    public function getAggregatedAnswersView(array $relevant_answers): string
-    {
-        return  $this->renderAggregateView(
-            $this->aggregateAnswers($relevant_answers, $this->object->getAnswers())
-        )->get();
-    }
-
-    public function aggregateAnswers($relevant_answers_chosen, $answers_defined_on_question): array
+    private function aggregateAnswers($relevant_answers_chosen, $answers_defined_on_question): array
     {
         $aggregate = [];
         foreach ($answers_defined_on_question as $answer) {

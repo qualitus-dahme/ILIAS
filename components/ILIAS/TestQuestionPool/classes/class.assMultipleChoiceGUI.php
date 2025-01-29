@@ -858,20 +858,7 @@ class assMultipleChoiceGUI extends assQuestionGUI implements ilGuiQuestionScorin
         return [];
     }
 
-    /**
-     * Returns an html string containing a question specific representation of the answers so far
-     * given in the test for use in the right column in the scoring adjustment user interface.
-     * @param array $relevant_answers
-     * @return string
-     */
-    public function getAggregatedAnswersView(array $relevant_answers): string
-    {
-        return  $this->renderAggregateView(
-            $this->aggregateAnswers($relevant_answers, $this->object->getAnswers())
-        )->get();
-    }
-
-    public function aggregateAnswers($relevant_answers_chosen, $answers_defined_on_question): array
+    private function aggregateAnswers($relevant_answers_chosen, $answers_defined_on_question): array
     {
         $aggregate = [];
         foreach ($answers_defined_on_question as $answer) {
@@ -891,32 +878,6 @@ class assMultipleChoiceGUI extends assQuestionGUI implements ilGuiQuestionScorin
             $aggregate[] = $aggregated_info_for_answer;
         }
         return $aggregate;
-    }
-
-    /**
-     * @param $aggregate
-     *
-     * @return ilTemplate
-     */
-    public function renderAggregateView($aggregate): ilTemplate
-    {
-        $tpl = new ilTemplate('tpl.il_as_aggregated_answers_table.html', true, true, "components/ILIAS/TestQuestionPool");
-
-        $tpl->setCurrentBlock('headercell');
-        $tpl->setVariable('HEADER', $this->lng->txt('tst_answer_aggr_answer_header'));
-        $tpl->parseCurrentBlock();
-
-        $tpl->setCurrentBlock('headercell');
-        $tpl->setVariable('HEADER', $this->lng->txt('tst_answer_aggr_frequency_header'));
-        $tpl->parseCurrentBlock();
-
-        foreach ($aggregate as $line_data) {
-            $tpl->setCurrentBlock('aggregaterow');
-            $tpl->setVariable('OPTION', $line_data['answertext']);
-            $tpl->setVariable('COUNT', $line_data['count_checked']);
-            $tpl->parseCurrentBlock();
-        }
-        return $tpl;
     }
 
     private function populateSpecificFeedbackInline($user_solution, $answer_id, $template): void

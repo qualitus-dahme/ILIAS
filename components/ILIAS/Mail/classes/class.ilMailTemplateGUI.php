@@ -46,16 +46,16 @@ class ilMailTemplateGUI
 
     public function __construct(
         protected ilObject $parentObject,
-        ilGlobalTemplateInterface $tpl = null,
-        ilCtrlInterface $ctrl = null,
-        ilLanguage $lng = null,
-        ilToolbarGUI $toolbar = null,
-        ilRbacSystem $rbacsystem = null,
-        ilErrorHandling $error = null,
-        GlobalHttpState $http = null,
-        Factory $uiFactory = null,
-        Renderer $uiRenderer = null,
-        ilMailTemplateService $templateService = null
+        ?ilGlobalTemplateInterface $tpl = null,
+        ?ilCtrlInterface $ctrl = null,
+        ?ilLanguage $lng = null,
+        ?ilToolbarGUI $toolbar = null,
+        ?ilRbacSystem $rbacsystem = null,
+        ?ilErrorHandling $error = null,
+        ?GlobalHttpState $http = null,
+        ?Factory $uiFactory = null,
+        ?Renderer $uiRenderer = null,
+        ?ilMailTemplateService $templateService = null
     ) {
         global $DIC;
         $this->tpl = $tpl ?? $DIC->ui()->mainTemplate();
@@ -167,10 +167,9 @@ class ilMailTemplateGUI
     }
 
     /**
-     * @param ilPropertyFormGUI|null $form
      * @throws ilMailException
      */
-    protected function showInsertTemplateForm(ilPropertyFormGUI $form = null): void
+    protected function showInsertTemplateForm(?ilPropertyFormGUI $form = null): void
     {
         if (!($form instanceof ilPropertyFormGUI)) {
             $form = $this->getTemplateForm();
@@ -247,7 +246,7 @@ class ilMailTemplateGUI
         }
     }
 
-    protected function showEditTemplateForm(ilPropertyFormGUI $form = null): void
+    protected function showEditTemplateForm(?ilPropertyFormGUI $form = null): void
     {
         if (!($form instanceof ilPropertyFormGUI)) {
             $templateId = 0;
@@ -407,10 +406,9 @@ class ilMailTemplateGUI
     }
 
     /**
-     * @param ilMailTemplate|null $template
      * @throws ilMailException
      */
-    protected function getTemplateForm(ilMailTemplate $template = null): ilPropertyFormGUI
+    protected function getTemplateForm(?ilMailTemplate $template = null): ilPropertyFormGUI
     {
         $form = new ilPropertyFormGUI();
 

@@ -64,9 +64,9 @@ class ilStartUpGUI implements ilCtrlBaseClassInterface, ilCtrlSecurityInterface
     private ILIAS\UI\Renderer $ui_renderer;
 
     public function __construct(
-        ilObjUser $user = null,
-        ilGlobalTemplateInterface $mainTemplate = null,
-        ServerRequestInterface $httpRequest = null
+        ?ilObjUser $user = null,
+        ?ilGlobalTemplateInterface $mainTemplate = null,
+        ?ServerRequestInterface $httpRequest = null
     ) {
         global $DIC;
 
@@ -273,7 +273,7 @@ class ilStartUpGUI implements ilCtrlBaseClassInterface, ilCtrlSecurityInterface
         $this->showLoginPage();
     }
 
-    private function showLoginPage(ILIAS\UI\Component\Input\Container\Form\Form $form = null): void
+    private function showLoginPage(?ILIAS\UI\Component\Input\Container\Form\Form $form = null): void
     {
         global $tpl; // Don't remove this, the global variables will be replaced with a ilGlobalTemplate instnace
 
@@ -385,8 +385,8 @@ class ilStartUpGUI implements ilCtrlBaseClassInterface, ilCtrlSecurityInterface
     }
 
     private function showCodeForm(
-        string $username = null,
-        ILIAS\UI\Component\Input\Container\Form\Form $form = null
+        ?string $username = null,
+        ?ILIAS\UI\Component\Input\Container\Form\Form $form = null
     ): void {
         $this->help->setSubScreenId('code_input');
 
@@ -397,7 +397,7 @@ class ilStartUpGUI implements ilCtrlBaseClassInterface, ilCtrlSecurityInterface
         self::printToGlobalTemplate($tpl);
     }
 
-    private function buildCodeForm(string $username = null): ILIAS\UI\Component\Input\Container\Form\Form
+    private function buildCodeForm(?string $username = null): ILIAS\UI\Component\Input\Container\Form\Form
     {
         $this->lng->loadLanguageModule('auth');
 
@@ -845,7 +845,7 @@ class ilStartUpGUI implements ilCtrlBaseClassInterface, ilCtrlSecurityInterface
 
     private function showLoginForm(
         string $page_editor_html,
-        ILIAS\UI\Component\Input\Container\Form\Form $form = null
+        ?ILIAS\UI\Component\Input\Container\Form\Form $form = null
     ): string {
         global $tpl;
 
@@ -1180,7 +1180,7 @@ class ilStartUpGUI implements ilCtrlBaseClassInterface, ilCtrlSecurityInterface
     }
 
     private function showAccountMigration(
-        ILIAS\UI\Component\Input\Container\Form\Form $form = null,
+        ?ILIAS\UI\Component\Input\Container\Form\Form $form = null,
         string $message = ''
     ): void {
         $this->help->setSubScreenId('account_migration');

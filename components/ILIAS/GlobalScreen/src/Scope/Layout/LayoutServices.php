@@ -39,7 +39,13 @@ class LayoutServices
      */
     public function __construct(string $resource_version)
     {
-        $this->meta_content = new MetaContent($resource_version);
+        $this->meta_content = new MetaContent(
+            $resource_version,
+            false,
+            true,
+            true,
+            false
+        );
         $this->modification_factory = new ModificationFactory();
     }
 

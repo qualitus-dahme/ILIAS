@@ -237,7 +237,7 @@ class ilTextInputGUI extends ilSubEnabledFormPropertyGUI implements ilTableFilte
 
     public function setDataSource(
         string $href,
-        string $a_delimiter = null
+        ?string $a_delimiter = null
     ): void {
         $this->ajax_datasource = $href;
         $this->ajax_datasource_delimiter = $a_delimiter;

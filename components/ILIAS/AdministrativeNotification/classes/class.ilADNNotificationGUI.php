@@ -224,6 +224,10 @@ class ilADNNotificationGUI extends ilADNAbstractGUI
         if (($field_ids[0] ?? null) === 'ALL_OBJECTS') {
             return ilADNNotification::get();
         }
+        // check ilADNAbstractGUI::IDENTIFIER
+        if (($field_id = $this->http->request()->getQueryParams()[ilADNAbstractGUI::IDENTIFIER] ?? false)) {
+            return [ilADNNotification::findOrFail((int) $field_id)];
+        }
 
         $return = [];
         foreach ($field_ids as $field_id) {

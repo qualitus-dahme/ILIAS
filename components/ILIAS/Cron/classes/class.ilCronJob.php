@@ -248,10 +248,45 @@ abstract class ilCronJob
         return false;
     }
 
+    /**
+     * @deprecated
+     */
+    #[\Deprecated('Will be removed without any alternative, KS/UI forms will be expected', since: '13.0')]
+    public function usesLegacyForms(): bool
+    {
+        return true;
+    }
+
+    public function getCustomConfigurationInput(
+        \ILIAS\UI\Factory $ui_factory,
+        \ILIAS\Refinery\Factory $factory,
+        ilLanguage $lng
+    ): \ILIAS\UI\Component\Input\Container\Form\FormInput {
+        throw new RuntimeException('Not implemented');
+    }
+
+    /**
+     * @deprecated
+     */
+    #[\Deprecated('Will be removed without any alternative, KS/UI forms will be expected', since: '13.0')]
     public function addCustomSettingsToForm(ilPropertyFormGUI $a_form): void
     {
     }
 
+    /**
+     * @param mixed $form_data The form data provided by the KS (\ILIAS\UI\Component\Input\Container\Container::getData)).
+     *                         The types and structure depend on the structure provided by `getCustomConfigurationInput`.
+     *                         It might be a single value or a `array<string, mixed>`-like structure.
+     */
+    public function saveCustomConfiguration(mixed $form_data): void
+    {
+        throw new RuntimeException('Not implemented');
+    }
+
+    /**
+     * @deprecated
+     */
+    #[\Deprecated('Will be removed without any alternative, KS/UI forms will be expected', since: '13.0')]
     public function saveCustomSettings(ilPropertyFormGUI $a_form): bool
     {
         return true;

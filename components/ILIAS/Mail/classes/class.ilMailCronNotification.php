@@ -94,6 +94,36 @@ class ilMailCronNotification extends ilCronJob
         return true;
     }
 
+    public function usesLegacyForms(): bool
+    {
+        return false;
+    }
+
+    public function getCustomConfigurationInput(
+        \ILIAS\UI\Factory $ui_factory,
+        \ILIAS\Refinery\Factory $factory,
+        ilLanguage $lng
+    ): \ILIAS\UI\Component\Input\Container\Form\FormInput {
+        $status = $ui_factory
+            ->input()
+            ->field()
+            ->checkbox($this->lng->txt('cron_mail_notification_message'))
+            ->withByline($this->lng->txt('cron_mail_notification_message_info'))
+            ->withValue((bool) $this->settings->get('mail_notification_message', '0'))
+            ->withDedicatedName('mail_notification_message');
+
+        return $status;
+    }
+
+    public function saveCustomConfiguration(mixed $form_data): void
+    {
+        $this->init();
+        $this->settings->set(
+            'mail_notification_message',
+            (string) ((int) $form_data)
+        );
+    }
+
     public function run(): ilCronJobResult
     {
         $msn = new ilMailSummaryNotification();
@@ -106,24 +136,12 @@ class ilMailCronNotification extends ilCronJob
 
     public function addCustomSettingsToForm(ilPropertyFormGUI $a_form): void
     {
-        $this->init();
-        $cb = new ilCheckboxInputGUI(
-            $this->lng->txt('cron_mail_notification_message'),
-            'mail_notification_message'
-        );
-        $cb->setInfo($this->lng->txt('cron_mail_notification_message_info'));
-        $cb->setChecked((bool) $this->settings->get('mail_notification_message', '0'));
-        $a_form->addItem($cb);
+        throw new RuntimeException('Not implemented');
     }
 
     public function saveCustomSettings(ilPropertyFormGUI $a_form): bool
     {
-        $this->init();
-        $this->settings->set(
-            'mail_notification_message',
-            (string) ($this->http->wrapper()->post()->has('mail_notification_message') ? 1 : 0)
-        );
-        return true;
+        throw new RuntimeException('Not implemented');
     }
 
     public function activationWasToggled(ilDBInterface $db, ilSetting $setting, bool $a_currently_active): void

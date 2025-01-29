@@ -33,13 +33,13 @@ class ilMailAddressTypeFactory
     protected ilRoleMailboxSearch $roleMailboxSearch;
 
     public function __construct(
-        ilGroupNameAsMailValidator $groupNameValidator = null,
-        ilLogger $logger = null,
-        ilRbacSystem $rbacsystem = null,
-        ilRbacReview $rbacreview = null,
-        ilMailAddressTypeHelper $typeHelper = null,
-        ilMailingLists $lists = null,
-        ilRoleMailboxSearch $roleMailboxSearch = null
+        ?ilGroupNameAsMailValidator $groupNameValidator = null,
+        ?ilLogger $logger = null,
+        ?ilRbacSystem $rbacsystem = null,
+        ?ilRbacReview $rbacreview = null,
+        ?ilMailAddressTypeHelper $typeHelper = null,
+        ?ilMailingLists $lists = null,
+        ?ilRoleMailboxSearch $roleMailboxSearch = null
     ) {
         global $DIC;
 

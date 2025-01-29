@@ -39,6 +39,7 @@ use ILIAS\File\Capabilities\Capabilities;
 use ILIAS\File\Capabilities\CapabilityBuilder;
 use ILIAS\File\Capabilities\CapabilityCollection;
 use ILIAS\File\Capabilities\CoreTypeResolver;
+use ILIAS\File\Capabilities\Context;
 
 /**
  * GUI class for file objects.
@@ -133,10 +134,29 @@ class ilObjFileGUI extends ilObject2GUI
             $this->ctrl,
             $this->action_repo,
             $DIC->http(),
-            new CoreTypeResolver(),
             $DIC['static_url.uri_builder']
         );
-        $this->capabilities = $capability_builder->get($a_id);
+
+        $capability_context = new Context(
+            $this->object_id,
+            $this->ref_id,
+            ($a_id_type === self::WORKSPACE_NODE_ID) ? Context::CONTEXT_WORKSPACDE : Context::CONTEXT_REPO
+        );
+
+        $this->capabilities = $capability_builder->get($capability_context);
+    }
+
+    protected function updateLearningProgress(): void
+    {
+        if ($this->object->getLPMode() === ilLPObjSettings::LP_MODE_CONTENT_VISITED) {
+            ilLPStatusWrapper::_updateStatus(
+                $this->object->getId(),
+                $this->user->getId(),
+                null,
+                false,
+                true
+            );
+        }
     }
 
     public function getType(): string
@@ -213,7 +233,7 @@ class ilObjFileGUI extends ilObject2GUI
             case "ilexportgui":
                 $ilTabs->activateTab("export");
                 $exp_gui = new ilExportGUI($this);
-                $exp_gui->addFormat();
+                $exp_gui->addFormat('xml');
                 $this->ctrl->forwardCommand($exp_gui);
                 break;
 
@@ -280,6 +300,7 @@ class ilObjFileGUI extends ilObject2GUI
                 };
 
                 $this->tabs_gui->activateTab('content');
+                $this->updateLearningProgress();
 
                 $embeded_application = new EmbeddedApplication(
                     $this->storage->manage()->find($this->object->getResourceId()),
@@ -622,10 +643,12 @@ class ilObjFileGUI extends ilObject2GUI
             $this->lng->txt('on_click_action')
         )->withOption(
             (string) ilObjFile::CLICK_MODE_DOWNLOAD,
-            $this->lng->txt('action_download')
+            $this->lng->txt('file_action_download'),
+            $this->lng->txt('file_action_download_info'),
         )->withOption(
             (string) ilObjFile::CLICK_MODE_INFOPAGE,
-            $this->lng->txt('action_show')
+            $this->lng->txt('file_action_show'),
+            $this->lng->txt('file_action_show_info'),
         )->withValue(
             (string) $this->object->getOnClickMode()
         );
@@ -711,15 +734,7 @@ class ilObjFileGUI extends ilObject2GUI
                     $this->object->getId(),
                     $this->user->getId()
                 );
-                if ($this->object->getLPMode() === ilLPObjSettings::LP_MODE_CONTENT_VISITED) {
-                    ilLPStatusWrapper::_updateStatus(
-                        $this->object->getId(),
-                        $this->user->getId(),
-                        null,
-                        false,
-                        true
-                    );
-                }
+                $this->updateLearningProgress();
 
                 $this->object->sendFile($hist_entry_id);
             } else {

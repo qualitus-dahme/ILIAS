@@ -107,7 +107,7 @@ class ilContentPageKioskModeView extends ilKioskModeView
         }
     }
 
-    public function updateGet(State $state, string $command, int $parameter = null): State
+    public function updateGet(State $state, string $command, ?int $parameter = null): State
     {
         $this->toggleLearningProgress($command);
 
@@ -149,7 +149,7 @@ class ilContentPageKioskModeView extends ilKioskModeView
         State $state,
         Factory $factory,
         URLBuilder $url_builder,
-        array $post = null
+        ?array $post = null
     ): Component {
         ilLearningProgress::_tracProgress(
             $this->user->getId(),

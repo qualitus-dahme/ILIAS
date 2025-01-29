@@ -27,9 +27,14 @@ use PHPUnit\Framework\TestCase;
 use ILIAS\File\Capabilities\Permissions;
 use ILIAS\File\Capabilities\Capabilities;
 use ILIAS\File\Capabilities\TypeResolver;
+use ILIAS\File\Capabilities\Context;
 
 class CapabilityTest extends TestCase
 {
+    /**
+     * @var (\ilWorkspaceAccessHandler & \PHPUnit\Framework\MockObject\MockObject)
+     */
+    public \PHPUnit\Framework\MockObject\MockObject $workspace_access_handler;
     public \PHPUnit\Framework\MockObject\MockObject|TypeResolver $type_resolver;
     private ilObjFileInfoRepository|MockObject $file_info_repository;
     private ilAccessHandler|MockObject $access;
@@ -56,8 +61,9 @@ class CapabilityTest extends TestCase
         $this->http = $this->createMock(Services::class);
         $this->static_url = $this->createMock(URIBuilder::class);
         $this->type_resolver = $this->createMock(TypeResolver::class);
+        $this->workspace_access_handler = $this->createMock(ilWorkspaceAccessHandler::class);
 
-        $this->type_resolver->method('resolveType')
+        $this->type_resolver->method('resolveTypeByObjectId')
                             ->withAnyParameters()
                             ->willReturn('file');
 
@@ -67,8 +73,9 @@ class CapabilityTest extends TestCase
             $this->ctrl,
             $this->action_repository,
             $this->http,
+            $this->static_url,
             $this->type_resolver,
-            $this->static_url
+            $this->workspace_access_handler
         );
     }
 
@@ -87,7 +94,7 @@ class CapabilityTest extends TestCase
     public static function environmentProvider(): array
     {
         return [
-            [
+            'testerei' => [
                 'wopi_view' => true,
                 'wopi_edit' => true,
                 'infopage_first' => true,
@@ -209,7 +216,15 @@ class CapabilityTest extends TestCase
         array $permissions,
         Capabilities $expected_best
     ): void {
-        $ref_id = 42;
+        static $id;
+
+        $id++;
+
+        $context = new Context(
+            $id,
+            $id,
+            Context::CONTEXT_REPO
+        );
 
         $this->access->method('checkAccess')
                      ->willReturnCallback(
@@ -227,8 +242,8 @@ class CapabilityTest extends TestCase
         $file_info->method('shouldDownloadDirectly')
                   ->willReturn(!$infopage_first);
 
-        $this->file_info_repository->method('getByRefId')
-                                   ->with($ref_id)
+        $this->file_info_repository->method('getByObjectId')
+                                   ->with($context->getObjectId())
                                    ->willReturn($file_info);
 
         $this->action_repository->method('hasEditActionForSuffix')
@@ -237,7 +252,7 @@ class CapabilityTest extends TestCase
         $this->action_repository->method('hasViewActionForSuffix')
                                 ->willReturn($wopi_view);
 
-        $capabilities = $this->capability_builder->get($ref_id);
+        $capabilities = $this->capability_builder->get($context);
         $best = $capabilities->getBest();
 
         $this->assertEquals($expected_best, $best->getCapability());
@@ -301,7 +316,10 @@ class CapabilityTest extends TestCase
         // Calculate the maximum width of each column
         $col_widths = array_map(
             static fn($col_index): int => max(
-                array_map(static fn($row): int => isset($row[$col_index]) ? mb_strlen((string) $row[$col_index]) : 0, $data)
+                array_map(
+                    static fn($row): int => isset($row[$col_index]) ? mb_strlen((string) $row[$col_index]) : 0,
+                    $data
+                )
             ),
             array_keys($data[0])
         );

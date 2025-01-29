@@ -77,9 +77,9 @@ class ilLocalUserPasswordSettingsGUI
     }
 
     public function showPassword(
-        Form $form = null,
+        ?Form $form = null,
         bool $hide_form = false,
-        MessageBox $message_box = null
+        ?MessageBox $message_box = null
     ): void {
         // check whether password of user have to be changed
         // due to first login or password of user is expired
@@ -104,7 +104,7 @@ class ilLocalUserPasswordSettingsGUI
     }
 
     public function getPasswordForm(
-        ServerRequestInterface $request = null,
+        ?ServerRequestInterface $request = null,
         array $errors = []
     ): Form {
         $items = [];

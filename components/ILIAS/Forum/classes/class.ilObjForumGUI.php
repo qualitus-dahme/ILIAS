@@ -967,8 +967,8 @@ class ilObjForumGUI extends ilObjectGUI implements ilDesktopItemHandling, ilForu
         $authorinfo = new ilForumAuthorInformation(
             $forum_topic->getThrAuthorId(),
             $forum_topic->getDisplayUserId(),
-            $forum_topic->getUserAlias(),
-            $forum_topic->getImportName()
+            (string) $forum_topic->getUserAlias(),
+            (string) $forum_topic->getImportName()
         );
 
         $properties = [
@@ -1004,7 +1004,7 @@ class ilObjForumGUI extends ilObjectGUI implements ilDesktopItemHandling, ilForu
         int $ref_id,
         string $title,
         string $cmd,
-        int $thread_id = null
+        ?int $thread_id = null
     ): \ILIAS\UI\Component\Link\Link {
         $this->ctrl->setParameter($this, 'ref_id', $ref_id);
         $this->ctrl->setParameter($this, 'thr_pk', $thread_id);
@@ -4945,10 +4945,7 @@ EOD
         }
     }
 
-    /**
-     * @param ilPropertyFormGUI|null $form
-     */
-    protected function editThreadDraftObject(ilPropertyFormGUI $form = null): void
+    protected function editThreadDraftObject(?ilPropertyFormGUI $form = null): void
     {
         if (
             !ilForumPostDraft::isSavePostDraftAllowed() ||
@@ -5462,7 +5459,7 @@ EOD
         }
     }
 
-    protected function deleteSelectedDraft(ilForumPostDraft $draft_obj = null): void
+    protected function deleteSelectedDraft(?ilForumPostDraft $draft_obj = null): void
     {
         $ref_id = $this->retrieveRefId();
         $draft_id = $this->retrieveDraftId();
@@ -5584,7 +5581,7 @@ EOD
         bool $is_post,
         ilForumPost $node,
         int $pageIndex = 0,
-        ilForumPostDraft $draft = null
+        ?ilForumPostDraft $draft = null
     ): void {
         $draft_id = $this->retrieveDraftId();
 

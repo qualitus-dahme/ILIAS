@@ -35,7 +35,6 @@ abstract class AbstractOfFinder
     protected array $ignore = [
         '.*/components/ILIAS/Setup/',
         '.*/components/ILIAS/GlobalScreen/',
-        '.*/Customizing/.*/src/',
         '.*/vendor/',
         '.*/components/ILIAS/App/tests/',
         '.*/components/ILIAS/BackgroundTasks/tests/',

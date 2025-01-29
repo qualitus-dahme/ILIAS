@@ -223,7 +223,7 @@ class ilSoapFunctions
     /**
      * @return soap_fault|SoapFault|string|null
      */
-    public static function getTreeChilds(string $sid, int $ref_id, array $types, int $user_id)
+    public static function getTreeChilds(string $sid, int $ref_id, ?array $types = null, ?int $user_id = null)
     {
         $soa = new ilSoapObjectAdministration();
         return $soa->getTreeChilds($sid, $ref_id, $types, $user_id);
@@ -232,7 +232,7 @@ class ilSoapFunctions
     /**
      * @return soap_fault|SoapFault|string|null
      */
-    public static function getXMLTree(string $sid, int $ref_id, array $types, ?int $user_id = null)
+    public static function getXMLTree(string $sid, int $ref_id, ?array $types = null, ?int $user_id = null)
     {
         $soa = new ilSoapObjectAdministration();
         return $soa->getXMLTree($sid, $ref_id, $types, $user_id);

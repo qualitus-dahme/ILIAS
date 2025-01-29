@@ -18,6 +18,8 @@
 
 declare(strict_types=1);
 
+use ILIAS\File\Capabilities\Permissions;
+
 /**
  * @author Fabian Schmid <fabian@sr.solutions>
  */
@@ -107,5 +109,27 @@ class ilFileObjectRBACDatabaseSteps implements ilDatabaseUpdateSteps
             } catch (Throwable) {
             };
         }
+    }
+
+    public function step_3(): void
+    {
+        $read_position = $this->database->fetchAssoc(
+            $this->database->queryF(
+                "SELECT op_order FROM rbac_operations WHERE operation = %s",
+                ['text'],
+                [Permissions::READ->value]
+            )
+        )['op_order'] ?? 2000;
+
+        // update position of view_content operation
+        $this->database->update(
+            "rbac_operations",
+            [
+                'op_order' => ['integer', $read_position + 1]
+            ],
+            [
+                'operation' => ['text', Permissions::VIEW_CONTENT->value]
+            ]
+        );
     }
 }

@@ -30,7 +30,7 @@ class ilBuddySystemRelationRepository
 
     protected ilDBInterface $db;
 
-    public function __construct(protected int $usrId, ilDBInterface $db = null)
+    public function __construct(protected int $usrId, ?ilDBInterface $db = null)
     {
         global $DIC;
 

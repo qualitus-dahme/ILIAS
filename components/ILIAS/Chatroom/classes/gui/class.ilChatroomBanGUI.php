@@ -31,10 +31,10 @@ class ilChatroomBanGUI extends ilChatroomGUIHandler
     private readonly ilObjUser $user;
 
     public function __construct(
-        ilChatroomObjectGUI $gui,
-        ilCtrlInterface $controller = null,
-        ilLanguage $language = null,
-        ilObjUser $user = null
+        ?ilChatroomObjectGUI $gui,
+        ?ilCtrlInterface $controller = null,
+        ?ilLanguage $language = null,
+        ?ilObjUser $user = null
     ) {
         if ($controller === null) {
             global $DIC;

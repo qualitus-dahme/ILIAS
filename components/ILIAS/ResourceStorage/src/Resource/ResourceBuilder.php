@@ -381,7 +381,7 @@ class ResourceBuilder
      */
     public function clone(StorableResource $resource): StorableResource
     {
-        $new_resource = $this->newBlank();
+        $new_resource = $this->newBlank($resource->getType());
         foreach ($resource->getStakeholders() as $stakeholder) {
             $stakeholder = clone $stakeholder;
             $new_resource->addStakeholder($stakeholder);

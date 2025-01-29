@@ -56,7 +56,7 @@ class ilDateTimeInputGUI extends ilSubEnabledFormPropertyGUI implements ilTableF
      *
      * 		$dt_form->setDate(new ilDate('2008-08-01',IL_CAL_DATE));
      */
-    public function setDate(ilDateTime $a_date = null): void
+    public function setDate(?ilDateTime $a_date = null): void
     {
         $this->date = $a_date;
     }

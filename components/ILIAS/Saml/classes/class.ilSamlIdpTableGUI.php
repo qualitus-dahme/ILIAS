@@ -31,11 +31,11 @@ final class ilSamlIdpTableGUI implements \ILIAS\UI\Component\Table\DataRetrieval
         private readonly \ILIAS\UI\Factory $ui_factory,
         private readonly \ILIAS\UI\Renderer $ui_renderer,
         private readonly ilLanguage $lng,
-        private readonly ilCtrl $ctrl,
+        private readonly ilCtrlInterface $ctrl,
         private readonly \Psr\Http\Message\ServerRequestInterface $http_request,
         private readonly \ILIAS\Data\Factory $df,
         private readonly string $parent_cmd,
-        private readonly bool $hasWriteAccess
+        private readonly bool $has_write_access
     ) {
         $this->idps = ilSamlIdp::getAllIdps();
 
@@ -84,8 +84,24 @@ final class ilSamlIdpTableGUI implements \ILIAS\UI\Component\Table\DataRetrieval
             'active' => $this->ui_factory
                 ->table()
                 ->column()
-                ->statusIcon($this->lng->txt('active'))
-                ->withIsSortable(true),
+                ->boolean(
+                    $this->lng->txt('status'),
+                    $this->ui_factory->symbol()->icon()->custom(
+                        'assets/images/standard/icon_ok.svg',
+                        $this->lng->txt('active'),
+                        'small'
+                    ),
+                    $this->ui_factory->symbol()->icon()->custom(
+                        'assets/images/standard/icon_not_ok.svg',
+                        $this->lng->txt('inactive'),
+                        'small'
+                    )
+                )
+                ->withIsSortable(true)
+                ->withOrderingLabels(
+                    "{$this->lng->txt('status')}, {$this->lng->txt('active')} {$this->lng->txt('order_option_first')}",
+                    "{$this->lng->txt('status')}, {$this->lng->txt('inactive')} {$this->lng->txt('order_option_first')}"
+                )
         ];
     }
 
@@ -94,7 +110,7 @@ final class ilSamlIdpTableGUI implements \ILIAS\UI\Component\Table\DataRetrieval
      */
     private function getActions(): array
     {
-        if (!$this->hasWriteAccess) {
+        if (!$this->has_write_access) {
             return [];
         }
 
@@ -118,7 +134,7 @@ final class ilSamlIdpTableGUI implements \ILIAS\UI\Component\Table\DataRetrieval
                 $this->lng->txt('delete'),
                 $this->url_builder->withParameter($this->action_parameter_token, 'confirmDeleteIdp'),
                 $this->row_id_token
-            ),
+            )
         ];
     }
 
@@ -138,7 +154,7 @@ final class ilSamlIdpTableGUI implements \ILIAS\UI\Component\Table\DataRetrieval
                 return ilStr::strCmp($left->getEntityId(), $right->getEntityId());
             }
 
-            return (int) $left->isActive() <=> (int) $right->isActive();
+            return (int) $right->isActive() <=> (int) $left->isActive();
         });
 
         if ($order_direction === \ILIAS\Data\Order::DESC) {
@@ -159,16 +175,11 @@ final class ilSamlIdpTableGUI implements \ILIAS\UI\Component\Table\DataRetrieval
         ?array $additional_parameters
     ): Generator {
         foreach ($this->getRecords($range, $order) as $item) {
-            $record = [
-                'title' => $item->getEntityId(),
-                'active' => $this->ui_factory->symbol()->icon()->custom(
-                    ilUtil::getImagePath($item->isActive() ? 'standard/icon_ok.svg' : 'standard/icon_not_ok.svg'),
-                    $item->isActive() ? $this->lng->txt('active') : $this->lng->txt('inactive')
-                ),
-            ];
-
             yield $row_builder
-                ->buildDataRow((string) $item->getIdpId(), $record)
+                ->buildDataRow((string) $item->getIdpId(), [
+                    'title' => $item->getEntityId(),
+                    'active' => $item->isActive()
+                ])
                 ->withDisabledAction(
                     'activate',
                     $item->isActive(),

@@ -31,8 +31,8 @@ class ilCertificateTemplateDatabaseRepository implements ilCertificateTemplateRe
 
     public function __construct(
         private readonly ilDBInterface $database,
-        ilLogger $logger = null,
-        ilObjectDataCache $objectDataCache = null
+        ?ilLogger $logger = null,
+        ?ilObjectDataCache $objectDataCache = null
     ) {
         if (null === $logger) {
             global $DIC;
@@ -312,7 +312,7 @@ class ilCertificateTemplateDatabaseRepository implements ilCertificateTemplateRe
 
     public function fetchActiveCertificateTemplatesForCoursesWithDisabledLearningProgress(
         bool $isGlobalLpEnabled,
-        int $forRefId = null
+        ?int $forRefId = null
     ): array {
         $this->logger->debug(
             'START - Fetch all active course certificate templates with disabled learning progress: "%s"'

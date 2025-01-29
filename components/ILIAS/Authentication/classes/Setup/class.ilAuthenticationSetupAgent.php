@@ -43,7 +43,7 @@ class ilAuthenticationSetupAgent implements Setup\Agent
         });
     }
 
-    public function getInstallObjective(Setup\Config $config = null): Setup\Objective
+    public function getInstallObjective(?Setup\Config $config = null): Setup\Objective
     {
         if ($config !== null) {
             return new ilSessionMaxIdleIsSetObjective($config);
@@ -54,7 +54,7 @@ class ilAuthenticationSetupAgent implements Setup\Agent
         );
     }
 
-    public function getUpdateObjective(Setup\Config $config = null): Setup\Objective
+    public function getUpdateObjective(?Setup\Config $config = null): Setup\Objective
     {
         if ($config !== null) {
             return new Setup\ObjectiveCollection(

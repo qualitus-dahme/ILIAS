@@ -38,13 +38,13 @@ class ilMailOptionsGUI
     protected ilMailOptions $mail_options;
 
     public function __construct(
-        ilGlobalTemplateInterface $tpl = null,
-        ilCtrlInterface $ctrl = null,
-        ilLanguage $lng = null,
-        ilObjUser $user = null,
-        GlobalHttpState $http = null,
-        Refinery $refinery = null,
-        ilMailOptions $mail_options = null
+        ?ilGlobalTemplateInterface $tpl = null,
+        ?ilCtrlInterface $ctrl = null,
+        ?ilLanguage $lng = null,
+        ?ilObjUser $user = null,
+        ?GlobalHttpState $http = null,
+        ?Refinery $refinery = null,
+        ?ilMailOptions $mail_options = null
     ) {
         global $DIC;
         $this->tpl = $tpl ?? $DIC->ui()->mainTemplate();
@@ -108,7 +108,7 @@ class ilMailOptionsGUI
         $this->showOptions($form);
     }
 
-    protected function showOptions(ilMailOptionsFormGUI $form = null): void
+    protected function showOptions(?ilMailOptionsFormGUI $form = null): void
     {
         if (null === $form) {
             $form = $this->getForm();

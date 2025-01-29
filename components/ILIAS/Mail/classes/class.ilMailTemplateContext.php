@@ -30,10 +30,10 @@ abstract class ilMailTemplateContext
     protected OrgUnitUserService $orgUnitUserService;
 
     public function __construct(
-        OrgUnitUserService $orgUnitUserService = null,
-        ilMailEnvironmentHelper $envHelper = null,
-        ilMailUserHelper $usernameHelper = null,
-        ilMailLanguageHelper $languageHelper = null
+        ?OrgUnitUserService $orgUnitUserService = null,
+        ?ilMailEnvironmentHelper $envHelper = null,
+        ?ilMailUserHelper $usernameHelper = null,
+        ?ilMailLanguageHelper $languageHelper = null
     ) {
         $this->orgUnitUserService = $orgUnitUserService ?? new OrgUnitUserService();
         $this->envHelper = $envHelper ?? new ilMailEnvironmentHelper();
@@ -116,7 +116,7 @@ abstract class ilMailTemplateContext
     abstract public function resolveSpecificPlaceholder(
         string $placeholder_id,
         array $context_parameters,
-        ilObjUser $recipient = null
+        ?ilObjUser $recipient = null
     ): string;
 
     /**
@@ -125,7 +125,7 @@ abstract class ilMailTemplateContext
     public function resolvePlaceholder(
         string $placeholder_id,
         array $context_parameters,
-        ilObjUser $recipient = null
+        ?ilObjUser $recipient = null
     ): string {
         if ($recipient !== null) {
             $this->initLanguage($recipient);

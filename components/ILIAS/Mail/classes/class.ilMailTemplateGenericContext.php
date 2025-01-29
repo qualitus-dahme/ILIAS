@@ -47,7 +47,7 @@ class ilMailTemplateGenericContext extends ilMailTemplateContext
     public function resolveSpecificPlaceholder(
         string $placeholder_id,
         array $context_parameters,
-        ilObjUser $recipient = null
+        ?ilObjUser $recipient = null
     ): string {
         return '';
     }

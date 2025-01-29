@@ -32,7 +32,7 @@ class ilMailTemplate
     protected string $message = '';
     protected bool $isDefault = false;
 
-    public function __construct(array $data = null)
+    public function __construct(?array $data = null)
     {
         if ($data) {
             $this->setTplId((int) $data['tpl_id']);

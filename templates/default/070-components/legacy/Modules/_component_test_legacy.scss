@@ -10,6 +10,10 @@ $il-test-term-bg-color: $il-highlight-bg;
 $il-test-term-disabled-bg-color: $il-disabled-btn-bg;
 $il-test-definition-bg-color: $il-main-darker-bg;
 $il-test-matching-padding: $il-padding-xs-horizontal;
+$il-test-longmenu-selectionlist-bg: $il-main-bg;
+$il-test-longmenu-selectionlist-bg-hover: $il-highlight-bg;
+$il-test-longmenu-selectionlist-border: $il-main-border;
+$il-test-longmenu-selectionlist-padding: $il-padding-xs-horizontal;
 
 .fullwidth_invisible {
 	background-color: transparent !important;
@@ -649,7 +653,27 @@ div.ilc_Page.readonly textarea[disabled]
     }
 }
 
-.draggableDisabled
-{
+.draggableDisabled {
     background-color: $il-test-term-disabled-bg-color;
+}
+
+.c-test__longmenu__selectionlist {
+    position: relative;
+    display: inline-block;
+    & ul {
+        position: absolute;
+        background-color: $il-test-longmenu-selectionlist-bg;
+        border-left: $il-test-longmenu-selectionlist-border;
+        border-right: $il-test-longmenu-selectionlist-border;
+        border-bottom: $il-test-longmenu-selectionlist-border;
+        margin: 0;
+        min-width: 100%;
+        padding: $il-test-longmenu-selectionlist-padding;
+        list-style: none;
+        z-index: 1;
+        cursor: default;
+    }
+    & li:hover {
+        background-color: $il-test-longmenu-selectionlist-bg-hover;
+    }
 }

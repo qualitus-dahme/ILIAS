@@ -133,7 +133,7 @@ class ilOpenIdConnectSettingsGUI
         }
     }
 
-    private function settings(ilPropertyFormGUI $form = null): void
+    private function settings(?ilPropertyFormGUI $form = null): void
     {
         $this->checkAccess('read');
 
@@ -719,7 +719,7 @@ class ilOpenIdConnectSettingsGUI
         }
     }
 
-    private function roles(ilPropertyFormGUI $form = null): void
+    private function roles(?ilPropertyFormGUI $form = null): void
     {
         $this->checkAccess('read');
 

@@ -30,4 +30,9 @@ class CoreTypeResolver implements TypeResolver
         return \ilObject2::_lookupType($ref_id, true);
     }
 
+    public function resolveTypeByObjectId(int $object_id): string
+    {
+        return \ilObject2::_lookupType($object_id, false);
+    }
+
 }

@@ -25,7 +25,6 @@ use ILIAS\Bibliographic\Field\Table;
  */
 abstract class ilBiblAdminFieldGUI
 {
-    public const CMD_INIT_DEFAULT_FIELDS_AND_SORTING = 'initDefaultFieldsAndSorting';
     public const SUBTAB_RIS = 'subtab_ris';
     public const SUBTAB_BIBTEX = 'subtab_bibtex';
     public const FIELD_IDENTIFIER = 'field_id';
@@ -34,6 +33,7 @@ abstract class ilBiblAdminFieldGUI
     public const CMD_CANCEL = 'cancel';
     public const CMD_EDIT = 'edit';
     public const CMD_UPDATE = 'update';
+    public const CMD_SAVE_ORDERING = 'saveOrdering';
     public const CMD_APPLY_FILTER = 'applyFilter';
     public const CMD_RESET_FILTER = 'resetFilter';
     public const CMD_SAVE = 'save';
@@ -101,6 +101,7 @@ abstract class ilBiblAdminFieldGUI
             case self::CMD_EDIT:
             case self::CMD_UPDATE:
             case self::CMD_SAVE:
+            case self::CMD_SAVE_ORDERING:
             case self::CMD_APPLY_FILTER:
             case self::CMD_RESET_FILTER:
                 if ($this->checkPermissionBoolAndReturn('write')) {
@@ -108,6 +109,18 @@ abstract class ilBiblAdminFieldGUI
                 }
                 break;
         }
+    }
+
+    protected function saveOrdering(): void
+    {
+        foreach ($this->table->getOrdering() as $position => $field_id) {
+            $field = $this->facade->fieldFactory()->findById($field_id);
+            $field->setPosition($position);
+            $field->store();
+        }
+
+        $this->main_tpl->setOnScreenMessage('success', $this->lng->txt('changes_successfully_saved'));
+        $this->ctrl->redirect($this, self::CMD_STANDARD);
     }
 
     protected function getFieldIdFromRequest(): int
@@ -178,20 +191,8 @@ abstract class ilBiblAdminFieldGUI
 
     protected function save(): void
     {
-        // I currently did not find a way to use the wrapper here
-        $positions = $this->http->request()->getParsedBody()['position'];
-
-        foreach ($positions as $set) {
-            $field_id = (int) key($set);
-            $position = (int) current($set);
-
-            $ilBiblField = $this->facade->fieldFactory()->findById($field_id);
-            $ilBiblField->setPosition($position);
-            $ilBiblField->store();
-        }
-
-        $this->main_tpl->setOnScreenMessage('success', $this->lng->txt('changes_successfully_saved'));
-        $this->ctrl->redirect($this, self::CMD_STANDARD);
+        $this->saveOrdering();
+        ;
     }
 
     protected function applyFilter(): void

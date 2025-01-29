@@ -1792,7 +1792,7 @@ class ilInitialisation
     /**
      * Translate message if possible
      */
-    protected static function translateMessage(string $a_message_id, array $a_message_static = null): string
+    protected static function translateMessage(string $a_message_id, ?array $a_message_static = null): string
     {
         global $ilDB, $lng, $ilSetting, $ilClientIniFile, $ilUser;
 
@@ -1835,7 +1835,7 @@ class ilInitialisation
     protected static function redirect(
         string $a_target,
         string $a_message_id = '',
-        array $a_message_static = null
+        ?array $a_message_static = null
     ): void {
         // #12739
         if (defined("ILIAS_HTTP_PATH") &&

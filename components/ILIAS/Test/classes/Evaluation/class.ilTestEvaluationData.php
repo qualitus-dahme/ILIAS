@@ -18,7 +18,6 @@
 
 declare(strict_types=1);
 
-use ILIAS\Test\Results\Data\StatusOfAttempt;
 use ILIAS\Test\Statistics\Statistics;
 
 /**

@@ -823,44 +823,7 @@ class assKprimChoiceGUI extends assQuestionGUI implements ilGuiQuestionScoringAd
         return [];
     }
 
-    /**
-     * Returns an html string containing a question specific representation of the answers so far
-     * given in the test for use in the right column in the scoring adjustment user interface.
-     * @param array $relevant_answers
-     * @return string
-     */
-    public function getAggregatedAnswersView(array $relevant_answers): string
-    {
-        return  $this->renderAggregateView(
-            $this->aggregateAnswers($relevant_answers, $this->object->getAnswers())
-        )->get();
-
-        return '<pre>' . print_r($relevant_answers, 1) . '</pre>';
-    }
-
-    public function renderAggregateView($aggregate): ilTemplate
-    {
-        $trueOptionLabel = $this->object->getTrueOptionLabelTranslation($this->lng, $this->object->getOptionLabel());
-        $falseOptionLabel = $this->object->getFalseOptionLabelTranslation($this->lng, $this->object->getOptionLabel());
-
-        $tpl = new ilTemplate('tpl.il_as_aggregated_kprim_answers_table.html', true, true, "components/ILIAS/TestQuestionPool");
-
-        foreach ($aggregate as $lineData) {
-            $tpl->setCurrentBlock('aggregaterow');
-            $tpl->setVariable('OPTION', $lineData['answertext']);
-            $tpl->setVariable('COUNT_TRUE', $lineData['count_true']);
-            $tpl->setVariable('COUNT_FALSE', $lineData['count_false']);
-            $tpl->parseCurrentBlock();
-        }
-
-        $tpl->setVariable('OPTION_HEAD', $this->lng->txt('answers'));
-        $tpl->setVariable('COUNT_TRUE_HEAD', $trueOptionLabel);
-        $tpl->setVariable('COUNT_FALSE_HEAD', $falseOptionLabel);
-
-        return $tpl;
-    }
-
-    public function aggregateAnswers($rawSolutionData, $answers): array
+    private function aggregateAnswers($rawSolutionData, $answers): array
     {
         $aggregate = [];
 

@@ -142,7 +142,7 @@ class ilBuddySystemGUI
     private function transitionCommand(
         string $cmd,
         string $positiveFeedbackLanguageId,
-        callable $onBeforeExecute = null
+        ?callable $onBeforeExecute = null
     ): void {
         if (!$this->isRequestParameterGiven('user_id', self::BS_REQUEST_HTTP_GET)) {
             $this->main_tpl->setOnScreenMessage('info', $this->lng->txt('buddy_bs_action_not_possible'), true);

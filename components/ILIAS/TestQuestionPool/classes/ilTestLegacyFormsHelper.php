@@ -75,11 +75,7 @@ class ilTestLegacyFormsHelper
             return $points;
         }
 
-        if (max($points) === 0.0) {
-            return 'enter_enough_positive_points';
-        }
-
-        return $points;
+        return max($points) <= 0 ? 'enter_enough_positive_points' : $points;
     }
 
     public function transformArray($data, string $key, Transformation $transformation): array

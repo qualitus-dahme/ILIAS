@@ -357,6 +357,16 @@ class IRSSWrapper
         return "";
     }
 
+    public function cloneContainer(
+        string $from_rid
+    ): string {
+        if ($from_rid !== "") {
+            $cloned_rid = $this->irss->manageContainer()->clone($this->getResourceIdForIdString($from_rid));
+            return $cloned_rid->serialize();
+        }
+        return "";
+    }
+
     public function deleteResource(string $rid, ResourceStakeholder $stakeholder): void
     {
         if ($rid !== "") {

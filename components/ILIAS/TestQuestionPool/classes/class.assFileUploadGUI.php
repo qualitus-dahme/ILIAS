@@ -381,18 +381,6 @@ class assFileUploadGUI extends assQuestionGUI implements ilGuiQuestionScoringAdj
         return [];
     }
 
-    /**
-     * Returns an html string containing a question specific representation of the answers so far
-     * given in the test for use in the right column in the scoring adjustment user interface.
-     * @param array $relevant_answers
-     * @return string
-     */
-    public function getAggregatedAnswersView(array $relevant_answers): string
-    {
-        // Empty implementation here since a feasible way to aggregate answer is not known.
-        return ''; //print_r($relevant_answers,true);
-    }
-
     protected function getTestPresentationFileTablePostVar(): string
     {
         if ($this->object->getTestPresentationConfig()->isSolutionInitiallyPrefilled()) {

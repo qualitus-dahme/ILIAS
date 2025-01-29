@@ -863,8 +863,12 @@ class assKprimChoice extends assQuestion implements ilObjQuestionScoringAdjustab
         array $solution_values
     ): array {
         $parsed_solution = [];
-        $true_option_label = $this->getTrueOptionLabel($this->getOptionLabel());
-        $false_option_label = $this->getFalseOptionLabel($this->getOptionLabel());
+        $true_option_label = $this->getOptionLabel() === self::OPTION_LABEL_CUSTOM
+            ? $this->getCustomTrueOptionLabel()
+            : $this->getTrueOptionLabel($this->getOptionLabel());
+        $false_option_label = $this->getOptionLabel() === self::OPTION_LABEL_CUSTOM
+            ? $this->getCustomFalseOptionLabel()
+            : $this->getFalseOptionLabel($this->getOptionLabel());
         foreach ($this->getAnswers() as $id => $answer) {
             $value = $additional_info->getNoneTag();
             foreach ($solution_values as $solution) {

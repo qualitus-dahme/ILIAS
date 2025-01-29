@@ -343,7 +343,7 @@ class ilMimeMail
         }
     }
 
-    public function Send(ilMailMimeTransport $transport = null): bool
+    public function Send(?ilMailMimeTransport $transport = null): bool
     {
         if (!($transport instanceof ilMailMimeTransport)) {
             $transport = self::getDefaultTransport();

@@ -30,7 +30,7 @@ class ilRoleMailboxSearch
 
     public function __construct(
         protected ilMailRfc822AddressParserFactory $parserFactory,
-        ilDBInterface $db = null
+        ?ilDBInterface $db = null
     ) {
         global $DIC;
 

@@ -293,7 +293,7 @@ class ilObjFilePreviewRendererGUI implements ilCtrlBaseClassInterface
         $modal = $this->ui_factory->modal()->lightbox($pages);
 
         // Send response and end script
-        $response = $this->http->response()->withBody(Streams::ofString($this->ui_renderer->render($modal)));
+        $response = $this->http->response()->withBody(Streams::ofString($this->ui_renderer->renderAsync($modal)));
         $this->http->saveResponse($response);
         $this->http->sendResponse();
     }

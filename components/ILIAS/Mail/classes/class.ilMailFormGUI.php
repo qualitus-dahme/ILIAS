@@ -57,8 +57,8 @@ class ilMailFormGUI
     private readonly Factory $ui_factory;
 
     public function __construct(
-        ilMailTemplateService $templateService = null,
-        ilMailBodyPurifier $bodyPurifier = null
+        ?ilMailTemplateService $templateService = null,
+        ?ilMailBodyPurifier $bodyPurifier = null
     ) {
         global $DIC;
 
@@ -915,7 +915,8 @@ class ilMailFormGUI
             $placeholders->setAdviseText(sprintf($this->lng->txt('placeholders_advise'), '<br />'));
         } catch (Throwable) {
             $placeholders->setAdviseText($this->lng->txt('placeholders_advise'));
-        }        foreach ($context->getPlaceholders() as $key => $value) {
+        }
+        foreach ($context->getPlaceholders() as $key => $value) {
             $placeholders->addPlaceholder($value['placeholder'], $value['label']);
         }
         $chb->addSubItem($placeholders);

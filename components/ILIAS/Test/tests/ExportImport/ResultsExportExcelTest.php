@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace ILIAS\Test\Tests\ExportImport;
 
 use ILIAS\Test\ExportImport\ResultsExportExcel;
+use ILIAS\TestQuestionPool\Questions\GeneralQuestionPropertiesRepository;
 
 class ResultsExportExcelTest extends \ilTestBaseTestCase
 {
@@ -29,7 +30,8 @@ class ResultsExportExcelTest extends \ilTestBaseTestCase
         $excel_export = new ResultsExportExcel(
             $this->createMock(\ilLanguage::class),
             $this->createMock(\ilObjUser::class),
-            $this->getTestObjMock()
+            $this->getTestObjMock(),
+            $this->createMock(GeneralQuestionPropertiesRepository::class),
         );
         $this->assertInstanceOf(ResultsExportExcel::class, $excel_export);
     }

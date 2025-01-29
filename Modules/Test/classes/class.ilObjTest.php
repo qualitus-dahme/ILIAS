@@ -2792,22 +2792,25 @@ class ilObjTest extends ilObject implements ilMarkSchemaAware
     * @return string The output name of the user
     * @access public
     */
-    public function buildName($user_id, $firstname, $lastname, $title): string
-    {
-        $name = "";
-        if (strlen($firstname . $lastname . $title) == 0) {
-            $name = $this->lng->txt('deleted_user');
-        } else {
-            if ($user_id == ANONYMOUS_USER_ID) {
-                $name = $lastname;
-            } else {
-                $name = trim($lastname . ", " . $firstname . " " . $title);
-            }
-            if ($this->getAnonymity()) {
-                $name = $this->lng->txt("anonymous");
-            }
+    public function buildName(
+        ?int $user_id,
+        ?string $firstname,
+        ?string $lastname
+    ): string {
+        if ($user_id === null
+            || $firstname . $lastname === '') {
+            return $this->lng->txt('deleted_user');
         }
-        return $name;
+
+        if ($this->getAnonymity()) {
+            return $this->lng->txt('anonymous');
+        }
+
+        if ($user_id == ANONYMOUS_USER_ID) {
+            return $lastname;
+        }
+
+        return trim($lastname . ', ' . $firstname);
     }
 
     public function evalTotalStartedAverageTime(?array $active_ids_to_filter = null): float
@@ -4284,14 +4287,18 @@ class ilObjTest extends ilObject implements ilMarkSchemaAware
     public function canEditMarks(): bool
     {
         $total = $this->evalTotalPersons();
-        if ($total > 0) {
-            $reporting_date = $this->getScoreSettings()->getResultSummarySettings()->getReportingDate();
-            if ($reporting_date !== null) {
-                return $reporting_date <= new DateTimeImmutable('now', new DateTimeZone('UTC'));
-            }
-            return false;
+        $results_summary_settings = $this->getScoreSettings()->getResultSummarySettings();
+        if ($total === 0
+            || $results_summary_settings->getScoreReportingEnabled() === false) {
+            return true;
         }
-        return true;
+
+        if ($results_summary_settings->getScoreReporting() === ilObjTestSettingsResultSummary::SCORE_REPORTING_DATE) {
+            return $results_summary_settings->getReportingDate()
+                >= new DateTimeImmutable('now', new DateTimeZone('UTC'));
+        }
+
+        return false;
     }
 
     /**

@@ -52,8 +52,8 @@ class ilBadgeManagementGUI
 
     public function __construct(
         private readonly int $parent_ref_id,
-        int $a_parent_obj_id = null,
-        string $a_parent_obj_type = null
+        ?int $a_parent_obj_id = null,
+        ?string $a_parent_obj_type = null
     ) {
         global $DIC;
 
@@ -313,7 +313,7 @@ class ilBadgeManagementGUI
     // badge (CRUD)
     //
 
-    protected function addBadge(ilPropertyFormGUI $a_form = null): void
+    protected function addBadge(?ilPropertyFormGUI $a_form = null): void
     {
         $ilCtrl = $this->ctrl;
         $tpl = $this->tpl;
@@ -497,7 +497,7 @@ class ilBadgeManagementGUI
         $this->addBadge($form);
     }
 
-    protected function editBadge(ilPropertyFormGUI $a_form = null): void
+    protected function editBadge(?ilPropertyFormGUI $a_form = null): void
     {
         $ilCtrl = $this->ctrl;
         $tpl = $this->tpl;

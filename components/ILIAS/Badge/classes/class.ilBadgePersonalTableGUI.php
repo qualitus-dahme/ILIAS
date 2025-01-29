@@ -95,7 +95,7 @@ class ilBadgePersonalTableGUI implements DataRetrieval
      *     title_sortable: string
      *  }>
      */
-    private function getRecords(Range $range = null, Order $order = null): array
+    private function getRecords(?Range $range = null, ?Order $order = null): array
     {
         $rows = [];
         $a_user_id = $this->user->getId();

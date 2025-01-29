@@ -195,7 +195,7 @@ class ilObjBadgeAdministrationGUI extends ilObjectGUI
     // settings
     //
 
-    protected function editSettings(ilPropertyFormGUI $a_form = null): void
+    protected function editSettings(?ilPropertyFormGUI $a_form = null): void
     {
         $this->tabs_gui->setTabActive('settings');
 
@@ -350,7 +350,7 @@ class ilObjBadgeAdministrationGUI extends ilObjectGUI
 
 
     protected function addImageTemplate(
-        ilPropertyFormGUI $a_form = null
+        ?ilPropertyFormGUI $a_form = null
     ): void {
         $tpl = $this->tpl;
 
@@ -444,7 +444,7 @@ class ilObjBadgeAdministrationGUI extends ilObjectGUI
     }
 
     protected function editImageTemplate(
-        ilPropertyFormGUI $a_form = null
+        ?ilPropertyFormGUI $a_form = null
     ): void {
         $ilCtrl = $this->ctrl;
         $tpl = $this->tpl;

@@ -114,7 +114,7 @@ class ilObjectBadgeTableGUI implements DataRetrieval
      *     container_sortable: string
      * }>
      */
-    private function getRecords(Range $range = null, Order $order = null): array
+    private function getRecords(?Range $range = null, ?Order $order = null): array
     {
         $container_deleted_title_part = '<span class="il_ItemAlertProperty">' . $this->lng->txt('deleted') . '</span>';
         $modal_container = new ModalBuilder();

@@ -304,7 +304,7 @@ class ilBadgeProfileGUI
         return $form;
     }
 
-    protected function editSettings(ilPropertyFormGUI $a_form = null): void
+    protected function editSettings(?ilPropertyFormGUI $a_form = null): void
     {
         $tpl = $this->tpl;
         $ilCtrl = $this->ctrl;

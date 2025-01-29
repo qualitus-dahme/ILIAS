@@ -253,7 +253,7 @@ class ilBadgeUserTableGUI implements DataRetrieval
      *     parent_sortable: ?string
      *  }>
      */
-    private function getRecords(Range $range = null, Order $order = null): array
+    private function getRecords(?Range $range = null, ?Order $order = null): array
     {
         $rows = $this->getBadgeImageTemplates();
 

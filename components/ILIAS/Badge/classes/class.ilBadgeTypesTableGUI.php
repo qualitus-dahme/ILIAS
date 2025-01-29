@@ -117,7 +117,7 @@ class ilBadgeTypesTableGUI implements DataRetrieval
     /**
      * @return list<array{"id": string, "comp": string, "name": string, "manual": bool, "active": bool, "activity": bool}>
      */
-    private function getRecords(Range $range = null, Order $order = null): array
+    private function getRecords(?Range $range = null, ?Order $order = null): array
     {
         $rows = $this->getBadgeImageTemplates();
 

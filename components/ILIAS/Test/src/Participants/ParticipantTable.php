@@ -198,7 +198,7 @@ class ParticipantTable implements DataRetrieval
                 Participant $b
             ) => $a->getRemainingDuration($processing_time, $reset_time_on_new_attempt)
                 <=> $b->getRemainingDuration($processing_time, $reset_time_on_new_attempt),
-            'last_access' => static fn(Participant $a, Participant $b) => $a->getTestEndDate() <=> $b->getTestEndDate(),
+            'last_access' => static fn(Participant $a, Participant $b) => $a->getLastAccess() <=> $b->getLastAccess(),
             'status_of_attempt' => static fn(
                 Participant $a,
                 Participant $b

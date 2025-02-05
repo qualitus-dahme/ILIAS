@@ -336,7 +336,7 @@ class ilTinyMCE extends ilRTE
                 $theme_advanced_buttons[] = '|';
             }
             if ($this->_buildAdvancedBlockformatsFromHTMLTags($a_html_tags) !== '') {
-                $theme_advanced_buttons[] = 'formatselect';
+                $theme_advanced_buttons[] = 'blocks';
             }
             if (in_array('hr', $a_html_tags)) {
                 $theme_advanced_buttons[] = 'hr';
@@ -452,7 +452,7 @@ class ilTinyMCE extends ilRTE
             $theme_advanced_buttons[] = 'alignjustify';
         }
         if ($this->_buildAdvancedBlockformatsFromHTMLTags($a_html_tags) !== '') {
-            $theme_advanced_buttons[] = 'formatselect';
+            $theme_advanced_buttons[] = 'blocks';
         }
         if (in_array('hr', $a_html_tags)) {
             $theme_advanced_buttons[] = 'hr';

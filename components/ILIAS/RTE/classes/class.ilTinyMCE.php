@@ -350,8 +350,8 @@ class ilTinyMCE extends ilRTE
                 $theme_advanced_buttons[] = 'superscript';
             }
             if (in_array('font', $a_html_tags)) {
-                $theme_advanced_buttons[] = 'fontselect';
-                $theme_advanced_buttons[] = 'fontsizeselect';
+                $theme_advanced_buttons[] = 'fontfamily';
+                $theme_advanced_buttons[] = 'fontsize';
             }
             $theme_advanced_buttons[] = 'charmap';
             if ((in_array('ol', $a_html_tags)) && (in_array('li', $a_html_tags))) {
@@ -464,8 +464,8 @@ class ilTinyMCE extends ilRTE
             $theme_advanced_buttons[] = 'superscript';
         }
         if (in_array('font', $a_html_tags)) {
-            $theme_advanced_buttons[] = 'fontselect';
-            $theme_advanced_buttons[] = 'fontsizeselect';
+            $theme_advanced_buttons[] = 'fontfamily';
+            $theme_advanced_buttons[] = 'fontsize';
         }
         if ((in_array('ol', $a_html_tags)) && (in_array('li', $a_html_tags))) {
             $theme_advanced_buttons[] = 'bullist';

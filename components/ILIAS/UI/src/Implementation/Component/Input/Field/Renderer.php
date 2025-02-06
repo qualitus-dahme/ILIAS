@@ -543,7 +543,7 @@ class Renderer extends AbstractComponentRenderer
                 $glyph = $glyph->withUnavailableAction();
             }
 
-            $action = $this->getUIFactory()->button()->standard($default_renderer->render($glyph), '#');
+            $action = $this->getUIFactory()->button()->standard('', '#')->withSymbol($glyph);
 
             if ($component->isDisabled()) {
                 $action = $action->withUnavailableAction();

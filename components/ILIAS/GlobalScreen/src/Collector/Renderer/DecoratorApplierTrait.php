@@ -24,10 +24,7 @@ use ILIAS\GlobalScreen\isGlobalScreenItem;
 use ILIAS\UI\Component\Component;
 use ILIAS\UI\Component\Symbol\Symbol;
 use ILIAS\GlobalScreen\Scope\isDecorateable;
-use ILIAS\UI\Component\JavaScriptBindable;
 use ILIAS\UI\Component\HasHelpTopics;
-use ILIAS\UI\Help\Topic;
-use ILIAS\GlobalScreen\Scope;
 
 /**
  * @author Fabian Schmid <fabian@sr.solutions>

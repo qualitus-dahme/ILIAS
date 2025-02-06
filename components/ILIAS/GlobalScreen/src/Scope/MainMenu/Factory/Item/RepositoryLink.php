@@ -31,8 +31,6 @@ use ILIAS\GlobalScreen\Scope\MainMenu\Factory\isInterchangeableItemTrait;
 use ILIAS\UI\Component\Symbol\Symbol;
 use ilLink;
 use LogicException;
-use ILIAS\GlobalScreen\Scope\isDecorateable;
-use ILIAS\GlobalScreen\Scope\TriggererDecoratorTrait;
 
 /**
  * @author Fabian Schmid <fabian@sr.solutions>

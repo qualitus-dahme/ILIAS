@@ -28,7 +28,7 @@ class ContentRenderer
 {
     use Hasher;
 
-    public function run()
+    public function run(): void
     {
         global $DIC;
 

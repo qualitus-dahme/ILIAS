@@ -41,10 +41,25 @@ final class ilFooterTranslationGUI
     use Hasher;
     use UIHelper;
 
+    /**
+     * @var string
+     */
     public const CMD_DEFAULT = 'index';
+    /**
+     * @var string
+     */
     public const CMD_LANGUAGE_SELECTION = 'selectLanguages';
+    /**
+     * @var string
+     */
     public const CMD_SAVE_LANGUAGE_SELECTION = 'saveLanguages';
+    /**
+     * @var string
+     */
     public const CMD_TRANSLATE_IN_MODAL = 'translateInAsyncModal';
+    /**
+     * @var string
+     */
     public const CMD_SAVE_TRANSLATIONS = 'saveTranslations';
     private TranslationsRepository $repository;
     private Factory $ui_factory;

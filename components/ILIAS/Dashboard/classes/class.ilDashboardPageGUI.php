@@ -47,7 +47,7 @@ class ilDashboardPageGUI extends ilPageObjectGUI
 
     public function finishEditing(): void
     {
-        $this->ctrl->redirectByClass(ilObjDashboardSettingsGUI::class, 'editCustomization');
+        $this->ctrl->redirectByClass(ilObjDashboardSettingsGUI::class, 'view');
     }
 
     public function executeCommand(): string

@@ -19,6 +19,10 @@
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use ILIAS\Cron\Job\JobRepository;
+use ILIAS\Cron\Job\JobResult;
+use ILIAS\Cron\CronJob;
+use ILIAS\Cron\Job\Manager\JobManagerImpl;
 
 class CronJobManagerTest extends TestCase
 {
@@ -50,8 +54,8 @@ class CronJobManagerTest extends TestCase
         $db = $this->createMock(ilDBInterface::class);
         $setting = $this->getMockBuilder(ilSetting::class)->disableOriginalConstructor()->getMock();
         $logger = $this->getMockBuilder(ilLogger::class)->disableOriginalConstructor()->getMock();
-        $repository = $this->createMock(ilCronJobRepository::class);
-        $job = $this->createMock(ilCronJob::class);
+        $repository = $this->createMock(JobRepository::class);
+        $job = $this->createMock(CronJob::class);
         $user = $this->getMockBuilder(ilObjUser::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getId'])
@@ -59,7 +63,7 @@ class CronJobManagerTest extends TestCase
 
         $clock_factory = $this->createClockFactoryMock();
 
-        $cronManager = new ilCronManagerImpl(
+        $cronManager = new JobManagerImpl(
             $repository,
             $db,
             $setting,
@@ -71,7 +75,7 @@ class CronJobManagerTest extends TestCase
             $job,
             $clock_factory->system()->now(),
             $user,
-            $this->isInstanceOf(ilCronJobResult::class),
+            $this->isInstanceOf(JobResult::class),
             true
         );
 
@@ -100,8 +104,8 @@ class CronJobManagerTest extends TestCase
         $db = $this->createMock(ilDBInterface::class);
         $setting = $this->getMockBuilder(ilSetting::class)->disableOriginalConstructor()->getMock();
         $logger = $this->getMockBuilder(ilLogger::class)->disableOriginalConstructor()->getMock();
-        $repository = $this->createMock(ilCronJobRepository::class);
-        $job = $this->createMock(ilCronJob::class);
+        $repository = $this->createMock(JobRepository::class);
+        $job = $this->createMock(CronJob::class);
         $user = $this->getMockBuilder(ilObjUser::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getId'])
@@ -109,7 +113,7 @@ class CronJobManagerTest extends TestCase
 
         $clock_factory = $this->createClockFactoryMock();
 
-        $cronManager = new ilCronManagerImpl(
+        $cronManager = new JobManagerImpl(
             $repository,
             $db,
             $setting,
@@ -126,7 +130,7 @@ class CronJobManagerTest extends TestCase
             ->method('activateJob')
             ->willReturnCallback(
                 function ($job, $date, $user, $flag) use (&$consecutive): void {
-                    list($ejob, $edate, $euser, $eflag) = array_shift($consecutive);
+                    [$ejob, $edate, $euser, $eflag] = array_shift($consecutive);
                     $this->assertEquals($ejob, $job);
                     $this->assertEquals($edate, $date);
                     $this->assertEquals($euser, $user);
@@ -149,8 +153,8 @@ class CronJobManagerTest extends TestCase
         $db = $this->createMock(ilDBInterface::class);
         $setting = $this->getMockBuilder(ilSetting::class)->disableOriginalConstructor()->getMock();
         $logger = $this->getMockBuilder(ilLogger::class)->disableOriginalConstructor()->getMock();
-        $repository = $this->createMock(ilCronJobRepository::class);
-        $job = $this->createMock(ilCronJob::class);
+        $repository = $this->createMock(JobRepository::class);
+        $job = $this->createMock(CronJob::class);
         $user = $this->getMockBuilder(ilObjUser::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getId'])
@@ -158,7 +162,7 @@ class CronJobManagerTest extends TestCase
 
         $clock_factory = $this->createClockFactoryMock();
 
-        $cronManager = new ilCronManagerImpl(
+        $cronManager = new JobManagerImpl(
             $repository,
             $db,
             $setting,
@@ -175,7 +179,7 @@ class CronJobManagerTest extends TestCase
             ->method('deactivateJob')
             ->willReturnCallback(
                 function ($job, $date, $user, $flag) use (&$consecutive): void {
-                    list($ejob, $edate, $euser, $eflag) = array_shift($consecutive);
+                    [$ejob, $edate, $euser, $eflag] = array_shift($consecutive);
                     $this->assertEquals($ejob, $job);
                     $this->assertEquals($edate, $date);
                     $this->assertEquals($euser, $user);

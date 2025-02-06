@@ -30,7 +30,7 @@ class Bylined extends Simple implements BylinedInterface
 {
     private string $byline;
 
-    public function __construct(string $label, string $byline, Icon $icon = null)
+    public function __construct(string $label, string $byline, ?Icon $icon = null)
     {
         parent::__construct($label, $icon);
 

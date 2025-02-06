@@ -92,6 +92,7 @@ class ilObjFile extends ilObject2 implements ilObjFileImplementationInterface
         $this->file_info = $is_ref_id ? $repository->getByRefId($id) : $repository->getByObjectId($id);
     }
 
+    #[\Override]
     public function getPresentationTitle(): string
     {
         return $this->file_info->getHeaderTitle();
@@ -500,6 +501,7 @@ class ilObjFile extends ilObject2 implements ilObjFileImplementationInterface
         $this->initImplementation();
     }
 
+    #[\Override]
     protected function beforeUpdate(): bool
     {
         $this->setTitle($this->ensureSuffix($this->getTitle(), $this->file_info->getSuffix()));
@@ -513,6 +515,7 @@ class ilObjFile extends ilObject2 implements ilObjFileImplementationInterface
         return true;
     }
 
+    #[\Override]
     protected function beforeDelete(): bool
     {
         // check, if file is used somewhere
@@ -571,7 +574,7 @@ class ilObjFile extends ilObject2 implements ilObjFileImplementationInterface
     /**
      * @return null
      */
-    public function replaceFile($a_upload_file, $a_filename)
+    public function replaceFile($a_upload_file, $a_filename): null
     {
         return null;
     }

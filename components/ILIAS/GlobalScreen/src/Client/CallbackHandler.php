@@ -20,9 +20,9 @@ declare(strict_types=1);
 
 namespace ILIAS\GlobalScreen\Client;
 
+use ILIAS\GlobalScreen\Services;
 use ILIAS\GlobalScreen\Scope\MainMenu\Collector\Renderer\Hasher;
 use ILIAS\GlobalScreen\Scope\Tool\Factory\isToolItem;
-use ilInitialisation;
 use ILIAS\HTTP\Wrapper\WrapperFactory;
 use ILIAS\Refinery\Factory;
 use ILIAS\GlobalScreen\Identification\IdentificationInterface;
@@ -31,13 +31,16 @@ class CallbackHandler
 {
     use Hasher;
 
+    /**
+     * @var string
+     */
     private const TARGET_SCRIPT = "/ilias.php";
     public const KEY_ITEM = 'item';
 
     protected WrapperFactory $wrapper;
     protected Factory $refinery;
     protected \ilCtrlInterface $ctrl;
-    protected \ILIAS\GlobalScreen\Services $global_screen;
+    protected Services $global_screen;
 
     public function __construct()
     {

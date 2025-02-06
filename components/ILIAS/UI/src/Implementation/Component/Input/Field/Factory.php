@@ -129,7 +129,7 @@ class Factory implements I\Factory
         UploadHandler $handler,
         string $label,
         ?string $byline = null,
-        FormInput $metadata_input = null
+        ?FormInput $metadata_input = null
     ): File {
         return new File(
             $this->lng,
@@ -163,12 +163,12 @@ class Factory implements I\Factory
         return new ColorPicker($this->data_factory, $this->refinery, $label, $byline);
     }
 
-    public function markdown(I\MarkdownRenderer $md_renderer, string $label, string $byline = null): Markdown
+    public function markdown(I\MarkdownRenderer $md_renderer, string $label, ?string $byline = null): Markdown
     {
         return new Markdown($this->data_factory, $this->refinery, $md_renderer, $label, $byline);
     }
 
-    public function rating(string $label, string $byline = null): Rating
+    public function rating(string $label, ?string $byline = null): Rating
     {
         return new Rating($this->data_factory, $this->refinery, $label, $byline);
     }

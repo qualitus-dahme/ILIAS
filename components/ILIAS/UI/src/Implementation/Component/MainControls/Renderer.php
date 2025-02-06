@@ -348,7 +348,7 @@ class Renderer extends AbstractComponentRenderer
         Signal $entry_signal,
         string $block,
         array $entries,
-        string $active = null
+        ?string $active = null
     ): void {
         foreach ($entries as $id => $entry) {
             $use_block = $block;

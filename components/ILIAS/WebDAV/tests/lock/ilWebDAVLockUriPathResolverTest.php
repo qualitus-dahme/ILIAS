@@ -1,11 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
-use PHPUnit\Framework\TestCase;
-use Sabre\DAV\Exception\BadRequest;
-use Sabre\DAV\Exception\NotFound;
-
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -22,12 +16,18 @@ use Sabre\DAV\Exception\NotFound;
  *
  *********************************************************************/
 
+declare(strict_types=1);
+
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\TestCase;
+use Sabre\DAV\Exception\BadRequest;
+use Sabre\DAV\Exception\NotFound;
+
 require_once "./components/ILIAS/WebDAV/tests/ilWebDAVTestHelper.php";
 
-/**
- * @runTestsInSeparateProcesses
- * @preserveGlobalState disabled
- */
+#[PreserveGlobalState(false)]
+#[RunTestsInSeparateProcesses]
 class ilWebDAVLockUriPathResolverTest extends TestCase
 {
     protected ilWebDAVTestHelper $webdav_test_helper;
@@ -158,15 +158,11 @@ class ilWebDAVLockUriPathResolverTest extends TestCase
         $mocked_repo_helper = $this->createMock(ilWebDAVRepositoryHelper::class);
         $mocked_repo_helper->expects($this->exactly($expects_children))
             ->method('getChildrenOfRefId')->willReturnCallback(
-                function (int $parent_ref) use ($tree): array {
-                    return $tree[$parent_ref]['children'];
-                }
+                fn(int $parent_ref): array => $tree[$parent_ref]['children']
             );
         $mocked_repo_helper->expects($this->exactly($expects_ref_id))
             ->method('getObjectTitleFromRefId')->willReturnCallback(
-                function (int $ref_id) use ($tree): string {
-                    return $tree[$ref_id]['title'];
-                }
+                fn(int $ref_id): string => $tree[$ref_id]['title']
             );
         return new ilWebDAVLockUriPathResolver($mocked_repo_helper);
     }

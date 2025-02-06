@@ -73,10 +73,10 @@ class DataRetrieval implements I\OrderingBinding
     protected function getRecords(Order $order): array
     {
         $records = $this->facade->fieldFactory()->filterAllFieldsForTypeAsArray($this->facade->type());
-        [$order_field, $order_direction] = $order->join([], fn($ret, $key, $value) => [$key, $value]);
-        usort($records, fn($a, $b) => $a[$order_field] <=> $b[$order_field]);
+        [$order_field, $order_direction] = $order->join([], fn($ret, $key, $value): array => [$key, $value]);
+        usort($records, fn($a, $b): int => $a[$order_field] <=> $b[$order_field]);
         if ($order_direction === 'DESC') {
-            $records = array_reverse($records);
+            return array_reverse($records);
         }
         return $records;
     }

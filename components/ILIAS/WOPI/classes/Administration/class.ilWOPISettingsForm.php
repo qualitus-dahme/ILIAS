@@ -18,6 +18,8 @@
 
 declare(strict_types=1);
 
+use ILIAS\UI\Factory;
+use ILIAS\UI\Renderer;
 use ILIAS\Administration\Setting;
 use ILIAS\UI\Component\Input\Container\Form\Standard;
 use ILIAS\UI\Component\Input\Field\Section;
@@ -31,8 +33,8 @@ use ILIAS\Data\URI;
 class ilWOPISettingsForm
 {
     private Standard $form;
-    private \ILIAS\UI\Factory $ui_factory;
-    private \ILIAS\UI\Renderer $ui_renderer;
+    private Factory $ui_factory;
+    private Renderer $ui_renderer;
     private ilCtrlInterface $ctrl;
     private ilLanguage $lng;
     private \ILIAS\Refinery\Factory $refinery;
@@ -68,24 +70,22 @@ class ilWOPISettingsForm
         $wopi_url = $this->ui_factory->input()->field()->text(
             $this->lng->txt("wopi_url"),
             $this->lng->txt("wopi_url_byline")
-        /*. $this->renderLink(
-            " ➜︎ Wikipedia",
-            "https://en.wikipedia.org/wiki/Web_Application_Open_Platform_Interface",
-            true
-        )*/
+            /*. $this->renderLink(
+                " ➜︎ Wikipedia",
+                "https://en.wikipedia.org/wiki/Web_Application_Open_Platform_Interface",
+                true
+            )*/
         )->withAdditionalTransformation(
-            $this->refinery->custom()->transformation(function ($v) {
-                return $v === '' ? null : $v;
-            })
+            $this->refinery->custom()->transformation(fn($v) => $v === '' ? null : $v)
         )->withAdditionalTransformation(
-            $this->refinery->custom()->constraint(function ($v) {
+            $this->refinery->custom()->constraint(function ($v): bool {
                 if ($v === null) {
                     return false;
                 }
                 return (new Crawler())->validate(new URI($v));
             }, $this->lng->txt('msg_error_wopi_invalid_discorvery_url'))
         )->withAdditionalTransformation(
-            $this->refinery->custom()->transformation(function ($v) {
+            $this->refinery->custom()->transformation(function ($v): true {
                 $this->settings->set("wopi_discovery_url", $v);
 
                 return true;
@@ -104,11 +104,9 @@ class ilWOPISettingsForm
                         $this->lng->txt("saving_interval_byline")
                     )
                     ->withAdditionalTransformation(
-                        $this->refinery->custom()->transformation(function ($v) {
-                            return $v === '' ? null : $v;
-                        })
+                        $this->refinery->custom()->transformation(fn($v) => $v === '' ? null : $v)
                     )->withAdditionalTransformation(
-                        $this->refinery->custom()->transformation(function ($v) {
+                        $this->refinery->custom()->transformation(function ($v): true {
                             if ($v === null || $v === 0) {
                                 $this->settings->delete("saving_interval");
                                 return true;

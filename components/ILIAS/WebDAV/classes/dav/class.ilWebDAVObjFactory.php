@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * https://github.com/ILIAS-eLearning
  *
  *********************************************************************/
+
+declare(strict_types=1);
 
 use Sabre\DAV\Exception\NotFound;
 use ILIAS\ResourceStorage\Services;
@@ -42,30 +42,8 @@ class ilWebDAVObjFactory
         'grp'
     ];
 
-    protected ilWebDAVRepositoryHelper $repository_helper;
-    protected ilObjUser $current_user;
-    protected Services $resource_storage;
-    protected RequestInterface $request;
-    protected ilLanguage $language;
-    protected string $client_id;
-    protected bool $versioning_enabled;
-
-    public function __construct(
-        ilWebDAVRepositoryHelper $repository_helper,
-        ilObjUser $current_user,
-        Services $resource_storage,
-        RequestInterface $request,
-        ilLanguage $language,
-        string $client_id,
-        bool $versioning_enabled
-    ) {
-        $this->repository_helper = $repository_helper;
-        $this->current_user = $current_user;
-        $this->resource_storage = $resource_storage;
-        $this->request = $request;
-        $this->language = $language;
-        $this->client_id = $client_id;
-        $this->versioning_enabled = $versioning_enabled;
+    public function __construct(protected ilWebDAVRepositoryHelper $repository_helper, protected ilObjUser $current_user, protected Services $resource_storage, protected RequestInterface $request, protected ilLanguage $language, protected string $client_id, protected bool $versioning_enabled)
+    {
     }
 
     public function retrieveDAVObjectByRefID(int $ref_id): INode
@@ -76,7 +54,7 @@ class ilWebDAVObjFactory
 
         $ilias_object = ilObjectFactory::getInstanceByRefId($ref_id);
 
-        if (!$ilias_object) {
+        if ($ilias_object === null) {
             throw new NotFound();
         }
 

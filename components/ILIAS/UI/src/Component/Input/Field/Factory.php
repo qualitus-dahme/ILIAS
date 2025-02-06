@@ -607,7 +607,7 @@ interface Factory
         UploadHandler $handler,
         string $label,
         ?string $byline = null,
-        FormInput $metadata_input = null
+        ?FormInput $metadata_input = null
     ): File;
 
     /**
@@ -755,7 +755,7 @@ interface Factory
      * @param string|null      $byline
      * @return \ILIAS\UI\Component\Input\Field\Markdown
      */
-    public function markdown(MarkdownRenderer $md_renderer, string $label, string $byline = null): Markdown;
+    public function markdown(MarkdownRenderer $md_renderer, string $label, ?string $byline = null): Markdown;
 
     /**
      * ---

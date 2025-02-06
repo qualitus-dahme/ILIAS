@@ -18,8 +18,6 @@
 
 declare(strict_types=1);
 use ILIAS\Setup\Environment;
-
-use ILIAS\Setup;
 use ILIAS\Cache\Services;
 
 class ilGlobalCacheAllFlushedObjective extends ilSetupObjective

@@ -21,10 +21,9 @@ namespace ILIAS\UI\examples\Input\Field\Duration;
  *   - No selection possible (beginning)
  *   - No selection possible (ending)
  *
- *   A calendar glyph is displayed next to each field, except for line 3 and 4, which display a clock glyph.
- *   You can choose a date/time in line 1-6 through clicking the glyphs.
- *   Please save the selection.
- *   ILIAS reloads the page and displays your selection in an array overview. The selection has to be the same as the output.
+ *   You can choose a date/time in line 1-6.
+ *   You can save the selection/change.
+ *   If done, ILIAS reloads the page and displays your selection in an array overview. The selection has to be the same as the output.
  *   Regarding pure date or time fields: the output might display the current date and time 00:00.
  * ---
  */

@@ -100,7 +100,7 @@ class Glyph implements C\Symbol\Glyph\Glyph
     private bool $highlighted;
     private bool $active = true;
 
-    public function __construct(string $type, string $label, string $action = null)
+    public function __construct(string $type, string $label, ?string $action = null)
     {
         $this->checkArgIsElement("type", $type, self::$types, "glyph type");
 

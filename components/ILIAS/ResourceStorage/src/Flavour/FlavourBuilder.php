@@ -246,7 +246,7 @@ class FlavourBuilder
         try {
             $stream = $this->resource_builder->extractStream($revision);
             $stream->rewind();
-        } catch (\Throwable $t) {
+        } catch (\Throwable) {
             // error while reading file stream, cannot process
             return $flavour;
         }

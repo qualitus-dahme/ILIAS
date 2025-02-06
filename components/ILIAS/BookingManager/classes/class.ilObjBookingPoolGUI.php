@@ -34,7 +34,7 @@ class ilObjBookingPoolGUI extends ilObjectGUI
 {
     protected InternalGUIService $gui;
     protected InternalDomainService $domain;
-    protected ilCronManager $cron_manager;
+    protected \ILIAS\Cron\Job\JobManager $cron_manager;
     protected StandardGUIRequest $book_request;
     protected InternalService $service;
     protected ilTabsGUI $tabs;

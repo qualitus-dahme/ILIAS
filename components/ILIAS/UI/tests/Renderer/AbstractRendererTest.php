@@ -121,7 +121,7 @@ namespace {
         {
         }
 
-        public function get(string $block = null): string
+        public function get(?string $block = null): string
         {
             return "";
         }

@@ -95,6 +95,7 @@ class ilObjFileServicesGUI extends ilObject2GUI
      * Execute command
      * @access public
      */
+    #[\Override]
     public function executeCommand(): void
     {
         $this->lng->loadLanguageModule("fils");
@@ -133,6 +134,7 @@ class ilObjFileServicesGUI extends ilObject2GUI
     /**
      * Get tabs
      */
+    #[\Override]
     public function getAdminTabs(): void
     {
         // General Settings for File-Services
@@ -185,6 +187,7 @@ class ilObjFileServicesGUI extends ilObject2GUI
         }
     }
 
+    #[\Override]
     public function setTitleAndDescription(): void
     {
         parent::setTitleAndDescription();
@@ -281,11 +284,9 @@ class ilObjFileServicesGUI extends ilObject2GUI
         // get form
         $form = $this->initSettingsForm();
         if ($form->checkInput()) {
-            $trafo = function (string $id): ?string {
-                return $this->http->post()->has($id)
-                    ? $this->http->post()->retrieve($id, $this->refinery->to()->string())
-                    : null;
-            };
+            $trafo = (fn(string $id): ?string => $this->http->post()->has($id)
+                ? $this->http->post()->retrieve($id, $this->refinery->to()->string())
+                : null);
 
 
             $this->settings->set("suffix_repl_additional", $trafo("suffix_repl_additional"));

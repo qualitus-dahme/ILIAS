@@ -19,7 +19,6 @@
 /**
  * @author Fabian Schmid <fabian@sr.solutions>
  */
-
 namespace ILIAS\File\Capabilities;
 
 enum Capabilities: string

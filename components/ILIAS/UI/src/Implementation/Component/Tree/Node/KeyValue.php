@@ -28,7 +28,7 @@ class KeyValue extends Simple implements KeyValueInterface
 {
     private string $value;
 
-    public function __construct(string $label, string $value, Icon $icon = null)
+    public function __construct(string $label, string $value, ?Icon $icon = null)
     {
         parent::__construct($label, $icon);
 

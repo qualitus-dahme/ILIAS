@@ -18,13 +18,15 @@
 
 declare(strict_types=1);
 
-use ILIAS\Cron\Schedule\CronJobScheduleType;
+use ILIAS\Cron\Job\Schedule\JobScheduleType;
+use ILIAS\Cron\Job\JobResult;
+use ILIAS\Cron\CronJob;
 
 /**
  * This cron send notifications about expiring user accounts
  * @author  Stefan Meyer <meyer@leifos.com>
  */
-class ilUserCronCheckAccounts extends ilCronJob
+class ilUserCronCheckAccounts extends CronJob
 {
     protected int $counter = 0;
 
@@ -65,9 +67,9 @@ class ilUserCronCheckAccounts extends ilCronJob
         return $this->lng->txt('check_user_accounts_desc');
     }
 
-    public function getDefaultScheduleType(): CronJobScheduleType
+    public function getDefaultScheduleType(): JobScheduleType
     {
-        return CronJobScheduleType::SCHEDULE_TYPE_DAILY;
+        return JobScheduleType::DAILY;
     }
 
     public function getDefaultScheduleValue(): ?int
@@ -85,9 +87,9 @@ class ilUserCronCheckAccounts extends ilCronJob
         return false;
     }
 
-    public function run(): ilCronJobResult
+    public function run(): JobResult
     {
-        $status = ilCronJobResult::STATUS_NO_ACTION;
+        $status = JobResult::STATUS_NO_ACTION;
 
         $now = time();
         $two_weeks_in_seconds = $now + (60 * 60 * 24 * 14); // #14630
@@ -147,9 +149,9 @@ class ilUserCronCheckAccounts extends ilCronJob
         $this->checkNotConfirmedUserAccounts();
 
         if ($this->counter) {
-            $status = ilCronJobResult::STATUS_OK;
+            $status = JobResult::STATUS_OK;
         }
-        $result = new ilCronJobResult();
+        $result = new JobResult();
         $result->setStatus($status);
         return $result;
     }

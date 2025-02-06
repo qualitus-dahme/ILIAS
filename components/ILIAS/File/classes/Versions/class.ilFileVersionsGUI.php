@@ -16,6 +16,11 @@
  *
  *********************************************************************/
 
+use ILIAS\DI\UIServices;
+use ILIAS\Filesystem\Stream\Streams;
+use ILIAS\ResourceStorage\Identification\ResourceIdentification;
+use ILIAS\FileUpload\Collection\Exception\NoSuchElementException;
+use ILIAS\FileUpload\Exception\IllegalStateException;
 use ILIAS\HTTP\Services;
 use ILIAS\Filesystem\Exception\FileNotFoundException;
 use ILIAS\ResourceStorage\Revision\Revision;
@@ -27,8 +32,6 @@ use ILIAS\components\WOPI\Discovery\ActionDBRepository;
 use ILIAS\components\WOPI\Discovery\ActionRepository;
 use ILIAS\components\WOPI\Embed\EmbeddedApplication;
 use ILIAS\Data\URI;
-use ILIAS\UI\Component\Modal\Modal;
-use ILIAS\components\WOPI\Discovery\ActionTarget;
 use ILIAS\FileUpload\MimeType;
 use ILIAS\MetaData\Services\ServicesInterface as LOMServices;
 use ILIAS\File\Capabilities\Capabilities;
@@ -71,7 +74,7 @@ class ilFileVersionsGUI
     private \ILIAS\ResourceStorage\Services $storage;
     private ActionRepository $action_repo;
     private ?Revision $current_revision;
-    protected \ILIAS\DI\UIServices $ui;
+    protected UIServices $ui;
     private ilAccessHandler $access;
     private \ilWorkspaceAccessHandler $wsp_access;
     private int $ref_id;
@@ -122,8 +125,8 @@ class ilFileVersionsGUI
 
 
     /**
-     * @throws \ILIAS\FileUpload\Collection\Exception\NoSuchElementException
-     * @throws \ILIAS\FileUpload\Exception\IllegalStateException
+     * @throws NoSuchElementException
+     * @throws IllegalStateException
      */
     protected function performCommand(): void
     {
@@ -345,8 +348,8 @@ class ilFileVersionsGUI
     }
 
     /**
-     * @throws \ILIAS\FileUpload\Collection\Exception\NoSuchElementException
-     * @throws \ILIAS\FileUpload\Exception\IllegalStateException
+     * @throws NoSuchElementException
+     * @throws IllegalStateException
      */
     private function saveVersion(int $mode = ilFileVersionFormGUI::MODE_ADD): void
     {
@@ -500,7 +503,7 @@ class ilFileVersionsGUI
 
         $this->http->saveResponse(
             $this->http->response()->withBody(
-                \ILIAS\Filesystem\Stream\Streams::ofString(
+                Streams::ofString(
                     (null !== $delete_selected_versions_modal) ?
                         $this->ui->renderer()->renderAsync([$delete_selected_versions_modal]) :
                         ''
@@ -520,7 +523,7 @@ class ilFileVersionsGUI
         $non_deletion_versions = array_udiff(
             $existing_versions,
             $deletion_version_ids,
-            static function ($a, $b) {
+            static function ($a, $b): int|float {
                 if ($a instanceof ilObjFileVersion) {
                     $a = $a->getHistEntryId();
                 }
@@ -582,7 +585,7 @@ class ilFileVersionsGUI
         $remaining_versions = array_udiff(
             $existing_versions,
             $version_ids,
-            static function ($a, $b) {
+            static function ($a, $b): int|float {
                 if ($a instanceof ilObjFileVersion) {
                     $a = $a->getHistEntryId();
                 }
@@ -724,7 +727,7 @@ class ilFileVersionsGUI
         );
     }
 
-    private function getIdentification(): ?\ILIAS\ResourceStorage\Identification\ResourceIdentification
+    private function getIdentification(): ?ResourceIdentification
     {
         return $this->storage->manage()->find($this->file->getResourceId());
     }

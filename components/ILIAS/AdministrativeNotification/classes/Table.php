@@ -18,6 +18,8 @@
 
 namespace ILIAS\AdministrativeNotification;
 
+use ILIAS\UI\Factory;
+use ILIAS\UI\Renderer;
 use ilADNAbstractGUI;
 use ILIAS\UI\URLBuilder;
 use ILIAS\Data\URI;
@@ -28,8 +30,8 @@ use ILIAS\UI\URLBuilderToken;
  */
 class Table
 {
-    private \ILIAS\UI\Factory $ui_factory;
-    private \ILIAS\UI\Renderer $ui_renderer;
+    private Factory $ui_factory;
+    private Renderer $ui_renderer;
     private \ilCtrlInterface $ctrl;
     private \ilLanguage $lng;
     private URLBuilder $url_builder;

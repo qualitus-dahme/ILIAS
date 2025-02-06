@@ -32,7 +32,6 @@ use ILIAS\UI\Component\Symbol\Symbol;
 use ILIAS\UI\Factory;
 use ILIAS\UI\Renderer;
 use Throwable;
-use ILIAS\GlobalScreen\Scope\isDecorateable;
 use ILIAS\UI\Component\HasHelpTopics;
 
 /**

@@ -20,8 +20,8 @@ declare(strict_types=1);
 
 namespace ILIAS\components\ResourceStorage\Container\DataProvider;
 
+use ILIAS\ResourceStorage\Services;
 use ILIAS\components\ResourceStorage\Container\View\Request;
-use ILIAS\components\ResourceStorage\Container\ContainerResourceManager;
 use ILIAS\components\ResourceStorage\Container\Wrapper\Dir;
 use ILIAS\components\ResourceStorage\Container\Wrapper\File;
 
@@ -30,7 +30,7 @@ use ILIAS\components\ResourceStorage\Container\Wrapper\File;
  */
 final class TableDataProvider
 {
-    private \ILIAS\ResourceStorage\Services $irss;
+    private Services $irss;
 
     public function __construct(
         private Request $view_request,
@@ -62,9 +62,7 @@ final class TableDataProvider
         $current_level = $this->view_request->getPath();
 
         $entries_at_current_level = iterator_to_array(
-            $this->view_request->getWrapper()->getEntries(
-                $current_level
-            )
+            $this->view_request->getWrapper()->getEntries()
         );
 
         // Currently no sorting is implemented

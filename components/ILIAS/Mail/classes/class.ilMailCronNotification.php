@@ -19,13 +19,15 @@
 declare(strict_types=1);
 
 use ILIAS\HTTP\GlobalHttpState;
-use ILIAS\Cron\Schedule\CronJobScheduleType;
+use ILIAS\Cron\Job\Schedule\JobScheduleType;
+use ILIAS\Cron\Job\JobResult;
+use ILIAS\Cron\CronJob;
 
 /**
  * Mail notifications
  * @author Nadia Ahmad <nahmad@databay.de>
  */
-class ilMailCronNotification extends ilCronJob
+class ilMailCronNotification extends CronJob
 {
     private GlobalHttpState $http;
     protected ilLanguage $lng;
@@ -69,9 +71,9 @@ class ilMailCronNotification extends ilCronJob
         );
     }
 
-    public function getDefaultScheduleType(): CronJobScheduleType
+    public function getDefaultScheduleType(): JobScheduleType
     {
-        return CronJobScheduleType::SCHEDULE_TYPE_DAILY;
+        return JobScheduleType::DAILY;
     }
 
     public function getDefaultScheduleValue(): ?int
@@ -124,13 +126,13 @@ class ilMailCronNotification extends ilCronJob
         );
     }
 
-    public function run(): ilCronJobResult
+    public function run(): JobResult
     {
         $msn = new ilMailSummaryNotification();
         $msn->send();
 
-        $result = new ilCronJobResult();
-        $result->setStatus(ilCronJobResult::STATUS_OK);
+        $result = new JobResult();
+        $result->setStatus(JobResult::STATUS_OK);
         return $result;
     }
 

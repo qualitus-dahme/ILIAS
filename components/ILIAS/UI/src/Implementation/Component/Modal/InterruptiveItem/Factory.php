@@ -28,7 +28,7 @@ class Factory implements ItemInterface\Factory
     public function standard(
         string $id,
         string $title,
-        Image $icon = null,
+        ?Image $icon = null,
         string $description = ''
     ): Standard {
         return new Standard($id, $title, $icon, $description);

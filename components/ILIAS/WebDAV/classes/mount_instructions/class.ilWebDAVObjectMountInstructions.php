@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -18,13 +16,14 @@ declare(strict_types=1);
  *
  *********************************************************************/
 
+declare(strict_types=1);
+
 /**
  * @author Raphael Heer <raphael.heer@hslu.ch>
  * $Id$
  */
 class ilWebDAVObjectMountInstructions extends ilWebDAVBaseMountInstructions
 {
-    protected int $ref_id;
     protected int $obj_id;
     protected string $obj_title;
 
@@ -33,11 +32,9 @@ class ilWebDAVObjectMountInstructions extends ilWebDAVBaseMountInstructions
         ilWebDAVUriBuilder $a_uri_builder,
         ilSetting $a_settings,
         String $language,
-        int $a_ref_id
+        protected int $ref_id
     ) {
         parent::__construct($a_repo, $a_uri_builder, $a_settings, $language);
-
-        $this->ref_id = $a_ref_id;
 
         // TODO: Change this to be more unit testable!
         $this->obj_id = ilObject::_lookupObjectId($this->ref_id);

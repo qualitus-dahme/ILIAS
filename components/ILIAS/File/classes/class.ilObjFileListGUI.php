@@ -22,7 +22,6 @@ use ILIAS\ResourceStorage\Services;
 use ILIAS\components\WOPI\Discovery\ActionDBRepository;
 use ILIAS\File\Capabilities\Capabilities;
 use ILIAS\File\Capabilities\CapabilityBuilder;
-use ILIAS\File\Capabilities\CoreTypeResolver;
 use ILIAS\File\Capabilities\Context;
 
 /**
@@ -87,6 +86,7 @@ class ilObjFileListGUI extends ilObjectListGUI
     /**
      * initialisation
      */
+    #[\Override]
     public function init(): void
     {
         $this->delete_enabled = true;
@@ -108,6 +108,7 @@ class ilObjFileListGUI extends ilObjectListGUI
         $this->updateContext();
     }
 
+    #[\Override]
     public function getCommands(): array
     {
         $this->updateContext();
@@ -125,6 +126,7 @@ class ilObjFileListGUI extends ilObjectListGUI
         return parent::getCommands();
     }
 
+    #[\Override]
     public function getCommandLink(string $cmd): string
     {
         $this->updateContext();
@@ -157,6 +159,7 @@ class ilObjFileListGUI extends ilObjectListGUI
 
 
 
+    #[\Override]
     public function getTitle(): string
     {
         return $this->file_info->getByObjectId($this->obj_id)->getListTitle();
@@ -167,6 +170,7 @@ class ilObjFileListGUI extends ilObjectListGUI
         return $this->secure(preg_replace('/\.[^.]*$/', '', $a_title));
     }
 
+    #[\Override]
     public function getCommandFrame(string $cmd): string
     {
         $this->updateContext();
@@ -186,6 +190,7 @@ class ilObjFileListGUI extends ilObjectListGUI
      * e.g. 'crs_offline', and/or to express a specific kind of object, e.g.
      * 'file_inline'.
      */
+    #[\Override]
     public function getIconImageType(): string
     {
         return $this->file_info->getByObjectId($this->obj_id)->shouldDeliverInline()
@@ -201,6 +206,7 @@ class ilObjFileListGUI extends ilObjectListGUI
      *                        "property" (string) => property name
      *                        "value" (string) => property value
      */
+    #[\Override]
     public function getProperties(): array
     {
         global $DIC;
@@ -269,11 +275,13 @@ class ilObjFileListGUI extends ilObjectListGUI
     /**
      * Get command icon image
      */
+    #[\Override]
     public function getCommandImage($a_cmd): string
     {
         return "";
     }
 
+    #[\Override]
     public function checkCommandAccess(
         string $permission,
         string $cmd,

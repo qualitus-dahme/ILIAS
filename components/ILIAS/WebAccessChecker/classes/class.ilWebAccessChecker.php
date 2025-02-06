@@ -17,9 +17,7 @@
  *********************************************************************/
 
 use ILIAS\HTTP\Cookies\CookieFactory;
-use ILIAS\HTTP\Cookies\CookieWrapper;
 use ILIAS\HTTP\Services;
-use Psr\Http\Message\UriInterface;
 
 /**
  * Class ilWebAccessChecker

@@ -83,25 +83,6 @@ class ilDclTableListGUI
 
         $ref_id = $this->http->wrapper()->query()->retrieve('ref_id', $this->refinery->kindlyTo()->int());
 
-        $tableHelper = new ilDclTableHelper(
-            $this->getObjId(),
-            $ref_id,
-            $DIC->rbac()->review(),
-            $DIC->user(),
-            $DIC->database()
-        );
-        $role_titles = $tableHelper->getRoleTitlesWithoutReadRightOnAnyStandardView();
-
-        if (count($role_titles) > 0) {
-            $this->tpl->setOnScreenMessage(
-                'info',
-                $this->lng->txt('dcl_rbac_roles_without_read_access_on_any_standard_view') . " " . implode(
-                    ", ",
-                    $role_titles
-                )
-            );
-        }
-
         switch ($next_class) {
             case 'ildcltableeditgui':
                 $this->tabs->clearTargets();

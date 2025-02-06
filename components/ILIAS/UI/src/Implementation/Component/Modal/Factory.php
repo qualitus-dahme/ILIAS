@@ -48,7 +48,7 @@ class Factory implements M\Factory
         return $this->item_factory;
     }
 
-    public function roundtrip(string $title, Component\Component|array|null $content, array $inputs = [], string $post_url = null): RoundTrip
+    public function roundtrip(string $title, Component\Component|array|null $content, array $inputs = [], ?string $post_url = null): RoundTrip
     {
         return new RoundTrip(
             $this->signal_generator,

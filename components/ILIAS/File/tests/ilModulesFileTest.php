@@ -18,6 +18,10 @@
 
 declare(strict_types=1);
 
+use PHPUnit\Framework\MockObject\MockObject;
+use ILIAS\Refinery\Factory;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
 use ILIAS\Filesystem\Stream\Streams;
 use ILIAS\DI\Container;
@@ -30,16 +34,16 @@ use ILIAS\ResourceStorage\Resource\StorableFileResource;
 
 class ilModulesFileTest extends TestCase
 {
-    private ?\ILIAS\DI\Container $dic_backup = null;
+    private ?Container $dic_backup = null;
     /**
-     * @var Services|\PHPUnit\Framework\MockObject\MockObject
+     * @var Services|MockObject
      */
-    protected $storage_mock;
+    protected ?MockObject $storage_mock = null;
     /**
-     * @var ilDBInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ilDBInterface|MockObject
      */
-    protected $db_mock;
-    protected $manager_mock;
+    protected ?MockObject $db_mock = null;
+    protected MockObject $manager_mock;
 
     protected function setUp(): void
     {
@@ -65,7 +69,7 @@ class ilModulesFileTest extends TestCase
         $DIC['ilAppEventHandler'] = $this->createMock(ilAppEventHandler::class);
         $DIC['lng'] = $this->createMock(ilLanguage::class);
         $DIC['ilCtrl'] = $this->createMock(ilCtrlInterface::class);
-        $DIC['refinery'] = $this->createMock(\ILIAS\Refinery\Factory::class);
+        $DIC['refinery'] = $this->createMock(Factory::class);
         $DIC['http'] = $this->createMock(\ILIAS\HTTP\Services::class);
         $DIC['object.customicons.factory'] = $this->createMock(ilObjectCustomIconFactory::class);
         /*  $DIC['ilCtrl'] = $this->getMockBuilder(ilCtrl::class)
@@ -84,10 +88,8 @@ class ilModulesFileTest extends TestCase
         $DIC = $this->dic_backup;
     }
 
-    /**
-     * @preserveGlobalState disabled
-     * @runInSeparateProcess
-     */
+    #[PreserveGlobalState(false)]
+    #[RunInSeparateProcess]
     public function testAppendStream(): void
     {
         $this->markTestSkipped('Failed for some unknown reason.');
@@ -102,7 +104,7 @@ class ilModulesFileTest extends TestCase
 
         $this->db_mock->expects($this->any())
                       ->method('query')
-                      ->willReturnCallback(function ($query) {
+                      ->willReturnCallback(function ($query): MockObject {
                           $mock_object = $this->createMock(ilDBStatement::class);
                           $mock_object->expects($this->any())->method('fetchAssoc')->willReturn([$query]);
 
@@ -162,7 +164,7 @@ class ilModulesFileTest extends TestCase
             ->willReturnCallback(
                 function (string $id) use (&$consecutive): ?ResourceIdentification {
                     $expected = array_shift($consecutive);
-                    list($eid, $ret) = $consecutive;
+                    [$eid, $ret] = $consecutive;
                     $this->assertEquals($eid, $id);
                     return $ret;
                 }

@@ -38,6 +38,9 @@ use ILIAS\ResourceStorage\Flavour\Engine\ImagickEngine;
 class FirstPageToTileImageMachine extends AbstractMachine implements FlavourMachine
 {
     public const ID = "be03e07e396a61f7d9b31a712f0913fe9c6cd43b009ce69d30aa0f10bd3500bd";
+    /**
+     * @var int
+     */
     private const FULL_QUALITY_SIZE_THRESHOLD = 100;
     private ExtractPages $extract_pages;
     private CropRectangle $crop;

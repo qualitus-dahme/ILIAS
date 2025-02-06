@@ -26,17 +26,17 @@ use ILIAS\UI\Component\Symbol\Icon\Icon as IIcon;
 
 class Factory implements INode\Factory
 {
-    public function simple(string $label, IIcon $icon = null, URI $link = null): Simple
+    public function simple(string $label, ?IIcon $icon = null, ?URI $link = null): Simple
     {
         return new Simple($label, $icon, $link);
     }
 
-    public function bylined(string $label, string $byline, IIcon $icon = null): Bylined
+    public function bylined(string $label, string $byline, ?IIcon $icon = null): Bylined
     {
         return new Bylined($label, $byline, $icon);
     }
 
-    public function keyValue(string $label, string $value, IIcon $icon = null) : KeyValue
+    public function keyValue(string $label, string $value, ?IIcon $icon = null) : KeyValue
     {
         return new KeyValue($label, $value, $icon);
     }

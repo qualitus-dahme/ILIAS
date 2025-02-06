@@ -12,30 +12,34 @@ System Styles may be customized by creating custom System Styles. Custom styles 
 to be placed in the `./public/Customizing/skin` directory to be active. One may have
 multiple substyles which may be active for different branches of the repository.
 
-A GitHub Repo for a custom System Style based on the default Delos will be available
-soon.
-
 ### Tools
 
-You may directly use the Sass version shipped with ILIAS.
+The ILIAS default system style called Delos is written in SCSS, which has to be
+compiled using the SASS pre-processor to a CSS file that the browser can read.
 
-If you want to use your own version, first install the necessary tools to your
-server. These tools include nodejs and the node packet manager. After that you
-can install the sass compiler that is used to turn SCSS into CSS using:
+For any larger scale styling project, we recommend that you consider using SASS as
+well. This way, you can build on and modify all the work that has been done by the
+community to style the many views and components used in ILIAS.
 
-```
-npm install -g sass
-```
+You may want to use the same version of SASS that is referenced in the NPM
+package.json and automatically installed to `node_modules/` when using `npm install`.
+This specific SASS version can be executed like this from the ILIAS root:
+`node_modules/.bin/sass`
 
-or
+Alternatively, you can install the latest version of SASS globally with
+`npm install sass -g`.
 
-Download [Dart SASS from Github](https://github.com/sass/dart-sass/releases/) and add it to the machine's PATH.
+You can find a starting point for a custom System Style based on the default Delos
+system style here: [Delos Repository](https://github.com/ILIAS-eLearning/delos)
+
+At the point of writing, it does require modification to be recognized as a custom
+System Style as outlined later in this document.
 
 ### Access available Styles through Frontend
 
 1. Navigate to "Administration -> Layout and Styles" of you ILIAS Installation.
 2. In a table you see all available System Styles. 
-3. You may assigne users to styles via Actions Dropdown
+3. You may assign users to styles via Actions Dropdown
 4. You may set Sub Styles for certain sections of the repository via Actions Dropdown
 
 ### How-To 
@@ -43,10 +47,7 @@ Download [Dart SASS from Github](https://github.com/sass/dart-sass/releases/) an
 #### Step 1: Create skin directory
 
 To create a new skin, first add a new subdirectory to directory
-`./public/Customizing/skin`, e.g. `./public/Customizing/skin`.
-
-In the future, we will provide a base System Style based on the
-default Delos that you can download from Github and place here.
+`./public/Customizing/skin`, e.g. `./public/Customizing/skin/myskin/`.
 
 #### Step 2: Create template.xml File
 
@@ -61,55 +62,64 @@ One file that must exist in every skin is the file template.xml. E.g.
 ```
 
 Every skin can contain multiple styles. This example defines one style called
-MyStyle. This skin/style combination will be listed as MySkin/MyStyle in the
-ILIAS Style and Layout administration. The ILIAS administration is the place
-where you can activate/deactivate styles, and where you can assign users from
-one skin to another.
+MyStyle.
 
-#### Step 3: Create main CSS File
+This skin/style combination will be listed as MySkin/MyStyle in the
+ILIAS Style and Layout administration. The style's files are now expected
+to be located in `./public/Customizing/skin/myskin/mystyle/`:
+
+The ILIAS administration is the place where you can activate/deactivate styles,
+and where you can assign users from one skin to another.
+
+#### Step 3.1: Create main CSS File
 
 The `id` attribute of the style tag defines the name of the corresponding style
-sheet (CSS) file. This CSS file must also be added to the skin directory (here:
-`./public/Customizing/skin/myskin/mystyle/mystyle.css`). You should start with a copy of
-the default CSS file located at `templates/default/delos.css`. The best way to
-see which styles are used on a given ILIAS screen is to open the HTML source of
-the screen. Probably import delos in the top line of your css like so: `@import url("../../../../assets/css/delos.css");`
+sheet (CSS) file, in our example `./public/Customizing/skin/myskin/mystyle/mystyle.css`.
+
+The easiest (but not recommended) ways to get a working skin quickly are to
+* copy and rename the default CSS file located at `templates/default/delos.css`
+  to `./public/Customizing/skin/myskin/mystyle/mystyle.css`
+* or create `./public/Customizing/skin/myskin/mystyle/` and import delos in the
+  top line of your css like so: `@import url("../../../../assets/css/delos.css");`
 
 If your CSS file contains references to (background) images, these images must
 be present at their defined locations. If you copied the default CSS file, the
 image paths will not be correct anymore. You can either copy them to your skin
 directory, change the CSS definitions or provide your own image files.
 
-#### Step 3: Better Alternative
+#### Step 3.2: Better Alternative
 
 To have a working directory for your skin, you can also copy the complete folder
 templates/default of your ilias installation to a new folder below
-`./public/Customizing/skin/skin` within that directory, edit the file `template.xml` to
-have an unique Style Name and id. This is needed to identify the new skin in
-ILIAS' administration. Then copy the standard `delos.css` file to "your-id.css".
-Take care: the main CSS-File must reflect the id in its name (see above).
+`./public/Customizing/skin/myskin` within that directory, edit the file
+`template.xml` to have an unique Style Name and id. This is needed to identify the
+new skin in ILIAS' administration. Compile `delos.scss` or copy/rename the
+standard `delos.css` file to `./public/Customizing/skin/myskin/mystyle/mystyle.css`.
+Take care: the main CSS-File must reflect the style id in its name (see above).
 
 However, best use the stand alone skin [delos](https://github.com/ILIAS-eLearning/delos)
 git repo, which is always an up-to-date copy of the delos skin from the main repo.
-Clone it into your `./public/Customizing/skin` folder, make your changes and keep it always
-up-to-date for fixes from the main repo.
+Clone it into your `./public/Customizing/skin/myskin` folder, make your changes and
+merge important fixes and updates to delos into your skin.
 
-#### Step 3: Sass
+With this approach, you should not modify the css file, but work entirely in the scss files.
 
-Do not froget to re-compile the scss-file after each change. Switch to the delos scss folder and execute:
+#### Step 3.3 Sass
+
+Do not forget to re-compile the scss-file after each change. Switch to the root of your style 
+and execute:
 
 ```
-./node_modules/sass/sass.js delos.scss mystyle.css
+./node_modules/.bin/sass delos.scss mystyle.css
 ```
 
 or
 
 ```
-./node_modules/sass/sass.js --style=compressed delos.scss mystyle.css
+./node_modules/.bin/sass  --style=compressed delos.scss mystyle.css
 ```
 
 for a minified CSS version.
-
 
 #### Step 4: Add Icons (Optional)
 

@@ -16,16 +16,14 @@
  *
  *********************************************************************/
 
-use ILIAS\Setup;
+use ILIAS\Setup\Objective;
+use ILIAS\Setup\Environment;
+use ILIAS\Setup\UnachievableException;
 
-class ilBackgroundTasksConfigStoredObjective implements Setup\Objective
+class ilBackgroundTasksConfigStoredObjective implements Objective
 {
-    protected ilBackgroundTasksSetupConfig $config;
-
-    public function __construct(
-        \ilBackgroundTasksSetupConfig $config
-    ) {
-        $this->config = $config;
+    public function __construct(protected ilBackgroundTasksSetupConfig $config)
+    {
     }
 
     public function getHash(): string
@@ -46,16 +44,16 @@ class ilBackgroundTasksConfigStoredObjective implements Setup\Objective
     /**
      * @return \ilIniFilesLoadedObjective[]
      */
-    public function getPreconditions(Setup\Environment $environment): array
+    public function getPreconditions(Environment $environment): array
     {
         return [
             new ilIniFilesLoadedObjective()
         ];
     }
 
-    public function achieve(Setup\Environment $environment): Setup\Environment
+    public function achieve(Environment $environment): Environment
     {
-        $ini = $environment->getResource(Setup\Environment::RESOURCE_ILIAS_INI);
+        $ini = $environment->getResource(Environment::RESOURCE_ILIAS_INI);
 
         if (!$ini->groupExists("background_tasks")) {
             $ini->addGroup("background_tasks");
@@ -65,7 +63,7 @@ class ilBackgroundTasksConfigStoredObjective implements Setup\Objective
         $ini->setVariable("background_tasks", "number_of_concurrent_tasks", $this->config->getMaxCurrentTasks());
 
         if (!$ini->write()) {
-            throw new Setup\UnachievableException("Could not write ilias.ini.php");
+            throw new UnachievableException("Could not write ilias.ini.php");
         }
 
         return $environment;
@@ -74,14 +72,15 @@ class ilBackgroundTasksConfigStoredObjective implements Setup\Objective
     /**
      * @inheritDoc
      */
-    public function isApplicable(Setup\Environment $environment): bool
+    public function isApplicable(Environment $environment): bool
     {
-        $ini = $environment->getResource(Setup\Environment::RESOURCE_ILIAS_INI);
-
-        return
-            !$ini->groupExists("background_tasks") ||
-            $ini->readVariable("background_tasks", "concurrency") !== $this->config->getType() ||
-            $ini->readVariable("background_tasks", "number_of_concurrent_tasks") !== $this->config->getMaxCurrentTasks()
-        ;
+        $ini = $environment->getResource(Environment::RESOURCE_ILIAS_INI);
+        if (!$ini->groupExists("background_tasks")) {
+            return true;
+        }
+        if ($ini->readVariable("background_tasks", "concurrency") !== $this->config->getType()) {
+            return true;
+        }
+        return $ini->readVariable("background_tasks", "number_of_concurrent_tasks") !== $this->config->getMaxCurrentTasks();
     }
 }

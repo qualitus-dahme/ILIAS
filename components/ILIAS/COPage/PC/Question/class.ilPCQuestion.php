@@ -276,6 +276,7 @@ class ilPCQuestion extends ilPageContent
             $js_files[] = 'assets/js/matchinginput.js';
             $js_files[] = 'assets/js/orderinghorizontal.js';
             $js_files[] = 'assets/js/orderingvertical.js';
+            $js_files[] = 'assets/js/matching.js';
 
             foreach ($this->getQuestionIds() as $qId) {
                 $qstGui = assQuestionGUI::_getQuestionGUI('', $qId);

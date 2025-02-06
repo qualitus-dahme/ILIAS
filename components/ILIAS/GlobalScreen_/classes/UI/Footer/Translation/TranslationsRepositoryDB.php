@@ -20,6 +20,9 @@ namespace ILIAS\GlobalScreen\UI\Footer\Translation;
 
 class TranslationsRepositoryDB implements TranslationsRepository
 {
+    /**
+     * @var string
+     */
     private const TABLE_NAME = 'gs_item_translation';
     private string $default_language;
 

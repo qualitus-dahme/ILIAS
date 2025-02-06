@@ -28,7 +28,6 @@ use ILIAS\MetaData\OERHarvester\ExposedRecords\RepositoryInterface as ExposedRec
 use ILIAS\MetaData\Copyright\Search\FactoryInterface as CopyrightSearchFactory;
 use ILIAS\MetaData\Repository\RepositoryInterface as LOMRepository;
 use ILIAS\MetaData\OERHarvester\XML\WriterInterface as SimpleDCXMLWriter;
-use ILIAS\MetaData\OERHarvester\ExposedRecords\RecordInterface;
 use ILIAS\MetaData\OERHarvester\Export\HandlerInterface as ExportHandler;
 
 class Harvester
@@ -89,13 +88,13 @@ class Harvester
             $messages[] = 'Created, updated, or deleted ' . $exposure_count . ' exposed records.';
 
             if ($deletion_count !== 0 || $harvest_count !== 0 || $exposure_count !== 0) {
-                $result = $result->withStatus(\ilCronJobResult::STATUS_OK);
+                $result = $result->withStatus(\ILIAS\Cron\Job\JobResult::STATUS_OK);
             } else {
-                $result = $result->withStatus(\ilCronJobResult::STATUS_NO_ACTION);
+                $result = $result->withStatus(\ILIAS\Cron\Job\JobResult::STATUS_NO_ACTION);
             }
             return $result->withMessage(implode('<br>', $messages));
         } catch (\Exception $e) {
-            return $result->withStatus(\ilCronJobResult::STATUS_FAIL)
+            return $result->withStatus(\ILIAS\Cron\Job\JobResult::STATUS_FAIL)
                           ->withMessage($e->getMessage());
         }
     }

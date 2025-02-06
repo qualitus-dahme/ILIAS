@@ -27,6 +27,9 @@ use ILIAS\Data\URI;
  */
 class ActionDBRepository implements ActionRepository
 {
+    /**
+     * @var string
+     */
     private const TABLE_NAME = 'wopi_action';
     private array $edit_actions = [ActionTarget::EDIT, ActionTarget::EMBED_EDIT, ActionTarget::CONVERT];
     private array $view_actions = [ActionTarget::VIEW, ActionTarget::EMBED_VIEW];

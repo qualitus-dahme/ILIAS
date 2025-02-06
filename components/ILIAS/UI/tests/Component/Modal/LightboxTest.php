@@ -90,7 +90,7 @@ class LightboxTest extends ModalBase
     protected static function getExpectedTextPageHTML(): string
     {
         return <<<EOT
-<dialog class="c-modal c-modal--lightbox il-modal-lightbox il-modal-lightbox-bright" tabindex="-1" role="dialog" id="id_1">
+<dialog class="c-modal c-modal--lightbox il-modal-lightbox il-modal-lightbox-bright" tabindex="-1" id="id_1">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content il-modal-lightbox-page">
 			<div class="modal-header">
@@ -119,7 +119,7 @@ EOT;
     protected static function getExpectedImagePageHTML(): string
     {
         return <<<EOT
-<dialog class="c-modal c-modal--lightbox il-modal-lightbox il-modal-lightbox-dark" tabindex="-1" role="dialog" id="id_1">
+<dialog class="c-modal c-modal--lightbox il-modal-lightbox il-modal-lightbox-dark" tabindex="-1" id="id_1">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content il-modal-lightbox-page">
 			<div class="modal-header">
@@ -153,7 +153,7 @@ EOT;
     protected static function getExpectedMixedPagesHTML(): string
     {
         return <<<EOT
-<dialog class="c-modal c-modal--lightbox il-modal-lightbox il-modal-lightbox-dark" tabindex="-1" role="dialog" id="id_1">
+<dialog class="c-modal c-modal--lightbox il-modal-lightbox il-modal-lightbox-dark" tabindex="-1" id="id_1">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content il-modal-lightbox-page">
 			<div class="modal-header">
@@ -205,7 +205,7 @@ EOT;
     private static function getExpectedCardPageHTML(): string
     {
         return <<<EOT
-<dialog class="c-modal c-modal--lightbox il-modal-lightbox il-modal-lightbox-bright" tabindex="-1" role="dialog" id="id_1">
+<dialog class="c-modal c-modal--lightbox il-modal-lightbox il-modal-lightbox-bright" tabindex="-1" id="id_1">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content il-modal-lightbox-page">
 			<div class="modal-header">

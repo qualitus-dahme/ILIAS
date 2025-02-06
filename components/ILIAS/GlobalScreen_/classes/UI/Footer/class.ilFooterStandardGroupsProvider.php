@@ -149,6 +149,7 @@ final class ilFooterStandardGroupsProvider extends AbstractStaticFooterProvider
         return $entries;
     }
 
+    #[\Override]
     public function getAdditionalTexts(): array
     {
         $ilias_version = ILIAS_VERSION;

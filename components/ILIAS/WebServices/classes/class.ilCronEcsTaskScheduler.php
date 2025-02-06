@@ -2,7 +2,8 @@
 
 /* Copyright (c) 1998-2010 ILIAS open source, Extended GPL, see docs/LICENSE */
 
-use ILIAS\Cron\Schedule\CronJobScheduleType;
+use ILIAS\Cron\Job\Schedule\JobScheduleType;
+use ILIAS\Cron\Job\JobResult;
 
 /**
  * Class ilCronEcsTaskScheduler
@@ -10,14 +11,14 @@ use ILIAS\Cron\Schedule\CronJobScheduleType;
  * Start execution of ecs tasks.
  *
  */
-class ilCronEcsTaskScheduler extends \ilCronJob
+class ilCronEcsTaskScheduler extends \ILIAS\Cron\CronJob
 {
     public const ID = 'ecs_task_handler';
     public const DEFAULT_SCHEDULE_VALUE = 1;
 
     private ilLogger $logger;
     private ilLanguage $lng;
-    private ilCronJobResult $result;
+    private JobResult $result;
 
     public function __construct()
     {
@@ -27,7 +28,7 @@ class ilCronEcsTaskScheduler extends \ilCronJob
         $this->lng = $DIC->language();
         $this->lng->loadLanguageModule('ecs');
 
-        $this->result = new \ilCronJobResult();
+        $this->result = new \ILIAS\Cron\Job\JobResult();
     }
 
     public function getTitle(): string
@@ -55,9 +56,9 @@ class ilCronEcsTaskScheduler extends \ilCronJob
         return true;
     }
 
-    public function getDefaultScheduleType(): CronJobScheduleType
+    public function getDefaultScheduleType(): JobScheduleType
     {
-        return CronJobScheduleType::SCHEDULE_TYPE_IN_HOURS;
+        return JobScheduleType::IN_HOURS;
     }
 
     public function getDefaultScheduleValue(): ?int
@@ -65,7 +66,7 @@ class ilCronEcsTaskScheduler extends \ilCronJob
         return self::DEFAULT_SCHEDULE_VALUE;
     }
 
-    public function run(): ilCronJobResult
+    public function run(): JobResult
     {
         $this->logger->debug('Starting ecs task scheduler...');
 
@@ -77,13 +78,13 @@ class ilCronEcsTaskScheduler extends \ilCronJob
                 $scheduler = \ilECSTaskScheduler::_getInstanceByServerId($server->getServerId());
                 $scheduler->startTaskExecution();
             } catch (\Exception $e) {
-                $this->result->setStatus(\ilCronJobResult::STATUS_CRASHED);
+                $this->result->setStatus(\ILIAS\Cron\Job\JobResult::STATUS_CRASHED);
                 $this->result->setMessage($e->getMessage());
                 $this->logger->warning('ECS task execution failed with message: ' . $e->getMessage());
                 return $this->result;
             }
         }
-        $this->result->setStatus(\ilCronJobResult::STATUS_OK);
+        $this->result->setStatus(\ILIAS\Cron\Job\JobResult::STATUS_OK);
         return $this->result;
     }
 }

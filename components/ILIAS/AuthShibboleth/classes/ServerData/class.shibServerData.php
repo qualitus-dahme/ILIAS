@@ -22,7 +22,7 @@
  */
 class shibServerData extends shibConfig
 {
-    protected static ?shibServerData $server_cache;
+    protected static ?shibServerData $server_cache = null;
 
     /**
      * @noinspection MagicMethodsValidityInspection
@@ -39,6 +39,7 @@ class shibServerData extends shibConfig
         }
     }
 
+    #[\Override]
     public static function getInstance(): shibServerData
     {
         if (!isset(self::$server_cache)) {

@@ -57,6 +57,16 @@ function base()
                 )
             )
             ->withValue(['field1','field2']),
+        $f->input()->viewControl()->mode([
+                'mode1' => 'a mode',
+                'mode2' => 'another mode'
+            ])
+            ->withAdditionalTransformation(
+                $refinery->custom()->transformation(
+                    fn($v) => ['vc_mode' => $v]
+                )
+            )
+            ->withValue('mode2'),
     ];
 
     $vc_container = $f->input()->container()->viewControl()->standard($vcs)

@@ -60,7 +60,7 @@ class DataRetrieval implements I\DataRetrieval
         $records = ilADNNotification::getArray();
 
         // populate with additional data
-        array_walk($records, function (&$record) {
+        array_walk($records, function (array &$record): void {
             $record['languages'] = $this->getLanguagesTextForNotification($record);
             $record['type'] = $this->lng->txt("msg_type_" . $record['type']);
             $record['event_start'] = $this->formatDate($record['event_start']);
@@ -68,18 +68,14 @@ class DataRetrieval implements I\DataRetrieval
             $record['display_start'] = $this->formatDate($record['display_start']);
             $record['display_end'] = $this->formatDate($record['display_end']);
 
-            if (!$record['permanent']) {
-                $record['type_during_event'] = $this->lng->txt("msg_type_" . $record['type_during_event']);
-            } else {
-                $record['type_during_event'] = '';
-            }
+            $record['type_during_event'] = $record['permanent'] ? '' : $this->lng->txt("msg_type_" . $record['type_during_event']);
         });
 
         // sort
-        [$order_field, $order_direction] = $order->join([], fn($ret, $key, $value) => [$key, $value]);
-        usort($records, fn($a, $b) => $a[$order_field] <=> $b[$order_field]);
+        [$order_field, $order_direction] = $order->join([], fn($ret, $key, $value): array => [$key, $value]);
+        usort($records, fn($a, $b): int => $a[$order_field] <=> $b[$order_field]);
         if ($order_direction === 'DESC') {
-            $records = array_reverse($records);
+            return array_reverse($records);
         }
 
         return $records;
@@ -113,9 +109,7 @@ class DataRetrieval implements I\DataRetrieval
                 $languages_text = implode(
                     ', ',
                     array_map(
-                        function (string $lng_code): string {
-                            return $this->lng->txt("meta_l_" . $lng_code);
-                        },
+                        fn(string $lng_code): string => $this->lng->txt("meta_l_" . $lng_code),
                         $limited_to_languages
                     )
                 );

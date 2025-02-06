@@ -26,7 +26,6 @@ use ILIAS\GlobalScreen\Scope\MetaBar\Collector\Renderer\BaseMetaBarItemRenderer;
 use ILIAS\GlobalScreen\Scope\MetaBar\Collector\Renderer\MetaBarItemRenderer;
 use Closure;
 use ILIAS\GlobalScreen\Scope\isDecorateable;
-use ILIAS\GlobalScreen\Scope\TriggererDecoratorTrait;
 
 /**
  * @author Fabian Schmid <fabian@sr.solutions>

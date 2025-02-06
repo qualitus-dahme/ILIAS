@@ -31,8 +31,17 @@ use ILIAS\GlobalScreen_\UI\Translator;
  */
 final class ilObjFooterAdministrationGUI extends ilObject2GUI
 {
+    /**
+     * @var string
+     */
     public const CMD_DEFAULT = 'view';
+    /**
+     * @var string
+     */
     public const TAB_INDEX = 'index';
+    /**
+     * @var string
+     */
     public const TAB_PERMISSIONS = 'permissions';
     private readonly Container $container;
     private readonly GroupsRepositoryDB $repository;
@@ -68,6 +77,7 @@ final class ilObjFooterAdministrationGUI extends ilObject2GUI
 
     // HELPERS AND NEEDED IMPLEMENATIONS
 
+    #[\Override]
     public function view(): void
     {
         $this->ctrl->redirectByClass(ilFooterGroupsGUI::class);
@@ -78,6 +88,7 @@ final class ilObjFooterAdministrationGUI extends ilObject2GUI
         return 'gsfo';
     }
 
+    #[\Override]
     public function executeCommand(): void
     {
         $this->ui_handling->requireReadable();
@@ -112,6 +123,7 @@ final class ilObjFooterAdministrationGUI extends ilObject2GUI
         }
     }
 
+    #[\Override]
     public function getAdminTabs(): void
     {
         $this->ui_handling->buildMainTabs();

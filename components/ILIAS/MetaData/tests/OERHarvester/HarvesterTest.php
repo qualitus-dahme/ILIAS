@@ -456,7 +456,7 @@ class HarvesterTest extends TestCase
 
         $result = $harvester->run($this->getCronResultWrapper());
 
-        $this->assertSame(\ilCronJobResult::STATUS_OK, $result->exposed_status);
+        $this->assertSame(\ILIAS\Cron\Job\JobResult::STATUS_OK, $result->exposed_status);
         $this->assertSame(
             'Deleted 1 deprecated references.<br>' .
             'Created 0 new references.<br>' .
@@ -487,7 +487,7 @@ class HarvesterTest extends TestCase
 
         $result = $harvester->run($this->getCronResultWrapper());
 
-        $this->assertSame(\ilCronJobResult::STATUS_OK, $result->exposed_status);
+        $this->assertSame(\ILIAS\Cron\Job\JobResult::STATUS_OK, $result->exposed_status);
         $this->assertSame(
             'Deleted 1 deprecated references.<br>' .
             'Created 0 new references.<br>' .
@@ -514,7 +514,7 @@ class HarvesterTest extends TestCase
 
         $result = $harvester->run($this->getCronResultWrapper());
 
-        $this->assertSame(\ilCronJobResult::STATUS_OK, $result->exposed_status);
+        $this->assertSame(\ILIAS\Cron\Job\JobResult::STATUS_OK, $result->exposed_status);
         $this->assertSame(
             'Deleted 1 deprecated references.<br>' .
             'Created 0 new references.<br>' .
@@ -541,7 +541,7 @@ class HarvesterTest extends TestCase
 
         $result = $harvester->run($this->getCronResultWrapper());
 
-        $this->assertSame(\ilCronJobResult::STATUS_OK, $result->exposed_status);
+        $this->assertSame(\ILIAS\Cron\Job\JobResult::STATUS_OK, $result->exposed_status);
         $this->assertSame(
             'Deleted 2 deprecated references.<br>' .
             'Created 0 new references.<br>' .
@@ -568,7 +568,7 @@ class HarvesterTest extends TestCase
 
         $result = $harvester->run($this->getCronResultWrapper());
 
-        $this->assertSame(\ilCronJobResult::STATUS_OK, $result->exposed_status);
+        $this->assertSame(\ILIAS\Cron\Job\JobResult::STATUS_OK, $result->exposed_status);
         $this->assertSame(
             'Deleted 0 deprecated references.<br>' .
             'Created 1 new references.<br>' .
@@ -610,7 +610,7 @@ class HarvesterTest extends TestCase
 
         $result = $harvester->run($this->getCronResultWrapper());
 
-        $this->assertSame(\ilCronJobResult::STATUS_NO_ACTION, $result->exposed_status);
+        $this->assertSame(\ILIAS\Cron\Job\JobResult::STATUS_NO_ACTION, $result->exposed_status);
         $this->assertSame(
             'Deleted 0 deprecated references.<br>' .
             'Created 0 new references.<br>' .
@@ -638,7 +638,7 @@ class HarvesterTest extends TestCase
 
         $result = $harvester->run($this->getCronResultWrapper());
 
-        $this->assertSame(\ilCronJobResult::STATUS_NO_ACTION, $result->exposed_status);
+        $this->assertSame(\ILIAS\Cron\Job\JobResult::STATUS_NO_ACTION, $result->exposed_status);
         $this->assertSame(
             'Deleted 0 deprecated references.<br>' .
             'Created 0 new references.<br>' .
@@ -666,7 +666,7 @@ class HarvesterTest extends TestCase
 
         $result = $harvester->run($this->getCronResultWrapper());
 
-        $this->assertSame(\ilCronJobResult::STATUS_NO_ACTION, $result->exposed_status);
+        $this->assertSame(\ILIAS\Cron\Job\JobResult::STATUS_NO_ACTION, $result->exposed_status);
         $this->assertSame(
             'Deleted 0 deprecated references.<br>' .
             'Created 0 new references.<br>' .
@@ -694,7 +694,7 @@ class HarvesterTest extends TestCase
 
         $result = $harvester->run($this->getCronResultWrapper());
 
-        $this->assertSame(\ilCronJobResult::STATUS_NO_ACTION, $result->exposed_status);
+        $this->assertSame(\ILIAS\Cron\Job\JobResult::STATUS_NO_ACTION, $result->exposed_status);
         $this->assertSame(
             'Deleted 0 deprecated references.<br>' .
             'Created 0 new references.<br>' .
@@ -722,7 +722,7 @@ class HarvesterTest extends TestCase
 
         $result = $harvester->run($this->getCronResultWrapper());
 
-        $this->assertSame(\ilCronJobResult::STATUS_OK, $result->exposed_status);
+        $this->assertSame(\ILIAS\Cron\Job\JobResult::STATUS_OK, $result->exposed_status);
         $this->assertSame(
             'Deleted 0 deprecated references.<br>' .
             'Created 2 new references.<br>' .
@@ -762,7 +762,7 @@ class HarvesterTest extends TestCase
 
         $result = $harvester->run($this->getCronResultWrapper());
 
-        $this->assertSame(\ilCronJobResult::STATUS_OK, $result->exposed_status);
+        $this->assertSame(\ILIAS\Cron\Job\JobResult::STATUS_OK, $result->exposed_status);
         $this->assertSame(
             'Deleted 0 deprecated references.<br>' .
             'Created 1 new references.<br>' .
@@ -804,7 +804,7 @@ class HarvesterTest extends TestCase
 
         $result = $harvester->run($this->getCronResultWrapper());
 
-        $this->assertSame(\ilCronJobResult::STATUS_OK, $result->exposed_status);
+        $this->assertSame(\ILIAS\Cron\Job\JobResult::STATUS_OK, $result->exposed_status);
         $this->assertSame(
             'Deleted 0 deprecated references.<br>' .
             'Created 3 new references.<br>' .
@@ -846,7 +846,7 @@ class HarvesterTest extends TestCase
 
         $result = $harvester->run($this->getCronResultWrapper());
 
-        $this->assertSame(\ilCronJobResult::STATUS_OK, $result->exposed_status);
+        $this->assertSame(\ILIAS\Cron\Job\JobResult::STATUS_OK, $result->exposed_status);
         $this->assertSame(
             'Deleted 0 deprecated references.<br>' .
             'Created 0 new references.<br>' .
@@ -885,7 +885,7 @@ class HarvesterTest extends TestCase
 
         $result = $harvester->run($this->getCronResultWrapper());
 
-        $this->assertSame(\ilCronJobResult::STATUS_OK, $result->exposed_status);
+        $this->assertSame(\ILIAS\Cron\Job\JobResult::STATUS_OK, $result->exposed_status);
         $this->assertSame(
             'Deleted 0 deprecated references.<br>' .
             'Created 0 new references.<br>' .
@@ -916,7 +916,7 @@ class HarvesterTest extends TestCase
 
         $result = $harvester->run($this->getCronResultWrapper());
 
-        $this->assertSame(\ilCronJobResult::STATUS_OK, $result->exposed_status);
+        $this->assertSame(\ILIAS\Cron\Job\JobResult::STATUS_OK, $result->exposed_status);
         $this->assertSame(
             'Deleted 0 deprecated references.<br>' .
             'Created 0 new references.<br>' .
@@ -947,7 +947,7 @@ class HarvesterTest extends TestCase
 
         $result = $harvester->run($this->getCronResultWrapper());
 
-        $this->assertSame(\ilCronJobResult::STATUS_OK, $result->exposed_status);
+        $this->assertSame(\ILIAS\Cron\Job\JobResult::STATUS_OK, $result->exposed_status);
         $this->assertSame(
             'Deleted 0 deprecated references.<br>' .
             'Created 0 new references.<br>' .
@@ -978,7 +978,7 @@ class HarvesterTest extends TestCase
 
         $result = $harvester->run($this->getCronResultWrapper());
 
-        $this->assertSame(\ilCronJobResult::STATUS_OK, $result->exposed_status);
+        $this->assertSame(\ILIAS\Cron\Job\JobResult::STATUS_OK, $result->exposed_status);
         $this->assertSame(
             'Deleted 0 deprecated references.<br>' .
             'Created 0 new references.<br>' .
@@ -1018,7 +1018,7 @@ class HarvesterTest extends TestCase
 
         $result = $harvester->run($this->getCronResultWrapper());
 
-        $this->assertSame(\ilCronJobResult::STATUS_OK, $result->exposed_status);
+        $this->assertSame(\ILIAS\Cron\Job\JobResult::STATUS_OK, $result->exposed_status);
         $this->assertSame(
             'Deleted 0 deprecated references.<br>' .
             'Created 0 new references.<br>' .
@@ -1059,7 +1059,7 @@ class HarvesterTest extends TestCase
 
         $result = $harvester->run($this->getCronResultWrapper());
 
-        $this->assertSame(\ilCronJobResult::STATUS_NO_ACTION, $result->exposed_status);
+        $this->assertSame(\ILIAS\Cron\Job\JobResult::STATUS_NO_ACTION, $result->exposed_status);
         $this->assertSame(
             'Deleted 0 deprecated references.<br>' .
             'Created 0 new references.<br>' .
@@ -1087,7 +1087,7 @@ class HarvesterTest extends TestCase
 
         $result = $harvester->run($this->getCronResultWrapper());
 
-        $this->assertSame(\ilCronJobResult::STATUS_NO_ACTION, $result->exposed_status);
+        $this->assertSame(\ILIAS\Cron\Job\JobResult::STATUS_NO_ACTION, $result->exposed_status);
         $this->assertSame(
             'Deleted 0 deprecated references.<br>' .
             'Created 0 new references.<br>' .
@@ -1115,7 +1115,7 @@ class HarvesterTest extends TestCase
 
         $result = $harvester->run($this->getCronResultWrapper());
 
-        $this->assertSame(\ilCronJobResult::STATUS_NO_ACTION, $result->exposed_status);
+        $this->assertSame(\ILIAS\Cron\Job\JobResult::STATUS_NO_ACTION, $result->exposed_status);
         $this->assertSame(
             'Deleted 0 deprecated references.<br>' .
             'Created 0 new references.<br>' .
@@ -1143,7 +1143,7 @@ class HarvesterTest extends TestCase
 
         $result = $harvester->run($this->getCronResultWrapper());
 
-        $this->assertSame(\ilCronJobResult::STATUS_NO_ACTION, $result->exposed_status);
+        $this->assertSame(\ILIAS\Cron\Job\JobResult::STATUS_NO_ACTION, $result->exposed_status);
         $this->assertSame(
             'Deleted 0 deprecated references.<br>' .
             'Created 0 new references.<br>' .
@@ -1171,7 +1171,7 @@ class HarvesterTest extends TestCase
 
         $result = $harvester->run($this->getCronResultWrapper());
 
-        $this->assertSame(\ilCronJobResult::STATUS_FAIL, $result->exposed_status);
+        $this->assertSame(\ILIAS\Cron\Job\JobResult::STATUS_FAIL, $result->exposed_status);
         $this->assertSame(
             'error',
             $result->exposed_message

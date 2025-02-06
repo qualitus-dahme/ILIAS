@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * https://github.com/ILIAS-eLearning
  *
  *********************************************************************/
+
+declare(strict_types=1);
 
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\NotFound;
@@ -35,38 +35,27 @@ class ilDAVFile implements IFile
     use ilObjFileNews;
     use ilWebDAVCheckValidTitleTrait;
     use ilWebDAVCommonINodeFunctionsTrait;
-
-    protected ilObjFile $obj;
-    protected ilWebDAVRepositoryHelper $repo_helper;
     protected Manager $resource_manager;
     protected Consumers $resource_consumer;
-    protected RequestInterface $request;
-    protected ilWebDAVObjFactory $dav_factory;
 
     protected bool $needs_size_check = true;
-    protected bool $versioning_enabled;
 
     public function __construct(
-        ilObjFile $obj,
-        ilWebDAVRepositoryHelper $repo_helper,
+        protected ilObjFile $obj,
+        protected ilWebDAVRepositoryHelper $repo_helper,
         Services $resource_storage,
-        RequestInterface $request,
-        ilWebDAVObjFactory $dav_factory,
-        bool $versioning_enabled
+        protected RequestInterface $request,
+        protected ilWebDAVObjFactory $dav_factory,
+        protected bool $versioning_enabled
     ) {
-        $this->obj = $obj;
-        $this->repo_helper = $repo_helper;
         $this->resource_manager = $resource_storage->manage();
         $this->resource_consumer = $resource_storage->consume();
-        $this->request = $request;
-        $this->dav_factory = $dav_factory;
-        $this->versioning_enabled = $versioning_enabled;
     }
 
     /**
      * @param string|resource $data
      */
-    public function put($data, string $name = null): ?string
+    public function put($data, ?string $name = null): ?string
     {
         if (!$this->repo_helper->checkAccess('write', $this->obj->getRefId())) {
             throw new Forbidden("Permission denied. No write access for this file");
@@ -108,7 +97,7 @@ class ilDAVFile implements IFile
         $stream = Streams::ofResource($data);
         $title = $this->obj->getTitle();
 
-        if ($this->versioning_enabled === true ||
+        if ($this->versioning_enabled ||
             $this->obj->getVersion() === 0 && $this->obj->getMaxVersion() === 0) {
             $this->obj->appendStream($stream, $name ?? $this->getName());
         } else {
@@ -170,7 +159,7 @@ class ilDAVFile implements IFile
     {
         try {
             return $this->obj->getFileSize();
-        } catch (Error $e) {
+        } catch (Error) {
             return -1;
         }
     }

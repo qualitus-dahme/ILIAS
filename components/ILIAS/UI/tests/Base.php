@@ -181,7 +181,7 @@ class LanguageMock extends ilLanguage
         return $a_topic;
     }
 
-    public function toJS($a_lang_key, ilGlobalTemplateInterface $a_tpl = null): void
+    public function toJS($a_lang_key, ?ilGlobalTemplateInterface $a_tpl = null): void
     {
     }
 
@@ -394,7 +394,7 @@ trait BaseUITestTrait
      * @param Component[] $with_additional_contexts
      */
     public function getDefaultRenderer(
-        JavaScriptBinding $js_binding = null,
+        ?JavaScriptBinding $js_binding = null,
         array $with_stub_renderings = [],
         array $with_additional_contexts = [],
     ): TestDefaultRenderer {

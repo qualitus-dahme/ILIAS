@@ -184,7 +184,7 @@ function base()
             return count($this->getRecords());
         }
 
-        protected function getRecords(Range $range = null, Order $order = null): array
+        protected function getRecords(?Range $range = null, ?Order $order = null): array
         {
             $records = [
                 ['usr_id' => 123,'login' => 'superuser','email' => 'user@example.com',

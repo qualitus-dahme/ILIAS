@@ -14,10 +14,7 @@
  * https://www.ilias.de
  * https://github.com/ILIAS-eLearning
  *
- *********************************************************************
- *
- * Entry Point for Async calls from the Notification Center
- */
+ *********************************************************************/
 
 declare(strict_types=1);
 

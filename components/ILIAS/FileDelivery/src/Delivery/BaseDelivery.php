@@ -20,10 +20,10 @@ declare(strict_types=1);
 
 namespace ILIAS\FileDelivery\Delivery;
 
+use ILIAS\HTTP\Services;
 use ILIAS\FileDelivery\Delivery\ResponseBuilder\ResponseBuilder;
 use ILIAS\HTTP\Response\ResponseHeader;
 use Psr\Http\Message\ResponseInterface;
-use ILIAS\FileDelivery\Token\Data\Stream;
 
 /**
  * @author Fabian Schmid <fabian@sr.solutions>
@@ -35,7 +35,7 @@ abstract class BaseDelivery
     protected array $mime_type_map;
 
     public function __construct(
-        protected \ILIAS\HTTP\Services $http,
+        protected Services $http,
         protected ResponseBuilder $response_builder,
         protected ResponseBuilder $fallback_response_builder,
     ) {
@@ -47,9 +47,9 @@ abstract class BaseDelivery
 
     protected function saveAndClose(
         ResponseInterface $r,
-        string $path_to_delete = null
+        ?string $path_to_delete = null
     ): never {
-        $sender = function () use ($r) {
+        $sender = function () use ($r): void {
             $this->http->saveResponse($r);
             $this->http->sendResponse();
             $this->http->close();

@@ -60,7 +60,7 @@ class CropSquare extends AbstractMachine implements FlavourMachine
         FileStream $stream,
         FlavourDefinition $for_definition
     ): \Generator {
-        if (!$for_definition instanceof \ILIAS\ResourceStorage\Flavour\Definition\CropToSquare) {
+        if (!$for_definition instanceof CropToSquare) {
             throw new \InvalidArgumentException('Invalid definition');
         }
         $image = $this->from($stream);
@@ -70,7 +70,7 @@ class CropSquare extends AbstractMachine implements FlavourMachine
 
         $stream_path = $stream->getMetadata('uri');
         if ($stream_path === 'php://memory') {
-            [$width, $height] = getimagesizefromstring((string)$stream);
+            [$width, $height] = getimagesizefromstring((string) $stream);
         } else {
             [$width, $height] = getimagesize($stream_path);
         }

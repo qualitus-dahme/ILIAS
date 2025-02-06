@@ -131,7 +131,7 @@ class PanelSecondaryLegacyTest extends ILIAS_UI_TestBase
             'date_desc' => 'Most Recent',
             'date_asc' => 'Oldest',
         );
-        $sortation = $this->getUIFactory()->viewControl()->sortation($sort_options);
+        $sortation = $this->getUIFactory()->viewControl()->sortation($sort_options, 'internal_rating');
 
         $secondary_panel = $this->getUIFactory()->legacyPanel("title", $legacy)
             ->withViewControls([$sortation]);
@@ -208,8 +208,8 @@ class PanelSecondaryLegacyTest extends ILIAS_UI_TestBase
 </div>
 EOT;
         $this->assertHTMLEquals(
-            $this->cleanHTML($expected_html),
-            $this->cleanHTML($html)
+            $this->brutallyTrimHTML($expected_html),
+            $this->brutallyTrimHTML($html)
         );
     }
 
@@ -220,7 +220,7 @@ EOT;
             'a' => 'A',
             'b' => 'B'
         );
-        $sortation = $this->getUIFactory()->viewControl()->sortation($sort_options);
+        $sortation = $this->getUIFactory()->viewControl()->sortation($sort_options, 'b');
         $sec = $this->getUIFactory()->legacyPanel("Title", $legacy)
             ->withViewControls([$sortation]);
 
@@ -231,23 +231,20 @@ EOT;
     <div class="panel-heading ilHeader">
         <div class="panel-title"><h2>Title</h2></div>
         <div class="panel-viewcontrols l-bar__space-keeper">
-            <div class="il-viewcontrol-sortation l-bar__element" id="id_1">
-                <div class="dropdown" id="id_4">
-                    <button class="btn btn-default dropdown-toggle" type="button" aria-label="actions" aria-haspopup="true" aria-expanded="false" aria-controls="id_4_menu">
-                        <span class="caret"></span>
-                    </button>
-                    <ul id="id_4_menu" class="dropdown-menu">
-                        <li><button class="btn btn-link" data-action="?sortation=a" id="id_2">A</button></li>
-                        <li><button class="btn btn-link" data-action="?sortation=b" id="id_3">B</button></li>
-                    </ul>
-                </div>
+            <div class="dropdown il-viewcontrol il-viewcontrol-sortation l-bar__element" id="id_1">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-label="sortation" aria-haspopup="true" aria-expanded="false" aria-controls="id_1_ctrl">
+                    <span class="label">vc_sort B</span>
+                    <span class="caret"></span>
+                </button>
+                <ul id="id_1_ctrl" class="dropdown-menu">
+                    <li><button class="btn btn-link" data-action="?sortation=a" id="id_2">A</button></li>
+                    <li class="selected"><button class="btn btn-link" data-action="?sortation=b" id="id_3">B</button></li>
+                </ul>
             </div>
         </div>
         <div class="panel-controls"></div>
     </div>
-	<div class="panel-body">
-		Legacy content
-	</div>
+    <div class="panel-body">Legacy content</div>
 </div>
 EOT;
         $this->assertEquals($this->brutallyTrimHTML($expected_html), $this->brutallyTrimHTML($html));
@@ -360,9 +357,7 @@ EOT;
 
         $expected_html = <<<EOT
 <div class="panel panel-secondary panel-flex">
-	<div class="panel-body">
-		Legacy content
-	</div>
+    <div class="panel-body">Legacy content</div>
 </div>
 EOT;
         $this->assertEquals($this->brutallyTrimHTML($expected_html), $this->brutallyTrimHTML($html));

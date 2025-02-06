@@ -17,7 +17,6 @@
  *********************************************************************/
 
 /** @noRector */
-
 use ILIAS\StaticURL\Services;
 
 require_once("../vendor/composer/vendor/autoload.php");

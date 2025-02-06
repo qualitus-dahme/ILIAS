@@ -23,12 +23,6 @@ namespace ILIAS\GlobalScreen\Collector\Map;
 use ArrayObject;
 use Closure;
 use ILIAS\GlobalScreen\Identification\IdentificationInterface;
-use ILIAS\GlobalScreen\Identification\NullIdentification;
-use ILIAS\GlobalScreen\Scope\MainMenu\Factory\isItem;
-use ILIAS\GlobalScreen\Scope\MainMenu\Factory\isParent;
-use ILIAS\GlobalScreen\Scope\MainMenu\Factory\Item\Lost;
-use ILIAS\GlobalScreen\Scope\MainMenu\Factory\MainMenuItemFactory;
-use ILIAS\GlobalScreen\Scope\MainMenu\Factory\hasTitle;
 use ILIAS\GlobalScreen\isGlobalScreenItem;
 
 /**

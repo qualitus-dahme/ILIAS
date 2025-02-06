@@ -109,7 +109,7 @@ class shibUser extends ilObjUser
         $this->setLastname($this->shibServerData->getLastname());
         $this->setLogin($this->returnNewLoginName());
         $array = ilSecuritySettingsChecker::generatePasswords(1);
-        $this->setPasswd(md5(end($array)), ilObjUser::PASSWD_CRYPTED);
+        $this->setPasswd(md5((string) end($array)), ilObjUser::PASSWD_CRYPTED);
         $this->setGender($this->shibServerData->getGender());
         $this->setExternalAccount($this->shibServerData->getLogin());
         $this->setTitle($this->shibServerData->getTitle());
@@ -138,19 +138,18 @@ class shibUser extends ilObjUser
     /**
      * @throws ilUserException
      */
+    #[\Override]
     public function create(): int
     {
         $c = shibConfig::getInstance();
         $registration_settings = new ilRegistrationSettings();
-        $recipients = array_filter($registration_settings->getApproveRecipients(), static function ($v) {
-            return is_int($v);
-        });
+        $recipients = array_filter($registration_settings->getApproveRecipients(), static fn($v): bool => is_int($v));
         if ($recipients !== [] && $c->isActivateNew()) {
             $this->setActive(false);
             $mail = new ilRegistrationMailNotification();
             $mail->setType(ilRegistrationMailNotification::TYPE_NOTIFICATION_CONFIRMATION);
             $mail->setRecipients($registration_settings->getApproveRecipients());
-            $mail->setAdditionalInformation(array('usr' => $this));
+            $mail->setAdditionalInformation(['usr' => $this]);
             $mail->send();
         }
 

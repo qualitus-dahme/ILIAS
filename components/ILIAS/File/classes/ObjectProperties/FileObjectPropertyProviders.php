@@ -30,7 +30,6 @@ use ILIAS\ResourceStorage\Flavour\Definition\FlavourDefinition;
 use ILIAS\components\File\Preview\Settings;
 use ILIAS\Modules\File\Preview\SettingsFactory;
 use ILIAS\File\Icon\IconDatabaseRepository;
-use ILIAS\File\Icon\IconRepositoryInterface;
 
 class FileObjectPropertyProviders implements ilObjectTypeSpecificPropertyProviders
 {
@@ -96,7 +95,7 @@ class FileObjectPropertyProviders implements ilObjectTypeSpecificPropertyProvide
         $image = $factory->responsive($urls[count($available_widths)], '');
         return array_reduce(
             $available_widths,
-            function ($carry, $size) use ($urls) {
+            function (array $carry, $size) use ($urls): array {
                 $image = $carry['image']->withAdditionalHighResSource($urls[$carry['counter']], $size / 2);
                 $counter = ++$carry['counter'];
                 return [
@@ -114,7 +113,8 @@ class FileObjectPropertyProviders implements ilObjectTypeSpecificPropertyProvide
         StorageService $irss
     ): ?CustomIcon {
         $info = $this->info->getByObjectId($obj_id);
-        if (($path = $this->icons->getIconFilePathBySuffix($info->getSuffix()))) {
+        $path = $this->icons->getIconFilePathBySuffix($info->getSuffix());
+        if (($path !== '' && $path !== '0')) {
             return $icon_factory->custom($path, $info->getSuffix());
         }
 

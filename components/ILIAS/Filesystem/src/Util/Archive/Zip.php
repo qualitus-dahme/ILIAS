@@ -145,7 +145,7 @@ class Zip
      */
     public function addPath(string $path, ?string $path_inside_zip = null): void
     {
-        $path_inside_zip = $path_inside_zip ?? basename($path);
+        $path_inside_zip ??= basename($path);
 
         // create directory if it does not exist
         $this->zip->addEmptyDir(rtrim(dirname($path_inside_zip), '/') . '/');

@@ -844,9 +844,8 @@ abstract class ilObjPortfolioBaseGUI extends ilObject2GUI
     ): void {
         $port_export = new \ILIAS\Portfolio\Export\PortfolioHtmlExport($this);
         $port_export->includeComments($a_with_comments);
-        $zip = $port_export->exportHtml();
-
-        ilFileDelivery::deliverFileLegacy($zip, $this->object->getTitle() . ".zip", '', false, true);
+        $port_export->exportHtml();
+        $port_export->deliver($this->object->getTitle() . ".zip", true);
     }
 
     public function exportWithComments(): void

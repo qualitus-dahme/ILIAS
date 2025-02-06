@@ -68,7 +68,7 @@ class ilTemplateWrapper implements Template
     /**
      * @inheritdocs
      */
-    public function get(string $block = null): string
+    public function get(?string $block = null): string
     {
         if ($block === null) {
             $block = "__global__";

@@ -206,7 +206,7 @@ class ilSessionTest extends TestCase
             1
         );
 
-        $cron_manager = $this->createMock(ilCronManager::class);
+        $cron_manager = $this->createMock(\ILIAS\Cron\Job\JobManager::class);
         $cron_manager->method('isJobActive')->with($this->isType('string'))->willReturn(true);
         $this->setGlobalVariable(
             'cron.manager',

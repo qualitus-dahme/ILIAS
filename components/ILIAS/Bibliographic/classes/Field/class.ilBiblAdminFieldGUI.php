@@ -16,6 +16,7 @@
  *
  *********************************************************************/
 
+use ILIAS\HTTP\Services;
 use ILIAS\Bibliographic\Field\Table;
 
 /**
@@ -37,23 +38,21 @@ abstract class ilBiblAdminFieldGUI
     public const CMD_APPLY_FILTER = 'applyFilter';
     public const CMD_RESET_FILTER = 'resetFilter';
     public const CMD_SAVE = 'save';
-    private \ILIAS\HTTP\Services $http;
+    private Services $http;
     private ilCtrl $ctrl;
     private ilTabsGUI $tabs;
     private ilLanguage $lng;
     private ilAccessHandler $access;
-    protected \ilBiblAdminFactoryFacadeInterface $facade;
     protected Table $table;
     private \ilGlobalTemplateInterface $main_tpl;
 
     /**
      * ilBiblAdminFieldGUI constructor.
      */
-    public function __construct(ilBiblAdminFactoryFacadeInterface $facade)
+    public function __construct(protected \ilBiblAdminFactoryFacadeInterface $facade)
     {
         global $DIC;
         $this->main_tpl = $DIC->ui()->mainTemplate();
-        $this->facade = $facade;
         $this->table = new Table(
             $this,
             $this->facade
@@ -159,10 +158,10 @@ abstract class ilBiblAdminFieldGUI
             self::SUBTAB_RIS,
             $this->lng->txt('ris'),
             $this->ctrl->getLinkTargetByClass(
-                array(
+                [
                     ilObjBibliographicAdminGUI::class,
                     ilBiblAdminRisFieldGUI::class,
-                ),
+                ],
                 ilBiblAdminRisFieldGUI::CMD_STANDARD
             )
         );
@@ -172,10 +171,10 @@ abstract class ilBiblAdminFieldGUI
             self::SUBTAB_BIBTEX,
             $this->lng->txt('bibtex'),
             $this->ctrl->getLinkTargetByClass(
-                array(
+                [
                     ilObjBibliographicAdminGUI::class,
                     ilBiblAdminBibtexFieldGUI::class,
-                ),
+                ],
                 ilBiblAdminBibtexFieldGUI::CMD_STANDARD
             )
         );

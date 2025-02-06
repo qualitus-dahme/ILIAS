@@ -16,10 +16,12 @@
  *
  *********************************************************************/
 
+use ILIAS\Filesystem\Filesystem;
+use ILIAS\Filesystem\Exception\IOException;
+use ILIAS\FileUpload\Exception\IllegalStateException;
 use ILIAS\ResourceStorage\Services;
 use ILIAS\FileUpload\FileUpload;
 use ILIAS\ResourceStorage\Identification\ResourceIdentification;
-use ILIAS\DI\Container;
 
 /**
  * Class ilObjBibliographic
@@ -30,7 +32,7 @@ use ILIAS\DI\Container;
  */
 class ilObjBibliographic extends ilObject2
 {
-    protected \ILIAS\Filesystem\Filesystem $filesystem;
+    protected Filesystem $filesystem;
     protected FileUpload $upload_service;
     protected \ilBiblFileReaderFactory $bib_filereader_factory;
     protected \ilBiblTypeFactory $bib_type_factory;
@@ -44,7 +46,7 @@ class ilObjBibliographic extends ilObject2
     protected ?string $filename = null;
     protected array $entries = [];
     protected int $file_type = 0;
-    protected ?\ILIAS\ResourceStorage\Identification\ResourceIdentification $resource_id = null;
+    protected ?ResourceIdentification $resource_id = null;
     protected bool $is_migrated = false;
 
     protected function initType(): void
@@ -65,7 +67,7 @@ class ilObjBibliographic extends ilObject2
         $this->stakeholder = new ilObjBibliographicStakeholder();
         $this->filesystem = $DIC->filesystem()->storage();
 
-        if ($existant_bibl_id) {
+        if ($existant_bibl_id !== 0) {
             $this->setId($existant_bibl_id);
             $this->doRead();
         }
@@ -85,9 +87,9 @@ class ilObjBibliographic extends ilObject2
 
     /**
      * handles a FileUpload and returns an IRSS identification string.
-     * @throws \ILIAS\FileUpload\Exception\IllegalStateException
+     * @throws IllegalStateException
      */
-    private function handleUpload(): ?\ILIAS\ResourceStorage\Identification\ResourceIdentification
+    private function handleUpload(): ?ResourceIdentification
     {
         if (!$this->upload_service->hasBeenProcessed()) {
             $this->upload_service->process();
@@ -98,7 +100,7 @@ class ilObjBibliographic extends ilObject2
             return null;
         }
 
-        if ($this->getResourceId()) {
+        if ($this->getResourceId() !== null) {
             $this->storage->manage()->appendNewRevision(
                 $this->getResourceId(),
                 $result,
@@ -131,7 +133,7 @@ class ilObjBibliographic extends ilObject2
                 "file_type" => ["integer",
                                 $this->getFilename() ? $this->determineFileTypeByFileName($this->getFilename()) : ""
                 ],
-                "rid" => ["string", ($rid = $this->getResourceId()) ? $rid->serialize() : ''],
+                "rid" => ["string", (($rid = $this->getResourceId()) !== null) ? $rid->serialize() : ''],
             ]
         );
         $this->parseFileToDatabase();
@@ -141,7 +143,7 @@ class ilObjBibliographic extends ilObject2
     protected function doRead(): void
     {
         /** @var ilBiblData $bibl_data */
-        $bibl_data = ilBiblData::where(array('id' => $this->getId()))->first();
+        $bibl_data = ilBiblData::where(['id' => $this->getId()])->first();
         if (!$this->getFilename() && $bibl_data->getFilename() !== null) {
             $this->setFilename($bibl_data->getFilename());
         }
@@ -177,7 +179,7 @@ class ilObjBibliographic extends ilObject2
             [
                 "filename" => ["text", $this->getFilename()],
                 "file_type" => ["integer", $this->getFileType()],
-                "rid" => ["string", ($rid = $this->getResourceId()) ? $rid->serialize() : ''],
+                "rid" => ["string", (($rid = $this->getResourceId()) !== null) ? $rid->serialize() : ''],
             ],
             ["id" => ["integer", $this->getId()]]
         );
@@ -231,7 +233,7 @@ class ilObjBibliographic extends ilObject2
         $path = $this->getFileDirectory();
         try {
             $this->filesystem->deleteDir($path);
-        } catch (\ILIAS\Filesystem\Exception\IOException $e) {
+        } catch (IOException) {
             return false;
         }
 
@@ -241,15 +243,14 @@ class ilObjBibliographic extends ilObject2
     /**
      * @return string|void
      */
-    public function getFilePath(bool $without_filename = false)
+    public function getFilePath(bool $without_filename = false): ?string
     {
         $file_name = $this->getFilename();
 
         if ($without_filename) {
-            return substr($file_name, 0, strrpos($file_name, DIRECTORY_SEPARATOR));
-        } else {
-            return $file_name;
+            return substr((string) $file_name, 0, strrpos((string) $file_name, DIRECTORY_SEPARATOR));
         }
+        return $file_name;
     }
 
     public function setFilename(string $filename): void
@@ -259,7 +260,7 @@ class ilObjBibliographic extends ilObject2
 
     public function getFilename(): ?string
     {
-        if ($this->getResourceId()) {
+        if ($this->getResourceId() !== null) {
             return $this->filename = $this->storage->manage()
                                  ->getCurrentRevision($this->getResourceId())
                                  ->getInformation()

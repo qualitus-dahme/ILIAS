@@ -21,7 +21,6 @@ use ILIAS\Setup\Environment;
 use ILIAS\Setup\Metrics\Storage;
 use ILIAS\Cache\Config;
 use ILIAS\Setup\Metrics\Metric;
-use ILIAS\Setup;
 
 class ilGlobalCacheMetricsCollectedObjective extends CollectedObjective
 {

@@ -118,7 +118,7 @@ class Inline implements C\Launcher\Inline
         return $this->launchable;
     }
 
-    public function withInputs(Group $fields, \Closure $evaluation, MessageBox\MessageBox $instruction = null): self
+    public function withInputs(Group $fields, \Closure $evaluation, ?MessageBox\MessageBox $instruction = null): self
     {
         $modal = $this->modal_factory->roundtrip(
             $this->getButtonLabel(),

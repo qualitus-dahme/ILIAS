@@ -36,7 +36,7 @@ trait UITestHelper
 {
     protected Container $dic_with_ui;
 
-    public function init(Container $dic = null): Container
+    public function init(?Container $dic = null): Container
     {
         if ($dic) {
             $this->dic_with_ui = $dic;

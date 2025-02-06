@@ -18,17 +18,19 @@
 
 declare(strict_types=1);
 
-use ILIAS\Cron\Schedule\CronJobScheduleType;
+use ILIAS\Cron\Job\Schedule\JobScheduleType;
 use ILIAS\Test\Results\Data\StatusOfAttempt;
 use ILIAS\Test\Results\Data\Repository as TestResultRepository;
 use ILIAS\Test\TestDIC;
 use ILIAS\Test\Logging\TestLogger;
+use ILIAS\Cron\Job\JobResult;
+use ILIAS\Cron\CronJob;
 
 /**
  * Class ilCronFinishUnfinishedTestPasses
  * @author Guido Vollbach <gvollbach@databay.de>
  */
-class ilCronFinishUnfinishedTestPasses extends ilCronJob
+class ilCronFinishUnfinishedTestPasses extends CronJob
 {
     protected readonly TestLogger $logger;
 
@@ -82,9 +84,9 @@ class ilCronFinishUnfinishedTestPasses extends ilCronJob
         return $this->lng->txt('finish_unfinished_passes_desc');
     }
 
-    public function getDefaultScheduleType(): CronJobScheduleType
+    public function getDefaultScheduleType(): JobScheduleType
     {
-        return CronJobScheduleType::SCHEDULE_TYPE_DAILY;
+        return JobScheduleType::DAILY;
     }
 
     public function getDefaultScheduleValue(): int
@@ -107,11 +109,11 @@ class ilCronFinishUnfinishedTestPasses extends ilCronJob
         return true;
     }
 
-    public function run(): ilCronJobResult
+    public function run(): JobResult
     {
         $this->logger->info('start inf cronjob...');
 
-        $result = new ilCronJobResult();
+        $result = new JobResult();
 
         $this->gatherUsersWithUnfinishedPasses();
         if (count($this->unfinished_passes) > 0) {
@@ -122,7 +124,7 @@ class ilCronFinishUnfinishedTestPasses extends ilCronJob
             $this->logger->info('No unfinished passes found.');
         }
 
-        $result->setStatus(ilCronJobResult::STATUS_OK);
+        $result->setStatus(JobResult::STATUS_OK);
 
         $this->logger->info(' ...finishing cronjob.');
 

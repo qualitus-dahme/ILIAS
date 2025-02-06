@@ -21,6 +21,7 @@ declare(strict_types=1);
 use ILIAS\DI\UIServices;
 use ILIAS\UI\Component\Input\Container\Form\Form;
 use ILIAS\UI\Component\Component;
+use ILIAS\Cron\Job\JobManager;
 
 /**
  * @ilCtrl_Calls      ilObjForumAdministrationGUI: ilPermissionGUI
@@ -34,7 +35,7 @@ class ilObjForumAdministrationGUI extends ilObjectGUI
     private const PROP_SECTION_DRAFTS = 'drafts';
 
     private readonly \ILIAS\DI\RBACServices $rbac;
-    private readonly ilCronManager $cronManager;
+    private readonly JobManager $cronManager;
     private readonly UIServices $ui;
 
     public function __construct($a_data, int $a_id, bool $a_call_by_reference = true, bool $a_prepare_output = true)

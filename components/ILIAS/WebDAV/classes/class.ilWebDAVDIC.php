@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * https://github.com/ILIAS-eLearning
  *
  *********************************************************************/
+
+declare(strict_types=1);
 
 use Pimple\Container;
 use ILIAS\DI\Container as ILIASContainer;
@@ -99,7 +99,7 @@ class ilWebDAVDIC extends Container
 
         $this['sabre.authplugin'] = function ($c) use ($DIC): AuthPlugin {
             $webdav_auth = new ilWebDAVAuthentication($DIC->user(), $DIC['ilAuthSession'], ilLoggerFactory::getLogger('webdav'));
-            $auth_callback_class = new BasicCallBack(array($webdav_auth, 'authenticate'));
+            $auth_callback_class = new BasicCallBack($webdav_auth->authenticate(...));
             return new AuthPlugin($auth_callback_class);
         };
 

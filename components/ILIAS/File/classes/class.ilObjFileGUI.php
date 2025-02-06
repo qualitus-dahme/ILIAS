@@ -27,8 +27,6 @@ use ILIAS\ResourceStorage\Stakeholder\ResourceStakeholder;
 use ILIAS\UI\Component\Input\Container\Form\Standard;
 use ILIAS\File\Icon\IconDatabaseRepository;
 use ILIAS\components\File\Settings\General;
-use ILIAS\UI\Implementation\Component\Input\UploadLimitResolver;
-use ILIAS\Data\DataSize;
 use ILIAS\Refinery\String\Group;
 use ILIAS\Data\Factory;
 use ILIAS\components\WOPI\Discovery\ActionDBRepository;
@@ -38,7 +36,6 @@ use ILIAS\MetaData\Services\ServicesInterface as LOMServices;
 use ILIAS\File\Capabilities\Capabilities;
 use ILIAS\File\Capabilities\CapabilityBuilder;
 use ILIAS\File\Capabilities\CapabilityCollection;
-use ILIAS\File\Capabilities\CoreTypeResolver;
 use ILIAS\File\Capabilities\Context;
 
 /**
@@ -90,7 +87,6 @@ class ilObjFileGUI extends ilObject2GUI
     protected General $general_settings;
     protected ilFileServicesSettings $file_service_settings;
     protected IconDatabaseRepository $icon_repo;
-    private UploadLimitResolver $upload_limit;
     protected \ILIAS\UI\Component\Input\Factory $inputs;
     protected Renderer $renderer;
     protected ServerRequestInterface $request;
@@ -120,7 +116,6 @@ class ilObjFileGUI extends ilObject2GUI
         $this->obj_service = $DIC->object();
         $this->lng->loadLanguageModule(ilObjFile::OBJECT_TYPE);
         $this->icon_repo = new IconDatabaseRepository();
-        $this->upload_limit = $DIC['ui.upload_limit_resolver'];
         $this->inputs = $DIC->ui()->factory()->input();
         $this->renderer = $DIC->ui()->renderer();
         $this->request = $DIC->http()->request();
@@ -169,6 +164,7 @@ class ilObjFileGUI extends ilObject2GUI
         return $this->parent_id;
     }
 
+    #[\Override]
     public function executeCommand(): void
     {
         global $DIC;
@@ -233,7 +229,7 @@ class ilObjFileGUI extends ilObject2GUI
             case "ilexportgui":
                 $ilTabs->activateTab("export");
                 $exp_gui = new ilExportGUI($this);
-                $exp_gui->addFormat('xml');
+                $exp_gui->addFormat();
                 $this->ctrl->forwardCommand($exp_gui);
                 break;
 
@@ -395,11 +391,13 @@ class ilObjFileGUI extends ilObject2GUI
     /**
      * @return array
      */
+    #[\Override]
     protected function initCreateForm(string $new_type): Standard
     {
         return $this->initUploadForm();
     }
 
+    #[\Override]
     protected function getCreationFormTitle(): string
     {
         return $this->lng->txt('upload_files');
@@ -417,19 +415,10 @@ class ilObjFileGUI extends ilObject2GUI
             self::UPLOAD_ORIGIN_STANDARD
         );
 
-        // add file input
-        $size = new DataSize(
-            $this->upload_limit->getBestPossibleUploadLimitInBytes($this->upload_handler),
-            DataSize::MB
-        );
 
         $inputs[self::PARAM_FILES] = $this->ui->factory()->input()->field()->file(
             $this->upload_handler,
             $this->lng->txt('upload_files'),
-            sprintf(
-                $this->lng->txt('upload_files_limit'),
-                (string) $size
-            ),
             $this->ui->factory()->input()->field()->group([
                 self::PARAM_TITLE => $this->ui->factory()->input()->field()->text(
                     $this->lng->txt('title')
@@ -537,7 +526,8 @@ class ilObjFileGUI extends ilObject2GUI
         $this->ctrl->redirectToURL($link);
     }
 
-    public function putObjectInTree(ilObject $obj, int $parent_node_id = null): void
+    #[\Override]
+    public function putObjectInTree(ilObject $obj, ?int $parent_node_id = null): void
     {
         // this is needed to support multi fileuploads in personal and shared resources
         $backup_node_id = $this->node_id;
@@ -548,6 +538,7 @@ class ilObjFileGUI extends ilObject2GUI
     /**
      * updates object entry in object_data
      */
+    #[\Override]
     public function update(): void
     {
         $data = [];
@@ -604,6 +595,7 @@ class ilObjFileGUI extends ilObject2GUI
         $this->ctrl->redirectByClass(self::class, self::CMD_EDIT);
     }
 
+    #[\Override]
     public function edit(): void
     {
         global $DIC;
@@ -981,6 +973,7 @@ class ilObjFileGUI extends ilObject2GUI
     }
 
     // get tabs
+    #[\Override]
     protected function setTabs(): void
     {
         global $DIC;
@@ -1125,6 +1118,7 @@ class ilObjFileGUI extends ilObject2GUI
         }
     }
 
+    #[\Override]
     protected function initHeaderAction(?string $a_sub_type = null, ?int $a_sub_id = null): ?\ilObjectListGUI
     {
         $lg = parent::initHeaderAction($a_sub_type, $a_sub_id);

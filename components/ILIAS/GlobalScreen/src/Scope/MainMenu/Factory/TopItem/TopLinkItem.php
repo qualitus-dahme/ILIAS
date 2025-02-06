@@ -28,8 +28,6 @@ use ILIAS\GlobalScreen\Scope\MainMenu\Factory\hasTitle;
 use ILIAS\GlobalScreen\Scope\MainMenu\Factory\isInterchangeableItem;
 use ILIAS\GlobalScreen\Scope\MainMenu\Factory\isInterchangeableItemTrait;
 use ILIAS\GlobalScreen\Scope\MainMenu\Factory\isTopItem;
-use ILIAS\GlobalScreen\Scope\isDecorateable;
-use ILIAS\GlobalScreen\Scope\TriggererDecoratorTrait;
 
 /**
  * @author Fabian Schmid <fabian@sr.solutions>

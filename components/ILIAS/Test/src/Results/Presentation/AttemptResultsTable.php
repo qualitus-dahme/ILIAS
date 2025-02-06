@@ -167,11 +167,10 @@ class AttemptResultsTable
         ];
 
         $pre = implode(URLBuilder::SEPARATOR, $this->getViewControlNamespace()) . URLBuilder::SEPARATOR;
-        $vc_sort = $ui_factory->viewControl()->sortation($options)->withTargetURL(
+        $vc_sort = $ui_factory->viewControl()->sortation($options, $sortation)->withTargetURL(
             $target->buildURI()->__toString(),
             $pre . self::PARAM_SORT
-        )
-        ->withLabel($options[$sortation]);
+        );
 
         return [
             $vc_mode,

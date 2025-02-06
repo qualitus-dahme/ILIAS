@@ -16,8 +16,9 @@
  *
  *********************************************************************/
 
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
-use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
 class ilWebDAVMountInstructionsDocumentProcessorBaseTest extends TestCase
 {
@@ -35,10 +36,8 @@ class ilWebDAVMountInstructionsDocumentProcessorBaseTest extends TestCase
         };
     }
 
-    /**
-     * @test
-     * @small
-     */
+    #[Test]
+
     public function parseInstructionsToAssocArray_noOpenNoCloseTags_returnArrayOnlyWithInputString(): void
     {
         // Arrange
@@ -52,10 +51,8 @@ class ilWebDAVMountInstructionsDocumentProcessorBaseTest extends TestCase
         $this->assertEquals($instructions, $parsed_instructions[0]);
     }
 
-    /**
-     * @test
-     * @small
-     */
+    #[Test]
+
     public function parseInstructionsToAssocArray_onlyOpenNoCloseTag_returnArrayOnlyWithInputString(): void
     {
         // Arrange
@@ -69,10 +66,8 @@ class ilWebDAVMountInstructionsDocumentProcessorBaseTest extends TestCase
         $this->assertEquals($instructions, $parsed_instructions[0]);
     }
 
-    /**
-     * @test
-     * @small
-     */
+    #[Test]
+
     public function parseInstructionsToAssocArray_noOpenOnlyCloseTag_returnArrayOnlyWithInputString(): void
     {
         // Arrange
@@ -86,10 +81,8 @@ class ilWebDAVMountInstructionsDocumentProcessorBaseTest extends TestCase
         $this->assertEquals($instructions, $parsed_instructions[0]);
     }
 
-    /**
-     * @test
-     * @small
-     */
+    #[Test]
+
     public function parseInstructionsToAssocArray_openTagAtStartCloseTagAtEnd_returnArrayOnlyWithInputString(): void
     {
         // Arrange
@@ -107,10 +100,8 @@ class ilWebDAVMountInstructionsDocumentProcessorBaseTest extends TestCase
         $this->assertEquals($instrunction_text, $parsed_instructions[$tag_title]);
     }
 
-    /**
-     * @test
-     * @small
-     */
+    #[Test]
+
     public function parseInstructionsToAssocArray_tagsContainSpaces_returnArrayOnlyWithInputString(): void
     {
         // Arrange
@@ -128,10 +119,8 @@ class ilWebDAVMountInstructionsDocumentProcessorBaseTest extends TestCase
         $this->assertEquals($instruction_text, $parsed_instructions[$tag_title]);
     }
 
-    /**
-     * @test
-     * @small
-     */
+    #[Test]
+
     public function parseInstructionsToAssocArray_tagsContainSpecialChars_returnArrayOnlyWithInputString(): void
     {
         // Arrange
@@ -149,10 +138,8 @@ class ilWebDAVMountInstructionsDocumentProcessorBaseTest extends TestCase
         $this->assertEquals($instruction_text, $parsed_instructions[$tag_title]);
     }
 
-    /**
-     * @test
-     * @small
-     */
+    #[Test]
+
     public function parseInstructionsToAssocArray_beforeStartTagAndAfterEndTagIsText_returnArrayOnlyWithStringBetweenTags(): void
     {
         // Arrange
@@ -170,10 +157,8 @@ class ilWebDAVMountInstructionsDocumentProcessorBaseTest extends TestCase
         $this->assertEquals($instruction_text, $parsed_instructions[$tag_title]);
     }
 
-    /**
-     * @test
-     * @small
-     */
+    #[Test]
+
     public function parseInstructionsToAssocArray_placeholderBeforeStartTag_returnArrayOnlyWithStringBetweenTags(): void
     {
         // Arrange
@@ -191,10 +176,8 @@ class ilWebDAVMountInstructionsDocumentProcessorBaseTest extends TestCase
         $this->assertEquals($instruction_text, $parsed_instructions[$tag_title]);
     }
 
-    /**
-     * @test
-     * @small
-     */
+    #[Test]
+
     public function parseInstructionsToAssocArray_withTwoOpenAndCloseTags_returnArrayWithBothInstructions(): void
     {
         // Arrange

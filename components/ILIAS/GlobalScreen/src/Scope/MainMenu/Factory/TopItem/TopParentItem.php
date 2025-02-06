@@ -26,8 +26,6 @@ use ILIAS\GlobalScreen\Scope\MainMenu\Factory\hasSymbolTrait;
 use ILIAS\GlobalScreen\Scope\MainMenu\Factory\hasTitle;
 use ILIAS\GlobalScreen\Scope\MainMenu\Factory\isTopItem;
 use ILIAS\GlobalScreen\Scope\MainMenu\Factory\supportsAsynchronousLoading;
-use ILIAS\GlobalScreen\Scope\isDecorateable;
-use ILIAS\GlobalScreen\Scope\TriggererDecoratorTrait;
 
 /**
  * @author Fabian Schmid <fabian@sr.solutions>

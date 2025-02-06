@@ -18,6 +18,7 @@
 
 namespace ILIAS\StaticURL\Tests;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use ILIAS\StaticURL\Builder\StandardURIBuilder;
 use ILIAS\Data\ReferenceId;
 
@@ -48,9 +49,7 @@ class URIBuilderTest extends Base
         ];
     }
 
-    /**
-     * @dataProvider getILIAS_HTTP_Paths
-     */
+    #[DataProvider('getILIAS_HTTP_Paths')]
     public function testBaseURI(string $ILIAS_HTTP_PATH, string $expected): void
     {
         $uri_builder = new StandardURIBuilder($ILIAS_HTTP_PATH);
@@ -67,9 +66,7 @@ class URIBuilderTest extends Base
         ];
     }
 
-    /**
-     * @dataProvider getBuilderParts
-     */
+    #[DataProvider('getBuilderParts')]
     public function testFullBuilder(string $namespace, ?int $ref_id, array $params, string $expected): void
     {
         $uri_builder = new StandardURIBuilder('https://test9.ilias.de');

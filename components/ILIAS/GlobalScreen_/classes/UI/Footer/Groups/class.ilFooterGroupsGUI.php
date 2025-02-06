@@ -42,14 +42,41 @@ final class ilFooterGroupsGUI
     use Hasher;
     use UIHelper;
 
+    /**
+     * @var string
+     */
     public const CMD_DEFAULT = 'index';
+    /**
+     * @var string
+     */
     public const CMD_ADD = 'add';
+    /**
+     * @var string
+     */
     public const CMD_CREATE = 'create';
+    /**
+     * @var string
+     */
     public const CMD_EDIT = 'edit';
+    /**
+     * @var string
+     */
     public const CMD_UPDATE = 'update';
+    /**
+     * @var string
+     */
     public const CMD_RESET = 'reset';
+    /**
+     * @var string
+     */
     public const CMD_SAVE_ORDER = 'saveOrder';
+    /**
+     * @var string
+     */
     public const GSFO_ID = 'gsfo_group_id';
+    /**
+     * @var string
+     */
     private const CMD_CONFIRM_RESET = 'confirmReset';
     private GroupsRepository $repository;
     private Factory $ui_factory;
@@ -91,7 +118,7 @@ final class ilFooterGroupsGUI
                     '#' //$this->ctrl->getLinkTarget($this, self::CMD_ADD)
                 )
                 ->withOnClick($modal->getShowSignal())
-                ->withHelpTopics(...$this->ui_factory->helpTopics('gsfo_button_add'))
+            //                ->withHelpTopics(...$this->ui_factory->helpTopics('gsfo_button_add')) // TODO reenable after ilHelp is working again
         );
         $this->dic->toolbar()->addComponent(
             $this->ui_factory
@@ -101,7 +128,7 @@ final class ilFooterGroupsGUI
                     '#' //'$this->ctrl->getLinkTarget($this, self::CMD_RESET)
                 )
                 ->withOnClick($confirm_reset->getShowSignal())
-                ->withHelpTopics(...$this->ui_factory->helpTopics('gsfo_button_reset'))
+            //                ->withHelpTopics(...$this->ui_factory->helpTopics('gsfo_button_reset')) // TODO reenable after ilHelp is working again
         );
 
         return [$modal, $confirm_reset];

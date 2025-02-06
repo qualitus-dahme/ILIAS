@@ -381,6 +381,6 @@ interface Factory
         $on_action,
         $off_action,
         bool $is_on = false,
-        Signal $click_signal = null
+        ?Signal $click_signal = null
     ): Toggle;
 }

@@ -18,13 +18,13 @@
 
 namespace ILIAS\Filesystem\Util;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use ILIAS\Filesystem\Stream\FileStream;
 use ILIAS\Filesystem\Stream\Streams;
 use ILIAS\Filesystem\Util\Convert\ImageConversionOptions;
 use ILIAS\Filesystem\Util\Convert\ImageConverter;
 use ILIAS\Filesystem\Util\Convert\ImageOutputOptions;
 use ILIAS\Filesystem\Util\Convert\Images;
-use ILIAS\Filesystem\Util\Convert\ResizeImageConverter;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -114,9 +114,7 @@ class ImageConversionTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getImageSizesByWidth
-     */
+    #[DataProvider('getImageSizesByWidth')]
     public function testResizeToFitWidth(
         int $width,
         int $height,
@@ -166,9 +164,7 @@ class ImageConversionTest extends TestCase
     }
 
 
-    /**
-     * @dataProvider getImageSizesByHeight
-     */
+    #[DataProvider('getImageSizesByHeight')]
     public function testResizeToFitHeight(
         int $width,
         int $height,
@@ -219,9 +215,7 @@ class ImageConversionTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getImageSizesByFixed
-     */
+    #[DataProvider('getImageSizesByFixed')]
     public function testResizeByFixedSize(
         int $width,
         int $height,
@@ -260,9 +254,7 @@ class ImageConversionTest extends TestCase
     }
 
 
-    /**
-     * @dataProvider getImageOptions
-     */
+    #[DataProvider('getImageOptions')]
     public function testImageOutputOptions(
         ImageOutputOptions $options,
         string $expected_mime_type,
@@ -316,9 +308,7 @@ class ImageConversionTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getWrongFormats
-     */
+    #[DataProvider('getWrongFormats')]
     public function testWrongFormats(string $format): void
     {
         $options = new ImageOutputOptions();
@@ -335,9 +325,7 @@ class ImageConversionTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getWrongQualites
-     */
+    #[DataProvider('getWrongQualites')]
     public function testWrongQualities(int $quality): void
     {
         $options = new ImageOutputOptions();
@@ -418,9 +406,7 @@ class ImageConversionTest extends TestCase
             + abs(hexdec($rgb_one[3]) - hexdec($rgb_two[3]));
     }
 
-    /**
-     * @dataProvider getColors
-     */
+    #[DataProvider('getColors')]
     public function testBackgroundColor(?string $color): void
     {
         $transparent_png = __DIR__ . '/img/transparent.png';

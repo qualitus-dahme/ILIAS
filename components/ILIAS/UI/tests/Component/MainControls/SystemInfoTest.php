@@ -208,7 +208,7 @@ EOT;
     }
 
     public function getDefaultRenderer(
-        JavaScriptBinding $js_binding = null,
+        ?JavaScriptBinding $js_binding = null,
         array $with_stub_renderings = [],
         array $with_additional_contexts = [],
     ): TestDefaultRenderer {

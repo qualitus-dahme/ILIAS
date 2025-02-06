@@ -114,6 +114,7 @@ final class ilFooterCustomGroupsProvider extends AbstractStaticFooterProvider
         return new URI($request->getScheme() . '://' . $request->getHost() . '/' . ltrim($from_path, '/'));
     }
 
+    #[\Override]
     public function getAdditionalTexts(): array
     {
         return [];

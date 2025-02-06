@@ -33,7 +33,7 @@ interface Crawler
      */
     public function crawlFactory(
         string $factoryPath,
-        Entry\ComponentEntry $parent = null,
+        ?Entry\ComponentEntry $parent = null,
         int $depth = 0
     ): Entry\ComponentEntries;
 }

@@ -18,7 +18,7 @@
 
 declare(strict_types=1);
 
-use ILIAS\Cron\Schedule\CronJobScheduleType;
+use ILIAS\Cron\Job\Schedule\JobScheduleType;
 
 /**
  * @author  Niels Theen <ntheen@databay.de>
@@ -470,7 +470,7 @@ class ilCertificateCronTest extends ilCertificateBaseTestCase
 
         $flexibleSchedule = $cron->getDefaultScheduleType();
 
-        $this->assertSame(CronJobScheduleType::SCHEDULE_TYPE_IN_MINUTES, $flexibleSchedule);
+        $this->assertSame(JobScheduleType::IN_MINUTES, $flexibleSchedule);
     }
 
     public function testGetDefaultScheduleValue(): void

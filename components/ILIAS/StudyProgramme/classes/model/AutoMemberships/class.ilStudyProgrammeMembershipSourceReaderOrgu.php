@@ -38,7 +38,7 @@ class ilStudyProgrammeMembershipSourceReaderOrgu implements ilStudyProgrammeMemb
     {
         $children[] = $this->src_id;
         if ($this->search_recursive) {
-            $children = array_unique(array_merge($children, $this->orgu_tree->getChildren($this->src_id)));
+            $children = array_unique(array_merge($children, $this->orgu_tree->getAllChildren($this->src_id)));
         }
         return $this->orgu_assignment_repo->getUsersByOrgUnits($children);
     }

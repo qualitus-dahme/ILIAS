@@ -29,6 +29,7 @@ $c-drilldown-selected-bg: $il-main-dark-bg;
 .c-drilldown {
     container-type: inline-size;
     container-name: drilldown;
+    overflow: hidden;
 
     // reset user agent CSS for lists
     ul, li {

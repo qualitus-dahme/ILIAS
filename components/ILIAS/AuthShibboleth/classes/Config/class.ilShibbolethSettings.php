@@ -1,31 +1,27 @@
 <?php
 
 /**
- * This file is part of ILIAS, a powerful learning management system
- * published by ILIAS open source e-Learning e.V.
- *
- * ILIAS is licensed with the GPL-3.0,
- * see https://www.gnu.org/licenses/gpl-3.0.en.html
- * You should have received a copy of said license along with the
- * source code, too.
- *
- * If this is not the case or you just want to try ILIAS, you'll find
- * us at:
- * https://www.ilias.de
- * https://github.com/ILIAS-eLearning
- *
- *********************************************************************/
-
-/**
  * Class ilShibbolethSettings
  *
  * @author Fabian Schmid <fs@studer-raimann.ch>
  */
 class ilShibbolethSettings
 {
+    /**
+     * @var string
+     */
     private const PREFIX = 'shib_';
+    /**
+     * @var string
+     */
     private const DEFAULT_IDP_LIST = "urn:mace:organization1:providerID, Example Organization 1\nurn:mace:organization2:providerID, Example Organization 2, /Shibboleth.sso/WAYF/SWITCHaai";
+    /**
+     * @var string
+     */
     private const DEFAULT_LOGIN_BUTTON = "assets/images/auth/shib_login_button.svg";
+    /**
+     * @var string
+     */
     private const DEFAULT_ORGANISATION_SELECTION = "external_wayf";
 
     public const ACCOUNT_CREATION_ENABLED = "enabled";

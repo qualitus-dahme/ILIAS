@@ -25,14 +25,17 @@ use ILIAS\Mail\Cron\ExpiredOrOrphanedMails\ExpiredOrOrphanedMailsCollector;
 use ILIAS\Mail\Cron\ExpiredOrOrphanedMails\MailDeletionHandler;
 use ILIAS\Mail\Cron\ExpiredOrOrphanedMails\NotificationsCollector;
 use ILIAS\Mail\Cron\ExpiredOrOrphanedMails\Notifier;
-use ILIAS\Cron\Schedule\CronJobScheduleType;
+use ILIAS\Cron\Job\Schedule\JobScheduleType;
+use ILIAS\Cron\Job\JobManager;
+use ILIAS\Cron\Job\JobResult;
+use ILIAS\Cron\CronJob;
 
 /**
  * Delete orphaned mails
  *
  * @author Nadia Matuschek <nmatuschek@databay.de>
  */
-class ilMailCronOrphanedMails extends ilCronJob
+class ilMailCronOrphanedMails extends CronJob
 {
     private GlobalHttpState $http;
     private Refinery $refinery;
@@ -41,7 +44,7 @@ class ilMailCronOrphanedMails extends ilCronJob
     private ilDBInterface $db;
     private ilObjUser $user;
     private bool $initDone = false;
-    private ilCronManager $cron_manager;
+    private JobManager $cron_manager;
 
     private function init(): void
     {
@@ -114,18 +117,18 @@ class ilMailCronOrphanedMails extends ilCronJob
     public function getValidScheduleTypes(): array
     {
         return [
-            CronJobScheduleType::SCHEDULE_TYPE_DAILY,
-            CronJobScheduleType::SCHEDULE_TYPE_WEEKLY,
-            CronJobScheduleType::SCHEDULE_TYPE_MONTHLY,
-            CronJobScheduleType::SCHEDULE_TYPE_QUARTERLY,
-            CronJobScheduleType::SCHEDULE_TYPE_YEARLY,
-            CronJobScheduleType::SCHEDULE_TYPE_IN_DAYS
+            JobScheduleType::DAILY,
+            JobScheduleType::WEEKLY,
+            JobScheduleType::MONTHLY,
+            JobScheduleType::QUARTERLY,
+            JobScheduleType::YEARLY,
+            JobScheduleType::IN_DAYS
         ];
     }
 
-    public function getDefaultScheduleType(): CronJobScheduleType
+    public function getDefaultScheduleType(): JobScheduleType
     {
-        return CronJobScheduleType::SCHEDULE_TYPE_DAILY;
+        return JobScheduleType::DAILY;
     }
 
     public function getDefaultScheduleValue(): ?int
@@ -221,7 +224,7 @@ class ilMailCronOrphanedMails extends ilCronJob
         $this->cron_manager->ping($this->getId());
     }
 
-    public function run(): ilCronJobResult
+    public function run(): JobResult
     {
         $this->init();
 
@@ -240,8 +243,8 @@ class ilMailCronOrphanedMails extends ilCronJob
             $this->processDeletion();
         }
 
-        $result = new ilCronJobResult();
-        $status = ilCronJobResult::STATUS_OK;
+        $result = new JobResult();
+        $status = JobResult::STATUS_OK;
         $result->setStatus($status);
 
         ilLoggerFactory::getLogger('mail')->info(sprintf(

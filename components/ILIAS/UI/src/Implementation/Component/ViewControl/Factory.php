@@ -44,9 +44,10 @@ class Factory implements VC\Factory
         return new Section($previous_action, $button, $next_action);
     }
 
-    public function sortation(array $options): Sortation
+
+    public function sortation(array $options, string $selected): Sortation
     {
-        return new Sortation($options, $this->signal_generator);
+        return new Sortation($options, $selected, $this->signal_generator);
     }
 
     public function pagination(): Pagination

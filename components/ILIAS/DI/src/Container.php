@@ -443,9 +443,9 @@ class Container extends \Pimple\Container
         return new \ILIAS\Notifications\Service($this);
     }
 
-    public function cron(): \ilCronServices
+    public function cron(): \ILIAS\Cron\CronServices
     {
-        return new \ilCronServicesImpl($this);
+        return new \ILIAS\Cron\Services\ServicesImpl($this);
     }
 
     public function mail(): \ILIAS\Mail\Service\MailService

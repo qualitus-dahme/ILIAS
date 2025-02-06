@@ -16,6 +16,7 @@
  *
  *********************************************************************/
 
+use ILIAS\Refinery\Transformation;
 use ILIAS\UI\Factory as UIFactory;
 use ILIAS\UI\Renderer;
 use ILIAS\UI\Component\Input\Container\Form\Standard as StandardForm;
@@ -29,7 +30,6 @@ use ILIAS\Refinery\Factory as Refinery;
  */
 class ilShibbolethSettingsForm
 {
-    protected string $action;
     protected ilCtrl $ctrl;
     protected ?StandardForm $form = null;
     protected ilLanguage $lng;
@@ -37,21 +37,17 @@ class ilShibbolethSettingsForm
     protected Refinery $refinery;
     protected Renderer $renderer;
     protected RequestInterface $request;
-    protected ilShibbolethSettings $settings;
     protected UIFactory $ui;
 
-    public function __construct(ilShibbolethSettings $settings, string $action)
+    public function __construct(protected ilShibbolethSettings $settings, protected string $action)
     {
         global $DIC;
-
-        $this->action = $action;
         $this->ctrl = $DIC->ctrl();
         $this->lng = $DIC->language();
         $this->rbac_review = $DIC->rbac()->review();
         $this->refinery = $DIC->refinery();
         $this->renderer = $DIC->ui()->renderer();
         $this->request = $DIC->http()->request();
-        $this->settings = $settings;
         $this->ui = $DIC->ui()->factory();
 
         $this->initForm();
@@ -75,7 +71,7 @@ class ilShibbolethSettingsForm
     public function initForm(): void
     {
         $field = $this->ui->input()->field();
-        $custom_trafo = fn(callable $c) => $this->refinery->custom()->transformation($c);
+        $custom_trafo = fn(callable $c): Transformation => $this->refinery->custom()->transformation($c);
         /** @noRector  */
         $active = $field->checkbox($this->txt('shib_active'), $this->lng->txt("auth_shib_instructions"))
                         ->withValue($this->settings->isActive())

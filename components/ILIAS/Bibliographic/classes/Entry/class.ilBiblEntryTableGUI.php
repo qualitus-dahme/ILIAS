@@ -121,7 +121,7 @@ class ilBiblEntryTableGUI
         $entry = $this->facade->entryFactory()->findByIdAndTypeString($entry_id, $this->facade->type()->getStringRepresentation());
 
         $settings = $this->facade->libraryFactory()->getAll();
-        if (count($settings) === 0) {
+        if ($settings === []) {
             return [];
         }
 
@@ -171,8 +171,8 @@ class ilBiblEntryTableGUI
                 $record['year'] = empty($record['year']) ? null : $record['year'];
 
                 $author = $record['autor'] = $record['author'] ?? $record['AU'] ?? '';
-                $title = $record['title'] = $record['title'] ?? $record['TI'] ?? '';
-                $year = $record['year'] = $record['year'] ?? $record['PY'] ?? '';
+                $title = ($record['title'] ??= $record['TI'] ?? '');
+                $year = ($record['year'] ??= $record['PY'] ?? '');
                 $entry_id = $record['entry_id'];
 
                 unset($record['author'], $record['title'], $record['AU'], $record['TI'], $record['entry_id']);

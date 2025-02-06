@@ -16,14 +16,16 @@
  ********************************************************************
  */
 
-use ILIAS\Cron\Schedule\CronJobScheduleType;
+use ILIAS\Cron\Job\Schedule\JobScheduleType;
+use ILIAS\Cron\Job\JobResult;
+use ILIAS\Cron\CronJob;
 
 /**
  * Class ilCronUpdateOrgUnitPaths
  * @author  Theodor Truffer <tt@studer-raimann.ch>
  * @author  Fabian Schmid <fs@studer-raimann.ch>
  */
-class ilCronUpdateOrgUnitPaths extends ilCronJob
+class ilCronUpdateOrgUnitPaths extends CronJob
 {
     public const ID = "orgunit_paths";
     protected ilDBInterface $db;
@@ -64,9 +66,9 @@ class ilCronUpdateOrgUnitPaths extends ilCronJob
         return true;
     }
 
-    public function getDefaultScheduleType(): CronJobScheduleType
+    public function getDefaultScheduleType(): JobScheduleType
     {
-        return CronJobScheduleType::SCHEDULE_TYPE_DAILY;
+        return JobScheduleType::DAILY;
     }
 
     public function getDefaultScheduleValue(): ?int
@@ -74,14 +76,14 @@ class ilCronUpdateOrgUnitPaths extends ilCronJob
         return null;
     }
 
-    public function run(): ilCronJobResult
+    public function run(): JobResult
     {
         foreach (ilOrgUnitPathStorage::getAllOrguRefIds() as $ref_id) {
             ilOrgUnitPathStorage::writePathByRefId($ref_id);
         }
         ilOrgUnitPathStorage::clearDeleted();
-        $result = new ilCronJobResult();
-        $result->setStatus(ilCronJobResult::STATUS_OK);
+        $result = new JobResult();
+        $result->setStatus(JobResult::STATUS_OK);
 
         return $result;
     }

@@ -26,7 +26,13 @@ use ILIAS\Filesystem\Stream\Streams;
  */
 class ilBibliographicDataSet extends ilDataSet
 {
+    /**
+     * @var string
+     */
     private const EXP_DIRECTORY = "/Modules/Bibliographic/set_1/expDir_1/";
+    /**
+     * @var string
+     */
     private const EXP_DIRECTORY_NEW = "/components/ILIAS/Bibliographic/set_1/expDir_1/";
     /**
      * @var Services
@@ -121,6 +127,7 @@ class ilBibliographicDataSet extends ilDataSet
      * Return dependencies form entities to other entities (in our case these are all the DB
      * relations)
      */
+    #[\Override]
     protected function getDependencies(
         string $a_entity,
         string $a_version,

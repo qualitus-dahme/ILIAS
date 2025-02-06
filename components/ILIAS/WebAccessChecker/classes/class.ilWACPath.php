@@ -100,7 +100,7 @@ class ilWACPath
         );
 
 
-        foreach (array_keys($result) as $k => $v) {
+        foreach (array_keys(array_keys($result)) as $k) {
             if (is_numeric($k)) {
                 unset($result[$k]);
             }
@@ -323,7 +323,10 @@ class ilWACPath
 
     public function isStreamable(): bool
     {
-        return ($this->isAudio() || $this->isVideo());
+        if ($this->isAudio()) {
+            return true;
+        }
+        return $this->isVideo();
     }
 
     public function isAudio(): bool

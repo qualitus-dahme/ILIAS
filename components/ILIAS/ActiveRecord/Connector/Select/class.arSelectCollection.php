@@ -28,7 +28,7 @@ class arSelectCollection extends arStatementCollection
         $return = 'SELECT ';
         if ($this->hasStatements()) {
             $activeRecord = $this->getAr();
-            $selectSQLs = array_map(fn ($select) => $select->asSQLStatement($activeRecord), $this->getSelects());
+            $selectSQLs = array_map(fn($select): string => $select->asSQLStatement($activeRecord), $this->getSelects());
             $return .= implode(', ', $selectSQLs);
         }
 

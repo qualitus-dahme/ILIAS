@@ -51,5 +51,5 @@ interface Template
     /**
      * Get the rendered template or a specific block.
      */
-    public function get(string $block = null): string;
+    public function get(?string $block = null): string;
 }

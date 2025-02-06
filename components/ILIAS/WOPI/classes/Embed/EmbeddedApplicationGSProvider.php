@@ -40,7 +40,13 @@ use ILIAS\UI\Component\Layout\Page\Standard;
  */
 class EmbeddedApplicationGSProvider extends AbstractModificationProvider
 {
+    /**
+     * @var int
+     */
     private const USE_METABAR = 1;
+    /**
+     * @var int
+     */
     private const USE_MODE_INFO = 2;
     private int $display_mode = self::USE_MODE_INFO;
     public const EMBEDDED_APPLICATION = 'embedded_application';

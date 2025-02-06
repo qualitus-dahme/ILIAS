@@ -16,6 +16,9 @@
  *
  *********************************************************************/
 
+use ILIAS\DI\Container;
+use ILIAS\UI\Component\Item\Notification;
+use ILIAS\BackgroundTasks\Task\UserInteraction\Option;
 use ILIAS\BackgroundTasks\Bucket;
 use ILIAS\BackgroundTasks\Implementation\Bucket\State;
 use ILIAS\BackgroundTasks\Implementation\Tasks\AbstractTask;
@@ -34,19 +37,17 @@ use ILIAS\UI\Component\Legacy\Content;
 class ilBTPopOverGUI
 {
     use StateTranslator;
-    protected \ILIAS\DI\Container $dic;
 
 
-    public function __construct(\ILIAS\DI\Container $dic)
+    public function __construct(protected Container $dic)
     {
-        $this->dic = $dic;
     }
 
 
     /**
      * Get the Notification Items. DOES NOT DO ANY PERMISSION CHECKS.
      */
-    public function getNotificationItem(int $nr_buckets): ILIAS\UI\Component\Item\Notification
+    public function getNotificationItem(int $nr_buckets): Notification
     {
         $ui_factory = $this->dic->ui()->factory();
 
@@ -62,7 +63,7 @@ class ilBTPopOverGUI
 
 
     /**
-     * @return ILIAS\UI\Component\Item\Notification[]
+     * @return Notification[]
      */
     protected function getAggregateItems(): array
     {
@@ -77,7 +78,7 @@ class ilBTPopOverGUI
     }
 
 
-    public function getItemForObserver(Bucket $observer): ILIAS\UI\Component\Item\Notification
+    public function getItemForObserver(Bucket $observer): Notification
     {
         $redirect_uri = "//{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 
@@ -123,7 +124,7 @@ class ilBTPopOverGUI
         if ($state === State::RUNNING) {
             $url = $this->getRefreshUrl($observer);
             //Running Items probably need to refresh themselves, right?
-            $item = $item->withAdditionalOnLoadCode(fn($id) => "var notification_item = il.UI.item.notification.getNotificationItemObject($('#$id'));
+            $item = $item->withAdditionalOnLoadCode(fn($id): string => "var notification_item = il.UI.item.notification.getNotificationItemObject($('#$id'));
                     il.BGTask.refreshItem(notification_item,'$url');");
 
             $expected = $current_task->getExpectedTimeOfTaskInSeconds();
@@ -147,7 +148,7 @@ class ilBTPopOverGUI
 
 
     /**
-     * @return \ILIAS\UI\Component\Legacy\Content[]|\ILIAS\UI\Component\Button\Shy[]
+     * @return Content[]|Shy[]
      */
     public function getUserInteractionContent(Bucket $observer, string $redirect_uri): array
     {
@@ -164,7 +165,7 @@ class ilBTPopOverGUI
         $options = $userInteraction->getOptions($userInteraction->getInput());
 
         return array_map(
-            function (UserInteraction\Option $option) use ($ctrl, $factory, $observer, $persistence, $redirect_uri, $language): \ILIAS\UI\Component\Button\Shy {
+            function (Option $option) use ($ctrl, $factory, $observer, $persistence, $redirect_uri, $language): Shy {
                 $ctrl->setParameterByClass(
                     ilBTControllerGUI::class,
                     ilBTControllerGUI::FROM_URL,
@@ -221,7 +222,7 @@ class ilBTPopOverGUI
     }
 
 
-    private function getCloseButtonAction(UserInteraction\Option $option, string $redirect_uri, Bucket $observer): string
+    private function getCloseButtonAction(Option $option, string $redirect_uri, Bucket $observer): string
     {
         $ctrl = $this->dic->ctrl();
         $persistence = $this->dic->backgroundTasks()->persistence();

@@ -37,21 +37,22 @@ use ILIAS\ResourceStorage\Events\Subject;
 class CollectionTest extends AbstractBaseResourceBuilderTestCase
 {
     /**
-     * @var \ILIAS\ResourceStorage\Collection\CollectionBuilder|mixed
+     * @var CollectionBuilder|mixed
      */
     public $collection_builder;
     /**
      * @var \ILIAS\ResourceStorage\Preloader\RepositoryPreloader&\PHPUnit\Framework\MockObject\MockObject|mixed
      */
-    public $preloader;
+    public MockObject $preloader;
     /**
-     * @var \ILIAS\ResourceStorage\Collection\Collections|mixed
+     * @var Collections|mixed
      */
     public $collections;
     public const DUMMY_RCID = 'dummy-rcid';
 
     protected CollectionIdentificationGenerator $rcid_generator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -277,7 +278,7 @@ class CollectionTest extends AbstractBaseResourceBuilderTestCase
             ->expects($this->exactly(3))
             ->method('has')
             ->willReturnCallback(
-                function ($rid) use (&$consecutive) {
+                function ($rid) use (&$consecutive): true {
                     $expected = array_shift($consecutive);
                     $this->assertEquals($expected, $rid);
                     return true;

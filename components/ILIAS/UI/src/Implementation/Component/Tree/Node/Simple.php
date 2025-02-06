@@ -34,8 +34,8 @@ class Simple extends Node implements ISimple
 
     public function __construct(
         string $label,
-        Icon $icon = null,
-        URI $link = null
+        ?Icon $icon = null,
+        ?URI $link = null
     ) {
         parent::__construct($label, $link);
         $this->icon = $icon;

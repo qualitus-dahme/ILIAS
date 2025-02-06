@@ -65,7 +65,8 @@ class ilDclMobRecordRepresentation extends ilDclFileRecordRepresentation
                 'tableview_id',
                 $this->refinery->kindlyTo()->int()
             );
-            $has_view = ilDclDetailedViewDefinition::isActive($tableview_id);
+            $page = new ilDclDetailedViewDefinitionGUI($tableview_id);
+            $has_view = $page->getPageObject()->isActive();
         }
 
         $components = [];

@@ -128,7 +128,7 @@ class ilObjDashboardSettingsGUI extends ilObjectGUI
             );
             $this->tabs_gui->addTarget(
                 'dash_customization',
-                $this->ctrl->getLinkTarget($this, 'editCustomization')
+                $this->ctrl->getLinkTargetByClass(ilDashboardPageLanguageSelectGUI::class)
             );
         }
 

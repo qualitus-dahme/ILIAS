@@ -28,8 +28,6 @@ use ILIAS\GlobalScreen\Scope\MainMenu\Factory\hasTitle;
 use ILIAS\GlobalScreen\Scope\MainMenu\Factory\isChild;
 use ILIAS\GlobalScreen\Scope\MainMenu\Factory\isInterchangeableItem;
 use ILIAS\GlobalScreen\Scope\MainMenu\Factory\isInterchangeableItemTrait;
-use ILIAS\GlobalScreen\Scope\isDecorateable;
-use ILIAS\GlobalScreen\Scope\TriggererDecoratorTrait;
 
 /**
  * Class Link

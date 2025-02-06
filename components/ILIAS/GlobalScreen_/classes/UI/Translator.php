@@ -27,6 +27,9 @@ use ILIAS\DI\Container;
  */
 class Translator
 {
+    /**
+     * @var string
+     */
     private const LANG_PHP = 'lang.php';
 
     public function __construct(private readonly Container $dic)

@@ -30,14 +30,14 @@ class Factory implements Page\Factory
 {
     public function standard(
         array $content,
-        MainControls\MetaBar $metabar = null,
-        MainControls\MainBar $mainbar = null,
-        Breadcrumbs $locator = null,
-        Image $logo = null,
-        Image $responsive_logo = null,
+        ?MainControls\MetaBar $metabar = null,
+        ?MainControls\MainBar $mainbar = null,
+        ?Breadcrumbs $locator = null,
+        ?Image $logo = null,
+        ?Image $responsive_logo = null,
         string $favicon_path = '',
-        Container $overlay = null,
-        MainControls\Footer $footer = null,
+        ?Container $overlay = null,
+        ?MainControls\Footer $footer = null,
         string $title = '',
         string $short_title = '',
         string $view_title = ''

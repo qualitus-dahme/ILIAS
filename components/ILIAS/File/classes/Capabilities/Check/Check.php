@@ -19,7 +19,6 @@
 /**
  * @author Fabian Schmid <fabian@sr.solutions>
  */
-
 namespace ILIAS\File\Capabilities\Check;
 
 use ILIAS\File\Capabilities\Capability;

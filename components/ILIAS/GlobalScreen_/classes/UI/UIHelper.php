@@ -20,7 +20,6 @@ declare(strict_types=1);
 
 namespace ILIAS\GlobalScreen_\UI;
 
-use ILIAS\DI\Container;
 use ILIAS\UI\Component\Symbol\Icon\Icon;
 use ILIAS\UI\Factory;
 use ILIAS\UI\Component\Image\Image;

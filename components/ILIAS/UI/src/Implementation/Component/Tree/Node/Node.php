@@ -46,7 +46,7 @@ abstract class Node implements INode
     protected bool $expanded = false;
     protected bool $highlighted = false;
 
-    public function __construct(string $label, URI $link = null)
+    public function __construct(string $label, ?URI $link = null)
     {
         $this->label = $label;
         $this->link = $link;

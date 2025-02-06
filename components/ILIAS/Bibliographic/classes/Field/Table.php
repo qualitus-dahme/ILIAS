@@ -18,8 +18,10 @@
 
 namespace ILIAS\Bibliographic\Field;
 
+use ILIAS\UI\Factory;
+use ILIAS\UI\Renderer;
+use ILIAS\UI\Component\Table\Ordering;
 use ilBiblAdminFieldGUI;
-use ilBiblAdminRisFieldGUI;
 use ilBiblTranslationGUI;
 use ILIAS\Bibliographic\Field\DataRetrieval;
 use ILIAS\Data\URI;
@@ -32,13 +34,13 @@ use ILIAS\UI\URLBuilderToken;
  */
 class Table
 {
-    private \ILIAS\UI\Factory $ui_factory;
-    private \ILIAS\UI\Renderer $ui_renderer;
+    private Factory $ui_factory;
+    private Renderer $ui_renderer;
     private \ilCtrlInterface $ctrl;
     private \ilLanguage $lng;
     private URLBuilder $url_builder;
     private URLBuilderToken $id_token;
-    private \ILIAS\UI\Component\Table\Ordering $table;
+    private Ordering $table;
 
     protected array $components = [];
 

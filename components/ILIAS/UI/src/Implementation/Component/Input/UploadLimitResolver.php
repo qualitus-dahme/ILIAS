@@ -42,14 +42,14 @@ use ILIAS\UI\Component\Input\Field\GlobalUploadLimit;
 class UploadLimitResolver
 {
     public function __construct(
-        protected PhpUploadLimit $php_upload_limit, 
+        protected PhpUploadLimit $php_upload_limit,
         protected GlobalUploadLimit $global_upload_limit
     ) {
     }
 
     public function getBestPossibleUploadLimitInBytes(
         UploadHandler $upload_handler,
-        int $local_limit_in_bytes = null
+        ?int $local_limit_in_bytes = null
     ): int {
         if (null !== $local_limit_in_bytes && $this->canUploadLimitBeUsed($upload_handler, $local_limit_in_bytes)) {
             return $local_limit_in_bytes;

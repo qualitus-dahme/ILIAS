@@ -105,7 +105,7 @@ abstract class ViewControl extends Container implements I\ViewControl
     * @return array     with key input name and its current value
     */
     public function getComponentInternalValues(
-        C\Input\Group $component = null,
+        ?C\Input\Group $component = null,
         array $input_values = []
     ): array {
         if (is_null($component)) {

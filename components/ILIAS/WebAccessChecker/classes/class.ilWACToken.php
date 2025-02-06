@@ -1,21 +1,5 @@
 <?php
 /**
- * This file is part of ILIAS, a powerful learning management system
- * published by ILIAS open source e-Learning e.V.
- *
- * ILIAS is licensed with the GPL-3.0,
- * see https://www.gnu.org/licenses/gpl-3.0.en.html
- * You should have received a copy of said license along with the
- * source code, too.
- *
- * If this is not the case or you just want to try ILIAS, you'll find
- * us at:
- * https://www.ilias.de
- * https://github.com/ILIAS-eLearning
- *
- *********************************************************************/
-
-/**
  * Class ilWACToken
  *
  * @author  Fabian Schmid <fs@studer-raimann.ch>
@@ -23,6 +7,9 @@
  */
 class ilWACToken
 {
+    /**
+     * @var string
+     */
     private const SALT_FILE_PATH = __DIR__ . '/../../../../public/data/wacsalt.php';
     protected static string $SALT = '';
     protected string $session_id = '';
@@ -63,12 +50,12 @@ class ilWACToken
     public function generateToken(): void
     {
         $this->initSalt();
-        $token = implode('-', array(
+        $token = implode('-', [
             self::getSALT(),
             $this->getClient(),
             $this->getTimestamp(),
             $this->getTTL(),
-        ));
+        ]);
         $this->setRawToken($token);
         $token = sha1($token);
         $this->setToken($token);

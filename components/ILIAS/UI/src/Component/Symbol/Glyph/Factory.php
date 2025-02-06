@@ -46,7 +46,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function settings(string $action = null): Glyph;
+    public function settings(?string $action = null): Glyph;
 
     /**
      * ---
@@ -74,7 +74,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function collapse(string $action = null): Glyph;
+    public function collapse(?string $action = null): Glyph;
 
     /**
      * ---
@@ -102,7 +102,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function expand(string $action = null): Glyph;
+    public function expand(?string $action = null): Glyph;
 
     /**
      * ---
@@ -138,7 +138,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function add(string $action = null): Glyph;
+    public function add(?string $action = null): Glyph;
 
     /**
      * ---
@@ -172,7 +172,7 @@ interface Factory
      * @param	string|null	$action
      * @return 	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function remove(string $action = null): Glyph;
+    public function remove(?string $action = null): Glyph;
 
     /**
      * ---
@@ -209,7 +209,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function up(string $action = null): Glyph;
+    public function up(?string $action = null): Glyph;
 
     /**
      * ---
@@ -246,7 +246,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function down(string $action = null): Glyph;
+    public function down(?string $action = null): Glyph;
 
     /**
      * ---
@@ -277,7 +277,7 @@ interface Factory
      * @param	string|null	$action
      * @return 	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function back(string $action = null): Glyph;
+    public function back(?string $action = null): Glyph;
 
     /**
      * ---
@@ -307,7 +307,7 @@ interface Factory
      * @param	string|null	$action
      * @return 	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function next(string $action = null): Glyph;
+    public function next(?string $action = null): Glyph;
 
     /**
      * ---
@@ -328,7 +328,7 @@ interface Factory
      * @param	string|null	$action
      * @return 	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function sortAscending(string $action = null): Glyph;
+    public function sortAscending(?string $action = null): Glyph;
 
     /**
      * ---
@@ -349,7 +349,7 @@ interface Factory
      * @param	string|null	$action
      * @return 	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function sortDescending(string $action = null): Glyph;
+    public function sortDescending(?string $action = null): Glyph;
 
     /**
      * ---
@@ -369,7 +369,7 @@ interface Factory
      * @param	string|null	$action
      * @return 	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function briefcase(string $action = null): Glyph;
+    public function briefcase(?string $action = null): Glyph;
 
     /**
      * ---
@@ -391,7 +391,7 @@ interface Factory
      * @param	string|null	$action
      * @return 	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function user(string $action = null): Glyph;
+    public function user(?string $action = null): Glyph;
 
     /**
      * ---
@@ -413,7 +413,7 @@ interface Factory
      * @param	string|null	$action
      * @return 	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function mail(string $action = null): Glyph;
+    public function mail(?string $action = null): Glyph;
 
     /**
      * ---
@@ -434,7 +434,7 @@ interface Factory
      * @param	string|null	$action
      * @return 	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function notification(string $action = null): Glyph;
+    public function notification(?string $action = null): Glyph;
 
     /**
      * ---
@@ -457,7 +457,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function tag(string $action = null): Glyph;
+    public function tag(?string $action = null): Glyph;
 
     /**
      * ---
@@ -480,7 +480,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function note(string $action = null): Glyph;
+    public function note(?string $action = null): Glyph;
 
     /**
      * ---
@@ -503,7 +503,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function comment(string $action = null): Glyph;
+    public function comment(?string $action = null): Glyph;
 
     /**
      * ---
@@ -529,7 +529,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function like(string $action = null): Glyph;
+    public function like(?string $action = null): Glyph;
 
     /**
      * ---
@@ -555,7 +555,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function love(string $action = null): Glyph;
+    public function love(?string $action = null): Glyph;
 
     /**
      * ---
@@ -581,7 +581,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function dislike(string $action = null): Glyph;
+    public function dislike(?string $action = null): Glyph;
 
     /**
      * ---
@@ -607,7 +607,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function laugh(string $action = null): Glyph;
+    public function laugh(?string $action = null): Glyph;
 
     /**
      * ---
@@ -633,7 +633,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function astounded(string $action = null): Glyph;
+    public function astounded(?string $action = null): Glyph;
 
     /**
      * ---
@@ -659,7 +659,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function sad(string $action = null): Glyph;
+    public function sad(?string $action = null): Glyph;
 
     /**
      * ---
@@ -685,7 +685,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function angry(string $action = null): Glyph;
+    public function angry(?string $action = null): Glyph;
 
 
     /**
@@ -713,7 +713,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function eyeclosed(string $action = null): Glyph;
+    public function eyeclosed(?string $action = null): Glyph;
 
     /**
      * ---
@@ -740,7 +740,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function eyeopen(string $action = null): Glyph;
+    public function eyeopen(?string $action = null): Glyph;
 
     /**
      * ---
@@ -764,7 +764,7 @@ interface Factory
      * @param string|null $action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function attachment(string $action = null): Glyph;
+    public function attachment(?string $action = null): Glyph;
 
     /**
      * ---
@@ -798,7 +798,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function reset(string $action = null): Glyph;
+    public function reset(?string $action = null): Glyph;
 
     /**
      * ---
@@ -832,7 +832,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function apply(string $action = null): Glyph;
+    public function apply(?string $action = null): Glyph;
 
     /**
      * ---
@@ -857,7 +857,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function search(string $action = null): Glyph;
+    public function search(?string $action = null): Glyph;
 
     /**
      * ---
@@ -883,7 +883,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function help(string $action = null): Glyph;
+    public function help(?string $action = null): Glyph;
 
     /**
      * ---
@@ -906,7 +906,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function calendar(string $action = null): Glyph;
+    public function calendar(?string $action = null): Glyph;
 
     /**
      * ---
@@ -929,7 +929,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function time(string $action = null): Glyph;
+    public function time(?string $action = null): Glyph;
 
     /**
      * ---
@@ -950,7 +950,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function close(string $action = null): Glyph;
+    public function close(?string $action = null): Glyph;
 
     /**
      * ---
@@ -1008,7 +1008,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function more(string $action = null): Glyph;
+    public function more(?string $action = null): Glyph;
 
     /**
      * ---
@@ -1064,7 +1064,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function disclosure(string $action = null): Glyph;
+    public function disclosure(?string $action = null): Glyph;
 
     /**
      * ---
@@ -1125,7 +1125,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function login(string $action = null): Glyph;
+    public function login(?string $action = null): Glyph;
 
     /**
      * ---
@@ -1153,7 +1153,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function logout(string $action = null): Glyph;
+    public function logout(?string $action = null): Glyph;
 
     /**
      * ---
@@ -1179,7 +1179,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function bulletlist(string $action = null): Glyph;
+    public function bulletlist(?string $action = null): Glyph;
 
     /**
      * ---
@@ -1208,7 +1208,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function numberedlist(string $action = null): Glyph;
+    public function numberedlist(?string $action = null): Glyph;
 
     /**
      * ---
@@ -1235,7 +1235,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function listindent(string $action = null): Glyph;
+    public function listindent(?string $action = null): Glyph;
 
     /**
      * ---
@@ -1261,7 +1261,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function listoutdent(string $action = null): Glyph;
+    public function listoutdent(?string $action = null): Glyph;
 
     /**
      * ---
@@ -1286,7 +1286,7 @@ interface Factory
      * @param	string|null	$action
      * @return	\ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function filter(string $action = null): Glyph;
+    public function filter(?string $action = null): Glyph;
 
     /**
      * ---
@@ -1319,7 +1319,7 @@ interface Factory
      * @param string|null $action
      * @return  \ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function collapseHorizontal(string $action = null): Glyph;
+    public function collapseHorizontal(?string $action = null): Glyph;
 
     /**
      * ---
@@ -1347,7 +1347,7 @@ interface Factory
      * @param string|null $action
      * @return  \ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function header(string $action = null): Glyph;
+    public function header(?string $action = null): Glyph;
 
     /**
      * ---
@@ -1375,7 +1375,7 @@ interface Factory
      * @param string|null $action
      * @return  \ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function italic(string $action = null): Glyph;
+    public function italic(?string $action = null): Glyph;
 
     /**
      * ---
@@ -1403,7 +1403,7 @@ interface Factory
      * @param string|null $action
      * @return  \ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function bold(string $action = null): Glyph;
+    public function bold(?string $action = null): Glyph;
 
     /**
      * ---
@@ -1432,7 +1432,7 @@ interface Factory
      * @param string|null $action
      * @return  \ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function link(string $action = null): Glyph;
+    public function link(?string $action = null): Glyph;
 
 
     /**
@@ -1459,7 +1459,7 @@ interface Factory
      * @param   string|null $action
      * @return  \ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function launch(string $action = null): Glyph;
+    public function launch(?string $action = null): Glyph;
 
     /**
      * ---
@@ -1485,7 +1485,7 @@ interface Factory
      * @param   string|null $action
      * @return  \ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function enlarge(string $action = null): Glyph;
+    public function enlarge(?string $action = null): Glyph;
 
     /**
      * ---
@@ -1510,7 +1510,7 @@ interface Factory
      * @param   string|null $action
      * @return  \ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function listView(string $action = null): Glyph;
+    public function listView(?string $action = null): Glyph;
 
     /**
      * ---
@@ -1536,7 +1536,7 @@ interface Factory
      * @param   string|null $action
      * @return  \ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function preview(string $action = null): Glyph;
+    public function preview(?string $action = null): Glyph;
 
     /**
      * ---
@@ -1560,7 +1560,7 @@ interface Factory
      * @param   string|null $action
      * @return  \ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function sort(string $action = null): Glyph;
+    public function sort(?string $action = null): Glyph;
 
 
     /**
@@ -1583,7 +1583,7 @@ interface Factory
      * @param   string|null $action
      * @return  \ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function columnSelection(string $action = null): Glyph;
+    public function columnSelection(?string $action = null): Glyph;
 
 
     /**
@@ -1611,5 +1611,5 @@ interface Factory
      * @param   string|null $action
      * @return  \ILIAS\UI\Component\Symbol\Glyph\Glyph
      */
-    public function tileView(string $action = null): Glyph;
+    public function tileView(?string $action = null): Glyph;
 }

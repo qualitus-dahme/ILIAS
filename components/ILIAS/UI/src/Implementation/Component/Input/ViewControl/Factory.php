@@ -86,4 +86,13 @@ class Factory implements VCInterface\Factory
             $this->refinery
         );
     }
+
+    public function mode(array $options): VCInterface\Mode
+    {
+        return new Mode(
+            $this->data_factory,
+            $this->refinery,
+            $options
+        );
+    }
 }

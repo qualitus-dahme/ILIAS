@@ -114,6 +114,7 @@ class NotificationCenter extends AbstractBaseItem implements hasSymbol
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function getPosition(): int
     {
         return 1;

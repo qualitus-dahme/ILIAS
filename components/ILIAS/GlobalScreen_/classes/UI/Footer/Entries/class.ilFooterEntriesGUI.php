@@ -43,13 +43,37 @@ final class ilFooterEntriesGUI
     use Hasher;
     use UIHelper;
 
+    /**
+     * @var string
+     */
     public const CMD_DEFAULT = 'index';
+    /**
+     * @var string
+     */
     public const CMD_ADD = 'add';
+    /**
+     * @var string
+     */
     public const CMD_CREATE = 'create';
+    /**
+     * @var string
+     */
     public const CMD_EDIT = 'edit';
+    /**
+     * @var string
+     */
     public const CMD_UPDATE = 'update';
+    /**
+     * @var string
+     */
     public const CMD_RESET = 'reset';
+    /**
+     * @var string
+     */
     public const CMD_SAVE_ORDER = 'saveOrder';
+    /**
+     * @var string
+     */
     public const GSFO_ID = 'gsfo_entry_id';
     private EntriesRepository $repository;
     private Factory $ui_factory;

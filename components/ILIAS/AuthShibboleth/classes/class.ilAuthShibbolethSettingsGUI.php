@@ -30,6 +30,9 @@ use ILIAS\Refinery\Factory as Refinery;
  */
 class ilAuthShibbolethSettingsGUI
 {
+    /**
+     * @var string
+     */
     private const PARAM_RULE_ID = 'rule_id';
 
     private ilAccessHandler $access;
@@ -41,7 +44,6 @@ class ilAuthShibbolethSettingsGUI
     private ilLanguage $lng;
     private RBACServices $rbac;
     private ilRbacReview $rbac_review;
-    private int $ref_id;
     private Refinery $refinery;
     private ?ilShibbolethRoleAssignmentRule $rule = null;
     private ilShibbolethSettings $shib_settings;
@@ -50,7 +52,7 @@ class ilAuthShibbolethSettingsGUI
     private WrapperFactory $wrapper;
 
 
-    public function __construct(int $a_auth_ref_id)
+    public function __construct(private int $ref_id)
     {
         global $DIC;
 
@@ -62,7 +64,6 @@ class ilAuthShibbolethSettingsGUI
         $this->lng->loadLanguageModule('shib');
         $this->rbac = $DIC->rbac();
         $this->rbac_review = $DIC->rbac()->review();
-        $this->ref_id = $a_auth_ref_id;
         $this->refinery = $DIC->refinery();
         $this->shib_settings = new ilShibbolethSettings();
         $this->tabs_gui = $DIC->tabs();
@@ -405,7 +406,7 @@ class ilAuthShibbolethSettingsGUI
             $parser->setCombination(ilQueryParser::QP_COMBINATION_AND);
             $parser->parse();
             $object_search = new ilLikeObjectSearch($parser);
-            $object_search->setFilter(array('role'));
+            $object_search->setFilter(['role']);
             $res = $object_search->performSearch();
             $entries = $res->getEntries();
             if (count($entries) === 1) {
@@ -453,7 +454,7 @@ class ilAuthShibbolethSettingsGUI
         $this->form->setValuesByArray($values);
     }
 
-    private function checkInput($a_rule_id = 0): string
+    private function checkInput(int $a_rule_id = 0): string
     {
         $this->loadRule($a_rule_id);
 

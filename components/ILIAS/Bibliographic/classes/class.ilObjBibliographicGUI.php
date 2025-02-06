@@ -16,10 +16,11 @@
  *
  *********************************************************************/
 
+use ILIAS\components\OrgUnit\ARHelper\DIC;
+use ILIAS\UI\Factory;
+use ILIAS\Refinery\Constraint;
 use ILIAS\ResourceStorage\Services;
-use ILIAS\DI\Container;
 use ILIAS\UI\Component\Input\Container\Form\Standard;
-use ILIAS\UI\Implementation\Component\Input\UploadLimitResolver;
 
 /**
  * Class ilObjBibliographicGUI
@@ -38,7 +39,7 @@ use ILIAS\UI\Implementation\Component\Input\UploadLimitResolver;
  */
 class ilObjBibliographicGUI extends ilObject2GUI implements ilDesktopItemHandling
 {
-    use \ILIAS\components\OrgUnit\ARHelper\DIC;
+    use DIC;
 
     public const P_ENTRY_ID = 'entry_id';
     public const CMD_SHOW_CONTENT = 'showContent';
@@ -66,7 +67,6 @@ class ilObjBibliographicGUI extends ilObject2GUI implements ilDesktopItemHandlin
     public const PROP_ONLINE_STATUS = 'online_status';
     public const SECTION_PRESENTATION = 'section_presentation';
     public const PROP_TILE_IMAGE = 'tile_image';
-    private UploadLimitResolver $upload_limit;
 
     public ?ilObject $object = null;
     protected ?\ilBiblFactoryFacade $facade = null;
@@ -79,7 +79,7 @@ class ilObjBibliographicGUI extends ilObject2GUI implements ilDesktopItemHandlin
     protected Services $storage;
     protected \ilObjBibliographicStakeholder $stakeholder;
     protected \ILIAS\HTTP\Services $http;
-    protected \ILIAS\UI\Factory $ui_factory;
+    protected Factory $ui_factory;
     protected \ILIAS\Refinery\Factory $refinery;
     protected ?string $cmd = self::CMD_SHOW_CONTENT;
 
@@ -93,7 +93,6 @@ class ilObjBibliographicGUI extends ilObject2GUI implements ilDesktopItemHandlin
         $this->http = $DIC->http();
         $this->ui_factory = $DIC->ui()->factory();
         $this->refinery = $DIC->refinery();
-        $this->upload_limit = $DIC["ui.upload_limit_resolver"];
 
         parent::__construct($a_id, $a_id_type, $a_parent_node_id);
         $DIC->language()->loadLanguageModule('bibl');
@@ -128,6 +127,7 @@ class ilObjBibliographicGUI extends ilObject2GUI implements ilDesktopItemHandlin
     /**
      * executeCommand
      */
+    #[\Override]
     public function executeCommand(): void
     {
         global $DIC;
@@ -177,7 +177,7 @@ class ilObjBibliographicGUI extends ilObject2GUI implements ilDesktopItemHandlin
                 $this->prepareOutput();
                 $this->dic()->tabs()->setTabActive(self::TAB_EXPORT);
                 $exp_gui = new ilExportGUI($this);
-                $exp_gui->addFormat("xml");
+                $exp_gui->addFormat();
                 $this->ctrl->forwardCommand($exp_gui);
                 break;
             case strtolower(ilBiblFieldFilterGUI::class):
@@ -281,18 +281,18 @@ class ilObjBibliographicGUI extends ilObject2GUI implements ilDesktopItemHandlin
             $DIC->ctrl()
                 ->setParameterByClass(ilObjBibliographicGUI::class, ilObjBibliographicGUI::P_ENTRY_ID, $id[1]);
             $DIC->ctrl()->redirectByClass(
-                array(
+                [
                     ilRepositoryGUI::class,
                     ilObjBibliographicGUI::class,
-                ),
+                ],
                 self::CMD_SHOW_DETAILS
             );
         } else {
             $DIC->ctrl()->redirectByClass(
-                array(
+                [
                     ilRepositoryGUI::class,
                     ilObjBibliographicGUI::class,
-                ),
+                ],
                 self::CMD_VIEW
             );
         }
@@ -301,6 +301,7 @@ class ilObjBibliographicGUI extends ilObject2GUI implements ilDesktopItemHandlin
     /**
      * @return mixed[]
      */
+    #[\Override]
     protected function initCreateForm(string $new_type): ilPropertyFormGUI
     {
         $form = new ilPropertyFormGUI();
@@ -333,6 +334,7 @@ class ilObjBibliographicGUI extends ilObject2GUI implements ilDesktopItemHandlin
         return $form;
     }
 
+    #[\Override]
     public function save(): void
     {
         $form = $this->initCreateForm($this->getType());
@@ -344,6 +346,7 @@ class ilObjBibliographicGUI extends ilObject2GUI implements ilDesktopItemHandlin
         }
     }
 
+    #[\Override]
     public function saveObject(): void
     {
         // create permission is already checked in createObject. This check here is done to prevent hacking attempts
@@ -367,7 +370,7 @@ class ilObjBibliographicGUI extends ilObject2GUI implements ilDesktopItemHandlin
             $this->putObjectInTree($newObj);
 
             $dtpl = $this->getDidacticTemplateVar('dtpl');
-            if ($dtpl) {
+            if ($dtpl !== 0) {
                 $newObj->applyDidacticTemplate($dtpl);
             }
 
@@ -378,6 +381,7 @@ class ilObjBibliographicGUI extends ilObject2GUI implements ilDesktopItemHandlin
         $this->tpl->setContent($form->getHTML());
     }
 
+    #[\Override]
     public function updateObject(): void
     {
         $form = $this->getSettingsForm();
@@ -407,6 +411,7 @@ class ilObjBibliographicGUI extends ilObject2GUI implements ilDesktopItemHandlin
         }
     }
 
+    #[\Override]
     protected function afterSave(ilObject $a_new_object): void
     {
         $this->addNews($a_new_object->getId(), 'created');
@@ -485,10 +490,6 @@ class ilObjBibliographicGUI extends ilObject2GUI implements ilDesktopItemHandlin
         $rid = $bibl_obj->getResourceId() ? $bibl_obj->getResourceId()->serialize() : "";
         $bibl_upload_handler = new ilObjBibliographicUploadHandlerGUI($rid);
 
-        $max_filesize_bytes = $this->upload_limit->getPhpUploadLimitInBytes();
-        $max_filesize_mb = round($max_filesize_bytes / 1024 / 1024, 1);
-        $info_file_limitations = $this->lng->txt('file_notice') . " " . number_format($max_filesize_mb, 1) . " MB <br>"
-            . $this->lng->txt('file_allowed_suffixes') . " .bib, .bibtex, .ris";
         $section_replace_bibliographic_file = $this->ui_factory
             ->input()
             ->field()
@@ -499,10 +500,8 @@ class ilObjBibliographicGUI extends ilObject2GUI implements ilDesktopItemHandlin
                         ->field()
                         ->file(
                             $bibl_upload_handler,
-                            $this->lng->txt('bibliography_file'),
-                            $info_file_limitations
+                            $this->lng->txt('bibliography_file')
                         )
-                        ->withMaxFileSize($max_filesize_bytes)
                         ->withRequired(true)
                         ->withAdditionalTransformation(
                             $this->getValidBiblFileSuffixConstraint()
@@ -519,7 +518,7 @@ class ilObjBibliographicGUI extends ilObject2GUI implements ilDesktopItemHandlin
         );
     }
 
-    protected function getValidBiblFileSuffixConstraint(): \ILIAS\Refinery\Constraint
+    protected function getValidBiblFileSuffixConstraint(): Constraint
     {
         return $this->refinery->custom()->constraint(
             function ($bibl_file_input): bool {
@@ -544,6 +543,7 @@ class ilObjBibliographicGUI extends ilObject2GUI implements ilDesktopItemHandlin
      * create tabs (repository/workspace switch)
      * this had to be moved here because of the context-specific permission tab
      */
+    #[\Override]
     public function setTabs(): void
     {
         global $DIC;
@@ -623,6 +623,7 @@ class ilObjBibliographicGUI extends ilObject2GUI implements ilDesktopItemHandlin
      * edit object
      * @access    public
      */
+    #[\Override]
     public function editObject(): void
     {
         if (!$this->checkPermissionBool("write")) {
@@ -808,6 +809,7 @@ class ilObjBibliographicGUI extends ilObject2GUI implements ilDesktopItemHandlin
         }
     }
 
+    #[\Override]
     public function view(): void
     {
         $this->showContent();
@@ -876,6 +878,7 @@ class ilObjBibliographicGUI extends ilObject2GUI implements ilDesktopItemHandlin
         $this->removeFromDeskObject();
     }
 
+    #[\Override]
     protected function afterImport(ilObject $a_new_object): void
     {
         /**

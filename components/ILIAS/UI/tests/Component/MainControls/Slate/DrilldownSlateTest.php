@@ -100,7 +100,7 @@ class DrilldownSlateTest extends ILIAS_UI_TestBase
                             <div></div>
                             <div class="c-drilldown__filter">
                                 <label for=\'id_3\' class="control-label">filter_nodes_in</label>
-                                <input id=\'id_3\' type="text" name=\'\' class="form-control" />
+                                <input id=\'id_3\' type="text" class="form-control" />
                             </div>
                             <div class="c-drilldown__backnav">
                                 <button class="btn btn-bulky" id="id_1" aria-label="back">

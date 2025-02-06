@@ -32,7 +32,7 @@ trait SecureString
     {
         return htmlspecialchars(
             strip_tags(
-                preg_replace('#\p{C}+#u', '', $string)
+                (string) preg_replace('#\p{C}+#u', '', $string)
             ),
             ENT_QUOTES,
             'UTF-8',

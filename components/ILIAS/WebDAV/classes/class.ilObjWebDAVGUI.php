@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * https://github.com/ILIAS-eLearning
  *
  *********************************************************************/
+
+declare(strict_types=1);
 
 /**
  * @author       Lukas Zehnder <lz@studer-raimann.ch>
@@ -44,6 +44,7 @@ class ilObjWebDAVGUI extends ilObjectGUI
         parent::__construct($a_data, $a_id, $a_call_by_reference, false);
     }
 
+    #[\Override]
     public function executeCommand(): void
     {
         $next_class = $this->ctrl->getNextClass($this);
@@ -75,6 +76,7 @@ class ilObjWebDAVGUI extends ilObjectGUI
         }
     }
 
+    #[\Override]
     public function getAdminTabs(): void
     {
         if ($this->rbac_system->checkAccess("visible,read", $this->object->getRefId())) {
@@ -91,6 +93,7 @@ class ilObjWebDAVGUI extends ilObjectGUI
         }
     }
 
+    #[\Override]
     public function setTitleAndDescription(): void
     {
         parent::setTitleAndDescription();

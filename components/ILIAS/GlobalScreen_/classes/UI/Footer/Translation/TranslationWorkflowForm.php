@@ -31,8 +31,17 @@ use ILIAS\GlobalScreen\UI\Footer\Entries\EntryDTO;
 
 class TranslationWorkflowForm
 {
+    /**
+     * @var string
+     */
     private const STEP = 'step';
+    /**
+     * @var string
+     */
     private const STEP_SELECTED_LNGS = 'selectedLngs';
+    /**
+     * @var string
+     */
     private const STEP_SAVE_TRANSLATIONS = 'saveTranslations';
     private readonly Factory $ui_factory;
     private readonly \ilLanguage $lng;

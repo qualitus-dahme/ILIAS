@@ -239,7 +239,7 @@ class Renderer extends AbstractComponentRenderer
      * for this specific component and the placement of {VALUE} in its template.
      * Please note: this may not work for customized templates!
      */
-    protected function applyValue(FormInput $component, Template $tpl, callable $escape = null): void
+    protected function applyValue(FormInput $component, Template $tpl, ?callable $escape = null): void
     {
         $value = $component->getValue();
         if (!is_null($escape)) {

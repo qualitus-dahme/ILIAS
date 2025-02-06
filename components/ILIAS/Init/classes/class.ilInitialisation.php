@@ -760,8 +760,8 @@ class ilInitialisation
 
     protected static function initCron(\ILIAS\DI\Container $c): void
     {
-        $c['cron.repository'] = static function (\ILIAS\DI\Container $c): ilCronJobRepository {
-            return new ilCronJobRepositoryImpl(
+        $c['cron.repository'] = static function (\ILIAS\DI\Container $c): ILIAS\Cron\Job\JobRepository {
+            return new ILIAS\Cron\Job\Repository\JobRepositoryImpl(
                 $c->database(),
                 $c->settings(),
                 $c->logger()->cron(),
@@ -770,8 +770,8 @@ class ilInitialisation
             );
         };
 
-        $c['cron.manager'] = static function (\ILIAS\DI\Container $c): ilCronManager {
-            return new ilCronManagerImpl(
+        $c['cron.manager'] = static function (\ILIAS\DI\Container $c): ILIAS\Cron\Job\JobManager {
+            return new ILIAS\Cron\Job\Manager\JobManagerImpl(
                 $c['cron.repository'],
                 $c->database(),
                 $c->settings(),

@@ -2323,10 +2323,10 @@ badge#:#criteria#:#Criteria
 badge#:#endless#:#Always
 badge#:#issued_on#:#Issued on
 badge#:#position_updated#:#Profil assignment updated.
-badge#:#sort_by_date_asc#:#Sort by Date Ascending
-badge#:#sort_by_date_desc#:#Sort by Date Descending
-badge#:#sort_by_title_asc#:#Sort by Title Ascending
-badge#:#sort_by_title_desc#:#Sort by Title Descending
+badge#:#sort_by_date_asc#:#Date Ascending
+badge#:#sort_by_date_desc#:#Date Descending
+badge#:#sort_by_title_asc#:#Title Ascending
+badge#:#sort_by_title_desc#:#Title Descending
 badge#:#table_view#:#Table View
 badge#:#tile_view#:#Tile View
 badge#:#valid_until#:#Valid until
@@ -4781,31 +4781,31 @@ common#:#msg_no_default_language#:#No default language specified! You must defin
 common#:#msg_no_delete_yourself#:#You cannot delete your own user account.
 common#:#msg_no_file#:#You didn't choose a file or the selected file was too big.
 common#:#msg_no_files_selected#:#No files selected
-common#:#msg_no_language_selected#:#No translation language specified! You must define a language for each translation
+common#:#msg_no_language_selected#:#No translation language specified! You must define a language for each translation.
 common#:#msg_no_perm_assign_role_to_user#:#You have no permission to change user's role assignment
-common#:#msg_no_perm_assign_user_to_role#:#You have no permission to change the user assignment
+common#:#msg_no_perm_assign_user_to_role#:#You have no permission to change the user assignment.
 common#:#msg_no_perm_copy#:#You have no permission to create a copy of the following object(s):
-common#:#msg_no_perm_create_rolt#:#You have no permission to add role templates
+common#:#msg_no_perm_create_rolt#:#You have no permission to add role templates.
 common#:#msg_no_perm_cut#:#You have no permission to cut the following object(s):
 common#:#msg_no_perm_delete#:#You have no permission to delete the following object(s):
 common#:#msg_no_perm_link#:#You have no permission to create a link from the following object(s):
-common#:#msg_no_perm_modify_rolt#:#You have no permission to modify role templates
-common#:#msg_no_perm_modify_user#:#You have no permission to modify user data
+common#:#msg_no_perm_modify_rolt#:#You have no permission to modify role templates.
+common#:#msg_no_perm_modify_user#:#You have no permission to modify user data.
 common#:#msg_no_perm_paste#:#You have no permission to paste the following object(s):
 common#:#msg_no_perm_paste_object_in_folder#:#You have no permission to paste the object %s in the folder %s.
-common#:#msg_no_perm_perm#:#You have no permission to edit permission settings
+common#:#msg_no_perm_perm#:#You have no permission to change permission settings.
 common#:#msg_no_perm_read#:#You have no permission to access this item.
 common#:#msg_no_perm_read_item#:#You have no permission to access item '%s’.
 common#:#msg_no_perm_read_lm#:#You have no permission to read this learning module.
-common#:#msg_no_perm_write#:#You have no permission to write
+common#:#msg_no_perm_write#:#You have no permission to edit settings.
 common#:#msg_no_search_result#:#No entries found
-common#:#msg_no_search_string#:#Please enter your query
+common#:#msg_no_search_string#:#Please enter your query.
 common#:#msg_no_title#:#Please enter a title.
-common#:#msg_not_available_for_anon#:#The page you have chosen is only accessible for registered users
-common#:#msg_not_in_itself#:#It’s not possible to paste the object in itself
+common#:#msg_not_available_for_anon#:#The page you have chosen is only accessible for registered users.
+common#:#msg_not_in_itself#:#It’s not possible to paste the object in itself.
 common#:#msg_obj_already_deleted#:#The object has already been deleted.
 common#:#msg_obj_created#:#Object created.
-common#:#msg_obj_exists#:#This object already exists in this folder
+common#:#msg_obj_exists#:#This object already exists in this folder.
 common#:#msg_obj_exists_in_folder#:#The object %s already exists in the folder %s.
 common#:#msg_obj_may_not_contain_objects_of_type#:#The object %s may not contain objects of type: %s.
 common#:#msg_obj_modified#:#Modifications saved.
@@ -7445,6 +7445,7 @@ cron#:#cron_action_run_sure#:#Are you sure you want to run the cron job "%s"?
 cron#:#cron_changed_by_crontab#:#SYSTEM
 cron#:#cron_component#:#Component
 cron#:#cron_job_id#:#ID
+cron#:#cron_jobs_with_required_intervention#:#The following jobs may require an intervention.
 cron#:#cron_last_run#:#Last Run
 cron#:#cron_no_executable_job_selected#:#Please select at least one executable cron job.
 cron#:#cron_result#:#Result
@@ -8149,10 +8150,10 @@ dash#:#dash_presentation#:#Presentation
 dash#:#dash_recommended_content#:#Recommended Content
 dash#:#dash_remove_from_list#:#Remove from List
 dash#:#dash_side_panel#:#Side Panel
-dash#:#dash_sort_by_alphabet#:#Sort by Alphabet
-dash#:#dash_sort_by_location#:#Sort by Location
-dash#:#dash_sort_by_start_date#:#Sort by Period of Event
-dash#:#dash_sort_by_type#:#Sort by Type
+dash#:#dash_sort_by_alphabet#:#Alphabet
+dash#:#dash_sort_by_location#:#Location
+dash#:#dash_sort_by_start_date#:#Period of Event
+dash#:#dash_sort_by_type#:#Type
 dash#:#dash_sortation#:#Sortation
 dash#:#dash_study_programmes#:#My Study Programmes
 dash#:#dash_tile#:#Tile
@@ -8581,7 +8582,6 @@ dateplaner#:#wk_short#:#WK
 dateplaner#:#year#:#Year
 dcl#:#add_value#:#Add New Entry
 dcl#:#dcl_activate_notification#:#Enable Notification
-dcl#:#dcl_activate_view#:#Activate this view
 dcl#:#dcl_add#:#Create Data Collection
 dcl#:#dcl_add_new_field#:#Add New Field
 dcl#:#dcl_add_new_record#:#Add New Entry
@@ -8606,8 +8606,6 @@ dcl#:#dcl_changed_by#:#Changed by
 dcl#:#dcl_checked#:#Checked.
 dcl#:#dcl_comments#:#Comments
 dcl#:#dcl_comments_desc#:#Displays the number of comments for a Entry.
-dcl#:#dcl_confirm_delete_detailed_view_text#:#The detailed view definition of entries of this table will be removed irreversibly, the entries and fields themselves will not be changed.
-dcl#:#dcl_confirm_delete_detailed_view_title#:#Do you really want to delete this detailed view?
 dcl#:#dcl_confirm_delete_field#:#Do you really want to delete this field?
 dcl#:#dcl_confirm_delete_fields#:#Do you really want to delete these fields?
 dcl#:#dcl_confirm_delete_record#:#Delete this Entry?
@@ -8630,7 +8628,6 @@ dcl#:#dcl_date_selection#:#Date Selection
 dcl#:#dcl_date_selection_desc#:#Offer selection of date options.
 dcl#:#dcl_datetime#:#Date Entry
 dcl#:#dcl_datetime_desc#:#Field for a date.
-dcl#:#dcl_deactivate_view#:#Deactivate this view
 dcl#:#dcl_default_sort_field#:#Default sort field
 dcl#:#dcl_default_sort_field_desc#:#The table will be sorted by this field by default.
 dcl#:#dcl_default_sort_field_order#:#Default sort field order
@@ -8640,8 +8637,6 @@ dcl#:#dcl_delete_perm#:#User can delete entries
 dcl#:#dcl_delete_records#:#Delete Entries
 dcl#:#dcl_delete_tables#:#Delete Tables
 dcl#:#dcl_delete_tables_no_selection#:#Please select at least one table to delete
-dcl#:#dcl_delete_views#:#Delete Views
-dcl#:#dcl_delete_views_no_selection#:#Please select at least one view to delete
 dcl#:#dcl_deleted_records#:#Successfully deleted %s Entries
 dcl#:#dcl_deprecated_copy#:#(Deprecated)
 dcl#:#dcl_desc#:#Descending Order (DESC)
@@ -8658,8 +8653,6 @@ dcl#:#dcl_edit_perm#:#User can edit entries
 dcl#:#dcl_edit_record#:#Edit Entry
 dcl#:#dcl_edit_table#:#Edit Settings of Table "%s"
 dcl#:#dcl_editable_in_table_gui#:#Please vote in the table view.
-dcl#:#dcl_empty_detailed_view#:#Delete this detailed view
-dcl#:#dcl_empty_detailed_view_success#:#The detailed view definition has been deleted successfully.
 dcl#:#dcl_err_formula_field_not_found#:#Field with title '%s' not found
 dcl#:#dcl_error_parsing_expression#:#Error parsing expression
 dcl#:#dcl_export_enabled#:#Allow export function for all users
@@ -8783,12 +8776,11 @@ dcl#:#dcl_plugin_hooks#:#Available Plugins
 dcl#:#dcl_plugin_no_hooks_available#:#No active field-type plugins found
 dcl#:#dcl_prev_record#:#Previous Entry
 dcl#:#dcl_prop_expression#:#Expression
-dcl#:#dcl_prop_expression_info#:#Supported operators: <b>%s</b><br>Supported functions: <b>%s</b><br>Use brackets <b>‘(’, ‘)’</b> to group calculations.<br>Concatenate strings and placeholders with &: <b>‘The result is ’ & [[Int 1]] * [[Int2]]</b><br>Using functions: <b>SUM([[Int 1]];[[Int 2]])</b><br><br>Allowed fields (click on title to copy field inside expression):<br>%s<br><b>(Allowed fields are boolean, number, text and date that dont contain formular-sensitive chars inside their title)<b>
+dcl#:#dcl_prop_expression_info#:#Supported operators: <b>%s</b><br>Supported functions: <b>%s</b><br>Use brackets <b>‘(’, ‘)’</b> to group calculations.<br>Concatenate strings and placeholders with &: <b>‘The result is ’ & [[Int 1]] * [[Int2]]</b><br>Using functions: <b>SUM([[Int 1]];[[Int 2]])</b><br><br>Allowed fields (click on title to copy field inside expression):<br>%s<br><b>(Allowed fields are boolean, number, text and date that dont contain formular-sensitive chars inside their title)</b>
 dcl#:#dcl_public_comments#:#Activate Public Comments
 dcl#:#dcl_public_comments_desc#:#Users can comment on entries of the table.
 dcl#:#dcl_rating#:#Rating
 dcl#:#dcl_rating_desc#:#Users can rate entries with up to five stars.
-dcl#:#dcl_rbac_roles_without_read_access_on_any_standard_view#:#The following rbac roles have read access on the data collection, but no read access on any standard view of a table:
 dcl#:#dcl_record#:#Entry
 dcl#:#dcl_record_deleted#:#Entry deleted
 dcl#:#dcl_record_from_total#:#%d of %d
@@ -13125,7 +13117,7 @@ orgu#:#msg_confirm_deletion#:#Would you really like to delete the following Posi
 orgu#:#msg_confirm_remove_user#:#Would you really like to remove the following User from the Position %s?
 orgu#:#msg_deleted#:#Deleted
 orgu#:#msg_position_created#:#Position created.
-orgu#:#msg_position_udpated#:#Position aktualisiert
+orgu#:#msg_position_delete_fail#:#Position wurde nicht gefunden.
 orgu#:#msg_position_updated#:#Position updated.
 orgu#:#msg_success_permission_saved#:#Permissions saved.
 orgu#:#no_assignment#:#Please check your XML-File. There is no User Assignment.
@@ -17313,6 +17305,7 @@ ui#:#footer_permanent_link#:#Footer Permanent Link
 ui#:#footer_texts#:#Footer Texts
 ui#:#label_fieldselection#:#Field Selection
 ui#:#label_fieldselection_refresh#:#Apply
+ui#:#label_modeviewcontrol#:#view mode
 ui#:#label_pagination_limit#:#Pagination Number of Rows
 ui#:#label_pagination_offset#:#Pagination Offset
 ui#:#label_sortation#:#Sortation
@@ -17350,6 +17343,7 @@ ui#:#ui_pagination_unlimited#:#Unlimited
 ui#:#ui_select_dropdown_label#:#Please select
 ui#:#ui_table_no_records#:#No records
 ui#:#ui_transcription#:#Transcript
+ui#:#vc_sort#:#Sort by:
 user#:#all_roles_has_starting_point#:#All the roles have starting points
 user#:#back_to_starting_points_list#:#Back to Starting Points
 user#:#change_email_email_confirmation_body#:#The email address for the account %s was changed. To confirm this change, please click on this link %s. The link is valid for %s minutes.

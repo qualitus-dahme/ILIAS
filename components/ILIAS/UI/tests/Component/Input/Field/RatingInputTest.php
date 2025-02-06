@@ -86,7 +86,7 @@ class RatingInputTest extends ILIAS_UI_TestBase
                     </div>
                     <div class="il-input-rating__none">
                         <label for="id_1-0" aria-label="reset_stars">reset_stars</label>
-                        <input aria-describedby="" type="radio" id="id_1-0" name="name_0" value="0" checked="checked"/>
+                        <input aria-describedby="id_1_desc" type="radio" id="id_1-0" name="name_0" value="0" checked="checked"/>
                     </div>
                 </div>
             </fieldset>
@@ -139,7 +139,7 @@ class RatingInputTest extends ILIAS_UI_TestBase
                     
                         <div class="il-input-rating__none">
                             <label for="id_1-0" aria-label="reset_stars">reset_stars</label>
-                            <input aria-describedby="" type="radio" id="id_1-0" name="name_0" value="0" />
+                            <input aria-describedby="id_1_desc" type="radio" id="id_1-0" name="name_0" value="0" />
                         </div>
                     
                     </div>

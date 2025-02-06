@@ -36,7 +36,7 @@
 			@include c-input_switch-bg-hover(none, s.$il-main-darker-bg);
 		}
 	}
-							
+
 	> .c-input__help-byline {
 		grid-area: group-help;
 	}
@@ -96,7 +96,7 @@
 }
 
 @include brk.on-screen-size(small) {
-	.c-form .c-input[data-il-ui-component="switchable-group-field-input"],
+	.c-form .c-input[data-il-ui-component="switchable-group-field-input"] > .c-input__field > .c-input,
 	.c-form .c-input[data-il-ui-component="optional-group-field-input"] {
 		grid-template-columns: 100%;
 		grid-template-areas:  "group-head"

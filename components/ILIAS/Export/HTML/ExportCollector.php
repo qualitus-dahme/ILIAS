@@ -126,4 +126,14 @@ class ExportCollector
         );
     }
 
+    public function deliver(string $filename) : void
+    {
+        $this->repo->deliverFile($this->rid);
+    }
+
+    public function delete() : void
+    {
+        $this->repo->delete($this->obj_id, $this->rid);
+    }
+
 }

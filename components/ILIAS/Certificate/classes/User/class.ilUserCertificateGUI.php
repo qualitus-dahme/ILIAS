@@ -157,10 +157,9 @@ class ilUserCertificateGUI
 
             $sortViewControl = $this->uiFactory
                 ->viewControl()
-                ->sortation($sortationOptions)
-                ->withLabel($this->language->txt($this->sortationOptions[$sorting]))
-                ->withTargetURL($this->ctrl->getLinkTarget($this, 'applySortation'), 'sort_by')
-            ;
+                ->sortation($sortationOptions, $sorting)
+                ->withTargetURL($this->ctrl->getLinkTarget($this, 'applySortation'), 'sort_by');
+
             $uiComponents[] = $sortViewControl;
 
             foreach ($data['items'] as $certificateData) {

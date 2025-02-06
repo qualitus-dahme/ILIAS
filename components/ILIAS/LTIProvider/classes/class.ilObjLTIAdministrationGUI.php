@@ -63,7 +63,7 @@ class ilObjLTIAdministrationGUI extends ilObjectGUI
 
             case 'illticonsumeradministrationgui':
                 $this->tabs_gui->activateTab('lti_consuming');
-                $gui = new ilLTIConsumerAdministrationGUI();
+                $gui = new ilLTIConsumerAdministrationGUI($this->checkPermissionBool('write'));
                 $this->ctrl->forwardCommand($gui);
                 break;
 

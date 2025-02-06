@@ -389,7 +389,7 @@ EOT;
             'a' => 'A',
             'b' => 'B'
         ];
-        $sortation = $this->getUIFactory()->viewControl()->sortation($sort_options);
+        $sortation = $this->getUIFactory()->viewControl()->sortation($sort_options, 'a');
         $f = $this->getPanelFactory();
         $p = $f->standard("Title", [])
             ->withViewControls([$sortation])
@@ -404,7 +404,7 @@ EOT;
             'a' => 'A',
             'b' => 'B'
         ];
-        $sortation = $this->getUIFactory()->viewControl()->sortation($sort_options);
+        $sortation = $this->getUIFactory()->viewControl()->sortation($sort_options, 'a');
         $f = $this->getPanelFactory();
         $p = $f->report("Title", [])
             ->withViewControls([$sortation])
@@ -457,7 +457,8 @@ EOT;
             'a' => 'A',
             'b' => 'B'
         ];
-        $sortation = $this->getUIFactory()->viewControl()->sortation($sort_options);
+
+        $sortation = $this->getUIFactory()->viewControl()->sortation($sort_options, 'b');
 
         $f = $this->getPanelFactory();
         $r = $this->getDefaultRenderer();
@@ -473,13 +474,15 @@ EOT;
     <div class="panel-heading ilHeader">
         <div class="panel-title"><h2>Title</h2></div>
         <div class="panel-viewcontrols l-bar__space-keeper">
-            <div class="il-viewcontrol-sortation l-bar__element" id="id_1">
-                <div class="dropdown" id="id_4"><button class="btn btn-default dropdown-toggle" type="button"  aria-label="actions" aria-haspopup="true" aria-expanded="false" aria-controls="id_4_menu"><span class="caret"></span></button>
-                    <ul id="id_4_menu" class="dropdown-menu">
-                       <li><button class="btn btn-link" data-action="?sortation=a" id="id_2">A</button></li>
-                       <li><button class="btn btn-link" data-action="?sortation=b" id="id_3">B</button></li>
-                    </ul>
-                </div>
+            <div class="dropdown il-viewcontrol il-viewcontrol-sortation l-bar__element" id="id_1">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-label="sortation" aria-haspopup="true" aria-expanded="false" aria-controls="id_1_ctrl">
+                    <span class="label">vc_sort B</span>
+                    <span class="caret"></span>
+                </button>
+                <ul id="id_1_ctrl" class="dropdown-menu">
+                   <li><button class="btn btn-link" data-action="?sortation=a" id="id_2">A</button></li>
+                   <li class="selected"><button class="btn btn-link" data-action="?sortation=b" id="id_3">B</button></li>
+                </ul>
             </div>
         </div>
         <div class="panel-controls"></div>

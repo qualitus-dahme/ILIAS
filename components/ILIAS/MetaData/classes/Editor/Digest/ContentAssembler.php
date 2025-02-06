@@ -324,7 +324,7 @@ class ContentAssembler
                 $potential_oer_values[] = $identifier;
             }
 
-            $option = $ff->group($sub_inputs, $entry->title());
+            $option = $ff->group($sub_inputs, $entry->title(), $entry->description());
 
             // outdated entries throw an error when selected
             if ($entry->isOutdated()) {

@@ -43,6 +43,7 @@ function with_required_input()
     $form = $ui->input()->container()->form()->standard($form_action, [$section]);
 
     if ($request->getMethod() == "POST"
+        && array_key_exists('example_name', $request->getQueryParams())
             && $request->getQueryParams()['example_name'] == 'required') {
         $form = $form->withRequest($request);
         $result = $form->getData();

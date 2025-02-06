@@ -1235,37 +1235,37 @@ class ilObjLTIConsumer extends ilObject2
 
     public static function getAuthenticationRequestUrl(): string
     {
-        return self::getIliasHttpPath() . "/components/ILIAS/LTIConsumer/ltiauth.php";
+        return self::getIliasHttpPath() . "/ltiauth.php";
     }
 
     public static function getAccessTokenUrl(): string
     {
-        return self::getIliasHttpPath() . "/components/ILIAS/LTIConsumer/ltitoken.php";
+        return self::getIliasHttpPath() . "/ltitoken.php";
     }
 
     public static function getPublicKeysetUrl(): string
     {
-        return self::getIliasHttpPath() . "/components/ILIAS/LTIConsumer/lticerts.php";
+        return self::getIliasHttpPath() . "/lticerts.php";
     }
 
     public static function getRegistrationUrl(): string
     {
-        return self::getIliasHttpPath() . "/components/ILIAS/LTIConsumer/ltiregistration.php";
+        return self::getIliasHttpPath() . "/ltiregistration.php";
     }
 
     public static function getRegistrationStartUrl(): string
     {
-        return self::getIliasHttpPath() . "/components/ILIAS/LTIConsumer/ltiregstart.php";
+        return self::getIliasHttpPath() . "/ltiregstart.php";
     }
 
     public static function getRegistrationEndUrl(): string
     {
-        return self::getIliasHttpPath() . "/components/ILIAS/LTIConsumer/ltiregend.php";
+        return self::getIliasHttpPath() . "/ltiregend.php";
     }
 
     public static function getOpenidConfigUrl(): string
     {
-        return self::getIliasHttpPath() . "/components/ILIAS/LTIConsumer/lticonfig.php";
+        return self::getIliasHttpPath() . "/lticonfig.php";
     }
 
     public static function getOpenidConfig(): array

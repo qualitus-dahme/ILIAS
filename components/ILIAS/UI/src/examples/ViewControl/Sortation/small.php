@@ -28,10 +28,14 @@ function small()
         'oldest' => 'Oldest Ordering'
     );
 
-    //Note that no label is attached
-    $s = $f->viewControl()->sortation($options)
+    //Hide the label
+    $s = $f->viewControl()->sortation($options, 'oldest')
         ->withTargetURL($DIC->http()->request()->getRequestTarget(), 'sortation');
 
-
-    return $renderer->render($s);
+    $item = $f->item()->standard("See the Viewcontrol in a toolbar")
+            ->withDescription("When space is limited, the label will be omitted.");
+    return $renderer->render(
+        $f->panel()->standard("Small space ", [$item])
+            ->withViewControls([$s])
+    );
 }

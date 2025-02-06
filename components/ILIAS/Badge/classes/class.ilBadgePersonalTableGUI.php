@@ -46,6 +46,19 @@ class ilBadgePersonalTableGUI implements DataRetrieval
     private readonly ilObjUser $user;
     private readonly ilAccessHandler $access;
     private readonly Tile $tile;
+    /**
+     * @return null|list<array{
+     *     id: int,
+     *     active: bool,
+     *     image: string,
+     *     awarded_by: string,
+     *     awarded_by_sortable: string,
+     *     badge_issued_on: DateTimeImmutable,
+     *     title: string,
+     *     title_sortable: string
+     *  }>
+     */
+    private ?array $cached_records = null;
 
     public function __construct()
     {
@@ -69,10 +82,44 @@ class ilBadgePersonalTableGUI implements DataRetrieval
         ?array $filter_data,
         ?array $additional_parameters
     ): Generator {
-        $records = $this->getRecords($range, $order);
+        $records = $this->getRecords();
+
+        if ($order) {
+            [$order_field, $order_direction] = $order->join(
+                [],
+                fn($ret, $key, $value) => [$key, $value]
+            );
+
+            usort($records, static function (array $left, array $right) use ($order_field): int {
+                if (in_array($order_field, ['title', 'awarded_by'], true)) {
+                    if (in_array($order_field, ['title', 'awarded_by'], true)) {
+                        $order_field .= '_sortable';
+                    }
+
+                    return ilStr::strCmp(
+                        $left[$order_field],
+                        $right[$order_field]
+                    );
+                }
+
+                if ($order_field === 'active') {
+                    return $right[$order_field] <=> $left[$order_field];
+                }
+
+                return $left[$order_field] <=> $right[$order_field];
+            });
+
+            if ($order_direction === Order::DESC) {
+                $records = array_reverse($records);
+            }
+        }
+
+        if ($range) {
+            $records = \array_slice($records, $range->getStart(), $range->getLength());
+        }
+
         foreach ($records as $record) {
-            $row_id = (string) $record['id'];
-            yield $row_builder->buildDataRow($row_id, $record);
+            yield $row_builder->buildDataRow((string) $record['id'], $record);
         }
     }
 
@@ -95,8 +142,12 @@ class ilBadgePersonalTableGUI implements DataRetrieval
      *     title_sortable: string
      *  }>
      */
-    private function getRecords(Range $range = null, Order $order = null): array
+    private function getRecords(): array
     {
+        if ($this->cached_records !== null) {
+            return $this->cached_records;
+        }
+
         $rows = [];
         $a_user_id = $this->user->getId();
 
@@ -162,35 +213,7 @@ class ilBadgePersonalTableGUI implements DataRetrieval
             ];
         }
 
-        if ($order) {
-            [$order_field, $order_direction] = $order->join(
-                [],
-                fn($ret, $key, $value) => [$key, $value]
-            );
-
-            usort($rows, static function (array $left, array $right) use ($order_field): int {
-                if (in_array($order_field, ['title', 'awarded_by'], true)) {
-                    if (in_array($order_field, ['title', 'awarded_by'], true)) {
-                        $order_field .= '_sortable';
-                    }
-
-                    return ilStr::strCmp(
-                        $left[$order_field],
-                        $right[$order_field]
-                    );
-                }
-
-                if ($order_field === 'active') {
-                    return $right[$order_field] <=> $left[$order_field];
-                }
-
-                return $left[$order_field] <=> $right[$order_field];
-            });
-
-            if ($order_direction === Order::DESC) {
-                $rows = array_reverse($rows);
-            }
-        }
+        $this->cached_records = $rows;
 
         return $rows;
     }

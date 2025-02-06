@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * https://github.com/ILIAS-eLearning
  *
  *********************************************************************/
+
+declare(strict_types=1);
 
 use ILIAS\LTI\Screen\LtiViewLayoutProvider;
 
@@ -136,14 +136,29 @@ class ilLTIViewGUI
     {
         $this->log->debug("initGUI");
         $baseclass = '';
+        $cmdclass = '';
         if ($this->wrapper->query()->has('baseClass')) {
             $baseclass = strtolower($this->wrapper->query()->retrieve('baseClass', $this->kindlyTo->string()));
         }
         if ($this->wrapper->query()->has('cmdClass')) {
             $cmdclass = strtolower($this->wrapper->query()->retrieve('cmdClass', $this->kindlyTo->string()));
         }
+
         if ($baseclass == 'illtiroutergui') {
             return;
+        }
+
+        $target = ilSession::get('lti_init_target');
+        if ($target) {
+            list($type, $ref_id) = explode('_', $target);
+
+            ilSession::clear('lti_init_target');
+
+            ilUtil::redirect(
+                "ilias.php?baseClass=ilRepositoryGUI&ref_id=" . $ref_id
+                . "&cmd=view"
+                . "&cmdClass=ilobj" . strtolower($type) . "gui"
+            );
         }
     }
 
@@ -203,7 +218,7 @@ class ilLTIViewGUI
                 }
             }
 
-            $referrer = (int) $this->effectiveRefId;
+            $referer = (int) $this->effectiveRefId;
 
             if ($referer > 0) {
                 if (ilSession::has('lti_' . $referer . '_post_data')) {

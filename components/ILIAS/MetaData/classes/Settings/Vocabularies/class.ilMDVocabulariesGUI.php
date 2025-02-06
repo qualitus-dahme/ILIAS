@@ -131,17 +131,17 @@ class ilMDVocabulariesGUI
 
     public function showVocabularies(): void
     {
-        $import_modal = $this->getImportModal();
-        $this->toolbar->addComponent($this->getImportButton($import_modal->getShowSignal()));
+        $content = [];
 
-        $table = $this->getTable();
+        if ($this->access_service->hasCurrentUserWriteAccess()) {
+            $import_modal = $this->getImportModal();
+            $this->toolbar->addComponent($this->getImportButton($import_modal->getShowSignal()));
+            $content[] = $import_modal;
+        }
 
-        $this->tpl->setContent(
-            $this->ui_renderer->render([
-                $import_modal,
-                $table
-            ])
-        );
+        $content[] = $this->getTable();
+
+        $this->tpl->setContent($this->ui_renderer->render($content));
     }
 
     public function tableAction(): void
@@ -367,38 +367,41 @@ class ilMDVocabulariesGUI
 
         list($url_builder, $action_parameter_token, $row_id_token) = $this->getTableURLBuilderAndParameters();
         $actions_factory = $this->ui_factory->table()->action();
-        $actions = [
-            'delete' => $actions_factory->single(
+        $actions = [];
+
+        if ($this->access_service->hasCurrentUserWriteAccess()) {
+            $actions ['delete'] = $actions_factory->single(
                 $this->lng->txt('md_vocab_delete_action'),
                 $url_builder->withParameter($action_parameter_token, 'delete'),
                 $row_id_token
-            )->withAsync(true),
-            'activate' => $actions_factory->single(
+            )->withAsync(true);
+            $actions['activate'] = $actions_factory->single(
                 $this->lng->txt('md_vocab_activate_action'),
                 $url_builder->withParameter($action_parameter_token, 'activate'),
                 $row_id_token
-            ),
-            'deactivate' => $actions_factory->single(
+            );
+            $actions['deactivate'] = $actions_factory->single(
                 $this->lng->txt('md_vocab_deactivate_action'),
                 $url_builder->withParameter($action_parameter_token, 'deactivate'),
                 $row_id_token
-            ),
-            'allow_custom_input' => $actions_factory->single(
+            );
+            $actions['allow_custom_input'] = $actions_factory->single(
                 $this->lng->txt('md_vocab_allow_custom_input_action'),
                 $url_builder->withParameter($action_parameter_token, 'allow_custom_input'),
                 $row_id_token
-            ),
-            'disallow_custom_input' => $actions_factory->single(
+            );
+            $actions['disallow_custom_input'] = $actions_factory->single(
                 $this->lng->txt('md_vocab_disallow_custom_input_action'),
                 $url_builder->withParameter($action_parameter_token, 'disallow_custom_input'),
                 $row_id_token
-            ),
-            'show_all' => $actions_factory->single(
-                $this->lng->txt('md_vocab_show_all_action'),
-                $url_builder->withParameter($action_parameter_token, 'show_all'),
-                $row_id_token
-            )->withAsync(true)
-        ];
+            );
+        }
+
+        $actions['show_all'] = $actions_factory->single(
+            $this->lng->txt('md_vocab_show_all_action'),
+            $url_builder->withParameter($action_parameter_token, 'show_all'),
+            $row_id_token
+        )->withAsync(true);
 
         return $this->ui_factory->table()->data(
             $this->lng->txt('md_vocab_table_title'),

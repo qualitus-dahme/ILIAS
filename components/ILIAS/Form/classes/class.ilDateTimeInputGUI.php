@@ -302,7 +302,7 @@ class ilDateTimeInputGUI extends ilSubEnabledFormPropertyGUI implements ilTableF
 
     public function getPostValueForComparison(): string
     {
-        return trim($this->str($this->getPostVar()));
+        return $this->serializeData();
     }
 
     public function getToolbarHTML(): string

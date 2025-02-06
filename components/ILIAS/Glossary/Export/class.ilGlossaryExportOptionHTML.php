@@ -23,7 +23,7 @@ use ILIAS\Export\ExportHandler\I\Consumer\Context\HandlerInterface as ilExportHa
 use ILIAS\Export\ExportHandler\Consumer\ExportOption\BasicLegacyHandler as ilBasicLegacyExportOption;
 use ILIAS\DI\Container;
 
-class ilGlossaryExportOptionHTML extends ilBasicLegacyExportOption
+class ilGlossaryExportOptionHTML extends \ILIAS\Export\HTML\ExportOptionBase
 {
     protected ilLanguage $lng;
 

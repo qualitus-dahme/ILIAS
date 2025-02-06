@@ -35,8 +35,6 @@ final class ilObjFooterUIHandling
 {
     use Hasher;
 
-    public $container;
-
     private ilGlobalTemplateInterface $main_tpl;
     private Renderer $ui_renderer;
     private Factory $ui_factory;
@@ -193,7 +191,7 @@ final class ilObjFooterUIHandling
     public function require(string $permissions): void
     {
         if (!$this->hasPermission($permissions)) {
-            $this->error->raiseError($this->container->language()->txt('msg_no_perm_read'), $this->error->WARNING);
+            $this->error->raiseError($this->translator->translate('msg_no_perm_read'), $this->error->WARNING);
         }
     }
 

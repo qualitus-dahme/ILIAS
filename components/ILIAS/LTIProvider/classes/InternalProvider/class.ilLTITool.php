@@ -41,14 +41,13 @@ class ilLTITool extends Tool
      */
     public function __construct(ilLTIDataConnector $dataConnector)
     {
-        global $DIC;
         $this->logger = ilLoggerFactory::getLogger('ltis');
         //        $this->initialize();
         if (empty($dataConnector)) {
             $dataConnector = ilLTIDataConnector::getDataConnector();
         }
         $this->dataConnector = $dataConnector;
-        //        parent::__construct($dataConnector);
+        //parent::__construct($dataConnector);
         $this->setParameterConstraint('resource_link_id', true, 50, array('basic-lti-launch-request'));
         $this->setParameterConstraint('user_id', true, 64, array('basic-lti-launch-request'));
         $this->setParameterConstraint('roles', true, null, array('basic-lti-launch-request'));
@@ -75,5 +74,14 @@ class ilLTITool extends Tool
             $this->logger->debug("onLaunch - resource");
             $this->resourceLink->save();
         }
+    }
+
+    public function handleRequest(bool $strictMode = null, bool $disableCookieCheck = false, bool $generateWarnings = false): void
+    {
+        global $DIC;
+
+        $_POST = $DIC->http()->request()->getParsedBody();
+        $_GET = $DIC->http()->request()->getQueryParams();
+        parent::handleRequest($strictMode, $disableCookieCheck, $generateWarnings);
     }
 }

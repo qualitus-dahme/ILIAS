@@ -294,7 +294,7 @@ class DataRendererTest extends TableTestBase
     </div>
     <div class="c-table-data__async_modal_container"></div>
 
-    <dialog class="c-table-data__async_message c-modal" role="dialog" id="{ID}_msgmodal">
+    <dialog class="c-table-data__async_message c-modal" id="{ID}_msgmodal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -368,7 +368,7 @@ EOT;
 
     <div class="c-table-data__async_modal_container"></div>
 
-    <dialog class="c-table-data__async_message c-modal" role="dialog" id="{ID}_msgmodal">
+    <dialog class="c-table-data__async_message c-modal" id="{ID}_msgmodal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">

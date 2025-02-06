@@ -58,6 +58,20 @@ class ilBadgeUserTableGUI implements DataRetrieval
     private readonly ilObjUser $user;
     private DateFormat $date_format;
     private bool $is_container_context = false;
+    /**
+     * @var null|list<array{
+     *     id: string,
+     *     name: string,
+     *     login: string,
+     *     type: string,
+     *     title: string,
+     *     issued: ?DateTimeImmutable,
+     *     issued_sortable: ?DateTimeImmutable,
+     *     parent: ?string,
+     *     parent_sortable: ?string
+     *  }>
+     */
+    private ?array $cached_records = null;
 
     public function __construct(
         private readonly ?int $parent_ref_id = null,
@@ -96,8 +110,12 @@ class ilBadgeUserTableGUI implements DataRetrieval
      *     parent_sortable: ?string
      *  }>
      */
-    private function getBadgeImageTemplates(): array
+    private function getRecords(): array
     {
+        if ($this->cached_records !== null) {
+            return $this->cached_records;
+        }
+
         /** @var array<int, list<ilBadgeAssignment>> $assignments */
         $assignments = [];
         $user_ids = [];
@@ -210,6 +228,8 @@ class ilBadgeUserTableGUI implements DataRetrieval
             }
         }
 
+        $this->cached_records = $rows;
+
         return $rows;
     }
 
@@ -221,7 +241,42 @@ class ilBadgeUserTableGUI implements DataRetrieval
         ?array $filter_data,
         ?array $additional_parameters
     ): Generator {
-        $records = $this->getRecords($range, $order);
+        $records = $this->getRecords();
+
+        if ($order) {
+            [$order_field, $order_direction] = $order->join(
+                [],
+                fn($ret, $key, $value) => [$key, $value]
+            );
+            usort($records, static function (array $left, array $right) use ($order_field): int {
+                if (\in_array($order_field, ['name', 'login', 'type', 'title', 'parent'], true)) {
+                    if ($order_field === 'parent') {
+                        $order_field .= '_sortable';
+                    }
+
+                    return \ilStr::strCmp(
+                        $left[$order_field] ?? '',
+                        $right[$order_field] ?? ''
+                    );
+                }
+
+                if ($order_field === 'issued') {
+                    $order_field .= '_sortable';
+                    return $left[$order_field] <=> $right[$order_field];
+                }
+
+                return $left[$order_field] <=> $right[$order_field];
+            });
+
+            if ($order_direction === ORDER::DESC) {
+                $records = array_reverse($records);
+            }
+        }
+
+        if ($range) {
+            $records = \array_slice($records, $range->getStart(), $range->getLength());
+        }
+
         foreach ($records as $record) {
             yield $row_builder->buildDataRow($record['id'], $record)->withDisabledAction(
                 'badge_award_badge',
@@ -238,62 +293,6 @@ class ilBadgeUserTableGUI implements DataRetrieval
         ?array $additional_parameters
     ): ?int {
         return \count($this->getRecords());
-    }
-
-    /**
-     * @return list<array{
-     *     id: string,
-     *     name: string,
-     *     login: string,
-     *     type: string,
-     *     title: string,
-     *     issued: ?DateTimeImmutable,
-     *     issued_sortable: ?DateTimeImmutable,
-     *     parent: ?string,
-     *     parent_sortable: ?string
-     *  }>
-     */
-    private function getRecords(Range $range = null, Order $order = null): array
-    {
-        $rows = $this->getBadgeImageTemplates();
-
-        if ($order) {
-            [$order_field, $order_direction] = $order->join(
-                [],
-                fn($ret, $key, $value) => [$key, $value]
-            );
-            usort(
-                $rows,
-                static function (array $left, array $right) use ($order_field): int {
-                    if (\in_array($order_field, ['name', 'login', 'type', 'title', 'parent'], true)) {
-                        if ($order_field === 'parent') {
-                            $order_field .= '_sortable';
-                        }
-
-                        return \ilStr::strCmp(
-                            $left[$order_field] ?? '',
-                            $right[$order_field] ?? ''
-                        );
-                    }
-
-                    if ($order_field === 'issued') {
-                        $order_field .= '_sortable';
-                        return $left[$order_field] <=> $right[$order_field];
-                    }
-
-                    return $left[$order_field] <=> $right[$order_field];
-                }
-            );
-            if ($order_direction === ORDER::DESC) {
-                $rows = array_reverse($rows);
-            }
-        }
-
-        if ($range) {
-            $rows = \array_slice($rows, $range->getStart(), $range->getLength());
-        }
-
-        return $rows;
     }
 
     /**

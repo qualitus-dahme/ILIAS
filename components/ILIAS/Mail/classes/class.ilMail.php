@@ -751,12 +751,10 @@ class ilMail
                 $recipient->getUserId()
             );
 
-            $mail_receiver_options = $this->getMailOptionsByUserId($this->user_id);
-
             $this->auto_responder_service->enqueueAutoresponderIfEnabled(
                 $recipient->getUserId(),
                 $recipient->getMailOptions(),
-                $mail_receiver_options,
+                $this->getMailOptionsByUserId($this->user_id),
             );
 
             if ($mail_data->getAttachments() !== []) {

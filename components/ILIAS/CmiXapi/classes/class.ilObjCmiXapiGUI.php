@@ -119,6 +119,7 @@ class ilObjCmiXapiGUI extends ilObject2GUI
             $item->addOption($option);
         }
         #$item->setValue($this->object->typedef->getTypeId());
+        $item->setInfo($this->lng->txt('cmix_add_lrs_type_info'));
         $form->addItem($item);
 
         $source = new ilRadioGroupInputGUI($this->lng->txt('cmix_add_source'), 'source_type');

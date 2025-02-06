@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * https://github.com/ILIAS-eLearning
  *
  *********************************************************************/
+
+declare(strict_types=1);
 
 /**
  * OAuth based lti authentication
@@ -264,7 +264,13 @@ class ilAuthProviderLTI extends \ilAuthProvider implements \ilAuthProviderInterf
             return false;
         }
 
-        $this->ref_id = $this->provider->platform->getRefId();
+        $platformId = $this->messageParameters['platform_id'];
+        $clientId = $this->provider->platform->clientId;
+        $deploymentId = $this->messageParameters['deployment_id'];
+
+        $platform = ilLTIPlatform::fromPlatformId($platformId, $clientId, $deploymentId, $this->dataConnector);
+
+        $this->ref_id = $platform->getRefId();
         // stores ref_ids of all lti consumer within active LTI User Session
         $lti_context_ids = ilSession::get('lti_context_ids');
         // if session object exists only add ref_id if not already exists
@@ -298,41 +304,44 @@ class ilAuthProviderLTI extends \ilAuthProvider implements \ilAuthProviderInterf
         ilSession::set('lti_init_target', ilObject::_lookupType($this->ref_id, true) . '_' . $this->ref_id);
 
         // lti service activation
-        if (!$this->provider->platform->enabled) {
+        if (!$platform->enabled) {
             $this->getLogger()->warning('Consumer is not enabled');
             $status->setReason('lti_consumer_inactive');
             $status->setStatus(ilAuthStatus::STATUS_AUTHENTICATION_FAILED);
             return false;
         }
         // global activation status
-        if (!$this->provider->platform->getActive()) {
+        if (!$platform->getActive()) {
             $this->getLogger()->warning('Consumer is not active');
             $status->setReason('lti_consumer_inactive');
             $status->setStatus(ilAuthStatus::STATUS_AUTHENTICATION_FAILED);
             return false;
         }
-        $lti_id = $this->provider->platform->getExtConsumerId();
+        $lti_id = $platform->getExtConsumerId();
         if (!$lti_id) {
             $status->setReason('lti_auth_failed_invalid_key');
             $status->setStatus(ilAuthStatus::STATUS_AUTHENTICATION_FAILED);
             return false;
         }
 
-        $this->getLogger()->debug('Using prefix:' . $this->provider->platform->getPrefix());
+        $this->getLogger()->debug('Using prefix:' . $platform->getPrefix());
+
+        // Use user_id as username instead of user email to avoid problems with uniqueness of the lti user.
+        $this->getCredentials()->setUsername($this->messageParameters['user_id']);
 
         $internal_account = $this->findUserId(
             $this->getCredentials()->getUsername(),
             (string) $lti_id,
-            $this->provider->platform->getPrefix()
+            $platform->getPrefix()
         );
 
         if ($internal_account) {
-            $this->updateUser($internal_account, $this->provider->platform);
+            $this->updateUser($internal_account, $platform);
         } else {
-            $internal_account = $this->createUser($this->provider->platform);
+            $internal_account = $this->createUser($platform);
         }
 
-        $this->handleLocalRoleAssignments($internal_account, $this->provider->platform);
+        $this->handleLocalRoleAssignments($internal_account, $platform);
 
         $status->setStatus(ilAuthStatus::STATUS_AUTHENTICATED);
         $status->setAuthenticatedUserId($internal_account);
@@ -427,12 +436,12 @@ class ilAuthProviderLTI extends \ilAuthProvider implements \ilAuthProviderInterf
         $local_user = ilAuthUtils::_generateLogin($consumer->getPrefix() . '_' . $this->getCredentials()->getUsername());
 
         $newUser["login"] = $local_user;
-        if(isset($this->messageParameters['lis_person_name_given'])) {
+        if (isset($this->messageParameters['lis_person_name_given'])) {
             $newUser["firstname"] = $this->messageParameters['lis_person_name_given'];
         } else {
             $newUser["firstname"] = '-';
         }
-        if(isset($this->messageParameters['lis_person_name_family'])) {
+        if (isset($this->messageParameters['lis_person_name_family'])) {
             $newUser["lastname"] = $this->messageParameters['lis_person_name_family'];
         } else {
             $newUser["lastname"] = '-';
@@ -552,6 +561,11 @@ class ilAuthProviderLTI extends \ilAuthProvider implements \ilAuthProviderInterf
         $role_arr = explode(',', $roles);
         foreach ($role_arr as $role_name) {
             $role_name = trim($role_name);
+            $role_name = str_replace('http://purl.imsglobal.org/vocab/lis/v2/membership#', '', $role_name);
+            $role_name = str_replace('http://purl.imsglobal.org/vocab/lis/v2/person#', '', $role_name);
+            $role_name = str_replace('http://purl.imsglobal.org/vocab/lis/v2/institution/person#', '', $role_name);
+            $role_name = str_replace('http://purl.imsglobal.org/vocab/lis/v2/system/person#', '', $role_name);
+
             switch ($role_name) {
                 case 'Administrator':
                     $this->getLogger()->info('Administrator role handling');

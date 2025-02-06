@@ -288,8 +288,8 @@ class ilLTIProviderObjectSettingGUI
     protected function updateSettings(): void
     {
         $form = $this->initObjectSettingsForm();
+        $form->setValuesByPost();
         if (!$form->checkInput()) {
-            $form->setValuesByPost();
             $this->settings($form);
             return;
         }

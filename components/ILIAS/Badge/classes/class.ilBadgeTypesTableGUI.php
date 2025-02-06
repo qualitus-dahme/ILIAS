@@ -47,6 +47,10 @@ class ilBadgeTypesTableGUI implements DataRetrieval
     private readonly Services $http;
     private readonly ilLanguage $lng;
     private readonly ilGlobalTemplateInterface $tpl;
+    /**
+     * @var null|list<array{"id": string, "comp": string, "name": string, "manual": bool, "active": bool, "activity": bool}>
+     */
+    private ?array $cached_records = null;
 
     public function __construct(protected bool $a_has_write = false)
     {
@@ -65,8 +69,12 @@ class ilBadgeTypesTableGUI implements DataRetrieval
     /**
      * @return list<array{"id": string, "comp": string, "name": string, "manual": bool, "active": bool, "activity": bool}>
      */
-    private function getBadgeImageTemplates(): array
+    private function getRecords(): array
     {
+        if ($this->cached_records !== null) {
+            return $this->cached_records;
+        }
+
         $rows = [];
         $handler = ilBadgeHandler::getInstance();
         $inactive = $handler->getInactiveTypes();
@@ -89,6 +97,8 @@ class ilBadgeTypesTableGUI implements DataRetrieval
             }
         }
 
+        $this->cached_records = $rows;
+
         return $rows;
     }
 
@@ -100,26 +110,7 @@ class ilBadgeTypesTableGUI implements DataRetrieval
         ?array $filter_data,
         ?array $additional_parameters
     ): Generator {
-        $records = $this->getRecords($range, $order);
-        foreach ($records as $record) {
-            $row_id = (string) $record['id'];
-            yield $row_builder->buildDataRow($row_id, $record);
-        }
-    }
-
-    public function getTotalRowCount(
-        ?array $filter_data,
-        ?array $additional_parameters
-    ): ?int {
-        return \count($this->getRecords());
-    }
-
-    /**
-     * @return list<array{"id": string, "comp": string, "name": string, "manual": bool, "active": bool, "activity": bool}>
-     */
-    private function getRecords(Range $range = null, Order $order = null): array
-    {
-        $rows = $this->getBadgeImageTemplates();
+        $records = $this->getRecords();
 
         if ($order) {
             [$order_field, $order_direction] = $order->join(
@@ -127,7 +118,7 @@ class ilBadgeTypesTableGUI implements DataRetrieval
                 fn($ret, $key, $value) => [$key, $value]
             );
 
-            usort($rows, static function (array $left, array $right) use ($order_field): int {
+            usort($records, static function (array $left, array $right) use ($order_field): int {
                 if (\in_array($order_field, ['name', 'comp'], true)) {
                     return \ilStr::strCmp(
                         $left[$order_field],
@@ -143,15 +134,24 @@ class ilBadgeTypesTableGUI implements DataRetrieval
             });
 
             if ($order_direction === Order::DESC) {
-                $rows = array_reverse($rows);
+                $records = array_reverse($records);
             }
         }
 
         if ($range) {
-            $rows = \array_slice($rows, $range->getStart(), $range->getLength());
+            $records = \array_slice($records, $range->getStart(), $range->getLength());
         }
 
-        return $rows;
+        foreach ($records as $record) {
+            yield $row_builder->buildDataRow((string) $record['id'], $record);
+        }
+    }
+
+    public function getTotalRowCount(
+        ?array $filter_data,
+        ?array $additional_parameters
+    ): ?int {
+        return \count($this->getRecords());
     }
 
     /**

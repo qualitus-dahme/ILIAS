@@ -358,7 +358,7 @@ class ilInfoScreenGUI
         }
 
         // public access export
-        $public_access_export = $this->buildPublicAccessExportLink($a_rep_obj_id, $a_obj_id);
+        $public_access_export = $this->buildPublicAccessExportButton($a_rep_obj_id, $a_obj_id);
 
         // output
 
@@ -401,22 +401,22 @@ class ilInfoScreenGUI
         }
         $this->addSection($lng->txt('meta_info_licence_section'));
 
-        if ($copyright !== '') {		// copyright
-            $this->addProperty(
-                $lng->txt("meta_copyright"),
-                $copyright
-            );
-        }
-
         if ($public_access_export !== '') {		// public access export
             $this->addProperty(
                 $lng->txt('export_info_public_access'),
                 $public_access_export
             );
         }
+
+        if ($copyright !== '') {		// copyright
+            $this->addProperty(
+                $lng->txt("meta_copyright"),
+                $copyright
+            );
+        }
     }
 
-    protected function buildPublicAccessExportLink(int $rep_obj_id, int $obj_id): string
+    protected function buildPublicAccessExportButton(int $rep_obj_id, int $obj_id): string
     {
         /*
          * This should be replaced by a proper export API
@@ -443,7 +443,7 @@ class ilInfoScreenGUI
         $ref_id = $this->gui_object->getObject()->getRefId();
 
         return $this->ui->renderer()->render(
-            $this->ui->factory()->link()->standard(
+            $this->ui->factory()->button()->standard(
                 $this->lng->txt('export_info_public_access_download'),
                 $public_access->downloadLinkOfPublicAccessFile($this->data_factory->refId($ref_id))
             )

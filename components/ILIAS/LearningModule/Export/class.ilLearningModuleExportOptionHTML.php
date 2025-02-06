@@ -28,7 +28,7 @@ use ILIAS\Export\ExportHandler\I\Consumer\File\Identifier\HandlerInterface as il
 use ILIAS\Export\ExportHandler\I\Info\File\CollectionInterface as ilExportHandlerFileInfoCollectionInterface;
 use ILIAS\MetaData\Services\ServicesInterface as LOMServices;
 
-class ilLearningModuleExportOptionHTML extends ilBasicExportOption
+class ilLearningModuleExportOptionHTML extends \ILIAS\Export\HTML\ExportOptionBase
 {
     protected ilLanguage $lng;
     protected ilCtrl $ctrl;
@@ -36,6 +36,7 @@ class ilLearningModuleExportOptionHTML extends ilBasicExportOption
 
     public function init(Container $DIC): void
     {
+        parent::init($DIC);
         $this->lng = $DIC->language();
         $this->ctrl = $DIC->ctrl();
         $this->lom_services = $DIC->learningObjectMetadata();
@@ -67,6 +68,7 @@ class ilLearningModuleExportOptionHTML extends ilBasicExportOption
         return $this->lng->txt("exp_format_dropdown-html");
     }
 
+    /*
     public function onDeleteFiles(
         ilExportHandlerConsumerContextInterface $context,
         ilExportHandlerConsumerFileIdentifierCollectionInterface $file_identifiers
@@ -96,8 +98,9 @@ class ilLearningModuleExportOptionHTML extends ilBasicExportOption
                 ilFileUtils::delDir($lm_dir);
             }
         }
-    }
+    }*/
 
+    /*
     public function onDownloadFiles(
         ilExportHandlerConsumerContextInterface $context,
         ilExportHandlerConsumerFileIdentifierCollectionInterface $file_identifiers
@@ -123,8 +126,9 @@ class ilLearningModuleExportOptionHTML extends ilBasicExportOption
                 break;
             }
         }
-    }
+    }*/
 
+    /*
     public function onDownloadWithLink(
         ReferenceId $reference_id,
         ilExportHandlerConsumerFileIdentifierInterface $file_identifier
@@ -150,8 +154,9 @@ class ilLearningModuleExportOptionHTML extends ilBasicExportOption
             );
             break;
         }
-    }
+    }*/
 
+    /*
     public function getFiles(
         ilExportHandlerConsumerContextInterface $context
     ): \ILIAS\Export\ExportHandler\I\Info\File\CollectionInterface {
@@ -183,7 +188,7 @@ class ilLearningModuleExportOptionHTML extends ilBasicExportOption
             }
         }
         return $collection_builder->collection();
-    }
+    }*/
 
     public function getFileSelection(
         ilExportHandlerConsumerContextInterface $context,

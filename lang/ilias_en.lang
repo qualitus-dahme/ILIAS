@@ -2321,10 +2321,10 @@ badge#:#criteria#:#Criteria
 badge#:#endless#:#Always
 badge#:#issued_on#:#Issued on
 badge#:#position_updated#:#Profil assignment updated.
-badge#:#sort_by_date_asc#:#Sort by Date Ascending
-badge#:#sort_by_date_desc#:#Sort by Date Descending
-badge#:#sort_by_title_asc#:#Sort by Title Ascending
-badge#:#sort_by_title_desc#:#Sort by Title Descending
+badge#:#sort_by_date_asc#:#Date Ascending
+badge#:#sort_by_date_desc#:#Date Descending
+badge#:#sort_by_title_asc#:#Title Ascending
+badge#:#sort_by_title_desc#:#Title Descending
 badge#:#table_view#:#Table View
 badge#:#tile_view#:#Tile View
 badge#:#valid_until#:#Valid until
@@ -3118,6 +3118,7 @@ cmix#:#cmix_add#:#Add xAPI/cmi5 Object
 cmix#:#cmix_add_cmi5_lm#:#cmi5 Learning Module
 cmix#:#cmix_add_cmi5_lm_info#:#This option should be used when the content is a cmi5 compliant learning module. Related features like suitable reportings are available without further configurations.
 cmix#:#cmix_add_lrs_type#:#LRS Type
+cmix#:#cmix_add_lrs_type_info#:#These Types of Learning Record Stores have been made available in the ILIAS Administration.###02 02 2025 new variable
 cmix#:#cmix_add_source#:#Source
 cmix#:#cmix_add_source_external_app#:#Resource not launched by ILIAS
 cmix#:#cmix_add_source_external_app_info#:#Use this option for separately launched resources as e.g. apps or simulations. Users must agree to the fetching of data.
@@ -4782,31 +4783,31 @@ common#:#msg_no_default_language#:#No default language specified! You must defin
 common#:#msg_no_delete_yourself#:#You cannot delete your own user account.
 common#:#msg_no_file#:#You didn't choose a file or the selected file was too big.
 common#:#msg_no_files_selected#:#No files selected
-common#:#msg_no_language_selected#:#No translation language specified! You must define a language for each translation
+common#:#msg_no_language_selected#:#No translation language specified! You must define a language for each translation.
 common#:#msg_no_perm_assign_role_to_user#:#You have no permission to change user's role assignment
-common#:#msg_no_perm_assign_user_to_role#:#You have no permission to change the user assignment
+common#:#msg_no_perm_assign_user_to_role#:#You have no permission to change the user assignment.
 common#:#msg_no_perm_copy#:#You have no permission to create a copy of the following object(s):
-common#:#msg_no_perm_create_rolt#:#You have no permission to add role templates
+common#:#msg_no_perm_create_rolt#:#You have no permission to add role templates.
 common#:#msg_no_perm_cut#:#You have no permission to cut the following object(s):
 common#:#msg_no_perm_delete#:#You have no permission to delete the following object(s):
 common#:#msg_no_perm_link#:#You have no permission to create a link from the following object(s):
-common#:#msg_no_perm_modify_rolt#:#You have no permission to modify role templates
-common#:#msg_no_perm_modify_user#:#You have no permission to modify user data
+common#:#msg_no_perm_modify_rolt#:#You have no permission to modify role templates.
+common#:#msg_no_perm_modify_user#:#You have no permission to modify user data.
 common#:#msg_no_perm_paste#:#You have no permission to paste the following object(s):
 common#:#msg_no_perm_paste_object_in_folder#:#You have no permission to paste the object %s in the folder %s.
-common#:#msg_no_perm_perm#:#You have no permission to edit permission settings
+common#:#msg_no_perm_perm#:#You have no permission to change permission settings.
 common#:#msg_no_perm_read#:#You have no permission to access this item.
 common#:#msg_no_perm_read_item#:#You have no permission to access item '%s’.
 common#:#msg_no_perm_read_lm#:#You have no permission to read this learning module.
-common#:#msg_no_perm_write#:#You have no permission to write
+common#:#msg_no_perm_write#:#You have no permission to edit settings.
 common#:#msg_no_search_result#:#No entries found
-common#:#msg_no_search_string#:#Please enter your query
+common#:#msg_no_search_string#:#Please enter your query.
 common#:#msg_no_title#:#Please enter a title.
-common#:#msg_not_available_for_anon#:#The page you have chosen is only accessible for registered users
-common#:#msg_not_in_itself#:#It’s not possible to paste the object in itself
+common#:#msg_not_available_for_anon#:#The page you have chosen is only accessible for registered users.
+common#:#msg_not_in_itself#:#It’s not possible to paste the object in itself.
 common#:#msg_obj_already_deleted#:#The object has already been deleted.
 common#:#msg_obj_created#:#Object created.
-common#:#msg_obj_exists#:#This object already exists in this folder
+common#:#msg_obj_exists#:#This object already exists in this folder.
 common#:#msg_obj_exists_in_folder#:#The object %s already exists in the folder %s.
 common#:#msg_obj_may_not_contain_objects_of_type#:#The object %s may not contain objects of type: %s.
 common#:#msg_obj_modified#:#Modifications saved.
@@ -8150,10 +8151,10 @@ dash#:#dash_presentation#:#Presentation
 dash#:#dash_recommended_content#:#Recommended Content
 dash#:#dash_remove_from_list#:#Remove from List
 dash#:#dash_side_panel#:#Side Panel
-dash#:#dash_sort_by_alphabet#:#Sort by Alphabet
-dash#:#dash_sort_by_location#:#Sort by Location
-dash#:#dash_sort_by_start_date#:#Sort by Period of Event
-dash#:#dash_sort_by_type#:#Sort by Type
+dash#:#dash_sort_by_alphabet#:#Alphabet
+dash#:#dash_sort_by_location#:#Location
+dash#:#dash_sort_by_start_date#:#Period of Event
+dash#:#dash_sort_by_type#:#Type
 dash#:#dash_sortation#:#Sortation
 dash#:#dash_study_programmes#:#My Study Programmes
 dash#:#dash_tile#:#Tile
@@ -8784,7 +8785,7 @@ dcl#:#dcl_plugin_hooks#:#Available Plugins
 dcl#:#dcl_plugin_no_hooks_available#:#No active field-type plugins found
 dcl#:#dcl_prev_record#:#Previous Entry
 dcl#:#dcl_prop_expression#:#Expression
-dcl#:#dcl_prop_expression_info#:#Supported operators: <b>%s</b><br>Supported functions: <b>%s</b><br>Use brackets <b>‘(’, ‘)’</b> to group calculations.<br>Concatenate strings and placeholders with &: <b>‘The result is ’ & [[Int 1]] * [[Int2]]</b><br>Using functions: <b>SUM([[Int 1]];[[Int 2]])</b><br><br>Allowed fields (click on title to copy field inside expression):<br>%s<br><b>(Allowed fields are boolean, number, text and date that dont contain formular-sensitive chars inside their title)<b>
+dcl#:#dcl_prop_expression_info#:#Supported operators: <b>%s</b><br>Supported functions: <b>%s</b><br>Use brackets <b>‘(’, ‘)’</b> to group calculations.<br>Concatenate strings and placeholders with &: <b>‘The result is ’ & [[Int 1]] * [[Int2]]</b><br>Using functions: <b>SUM([[Int 1]];[[Int 2]])</b><br><br>Allowed fields (click on title to copy field inside expression):<br>%s<br><b>(Allowed fields are boolean, number, text and date that dont contain formular-sensitive chars inside their title)</b>
 dcl#:#dcl_public_comments#:#Activate Public Comments
 dcl#:#dcl_public_comments_desc#:#Users can comment on entries of the table.
 dcl#:#dcl_rating#:#Rating
@@ -11134,6 +11135,12 @@ lti#:#conf_privacy_ident_il_uuid_ext_account#:#External User ID combined with a 
 lti#:#conf_privacy_ident_il_uuid_ext_account_info#:#This is identical to each call, but may allow a direct conclusion about the user.
 lti#:#conf_privacy_ident_il_uuid_login#:#ILIAS Login combined with a unique ILIAS platform id formatted as an E-Mail address
 lti#:#conf_privacy_ident_il_uuid_login_info#:#Sends the login name. This is identical to each call, but may allow a direct conclusion about the ILIAS user.
+lti#:#conf_privacy_ident_il_uuid_random#:#Random ID combined with a unique ILIAS platform ID formatted as an E-Mail address
+lti#:#conf_privacy_ident_il_uuid_random_info#:#For each ILIAS object and ILIAS user a random ID is generated which remains identical for each call. Conclusions about a user are very limited because it is practically impossible to create user profiles across objects.
+lti#:#conf_privacy_ident_il_uuid_sha256#:#Hash combined with a unique ILIAS platform id formatted as an E-Mail address
+lti#:#conf_privacy_ident_il_uuid_sha256_info#:#This is identical to each call, but does not permit any direct conclusions about the ILIAS user.
+lti#:#conf_privacy_ident_il_uuid_sha256url#:#Hash combined with the ILIAS Domain formatted as an E-Mail address.
+lti#:#conf_privacy_ident_il_uuid_sha256url_info#:#This is identical to each call, with with a maximum of 80 characters significantly shorter than the variant with the ILIAS platform ID and allows only very limited conclusions about the ILIAS user.
 lti#:#conf_privacy_ident_il_uuid_user_id#:#ILIAS user id combined with a unique ILIAS platform id formatted as an E-Mail address
 lti#:#conf_privacy_ident_il_uuid_user_id_info#:#Sends the internal numeric user id. This is identical to each call, but may allow conclusions about the ILIAS user.
 lti#:#conf_privacy_ident_info#:#Standard is frequently the email address. The unique ILIAS platform id is:
@@ -11219,13 +11226,16 @@ lti#:#launched#:#Resource was already launched.
 lti#:#learning_progress_options#:#Options for Learning Progress
 lti#:#lm_only_one_download_per_type#:#Only one file per type (XML, HTML, SCORM) can be released publicly.
 lti#:#lti13_hints#:#If the tool was created without dynamic registration, the following data must be entered for the tool to run.
+lti#:#lti_13_authentication_url#:#Authentication Request URL
 lti#:#lti_13_client_id#:#Client-ID
 lti#:#lti_13_deployment_id#:#Deployment-ID
+lti#:#lti_13_keyset_url#:#Public Keyset URL
 lti#:#lti_13_platform_id#:#Platform-ID
 lti#:#lti_13_step1#:#Step 1
 lti#:#lti_13_step1_info#:#For the initiating platform (consumer), enter the following address for Launch URL, Initiate Login URL, Redirection URI, and Registration URL:
 lti#:#lti_13_step2#:#Step 2
 lti#:#lti_13_step2_info#:#You will receive information from the initiating platform (Consumer), which you must enter in the following fields. After saving, the LTI 1.3 functionalities are available.
+lti#:#lti_13_token_url#:#Access Token URL
 lti#:#lti_action_accept_provider_as_global#:#Accept Provider as Global Provider for all Users
 lti#:#lti_action_accept_providers_as_global#:#Accept Providers as Global
 lti#:#lti_action_delete_providers#:#Delete Providers
@@ -11239,6 +11249,8 @@ lti#:#lti_at_least_one_prov_has_usages#:#At least one provider could not be dele
 lti#:#lti_auth_failed_invalid_key#:#Authentication failed, no valid consumer key given.
 lti#:#lti_con_content_item#:#Support for Deep Linking
 lti#:#lti_con_content_item_url#:#Content URL
+lti#:#lti_con_grade_synchronization#:#Advanced Grading Services
+lti#:#lti_con_grade_synchronization_info#:#The LTI tool must offer 'Assignment and Grade Services'.
 lti#:#lti_con_initiate_login_url#:#Initiate Login URL
 lti#:#lti_con_key_type#:#Public Key Type
 lti#:#lti_con_key_type_jwk#:#URL (Json Web Token)
@@ -11258,6 +11270,10 @@ lti#:#lti_con_prov_category_info#:#Category to filter entries when LTI Consumer 
 lti#:#lti_con_prov_custom_params#:#Custom Parameters for this specific Provider
 lti#:#lti_con_prov_custom_params_info#:#Please enter them in the form param1=value1; param2=value2
 lti#:#lti_con_prov_description#:#Description
+lti#:#lti_con_prov_dyn_reg_params#:#Optional Parameters
+lti#:#lti_con_prov_dyn_reg_params_info#:#Here, for example, references to target objects in the tool can be specified.
+lti#:#lti_con_prov_dyn_reg_url#:#Registration URL of the Tool
+lti#:#lti_con_prov_dyn_reg_url_info#:#Note: Not every tool supports dynamic registration.
 lti#:#lti_con_prov_external_provider#:#External Provider
 lti#:#lti_con_prov_external_provider_info#:#A hint will be shown to users when dealing with an external Provider. An external Provider is characterized by insufficient influence on the Provider by the operator of the ILIAS-installation. This is the case when there are no rights to delete.
 lti#:#lti_con_prov_group_options#:#Options to group and filter Providers
@@ -11326,6 +11342,8 @@ lti#:#lti_custom_new#:#Create Own Provider Settings
 lti#:#lti_delete_consume_provider#:#Delete Provider
 lti#:#lti_delete_consume_providers#:#Delete Providers
 lti#:#lti_delete_provider#:#Delete Provider
+lti#:#lti_dyn_reg_add_tool#:#Add
+lti#:#lti_dynamic_registration#:#Create Own Settings for Tool with Dynamic Registration (LTI 1.3)
 lti#:#lti_edit_consumer#:#Edit LTI Consumer
 lti#:#lti_exit#:#Close LTI Session
 lti#:#lti_exited#:#LTI Session closed
@@ -13127,7 +13145,7 @@ orgu#:#msg_confirm_deletion#:#Would you really like to delete the following Posi
 orgu#:#msg_confirm_remove_user#:#Would you really like to remove the following User from the Position %s?
 orgu#:#msg_deleted#:#Deleted
 orgu#:#msg_position_created#:#Position created.
-orgu#:#msg_position_udpated#:#Position aktualisiert
+orgu#:#msg_position_delete_fail#:#Position wurde nicht gefunden.
 orgu#:#msg_position_updated#:#Position updated.
 orgu#:#msg_success_permission_saved#:#Permissions saved.
 orgu#:#no_assignment#:#Please check your XML-File. There is no User Assignment.
@@ -17350,6 +17368,7 @@ ui#:#ui_pagination_unlimited#:#Unlimited
 ui#:#ui_select_dropdown_label#:#Please select
 ui#:#ui_table_no_records#:#No records
 ui#:#ui_transcription#:#Transcript
+ui#:#vc_sort#:#Sort by:
 user#:#all_roles_has_starting_point#:#All the roles have starting points
 user#:#back_to_starting_points_list#:#Back to Starting Points
 user#:#change_email_email_confirmation_body#:#The email address for the account %s was changed. To confirm this change, please click on this link %s. The link is valid for %s minutes.

@@ -67,13 +67,15 @@ class ilLTIConsumerAdministrationGUI
     private array $_importedXmlData = [];
     private \ilGlobalTemplateInterface $main_tpl;
 
-    public function __construct()
+    private bool $hasWritePermission;
+
+    public function __construct(bool $hasWritePermission = false)
     {
         global $DIC;
+        $this->hasWritePermission = $hasWritePermission;
         $this->main_tpl = $DIC->ui()->mainTemplate(); /* @var \ILIAS\DI\Container $DIC */
 
         $DIC->language()->loadLanguageModule("rep");
-
         //$this->performProviderImport($this->xml2());
     }
 
@@ -146,19 +148,23 @@ class ilLTIConsumerAdministrationGUI
 
         $DIC->tabs()->activateSubTab('global_provider');
 
-        $button = $DIC->ui()->factory()->button()->standard(
-            $DIC->language()->txt('lti_add_global_provider'),
-            $DIC->ctrl()->getLinkTarget($this, self::CMD_SHOW_GLOBAL_PROVIDER_FORM)
-        );
+        if ($this->hasWritePermission) {
+            $button = $DIC->ui()->factory()->button()->standard(
+                $DIC->language()->txt('lti_add_global_provider'),
+                $DIC->ctrl()->getLinkTarget($this, self::CMD_SHOW_GLOBAL_PROVIDER_FORM)
+            );
 
-        $DIC->toolbar()->addComponent($button);
+            $DIC->toolbar()->addComponent($button);
 
-        $button = $DIC->ui()->factory()->button()->standard(
-            $DIC->language()->txt('lti_import_global_provider'),
-            $DIC->ctrl()->getLinkTarget($this, self::CMD_SHOW_GLOBAL_PROVIDER_IMPORT)
-        );
+            $button = $DIC->ui()->factory()->button()->standard(
+                $DIC->language()->txt('lti_import_global_provider'),
+                $DIC->ctrl()->getLinkTarget($this, self::CMD_SHOW_GLOBAL_PROVIDER_IMPORT)
+            );
 
-        $DIC->toolbar()->addComponent($button);
+            $DIC->toolbar()->addComponent($button);
+        }
+
+
 
         $table = $this->buildProviderTable($this, self::CMD_SHOW_GLOBAL_PROVIDER);
         $table->setEditProviderCmd(self::CMD_SHOW_GLOBAL_PROVIDER_FORM);
@@ -820,13 +826,14 @@ class ilLTIConsumerAdministrationGUI
             $parentCmd
         );
 
+
         $table->setFilterCommand(self::CMD_APPLY_GLOBAL_PROVIDER_FILTER);
         $table->setResetCommand(self::CMD_RESET_GLOBAL_PROVIDER_FILTER);
 
         $table->setAvailabilityColumnEnabled(true);
         $table->setProviderCreatorColumnEnabled(true);
 
-        $table->setActionsColumnEnabled(true);
+        $table->setActionsColumnEnabled($this->hasWritePermission);
         $table->setDetailedUsagesEnabled(true);
 
         return $table;

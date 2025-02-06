@@ -37,6 +37,8 @@ class ilCASSettingsGUI
     private ilRbacSystem $rbacSystem;
     private ilRbacReview $rbacReview;
     private ilErrorHandling $ilErr;
+    private \ILIAS\UI\Renderer $renderer;
+    private \ILIAS\UI\Factory $factory;
 
     public function __construct(int $a_auth_ref_id)
     {
@@ -93,6 +95,8 @@ class ilCASSettingsGUI
 
         $form->setTitle($this->lng->txt('auth_cas_auth'));
 
+        $has_write_permissions = $this->rbacSystem->checkAccess('write', $this->ref_id);
+
         $drop_in_replacements_url = 'https://github.com/ILIAS-eLearning/ILIAS/tree/trunk/components/ILIAS/HTTP#dropinreplacements';
         $drop_in_replacements_link = $this->factory->link()->standard(
             $this->lng->txt("auth_cas_auth_desc"),
@@ -104,11 +108,13 @@ class ilCASSettingsGUI
 
         // Form checkbox
         $check = new ilCheckboxInputGUI($this->lng->txt("active"), 'active');
+        $check->setDisabled(!$has_write_permissions);
         $check->setChecked($this->getSettings()->isActive());
         $check->setValue("1");
         $form->addItem($check);
 
         $text = new ilTextInputGUI($this->lng->txt('server'), 'server');
+        $text->setDisabled(!$has_write_permissions);
         $text->setValue($this->getSettings()->getServer());
         $text->setRequired(true);
         $text->setInfo($this->lng->txt('auth_cas_server_desc'));
@@ -117,6 +123,7 @@ class ilCASSettingsGUI
         $form->addItem($text);
 
         $port = new ilNumberInputGUI($this->lng->txt("port"), 'port');
+        $port->setDisabled(!$has_write_permissions);
         $port->setValue((string) $this->getSettings()->getPort());
         $port->setRequired(true);
         $port->setMinValue(0);
@@ -127,6 +134,7 @@ class ilCASSettingsGUI
         $form->addItem($port);
 
         $text = new ilTextInputGUI($this->lng->txt('uri'), 'uri');
+        $text->setDisabled(!$has_write_permissions);
         $text->setValue($this->getSettings()->getUri());
         $text->setRequired(true);
         $text->setInfo($this->lng->txt('auth_cas_uri_desc'));
@@ -139,6 +147,7 @@ class ilCASSettingsGUI
         // 1: CAS
         // 2: LDAP
         $sync = new ilRadioGroupInputGUI($this->lng->txt('auth_sync'), 'sync');
+        $sync->setDisabled(!$has_write_permissions);
         $sync->setRequired(true);
         $form->addItem($sync);
 
@@ -148,6 +157,7 @@ class ilCASSettingsGUI
             (string) self::SYNC_DISABLED,
             ''
         );
+        $dis->setDisabled(!$has_write_permissions);
         $sync->addOption($dis);
 
         // CAS
@@ -156,12 +166,14 @@ class ilCASSettingsGUI
             (string) self::SYNC_CAS,
             ''
         );
+        $rad->setDisabled(!$has_write_permissions);
         $rad->setInfo($this->lng->txt('auth_sync_cas_info'));
         $sync->addOption($rad);
 
         $select = new ilSelectInputGUI($this->lng->txt('auth_user_default_role'), 'role');
         $select->setOptions($this->prepareRoleSelection());
         $select->setValue($this->getSettings()->getDefaultRole());
+        $select->setDisabled(!$has_write_permissions);
         $rad->addSubItem($select);
 
 
@@ -174,10 +186,12 @@ class ilCASSettingsGUI
                 (string) ilCASSettings::SYNC_LDAP,
                 ''
             );
+            $ldap->setDisabled(!$has_write_permissions);
             $ldap->setInfo($this->lng->txt('auth_cas_ldap_info'));
             $sync->addOption($ldap);
 
             $ldap_server_select = new ilSelectInputGUI($this->lng->txt('auth_ldap_server_ds'), 'ldap_sid');
+            $ldap_server_select->setDisabled(!$has_write_permissions);
             $options[0] = $this->lng->txt('select_one');
             foreach ($server_ids as $ldap_sid) {
                 $ldap_server = new ilLDAPServer($ldap_sid);
@@ -204,6 +218,7 @@ class ilCASSettingsGUI
         $instruction = new ilTextAreaInputGUI($this->lng->txt('auth_login_instructions'), 'instruction');
         $instruction->setCols(80);
         $instruction->setRows(6);
+        $instruction->setDisabled(!$has_write_permissions);
         $instruction->setValue($this->getSettings()->getLoginInstruction());
         $form->addItem($instruction);
 
@@ -211,6 +226,7 @@ class ilCASSettingsGUI
         $create->setInfo($this->lng->txt('auth_cas_allow_local_desc'));
         $create->setChecked($this->getSettings()->isLocalAuthenticationEnabled());
         $create->setValue("1");
+        $create->setDisabled(!$has_write_permissions);
         $form->addItem($create);
 
         if ($this->rbacSystem->checkAccess('write', $this->ref_id)) {
@@ -228,6 +244,10 @@ class ilCASSettingsGUI
 
     public function save(): void
     {
+        if (!$this->rbacSystem->checkAccess('write', $this->ref_id)) {
+            $this->ilErr->raiseError($this->lng->txt('permission_denied'), $this->ilErr->WARNING);
+        }
+
         $form = $this->initFormSettings();
         if ($form->checkInput()) {
             $this->getSettings()->setActive((bool) $form->getInput('active'));

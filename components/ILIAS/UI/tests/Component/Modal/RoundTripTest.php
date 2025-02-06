@@ -82,7 +82,7 @@ class RoundTripTest extends ModalBase
     protected function getExpectedHTML(): string
     {
         return <<<EOT
-<dialog class="c-modal il-modal-roundtrip" tabindex="-1" role="dialog" id="id_1">
+<dialog class="c-modal il-modal-roundtrip" tabindex="-1" id="id_1">
    <div class="modal-dialog" role="document" data-replace-marker="component">
       <div class="modal-content">
          <div class="modal-header">

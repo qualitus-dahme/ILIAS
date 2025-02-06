@@ -75,7 +75,8 @@
 		"monolog/monolog": "^2.9.3",
 		"phpoffice/phpspreadsheet": "^2.2",
 		"celtic/lti": "^5.0.0",
-		"jumbojett/openid-connect-php": "^1.0"
+		"jumbojett/openid-connect-php": "^1.0",
+		"guzzlehttp/guzzle": "^7.9"
 	},
 	"require-dev": {
 		"friendsofphp/php-cs-fixer": "^3.40",

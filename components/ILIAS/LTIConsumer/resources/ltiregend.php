@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -18,8 +16,11 @@ declare(strict_types=1);
  *
  *********************************************************************/
 
+declare(strict_types=1);
+
 /** @noRector */
-chdir("../../../");
+require_once("../vendor/composer/vendor/autoload.php");
+
 
 ilInitialisation::initILIAS();
 $clientId = (ilSession::has('lti_dynamic_registration_client_id')) ? (string) ilSession::get('lti_dynamic_registration_client_id') : '';

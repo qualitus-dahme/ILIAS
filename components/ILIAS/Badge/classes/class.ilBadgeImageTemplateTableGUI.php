@@ -46,6 +46,8 @@ class ilBadgeImageTemplateTableGUI implements DataRetrieval
     private readonly Services $http;
     private readonly ilLanguage $lng;
     private readonly ilGlobalTemplateInterface $tpl;
+    /** @var list<array{id: int, image: string, title: string, title_sortable: string}>|null */
+    private ?array $cached_records = null;
 
     public function __construct(protected bool $has_write = false)
     {
@@ -62,8 +64,12 @@ class ilBadgeImageTemplateTableGUI implements DataRetrieval
     /**
      * @return list<array{id: int, image: string, title: string, title_sortable: string}>
      */
-    private function getBadgeImageTemplates(): array
+    private function getRecords(): array
     {
+        if ($this->cached_records !== null) {
+            return $this->cached_records;
+        }
+
         $modal_container = new ModalBuilder();
         $rows = [];
 
@@ -104,6 +110,8 @@ class ilBadgeImageTemplateTableGUI implements DataRetrieval
             ];
         }
 
+        $this->cached_records = $rows;
+
         return $rows;
     }
 
@@ -115,26 +123,7 @@ class ilBadgeImageTemplateTableGUI implements DataRetrieval
         ?array $filter_data,
         ?array $additional_parameters
     ): Generator {
-        $records = $this->getRecords($range, $order);
-        foreach ($records as $record) {
-            $row_id = (string) $record['id'];
-            yield $row_builder->buildDataRow($row_id, $record);
-        }
-    }
-
-    public function getTotalRowCount(
-        ?array $filter_data,
-        ?array $additional_parameters
-    ): ?int {
-        return \count($this->getRecords());
-    }
-
-    /**
-     * @return list<array{id: int, image: string, title: string, title_sortable: string}>
-     */
-    private function getRecords(Range $range = null, Order $order = null): array
-    {
-        $rows = $this->getBadgeImageTemplates();
+        $records = $this->getRecords();
 
         if ($order) {
             [$order_field, $order_direction] = $order->join(
@@ -142,7 +131,7 @@ class ilBadgeImageTemplateTableGUI implements DataRetrieval
                 fn($ret, $key, $value) => [$key, $value]
             );
 
-            usort($rows, static function (array $left, array $right) use ($order_field): int {
+            usort($records, static function (array $left, array $right) use ($order_field): int {
                 if ($order_field === 'title') {
                     return \ilStr::strCmp(
                         $left[$order_field . '_sortable'],
@@ -154,15 +143,24 @@ class ilBadgeImageTemplateTableGUI implements DataRetrieval
             });
 
             if ($order_direction === Order::DESC) {
-                $rows = array_reverse($rows);
+                $records = array_reverse($records);
             }
         }
 
         if ($range) {
-            $rows = \array_slice($rows, $range->getStart(), $range->getLength());
+            $records = \array_slice($records, $range->getStart(), $range->getLength());
         }
 
-        return $rows;
+        foreach ($records as $record) {
+            yield $row_builder->buildDataRow((string) $record['id'], $record);
+        }
+    }
+
+    public function getTotalRowCount(
+        ?array $filter_data,
+        ?array $additional_parameters
+    ): ?int {
+        return \count($this->getRecords());
     }
 
     /**

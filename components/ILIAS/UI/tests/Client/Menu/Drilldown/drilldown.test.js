@@ -1,3 +1,19 @@
+/**
+ * This file is part of ILIAS, a powerful learning management system
+ * published by ILIAS open source e-Learning e.V.
+ *
+ * ILIAS is licensed with the GPL-3.0,
+ * see https://www.gnu.org/licenses/gpl-3.0.en.html
+ * You should have received a copy of said license along with the
+ * source code, too.
+ *
+ * If this is not the case or you just want to try ILIAS, you'll find
+ * us at:
+ * https://www.ilias.de
+ * https://github.com/ILIAS-eLearning
+ *
+ ******************************************************************** */
+
 import { assert, expect } from 'chai';
 import { JSDOM } from 'jsdom';
 import fs from 'fs';
@@ -20,7 +36,7 @@ const parsedHtml = `<section class="c-drilldown" id="id_2">
         <div></div>
         <div class="c-drilldown__filter">
             <label for="id_3" class="control-label">filter_nodes_in</label>
-            <input id="id_3" type="text" name="" class="form-control">
+            <input id="id_3" type="text" class="form-control">
         </div>
         <div class="c-drilldown__backnav">
             <button class="btn btn-bulky" id="id_1" aria-label="back">

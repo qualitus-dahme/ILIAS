@@ -16,19 +16,19 @@
  *
  *********************************************************************/
 
+declare(strict_types=1);
+
 namespace ILIAS\LearningModule\Export;
 
 use ILIAS\COPage\PageLinker;
 use ilFileUtils;
+use ILIAS\components\Export\HTML\Util;
+use ILIAS\components\Export\HTML\ExportCollector;
 
-/**
- * LM HTML Export
- *
- * @author Alexander Killing <killing@leifos.de>
- */
 class LMHtmlExport
 {
-    protected \ILIAS\components\Export\HTML\Util $export_util;
+    protected ExportCollector $collector;
+    protected Util $export_util;
     protected \ilLogger $log;
     protected string $target_dir = "";
     protected string $sub_dir = "";
@@ -67,7 +67,11 @@ class LMHtmlExport
         $this->target_dir = $export_dir . "/" . $sub_dir;
         $cs = $DIC->contentStyle();
         $this->content_style_domain = $cs->domain()->styleForRefId($this->lm->getRefId());
-        $this->co_page_html_export = new \ilCOPageHTMLExport($this->target_dir, $this->getLinker(), $lm->getRefId());
+        $this->collector = $DIC->export()->domain()->html()->collector($this->lm->getId());
+        $this->collector->init();
+        $this->export_util = new Util("", "", $this->collector);
+        $this->co_page_html_export = new \ilCOPageHTMLExport($this->target_dir,  $this->getLinker(), $lm->getRefId(), $this->collector);
+
         $this->co_page_html_export->setContentStyleId(
             $this->content_style_domain->getEffectiveStyleId()
         );
@@ -85,7 +89,6 @@ class LMHtmlExport
         $this->initial_current_user_language = $this->user->getCurrentLanguage();
 
         $this->global_screen = $DIC->globalScreen();
-        $this->export_util = new \ILIAS\components\Export\HTML\Util($export_dir, $sub_dir);
 
         $this->setAdditionalContextData(\ilLMEditGSToolProvider::SHOW_TREE, false);
     }
@@ -125,20 +128,6 @@ class LMHtmlExport
         $this->user->setCurrentLanguage($this->initial_current_user_language);
     }
 
-
-    /**
-     * Initialize directories
-     */
-    protected function initDirectories(): void
-    {
-        // initialize temporary target directory
-        ilFileUtils::delDir($this->target_dir);
-        ilFileUtils::makeDir($this->target_dir);
-        foreach (["mobs", "files", "textimg", "style",
-            "style/images", "content_style", "content_style", "content_style/images"] as $dir) {
-            ilFileUtils::makeDir($this->target_dir . "/" . $dir);
-        }
-    }
 
     protected function getLanguageIterator(): \Iterator
     {
@@ -228,7 +217,6 @@ class LMHtmlExport
     public function exportHTML(bool $zip = true): void
     {
         $this->initGlobalScreen();
-        $this->initDirectories();
 
         $this->export_util->exportSystemStyle();
         $this->export_util->exportCOPageFiles($this->content_style_domain->getEffectiveStyleId(), "lm");
@@ -249,31 +237,6 @@ class LMHtmlExport
 
         $this->co_page_html_export->exportPageElements();
 
-        // zip everything
-        if ($zip) {
-            $this->zipPackage();
-        }
-    }
-
-    /**
-     * Zip everything, zip file will be in
-     * $this->export_dir, $this->target_dir (sub-dir in export dir) will be deleted
-     */
-    protected function zipPackage(): void
-    {
-        if ($this->lang == "") {
-            $zip_target_dir = $this->lm->getExportDirectory("html");
-        } else {
-            $zip_target_dir = $this->lm->getExportDirectory("html_" . $this->lang);
-            ilFileUtils::makeDir($zip_target_dir);
-        }
-
-        // zip it all
-        $date = time();
-        $zip_file = $zip_target_dir . "/" . $date . "__" . IL_INST_ID . "__" .
-            $this->lm->getType() . "_" . $this->lm->getId() . ".zip";
-        ilFileUtils::zip($this->target_dir, $zip_file);
-        ilFileUtils::delDir($this->target_dir);
     }
 
 
@@ -511,34 +474,30 @@ class LMHtmlExport
 
         if ($frame == "") {
             if (is_array($exp_id_map) && isset($a_exp_id_map[$lm_page_id])) {
-                $file = $target_dir . "/lm_pg_" . $exp_id_map[$lm_page_id] . $lang_suffix . ".html";
+                $file = "lm_pg_" . $exp_id_map[$lm_page_id] . $lang_suffix . ".html";
             } else {
-                $file = $target_dir . "/lm_pg_" . $lm_page_id . $lang_suffix . ".html";
+                $file = "lm_pg_" . $lm_page_id . $lang_suffix . ".html";
             }
         } else {
             if ($frame != "toc") {
-                $file = $target_dir . "/frame_" . $lm_page_id . "_" . $frame . $lang_suffix . ".html";
+                $file = "frame_" . $lm_page_id . "_" . $frame . $lang_suffix . ".html";
             } else {
-                $file = $target_dir . "/frame_" . $frame . $lang_suffix . ".html";
+                $file = "frame_" . $frame . $lang_suffix . ".html";
             }
         }
 
         // return if file is already existing
+        /*
         if (is_file($file)) {
             return;
-        }
+        }*/
 
         $content = $this->lm_gui->layout("main.xml", false);
 
-        // write xml data into the file
-        $fp = fopen($file, "w+");
-        fwrite($fp, $content);
-
-        // close file
-        fclose($fp);
+        $this->collector->addString($content, $file);
 
         if ($is_first && $frame == "") {
-            copy($file, $target_dir . "/index" . $lang_suffix . ".html");
+            $this->collector->addString($content, "index" . $lang_suffix . ".html");
         }
     }
 }

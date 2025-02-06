@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -18,6 +16,8 @@ declare(strict_types=1);
  *
  *********************************************************************/
 
+declare(strict_types=1);
+
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -28,8 +28,6 @@ class ilLTIToolConsumerTest extends TestCase
 {
     public function testTitle(): void
     {
-        $this->markTestSkipped('Test skipped while integrating the new dependencies in LTI components.');
-
         $ltiToolConsumer = new ilLTIPlatform(
             $this->createMock(ilLTIDataConnector::class)
         );

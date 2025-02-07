@@ -53,15 +53,11 @@ trait ilSearchResultTableHelper
     protected function buildSortationViewControl(): SortationViewControl
     {
         $options = $this->getPossibleSortations();
-        $label = sprintf(
-            $options[$this->getCurrentSortation()] ?? '',
-            $this->lng->txt('search_sort_by')
-        );
-        $options[$this->getCurrentSortation()] ?? '';
+        $current_sortation = $this->getCurrentSortation();
 
         return $this->ui->factory()->viewControl()
-                        ->sortation($options)
-                        ->withLabel($label)
+                        ->sortation($options, $current_sortation)
+                        ->withLabelPrefix($this->lng->txt('search_sort_by'))
                         ->withTargetURL(
                             $this->ctrl->getLinkTarget($this->parent_obj, $this->parent_cmd),
                             'sortation'

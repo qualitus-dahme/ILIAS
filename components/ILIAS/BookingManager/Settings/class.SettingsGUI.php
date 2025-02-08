@@ -166,15 +166,20 @@ class SettingsGUI
                 $settings->getPrefDeadline()
                     ? new \ilDateTime($settings->getPrefDeadline(), IL_CAL_UNIX) : null
             );
+
+        // #14478
+        $mode_disabled = (count(\ilBookingObject::getList($this->obj_id)));
+
         if ($pref_options_disabled) {
             $form = $form->disabled();
         } else {
-            $form = $form->required();
+            if (!$mode_disabled) {
+                $form = $form->required();
+            }
         }
         $form->end();
 
-        // #14478
-        if (count(\ilBookingObject::getList($this->obj_id))) {
+        if ($mode_disabled) {
             $form = $form->disabled(true);
         }
 

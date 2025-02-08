@@ -1955,6 +1955,17 @@ class ilObjBlogGUI extends ilObject2GUI implements ilDesktopItemHandling
                     ilUtil::getImagePath("object/notification_on.svg"),
                     $this->lng->txt("blog_notification_activated")
                 );
+            } else {
+                $ilCtrl->setParameter($this, "ntf", 2);
+                $link = $ilCtrl->getLinkTarget($this, "setNotification");
+                $ilCtrl->setParameter($this, "ntf", "");
+                $lg->addCustomCommand($link, "blog_notification_toggle_on");
+
+                $lg->addHeaderIcon(
+                    "not_icon",
+                    ilUtil::getImagePath("object/notification_off.svg"),
+                    $this->lng->txt("blog_notification_deactivated")
+                );
             }
 
             // #11758

@@ -253,7 +253,7 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
 
         if (!$executable['executable']) {
             $this->tpl->setOnScreenMessage('info', $executable['errormessage'], true);
-            $this->ctrl->redirectByClass([ilRepositoryGUI::class, ilObjTestGUI::class, ilInfoScreenGUI::class]);
+            $this->ctrl->redirectByClass([ilRepositoryGUI::class, ilObjTestGUI::class, TestScreenGUI::class]);
         }
     }
 

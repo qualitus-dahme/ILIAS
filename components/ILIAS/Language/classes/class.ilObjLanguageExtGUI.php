@@ -833,6 +833,7 @@ class ilObjLanguageExtGUI extends ilObjectGUI
                 $this->ctrl->getLinkTargetByClass("ilObjLanguageFolderGUI")
             );
 
+            $this->ctrl->setParameter($this, "obj_id", $this->id);
             $this->tabs_gui->addTab(
                 "edit",
                 $this->lng->txt("edit"),

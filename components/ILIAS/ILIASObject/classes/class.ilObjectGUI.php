@@ -2023,6 +2023,8 @@ class ilObjectGUI implements ImplementsCreationCallback
         array $subtypes
     ): array {
         $add_new_item_elements = [];
+        $grouped_types = [];
+
         foreach ($default_groups['groups'] as $group_id => $group) {
             $obj_types_in_group = array_keys(
                 array_filter(
@@ -2030,6 +2032,7 @@ class ilObjectGUI implements ImplementsCreationCallback
                     fn($item_group_id) => $item_group_id === $group_id
                 )
             );
+            $grouped_types = array_merge($grouped_types, $obj_types_in_group);
 
             $group_element = $this->buildGroup(
                 $create_target_class,
@@ -2041,6 +2044,16 @@ class ilObjectGUI implements ImplementsCreationCallback
             if ($group_element !== null) {
                 $add_new_item_elements[$group['pos']] = $group_element;
             }
+        }
+
+        $ungrouped_types = array_diff(array_keys($subtypes), $grouped_types);
+        if ($ungrouped_types !== []) {
+            $add_new_item_elements[] = $this->buildGroup(
+                $create_target_class,
+                $ungrouped_types,
+                $this->lng->txt('rep_new_item_group_other'),
+                $subtypes
+            );
         }
 
         return $add_new_item_elements;

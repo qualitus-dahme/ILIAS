@@ -19,7 +19,6 @@
 declare(strict_types=1);
 
 use ILIAS\User\UserGUIRequest;
-
 use ILIAS\Language\Language;
 use ILIAS\UI\Factory as UIFactory;
 
@@ -300,7 +299,7 @@ class ilCustomUserFieldsGUI
                     break;
 
                 default:
-                    $plugin = ilCustomUserFieldsHelper::getInstance()->getPluginForType((string) $udf_type);
+                    $plugin = ilCustomUserFieldsHelper::getInstance()->getPluginForType($udf_type);
                     if ($plugin instanceof ilUDFDefinitionPlugin) {
                         $plugin->addDefinitionTypeOptionsToRadioOption($op, $this->field_id);
                     }

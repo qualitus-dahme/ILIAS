@@ -107,8 +107,13 @@ class ilRoleTableGUI extends ilTable2GUI
             $a_set['obj_id'] != ANONYMOUS_ROLE_ID && $a_set['obj_id'] != SYSTEM_ROLE_ID && substr($a_set['title_orig'], 0, 3) != 'il_' || $this->getType() == self::TYPE_SEARCH) {
             $this->tpl->setVariable('VAL_ID', $a_set['obj_id']);
         }
-        $this->tpl->setVariable('VAL_TITLE_LINKED', $a_set['title']);
-        $this->tpl->setVariable('VAL_LINK', $link);
+
+        if ($this->system->checkAccess('write', $this->parent_obj->getRefId())) {
+            $this->tpl->setVariable('VAL_TITLE_LINKED', $a_set['title']);
+            $this->tpl->setVariable('VAL_LINK', $link);
+        } else {
+            $this->tpl->setVariable('VAL_TITLE', $a_set['title']);
+        }
         if (strlen($a_set['description'])) {
             $this->tpl->setVariable('VAL_DESC', $a_set['description']);
         }

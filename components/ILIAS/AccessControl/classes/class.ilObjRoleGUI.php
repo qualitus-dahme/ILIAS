@@ -302,7 +302,7 @@ class ilObjRoleGUI extends ilObjectGUI
     {
         if (!$this->rbac_system->checkAccess('create_role', $this->obj_ref_id)) {
             $this->tpl->setOnScreenMessage('failure', $this->lng->txt('permission_denied'), true);
-            $this->ctrl->redirectByClass(ilRepositoryGUI::class);
+            $this->ctrl->returnToParent(ilRepositoryGUI::class);
         }
 
         $this->tabs_gui->setBackTarget(
@@ -324,7 +324,7 @@ class ilObjRoleGUI extends ilObjectGUI
     {
         if (!$this->checkAccess('write', 'edit_permission')) {
             $this->tpl->setOnScreenMessage('msg_no_perm_write', $this->lng->txt('permission_denied'), true);
-            $this->ctrl->redirectByClass(ilRepositoryGUI::class);
+            $this->ctrl->returnToParent($this);
         }
         $this->tabs_gui->activateTab('edit_properties');
 
@@ -443,7 +443,7 @@ class ilObjRoleGUI extends ilObjectGUI
 
         if (!$this->checkAccess('write', 'edit_permission')) {
             $this->tpl->setOnScreenMessage('failure', $this->lng->txt('msg_no_perm_write'), true);
-            $this->ctrl->redirectByClass(ilRepositoryGUI::class);
+            $this->ctrl->returnToParent($this);
         }
 
         if ($a_show_admin_permissions) {

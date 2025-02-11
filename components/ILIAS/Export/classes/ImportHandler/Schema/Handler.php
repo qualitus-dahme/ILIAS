@@ -120,7 +120,8 @@ class Handler implements SchemaInterface
         if ($version_str === '') {
             return $this
                 ->withType($types[0])
-                ->withSubType($types[1]);
+                ->withSubType($types[1])
+                ->withVersion($this->data_factory->version(((int) ILIAS_VERSION_NUMERIC) . ".0.0"));
         }
         return $this
             ->withType($types[0])

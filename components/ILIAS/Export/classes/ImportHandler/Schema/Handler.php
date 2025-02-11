@@ -154,6 +154,9 @@ class Handler implements SchemaInterface
 
     public function getMajorVersionString(): string
     {
+        if (is_null($this->getVersion()) || is_null($this->getVersion()->getMajor())) {
+            return ((int) ILIAS_VERSION_NUMERIC) . ".0.0";
+        }
         return $this->getVersion()->getMajor() . ".0.0";
     }
 

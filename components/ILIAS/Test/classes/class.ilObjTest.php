@@ -462,7 +462,6 @@ class ilObjTest extends ilObject
                 [
                     'test_id' => ['integer', $next_id],
                     'obj_fi' => ['integer', $this->getId()],
-                    'author' => ['text', $this->getAuthor()],
                     'created' => ['integer', time()],
                     'tstamp' => ['integer', time()],
                     'template_id' => ['integer', $this->getTemplate()]
@@ -471,16 +470,6 @@ class ilObjTest extends ilObject
 
             $this->test_id = $next_id;
         } else {
-            $this->db->update(
-                'tst_tests',
-                [
-                    'author' => ['text', $this->getAuthor()],
-                ],
-                [
-                    'test_id' => ['integer', $this->getTestId()]
-                ]
-            );
-
             if ($this->evalTotalPersons() > 0) {
                 // reset the finished status of participants if the nr of test passes did change
                 if ($this->getNrOfTries() > 0) {
@@ -4049,7 +4038,7 @@ class ilObjTest extends ilObject
         $author_data = $this->lo_metadata->read($this->getId(), 0, $this->getType(), $path_to_authors)
                                          ->allData($path_to_authors);
 
-        return $this->lo_metadata->dataHelper()->makePresentableAsList(',', ...$author_data);
+        return $this->lo_metadata->dataHelper()->makePresentableAsList(', ', ...$author_data);
     }
 
     /**

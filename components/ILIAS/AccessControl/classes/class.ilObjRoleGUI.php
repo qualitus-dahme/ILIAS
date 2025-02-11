@@ -385,14 +385,18 @@ class ilObjRoleGUI extends ilObjectGUI
             return;
         }
 
-        if (isset($data['title'])) {
+        if (isset($data[self::FORM_KEY_TITLE])) {
             $this->object->setTitle($data[self::FORM_KEY_TITLE]);
         }
-        if (isset($data['description'])) {
+        if (isset($data[self::FORM_KEY_DESCRIPTION])) {
             $this->object->setDescription($data[self::FORM_KEY_DESCRIPTION]);
         }
-        $this->object->setAllowRegister($data[self::FORM_KEY_ON_REGISTRATION_FORM]);
-        $this->object->toggleAssignUsersStatus($data[self::FORM_KEY_ALLOW_LOCAL_USER_ASSIGNMENT]);
+        if (isset($data[self::FORM_KEY_ON_REGISTRATION_FORM])) {
+            $this->object->setAllowRegister($data[self::FORM_KEY_ON_REGISTRATION_FORM]);
+        }
+        if (isset($data[self::FORM_KEY_ALLOW_LOCAL_USER_ASSIGNMENT])) {
+            $this->object->toggleAssignUsersStatus($data[self::FORM_KEY_ALLOW_LOCAL_USER_ASSIGNMENT]);
+        }
         $this->object->update();
         $this->rbac_admin->setProtected(
             $this->obj_ref_id,

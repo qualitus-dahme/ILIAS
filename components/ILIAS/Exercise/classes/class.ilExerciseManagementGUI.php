@@ -2149,7 +2149,8 @@ class ilExerciseManagementGUI
 
         $obj_dir = $this->assignment->getAssignmentType()->getStringIdentifier() . "_" . $obj_id;
 
-        $index_html_file = ILIAS_WEB_DIR .
+        $index_html_file =
+            ILIAS_WEB_DIR .
             DIRECTORY_SEPARATOR .
             CLIENT_ID .
             DIRECTORY_SEPARATOR .

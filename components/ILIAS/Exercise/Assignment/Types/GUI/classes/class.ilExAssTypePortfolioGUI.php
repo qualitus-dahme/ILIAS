@@ -197,7 +197,7 @@ class ilExAssTypePortfolioGUI implements ilExAssignmentTypeGUIInterface
         }
 
         if ($submission->hasSubmitted()) {
-            $ilCtrl->setParameterByClass("ilExSubmissionFileGUI", "delivered", $selected_prtf["returned_id"]);
+            $ilCtrl->setParameterByClass("ilExSubmissionFileGUI", "delivered", $selected_prtf->getId());
             $dl_link = $ilCtrl->getLinkTargetByClass(array(ilAssignmentPresentationGUI::class, "ilExSubmissionGUI", "ilExSubmissionFileGUI"), "download");
             $ilCtrl->setParameterByClass("ilExSubmissionFileGUI", "delivered", "");
 

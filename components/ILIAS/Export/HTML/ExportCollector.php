@@ -125,6 +125,11 @@ class ExportCollector
         );
     }
 
+    public function getFilePath(): string
+    {
+        return $this->repo->getFilePath($this->rid);
+    }
+
     public function deliver(string $filename): void
     {
         $this->repo->deliverFile($this->rid);

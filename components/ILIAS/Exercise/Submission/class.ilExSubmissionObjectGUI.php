@@ -813,7 +813,9 @@ class ilExSubmissionObjectGUI extends ilExSubmissionBaseGUI
         if ($prtf->getTitle()) {
             $port_gui = new ilObjPortfolioGUI($prtf_id);
             $port_export = new PortfolioHtmlExport($port_gui);
-            $file = $port_export->exportHtml();
+            $port_export->exportHtml();
+
+            $file = $port_export->getFilePath();
 
             $size = filesize($file);
             if ($size) {
@@ -824,11 +826,13 @@ class ilExSubmissionObjectGUI extends ilExSubmissionBaseGUI
                     $file,
                     $prtf_id . ".zip"
                 );
-                unlink($file);
+                $port_export->delete();
 
                 // print version
+                $port_export = new PortfolioHtmlExport($port_gui);
                 $port_export->setPrintVersion(true);
-                $file = $port_export->exportHtml();
+                $port_export->exportHtml();
+                $file = $port_export->getFilePath();
                 $size = filesize($file);
 
                 if ($size) {
@@ -837,7 +841,7 @@ class ilExSubmissionObjectGUI extends ilExSubmissionBaseGUI
                         $file,
                         $prtf_id . "print.zip"
                     );
-                    unlink($file);
+                    $file = $port_export->delete();
                 }
 
                 $this->handleNewUpload();

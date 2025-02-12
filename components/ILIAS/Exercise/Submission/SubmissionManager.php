@@ -373,7 +373,6 @@ class SubmissionManager
                 $web_filesystem->deleteDir($internal_dirs);
             }
             $web_filesystem->createDir($internal_dirs);
-
             if ($web_filesystem->has($internal_file_path)) {
                 $web_filesystem->delete($internal_file_path);
             }
@@ -387,6 +386,8 @@ class SubmissionManager
                     $web_filesystem->writeStream($internal_file_path, $stream);
 
                     return ILIAS_ABSOLUTE_PATH .
+                        DIRECTORY_SEPARATOR .
+                        "public" .
                         DIRECTORY_SEPARATOR .
                         ILIAS_WEB_DIR .
                         DIRECTORY_SEPARATOR .

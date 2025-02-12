@@ -24,11 +24,9 @@ use ILIAS\Data\Factory as DataFactory;
 use ILIAS\Data\URI;
 use ILIAS\Test\Utilities\TitleColumnsBuilder;
 use ILIAS\Test\RequestDataCollector;
-use ILIAS\UI\Component\Table\Action\Action;
 use ILIAS\UI\Component\Table\OrderingBinding;
 use ILIAS\UI\Component\Table\OrderingRowBuilder;
 use ILIAS\UI\Component\Table\Ordering as OrderingTable;
-use ILIAS\UI\Component\Table\Column\Column;
 use ILIAS\UI\Factory as UIFactory;
 use ILIAS\UI\URLBuilder;
 use ILIAS\UI\URLBuilderToken;
@@ -69,9 +67,8 @@ class RandomQuestionSetSourcePoolDefinitionListTable implements OrderingBinding
             $record = [
                 'sequence_position' => (int) $qp['sequence_position'],
                 'source_pool_label' => $this->title_builder->buildAccessCheckedQuestionpoolTitleAsLink(
-                    $qp['ref_id'],
-                    $qp['source_pool_label'],
-                    true
+                    $qp['pool_id'],
+                    $qp['source_pool_label']
                 ),
                 'taxonomy_filter' => $this->taxonomy_translator->getTaxonomyFilterLabel(
                     $qp['taxonomy_filter'],
@@ -107,7 +104,7 @@ class RandomQuestionSetSourcePoolDefinitionListTable implements OrderingBinding
             $set['type_filter'] = $source_pool_definition->getTypeFilter();
             // fau.
             $set['question_amount'] = $source_pool_definition->getQuestionAmount();
-            $set['ref_id'] = $source_pool_definition->getPoolRefId();
+            $set['pool_id'] = $source_pool_definition->getPoolId();
             $data[] = $set;
         }
 

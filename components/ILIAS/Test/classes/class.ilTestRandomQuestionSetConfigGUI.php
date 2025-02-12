@@ -800,10 +800,14 @@ class ilTestRandomQuestionSetConfigGUI
             foreach ($pool_ids as $pool_id) {
                 $lost_pool = $this->source_pool_definition_list->getLostPool($pool_id);
 
-                $deriver = new ilTestRandomQuestionSetPoolDeriver($this->db, $this->component_repository, $this->test_obj);
-                $deriver->setSourcePoolDefinitionList($this->source_pool_definition_list);
-                $deriver->setTargetContainerRef($target_ref);
-                $deriver->setOwnerId($this->user->getId());
+                $deriver = new ilTestRandomQuestionSetPoolDeriver(
+                    $this->db,
+                    $this->component_repository,
+                    $this->test_obj,
+                    $this->source_pool_definition_list,
+                    $this->user->getId(),
+                    $target_ref
+                );
                 $new_pool = $deriver->derive($lost_pool);
 
                 $srcPoolDefinition = $this->source_pool_definition_list->getDefinitionBySourcePoolId($new_pool->getId());

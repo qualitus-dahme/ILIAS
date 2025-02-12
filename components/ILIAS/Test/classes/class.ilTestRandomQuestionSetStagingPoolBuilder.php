@@ -243,28 +243,14 @@ class ilTestRandomQuestionSetStagingPoolBuilder
         return $duplicator->getDuplicatedTaxonomiesKeysMap();
     }
 
-    /**
-     * @param ilTestRandomQuestionSetSourcePoolDefinitionList $sourcePoolDefinitionList
-     * @param ilQuestionPoolDuplicatedTaxonomiesKeysMap $taxonomiesKeysMap
-     * @param integer $sourcePoolId
-     */
-    private function applyMappedTaxonomiesKeys(ilTestRandomQuestionSetSourcePoolDefinitionList $sourcePoolDefinitionList, ilQuestionPoolDuplicatedTaxonomiesKeysMap $taxonomiesKeysMap, $sourcePoolId)
-    {
-        foreach ($sourcePoolDefinitionList as $definition) {
-            /** @var ilTestRandomQuestionSetSourcePoolDefinition $definition */
-
-            if ($definition->getPoolId() == $sourcePoolId) {
-                // fau: taxFilter/typeFilter - map the enhanced taxonomy filter
-                #$definition->setMappedFilterTaxId(
-                #	$taxonomiesKeysMap->getMappedTaxonomyId($definition->getOriginalFilterTaxId())
-                #);
-
-                #$definition->setMappedFilterTaxNodeId(
-                #	$taxonomiesKeysMap->getMappedTaxNodeId($definition->getOriginalFilterTaxNodeId())
-                #);
-
-                $definition->mapTaxonomyFilter($taxonomiesKeysMap);
-                // fau.
+    private function applyMappedTaxonomiesKeys(
+        ilTestRandomQuestionSetSourcePoolDefinitionList $source_pool_definition_list,
+        ilQuestionPoolDuplicatedTaxonomiesKeysMap $taxonomies_keys_map,
+        int $source_pool_id
+    ): void {
+        foreach ($source_pool_definition_list as $definition) {
+            if ($definition->getPoolId() === $source_pool_id) {
+                $definition->mapTaxonomyFilter($taxonomies_keys_map);
             }
         }
     }

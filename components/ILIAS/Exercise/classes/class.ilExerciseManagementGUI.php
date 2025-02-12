@@ -2155,8 +2155,8 @@ class ilExerciseManagementGUI
             CLIENT_ID .
             DIRECTORY_SEPARATOR .
             dirname($zip_internal_path) .
-            DIRECTORY_SEPARATOR .
-            $obj_dir .
+            //DIRECTORY_SEPARATOR .
+            //$obj_dir .
             DIRECTORY_SEPARATOR .
             "index.html";
         $this->log->debug("index html file: " . $index_html_file);
@@ -2179,6 +2179,8 @@ class ilExerciseManagementGUI
 
             $submission_repository = $this->service->repo()->submission();
             $submission_repository->updateWebDirAccessTime($this->assignment->getId(), $member_id);
+            var_dump($index_html_file);
+            exit;
             ilWACSignedPath::signFolderOfStartFile($index_html_file);
             ilUtil::redirect($index_html_file . "?" . time());
         }

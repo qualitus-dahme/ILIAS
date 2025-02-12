@@ -764,7 +764,8 @@ class ilExSubmissionObjectGUI extends ilExSubmissionBaseGUI
 
         $blog_gui = new ilObjBlogGUI($blog_id, ilObject2GUI::WORKSPACE_NODE_ID);
         if ($blog_gui->getObject()) {
-            $file = $blog_gui->buildExportFile();
+            $export = $blog_gui->buildExportFile();
+            $file = $export->getFilePath();
             $size = filesize($file);
             if ($size) {
                 $this->submission->deleteAllFiles();
@@ -774,10 +775,11 @@ class ilExSubmissionObjectGUI extends ilExSubmissionBaseGUI
                     $file,
                     $blog_id . ".zip"
                 );
-                unlink($file);
+                $export->delete();
 
                 // print version
-                $file = $blog_gui->buildExportFile(false, true);
+                $blog_gui->buildExportFile(false, true);
+                $file = $export->getFilePath();
                 $size = filesize($file);
                 if ($size) {
                     $subm->addLocalFile(
@@ -785,7 +787,7 @@ class ilExSubmissionObjectGUI extends ilExSubmissionBaseGUI
                         $file,
                         $blog_id . "print.zip"
                     );
-                    unlink($file);
+                    $export->delete();
                 }
 
                 $this->handleNewUpload();

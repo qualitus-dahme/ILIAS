@@ -84,7 +84,8 @@ class ilChatroomFormFactory
     public function getSettingsForm(
         ilChatroomObjectGUI $gui,
         ilCtrlInterface $ctrl,
-        ?array $values = null
+        ?array $values = null,
+        bool $may_write = false
     ): \ILIAS\UI\Component\Input\Container\Form\Form {
         $this->lng->loadLanguageModule('obj');
         $this->lng->loadLanguageModule('rep');
@@ -176,15 +177,31 @@ class ilChatroomFormFactory
             ),
         ];
 
-        return $this->ui_factory->input()
-                                ->container()
-                                ->form()
-                                ->standard(
-                                    $ctrl->getFormAction($gui, 'settings-saveGeneral'),
-                                    $sections
-                                )
-                                ->withAdditionalTransformation($this->mergeValuesTrafo())
-                                ->withAdditionalTransformation($this->saniziteArrayElementsTrafo());
+        $action = $ctrl->getFormAction($gui, 'settings-saveGeneral');
+        if (!$may_write) {
+            $action = $ctrl->getFormAction($gui, 'settings-general');
+        }
+
+        if (!$may_write) {
+            $sections = array_map(static fn($x) => $x->withDisabled(true), $sections);
+        }
+
+        $form = $this->ui_factory
+            ->input()
+            ->container()
+            ->form()
+            ->standard(
+                $action,
+                $sections
+            )
+            ->withAdditionalTransformation($this->mergeValuesTrafo())
+            ->withAdditionalTransformation($this->saniziteArrayElementsTrafo());
+
+        if (!$may_write) {
+            $form = $form->withSubmitLabel($this->lng->txt('refresh'));
+        }
+
+        return $form;
     }
 
     public function getPeriodForm(): ilPropertyFormGUI

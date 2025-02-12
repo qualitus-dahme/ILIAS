@@ -397,4 +397,11 @@ class Test10DBUpdateSteps implements \ilDatabaseUpdateSteps
     {
         $this->db->manipulate('DELETE FROM rbac_operations WHERE operation = "tst_statistics"');
     }
+
+    public function step_10(): void
+    {
+        if ($this->db->tableColumnExists('tst_tests', 'author')) {
+            $this->db->dropTableColumn('tst_tests', 'author');
+        }
+    }
 }

@@ -30,6 +30,7 @@
             return a.length > b.length ? a : b;
           });
           input.setAttribute('size', longest.length);
+          input.addEventListener('keydown', keyHandler);
           input.addEventListener('keyup', onChangeHandler);
           input.addEventListener('focus', onChangeHandler);
         }
@@ -44,6 +45,35 @@
       }
       );
     };
+
+    const keyHandler = (e) => {
+      if (e.key === 'Enter' && e.target.nodeName === 'LI') {
+        e.preventDefault();
+        onSelectHandler(e);
+      }
+
+      if (e.key === 'ArrowDown') {
+        e.stopImmediatePropagation();
+        e.preventDefault();
+        if (e.target.nextElementSibling?.nodeName === 'UL') {
+          e.target.nextElementSibling.firstElementChild.focus();
+        }
+
+        if (e.target.nodeName === 'LI' && e.target.nextElementSibling !== null) {
+          e.target.nextElementSibling.focus();
+        }
+      }
+
+      if (e.key === 'ArrowUp' && e.target.nodeName === 'LI') {
+        e.stopImmediatePropagation();
+        e.preventDefault();
+        if (e.target.previousElementSibling === null) {
+          e.target.parentElement.previousElementSibling.focus();
+        } else {
+          e.target.previousElementSibling.focus();
+        }
+      }
+    }
 
     const onChangeHandler = (e) => {
       const name = e.target.name;
@@ -68,15 +98,18 @@
       let list = document.createElement('ul');
       matchingAnswers.forEach((answer) => {
         let listElement = document.createElement('li');
+        listElement.tabIndex = 0;
         listElement.textContent = answer;
         list.appendChild(listElement);
       });
+      list.addEventListener('keydown', keyHandler);
       list.addEventListener('click', onSelectHandler);
       e.target.parentNode.appendChild(list);
     };
 
     const onSelectHandler = (e) => {
       e.target.parentNode.previousElementSibling.value = e.target.textContent;
+      e.target.parentNode.previousElementSibling.focus();
       e.target.parentNode.remove();
     };
 

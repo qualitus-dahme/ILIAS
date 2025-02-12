@@ -235,7 +235,9 @@ class ilObjExternalToolsSettingsGUI extends ilObjectGUI
             case 'ilmathjaxsettingsgui':
                 $this->tabs_gui->setTabActive('settings');
                 $this->initSubTabs("editMathJax");
-                $this->ctrl->forwardCommand(new ilMathJaxSettingsGUI());
+                $this->ctrl->forwardCommand(new ilMathJaxSettingsGUI(
+                    $this->rbacsystem->checkAccess('write', $this->object->getRefId())
+                ));
                 break;
 
             case 'ilecssettingsgui':

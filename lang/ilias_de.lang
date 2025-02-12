@@ -15481,7 +15481,7 @@ search#:#search_show_inactive_user#:#Inaktive Benutzer anzeigen
 search#:#search_show_inactive_user_info#:#In der Benutzersuche werden auch Benutzer angezeigt, deren Konto nicht aktiv ist.
 search#:#search_show_limited_user#:#Zeitlich begrenzte Benutzer anzeigen
 search#:#search_show_limited_user_info#:#In der Benutzersuche werden auch Benutzer mit zeitlichem begrenztem Zugang angezeigt, die entweder noch nicht oder nicht mehr auf ILIAS zugreifen können.
-search#:#search_sort_by#:#Sortierung: %s
+search#:#search_sort_by#:#Sortierung:
 search#:#search_sort_creation_date_asc#:#Ältestes
 search#:#search_sort_creation_date_desc#:#Neuestes
 search#:#search_sort_generic_asc#:#%s, aufst.

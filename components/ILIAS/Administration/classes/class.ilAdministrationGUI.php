@@ -76,6 +76,7 @@ class ilAdministrationGUI implements ilCtrlBaseClassInterface
     protected int $requested_obj_id = 0;
     protected AdminGUIRequest $request;
     protected ilObjectGUI $gui_obj;
+    private readonly ilErrorHandling $error;
 
     public function __construct()
     {
@@ -98,6 +99,7 @@ class ilAdministrationGUI implements ilCtrlBaseClassInterface
         $this->rbacsystem = $rbacsystem;
         $this->objDefinition = $objDefinition;
         $this->ctrl = $ilCtrl;
+        $this->error = $DIC['ilErr'];
 
         $context = $DIC->globalScreen()->tool()->context();
         $context->claim()->administration();
@@ -142,7 +144,7 @@ class ilAdministrationGUI implements ilCtrlBaseClassInterface
         // permission checks
         if (!$rbacsystem->checkAccess("visible", SYSTEM_FOLDER_ID) &&
                 !$rbacsystem->checkAccess("read", SYSTEM_FOLDER_ID)) {
-            throw new ilPermissionException($this->lng->txt('permission_denied'));
+            $this->error->raiseError($this->lng->txt('permission_denied'), $this->error->MESSAGE);
         }
 
         // check creation mode

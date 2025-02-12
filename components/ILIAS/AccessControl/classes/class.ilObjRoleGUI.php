@@ -302,7 +302,7 @@ class ilObjRoleGUI extends ilObjectGUI
     {
         if (!$this->rbac_system->checkAccess('create_role', $this->obj_ref_id)) {
             $this->tpl->setOnScreenMessage('failure', $this->lng->txt('permission_denied'), true);
-            $this->ctrl->redirectByClass(ilRepositoryGUI::class);
+            $this->ctrl->returnToParent(ilRepositoryGUI::class);
         }
 
         $this->tabs_gui->setBackTarget(
@@ -324,7 +324,7 @@ class ilObjRoleGUI extends ilObjectGUI
     {
         if (!$this->checkAccess('write', 'edit_permission')) {
             $this->tpl->setOnScreenMessage('msg_no_perm_write', $this->lng->txt('permission_denied'), true);
-            $this->ctrl->redirectByClass(ilRepositoryGUI::class);
+            $this->ctrl->returnToParent($this);
         }
         $this->tabs_gui->activateTab('edit_properties');
 
@@ -385,14 +385,18 @@ class ilObjRoleGUI extends ilObjectGUI
             return;
         }
 
-        if (isset($data['title'])) {
+        if (isset($data[self::FORM_KEY_TITLE])) {
             $this->object->setTitle($data[self::FORM_KEY_TITLE]);
         }
-        if (isset($data['description'])) {
+        if (isset($data[self::FORM_KEY_DESCRIPTION])) {
             $this->object->setDescription($data[self::FORM_KEY_DESCRIPTION]);
         }
-        $this->object->setAllowRegister($data[self::FORM_KEY_ON_REGISTRATION_FORM]);
-        $this->object->toggleAssignUsersStatus($data[self::FORM_KEY_ALLOW_LOCAL_USER_ASSIGNMENT]);
+        if (isset($data[self::FORM_KEY_ON_REGISTRATION_FORM])) {
+            $this->object->setAllowRegister($data[self::FORM_KEY_ON_REGISTRATION_FORM]);
+        }
+        if (isset($data[self::FORM_KEY_ALLOW_LOCAL_USER_ASSIGNMENT])) {
+            $this->object->toggleAssignUsersStatus($data[self::FORM_KEY_ALLOW_LOCAL_USER_ASSIGNMENT]);
+        }
         $this->object->update();
         $this->rbac_admin->setProtected(
             $this->obj_ref_id,
@@ -439,7 +443,7 @@ class ilObjRoleGUI extends ilObjectGUI
 
         if (!$this->checkAccess('write', 'edit_permission')) {
             $this->tpl->setOnScreenMessage('failure', $this->lng->txt('msg_no_perm_write'), true);
-            $this->ctrl->redirectByClass(ilRepositoryGUI::class);
+            $this->ctrl->returnToParent($this);
         }
 
         if ($a_show_admin_permissions) {

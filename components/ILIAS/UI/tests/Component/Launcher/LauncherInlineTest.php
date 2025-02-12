@@ -210,7 +210,7 @@ class LauncherInlineTest extends ILIAS_UI_TestBase
         ;
 
         $expected = <<<EXP
-<div class="c-launcher c-launcher--inline" id="">
+<div class="c-launcher c-launcher--inline">
     <div class="c-launcher__status">
         <div class="c-launcher__status__message">$msg_html
         </div>

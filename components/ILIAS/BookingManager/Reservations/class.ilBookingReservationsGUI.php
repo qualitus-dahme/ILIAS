@@ -705,7 +705,7 @@ class ilBookingReservationsGUI
 
     public function redirectMailToBooker(): void
     {
-        if (!$this->checkPermissionBool("write")) {
+        if (!$this->access->canManageAllReservations($this->ref_id)) {
             $this->tpl->setOnScreenMessage('failure', $this->lng->txt('permission_denied'), true);
             $this->ctrl->redirect($this, 'log');
         }

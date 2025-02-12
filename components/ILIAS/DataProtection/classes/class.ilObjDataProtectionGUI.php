@@ -205,6 +205,13 @@ final class ilObjDataProtectionGUI extends ilObject2GUI
             ['enabled' => $enabled]
         );
 
+        if (!$this->config->editable()) {
+            $form = $form->withSubmitLabel($this->lng->txt('refresh'));
+            return $this->legal_documents->admin()->withFormData($form, function () {
+                $this->ctrl->redirect($this, 'settings');
+            });
+        }
+
         return $this->legal_documents->admin()->withFormData($form, function (array $data) use ($no_documents): void {
             if ($no_documents && isset($data['enabled'])) {
                 $this->tpl->setOnScreenMessage('failure', $this->ui->txt('no_documents_exist_cant_save'), true);

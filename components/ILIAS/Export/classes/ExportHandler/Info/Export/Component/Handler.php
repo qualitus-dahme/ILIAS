@@ -30,6 +30,7 @@ use ilXmlExporter;
 
 class Handler implements ilExportHandlerExportComponentInfoInterface
 {
+    protected const PLUGIN = "Plugins";
     protected ilExportHandlerFactoryInterface $export_handler;
     protected ilExportHandlerTargetInterface $export_target;
     protected array $sv;
@@ -125,7 +126,7 @@ class Handler implements ilExportHandlerExportComponentInfoInterface
         $component_infos = $this->export_handler->info()->export()->component()->collection();
         foreach ($sequence as $s) {
             $comp = explode("/", $s["component"]);
-            $component = str_replace("_", "", $comp[2]);
+            $component = str_replace("_", "", ($comp[0] === self::PLUGIN ? $comp[1] : $comp[2]));
             $exp_class = "il" . $component . "Exporter";
             $component_infos = $component_infos->withComponent((new Handler($this->export_handler))->withExportTarget(
                 $this->export_handler->target()->handler()

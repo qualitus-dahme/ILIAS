@@ -28,11 +28,18 @@ class ilChatroomSettingsGUI extends ilChatroomGUIHandler
 {
     public function saveGeneral(): void
     {
+        if (!ilChatroom::checkUserPermissions(['write'], $this->gui->getRefId())) {
+            $this->ilCtrl->setParameterByClass(ilRepositoryGUI::class, 'ref_id', ROOT_FOLDER_ID);
+            $this->ilCtrl->redirectByClass(ilRepositoryGUI::class);
+        }
+
         $formFactory = new ilChatroomFormFactory();
 
         $settingsForm = $formFactory->getSettingsForm(
             $this->gui,
-            $this->ilCtrl
+            $this->ilCtrl,
+            null,
+            true
         );
 
         $result = (new \ILIAS\Data\Factory())->error($this->ilLng->txt('form_input_not_valid'));
@@ -113,7 +120,8 @@ class ilChatroomSettingsGUI extends ilChatroomGUIHandler
             $settingsForm = $formFactory->getSettingsForm(
                 $this->gui,
                 $this->ilCtrl,
-                $settings
+                $settings,
+                ilChatroom::checkUserPermissions(['write'], $this->gui->getRefId(), false)
             );
         }
 

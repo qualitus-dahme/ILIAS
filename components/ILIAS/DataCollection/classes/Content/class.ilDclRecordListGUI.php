@@ -200,12 +200,8 @@ class ilDclRecordListGUI
         $this->tpl->setPermanentLink("dcl", $this->parent_obj->getRefId(), $target);
 
         if ($desc = $this->table_obj->getDescription()) {
-            $ilSetting = new ilSetting('advanced_editing');
-            if ($ilSetting->get('advanced_editing_javascript_editor')) {
-                $desc = "<div class='ilDclTableDescription'>" . $desc . "</div>";
-            } else {
-                $desc = "<div class='ilDclTableDescription'>" . nl2br($this->refinery->encode()->htmlSpecialCharsAsEntities()->transform($desc)) . "</div>";
-            }
+            $desc = $this->refinery->string()->markdown()->toHTML()->transform($desc);
+            $desc = '<div class="ilDclTableDescription">' . $desc . '</div>';
         }
         $this->tpl->setContent($desc . $list->getHTML());
     }

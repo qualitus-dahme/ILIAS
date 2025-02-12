@@ -398,6 +398,7 @@ class Renderer extends AbstractComponentRenderer
     {
         parent::registerResources($registry);
         $registry->register('assets/js/viewcontrols.min.js');
+        $registry->register('assets/js/dropdown.js');
     }
 
     protected function renderId(

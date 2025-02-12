@@ -67,48 +67,48 @@ class Util
             $sys_style_html_export = new \ilSystemStyleHTMLExport($this->target_dir);
             $sys_style_html_export->export();
         } else {
-            $style_dir = '/templates/default';
-            $img_dir = '/images';
 
-            $location_stylesheet = \ilUtil::getStyleSheetLocation('filesystem');
+            $asset_dirs = ["css", "fonts", "images/logo"];
+            foreach ($asset_dirs as $asset_dir) {
 
-            // Fix skin path
-            $style_dir = dirname($style_dir, 2) . DIRECTORY_SEPARATOR . dirname($location_stylesheet);
+                $asset_dir = "./assets/" . $asset_dir;
 
-            // export system style sheet
-            $iterator = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator(dirname($location_stylesheet), \FilesystemIterator::SKIP_DOTS),
-                \RecursiveIteratorIterator::SELF_FIRST
-            );
-            foreach ($iterator as $item) {
-                if (!$item->isDir()) {
-                    $this->export_collector->addFile(
-                        $item->getPathname(),
-                        $style_dir . DIRECTORY_SEPARATOR . $iterator->getSubPathname()
-                    );
-                }
-            }
-
-            // export (icon) images
-            foreach (
-                [
-                    ['file' => 'media/enlarge.svg', 'exp_file_name' => ''],
-                    ['file' => 'browser/blank.png', 'exp_file_name' => '/browser/plus.png'],
-                    ['file' => 'browser/blank.png', 'exp_file_name' => '/browser/minus.png'],
-                    ['file' => 'browser/blank.png', 'exp_file_name' => '/browser/blank.png'],
-                    ['file' => 'media/spacer.png', 'exp_file_name' => ''],
-                    ['file' => 'standard/icon_st.svg', 'exp_file_name' => ''],
-                    ['file' => 'standard/icon_pg.svg', 'exp_file_name' => ''],
-                    ['file' => 'standard/icon_lm.svg', 'exp_file_name' => ''],
-                ] as $im) {
-                $from = $to = $im['file'];
-                if ($im['exp_file_name'] != '') {
-                    $to = $im['exp_file_name'];
-                }
-                $this->export_collector->addFile(
-                    \ilUtil::getImagePath($from, '', 'filesystem'),
-                    $img_dir . '/' . $to
+                // export system style sheet
+                $iterator = new \RecursiveIteratorIterator(
+                    new \RecursiveDirectoryIterator($asset_dir, \FilesystemIterator::SKIP_DOTS),
+                    \RecursiveIteratorIterator::SELF_FIRST
                 );
+                foreach ($iterator as $item) {
+                    if (!$item->isDir()) {
+                        $this->export_collector->addFile(
+                            $item->getPathname(),
+                            $asset_dir . DIRECTORY_SEPARATOR . $iterator->getSubPathname()
+                        );
+                    }
+                }
+
+                /*
+                // export (icon) images
+                foreach (
+                    [
+                        ['file' => 'media/enlarge.svg', 'exp_file_name' => ''],
+                        ['file' => 'browser/blank.png', 'exp_file_name' => '/browser/plus.png'],
+                        ['file' => 'browser/blank.png', 'exp_file_name' => '/browser/minus.png'],
+                        ['file' => 'browser/blank.png', 'exp_file_name' => '/browser/blank.png'],
+                        ['file' => 'media/spacer.png', 'exp_file_name' => ''],
+                        ['file' => 'standard/icon_st.svg', 'exp_file_name' => ''],
+                        ['file' => 'standard/icon_pg.svg', 'exp_file_name' => ''],
+                        ['file' => 'standard/icon_lm.svg', 'exp_file_name' => ''],
+                    ] as $im) {
+                    $from = $to = $im['file'];
+                    if ($im['exp_file_name'] != '') {
+                        $to = $im['exp_file_name'];
+                    }
+                    $this->export_collector->addFile(
+                        \ilUtil::getImagePath($from, '', 'filesystem'),
+                        $img_dir . '/' . $to
+                    );
+                }*/
             }
         }
     }

@@ -336,7 +336,7 @@ class ilTinyMCE extends ilRTE
                 $theme_advanced_buttons[] = '|';
             }
             if ($this->_buildAdvancedBlockformatsFromHTMLTags($a_html_tags) !== '') {
-                $theme_advanced_buttons[] = 'formatselect';
+                $theme_advanced_buttons[] = 'blocks';
             }
             if (in_array('hr', $a_html_tags)) {
                 $theme_advanced_buttons[] = 'hr';
@@ -350,8 +350,8 @@ class ilTinyMCE extends ilRTE
                 $theme_advanced_buttons[] = 'superscript';
             }
             if (in_array('font', $a_html_tags)) {
-                $theme_advanced_buttons[] = 'fontselect';
-                $theme_advanced_buttons[] = 'fontsizeselect';
+                $theme_advanced_buttons[] = 'fontfamily';
+                $theme_advanced_buttons[] = 'fontsize';
             }
             $theme_advanced_buttons[] = 'charmap';
             if ((in_array('ol', $a_html_tags)) && (in_array('li', $a_html_tags))) {
@@ -452,7 +452,7 @@ class ilTinyMCE extends ilRTE
             $theme_advanced_buttons[] = 'alignjustify';
         }
         if ($this->_buildAdvancedBlockformatsFromHTMLTags($a_html_tags) !== '') {
-            $theme_advanced_buttons[] = 'formatselect';
+            $theme_advanced_buttons[] = 'blocks';
         }
         if (in_array('hr', $a_html_tags)) {
             $theme_advanced_buttons[] = 'hr';
@@ -464,8 +464,8 @@ class ilTinyMCE extends ilRTE
             $theme_advanced_buttons[] = 'superscript';
         }
         if (in_array('font', $a_html_tags)) {
-            $theme_advanced_buttons[] = 'fontselect';
-            $theme_advanced_buttons[] = 'fontsizeselect';
+            $theme_advanced_buttons[] = 'fontfamily';
+            $theme_advanced_buttons[] = 'fontsize';
         }
         if ((in_array('ol', $a_html_tags)) && (in_array('li', $a_html_tags))) {
             $theme_advanced_buttons[] = 'bullist';

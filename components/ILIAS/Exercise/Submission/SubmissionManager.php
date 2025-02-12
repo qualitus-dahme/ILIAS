@@ -509,7 +509,7 @@ class SubmissionManager
             $team_map = \ilExAssignmentTeam::getAssignmentTeamMap($ass->getId());
         }
         foreach ($members as $id => $item) {
-            $user_files = $item["files"] ?? null;
+            $user_files = $item["files"] ?? [];
 
             // group by teams
             $team_dir = "";
@@ -582,7 +582,7 @@ class SubmissionManager
 
                 // add file to directory (no zip see end of the function)
                 $dir = $to_path . DIRECTORY_SEPARATOR . $targetdir;
-                \ilFileUtils::makeDir($dir);
+                \ilFileUtils::makeDirParents($dir);
                 $file = $dir . DIRECTORY_SEPARATOR . $targetfile;
                 file_put_contents(
                     $file,

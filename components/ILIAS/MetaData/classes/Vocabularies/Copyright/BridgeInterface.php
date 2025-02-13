@@ -29,6 +29,10 @@ interface BridgeInterface
 {
     public function vocabulary(SlotIdentifier $slot): ?VocabularyInterface;
 
+    /**
+     * Values not from copyrights will not be returned at all.
+     * @return LabelledValueInterface[]
+     */
     public function labelsForValues(
         SlotIdentifier $slot,
         string ...$values

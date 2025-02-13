@@ -13,8 +13,7 @@
  * us at:
  * https://www.ilias.de
  * https://github.com/ILIAS-eLearning
- *
- *********************************************************************/
+ */
 
 declare(strict_types=1);
 
@@ -74,6 +73,7 @@ class ilMDKeywordExposer extends AbstractModificationProvider
                 );
             }
 
+            // Copyright
             if ($this->md->copyrightHelper()->isCopyrightSelectionActive()) {
                 $reader = $this->copyrightReader($object_id);
                 if ($this->md->copyrightHelper()->hasPresetCopyright($reader)) {

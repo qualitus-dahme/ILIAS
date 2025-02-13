@@ -116,6 +116,9 @@ class ilMDCopyrightUpdateSteps implements ilDatabaseUpdateSteps
         }
     }
 
+    /**
+     * Add CC0 to the available copyrights
+     */
     public function step_7(): void
     {
         $title = "Public Domain";

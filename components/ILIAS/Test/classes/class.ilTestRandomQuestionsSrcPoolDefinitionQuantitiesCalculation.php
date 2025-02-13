@@ -26,116 +26,62 @@ declare(strict_types=1);
  */
 class ilTestRandomQuestionsSrcPoolDefinitionQuantitiesCalculation
 {
-    /**
-     * @var ilTestRandomQuestionSetSourcePoolDefinition
-     */
-    protected $sourcePoolDefinition;
+    protected ilTestRandomQuestionSetSourcePoolDefinitionList $intersectionQuantitySharingDefinitionList;
+    protected int $overallQuestionAmount;
+    protected int $exclusiveQuestionAmount;
+    protected int $availableSharedQuestionAmount;
 
-    /**
-     * @var ilTestRandomQuestionSetSourcePoolDefinitionList
-     */
-    protected $intersectionQuantitySharingDefinitionList;
-
-    /**
-     * @var integer
-     */
-    protected $overallQuestionAmount;
-
-    /**
-     * @var integer
-     */
-    protected $exclusiveQuestionAmount;
-
-    /**
-     * @var integer
-     */
-    protected $availableSharedQuestionAmount;
-
-    /**
-     * ilTestRandomQuestionsSrcPoolDefinitionQuantitiesCheck constructor.
-     *
-     * @param ilTestRandomQuestionSetSourcePoolDefinition $sourcePoolDefinition
-     */
-    public function __construct(ilTestRandomQuestionSetSourcePoolDefinition $sourcePoolDefinition)
-    {
-        $this->sourcePoolDefinition = $sourcePoolDefinition;
+    public function __construct(
+        protected readonly ilTestRandomQuestionSetSourcePoolDefinition $sourcePoolDefinition
+    ) {
     }
 
-    /**
-     * @return ilTestRandomQuestionSetSourcePoolDefinition
-     */
     public function getSourcePoolDefinition(): ilTestRandomQuestionSetSourcePoolDefinition
     {
         return $this->sourcePoolDefinition;
     }
 
-    /**
-     * @return ilTestRandomQuestionSetSourcePoolDefinitionList
-     */
     public function getIntersectionQuantitySharingDefinitionList(): ilTestRandomQuestionSetSourcePoolDefinitionList
     {
         return $this->intersectionQuantitySharingDefinitionList;
     }
 
-    /**
-     * @param ilTestRandomQuestionSetSourcePoolDefinitionList $intersectionQuantitySharingDefinitionList
-     */
-    public function setIntersectionQuantitySharingDefinitionList($intersectionQuantitySharingDefinitionList)
-    {
+    public function setIntersectionQuantitySharingDefinitionList(
+        ilTestRandomQuestionSetSourcePoolDefinitionList $intersectionQuantitySharingDefinitionList
+    ): void {
         $this->intersectionQuantitySharingDefinitionList = $intersectionQuantitySharingDefinitionList;
     }
 
-    /**
-     * @return int
-     */
     public function getOverallQuestionAmount(): int
     {
         return $this->overallQuestionAmount;
     }
 
-    /**
-     * @param int $overallQuestionAmount
-     */
-    public function setOverallQuestionAmount($overallQuestionAmount)
+    public function setOverallQuestionAmount(int $overallQuestionAmount): void
     {
         $this->overallQuestionAmount = $overallQuestionAmount;
     }
 
-    /**
-     * @return int
-     */
     public function getExclusiveQuestionAmount(): int
     {
         return $this->exclusiveQuestionAmount;
     }
 
-    /**
-     * @param int $exclusiveQuestionAmount
-     */
-    public function setExclusiveQuestionAmount($exclusiveQuestionAmount)
+    public function setExclusiveQuestionAmount(int $exclusiveQuestionAmount): void
     {
         $this->exclusiveQuestionAmount = $exclusiveQuestionAmount;
     }
 
-    /**
-     * @return int
-     */
     public function getAvailableSharedQuestionAmount(): int
     {
         return $this->availableSharedQuestionAmount;
     }
 
-    /**
-     * @param int $availableSharedQuestionAmount
-     */
-    public function setAvailableSharedQuestionAmount($availableSharedQuestionAmount)
+    public function setAvailableSharedQuestionAmount(int $availableSharedQuestionAmount): void
     {
         $this->availableSharedQuestionAmount = $availableSharedQuestionAmount;
     }
 
-    /**
-     * @return int
-     */
     protected function getReservedSharedQuestionAmount(): int
     {
         return $this->getOverallQuestionAmount() - (
@@ -143,9 +89,6 @@ class ilTestRandomQuestionsSrcPoolDefinitionQuantitiesCalculation
         );
     }
 
-    /**
-     * @return integer
-     */
     protected function getRemainingRequiredQuestionAmount(): int
     {
         $requiredQuestionAmount = $this->getSourcePoolDefinition()->getQuestionAmount();
@@ -154,9 +97,6 @@ class ilTestRandomQuestionsSrcPoolDefinitionQuantitiesCalculation
         return $requiredQuestionAmount - $exclusiveQuestionAmount;
     }
 
-    /**
-     * @return bool
-     */
     protected function isRequiredQuestionAmountSatisfiedByOverallQuestionQuantity(): bool
     {
         $requiredQuestionAmount = $this->getSourcePoolDefinition()->getQuestionAmount();
@@ -165,9 +105,6 @@ class ilTestRandomQuestionsSrcPoolDefinitionQuantitiesCalculation
         return $overallQuestionAmount >= $requiredQuestionAmount;
     }
 
-    /**
-     * @return bool
-     */
     protected function isRequiredQuestionAmountSatisfiedByExclusiveQuestionQuantity(): bool
     {
         $requiredQuestionAmount = $this->getSourcePoolDefinition()->getQuestionAmount();
@@ -176,9 +113,6 @@ class ilTestRandomQuestionsSrcPoolDefinitionQuantitiesCalculation
         return $exclusiveQuestionAmount >= $requiredQuestionAmount;
     }
 
-    /**
-     * @return bool
-     */
     protected function isRemainingRequiredQuestionAmountSatisfiedBySharedQuestionQuantity(): bool
     {
         $remainingRequiredQuestionAmount = $this->getRemainingRequiredQuestionAmount();
@@ -187,9 +121,6 @@ class ilTestRandomQuestionsSrcPoolDefinitionQuantitiesCalculation
         return $availableSharedQuestionAmount >= $remainingRequiredQuestionAmount;
     }
 
-    /**
-     * @return bool
-     */
     protected function sourcePoolDefinitionIntersectionsExist(): bool
     {
         if ($this->getIntersectionQuantitySharingDefinitionList()->getDefinitionCount() > 0) {
@@ -199,9 +130,6 @@ class ilTestRandomQuestionsSrcPoolDefinitionQuantitiesCalculation
         return false;
     }
 
-    /**
-     * @return bool
-     */
     public function isRequiredAmountGuaranteedAvailable(): bool
     {
         if ($this->isRequiredQuestionAmountSatisfiedByExclusiveQuestionQuantity()) {
@@ -264,10 +192,6 @@ class ilTestRandomQuestionsSrcPoolDefinitionQuantitiesCalculation
         );
     }
 
-    /**
-     * @param ilLanguage $lng
-     * @return string
-     */
     protected function buildIntersectionQuestionSharingDefinitionsString(ilLanguage $lng): string
     {
         $definitionsString = [];

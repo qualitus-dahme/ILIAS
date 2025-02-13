@@ -171,6 +171,9 @@ class RandomQuestionSetSourcePoolDefinitionListTable implements OrderingBinding
      */
     protected function getActions(): array
     {
+        if (!$this->editable) {
+            return [];
+        }
         return [
             'delete' => $this->ui_factory->table()->action()->standard(
                 $this->lng->txt('delete'),

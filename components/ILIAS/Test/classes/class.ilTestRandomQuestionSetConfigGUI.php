@@ -615,8 +615,9 @@ class ilTestRandomQuestionSetConfigGUI
     {
         $this->question_set_config->loadFromDb();
 
-        $defId = $this->fetchSingleSourcePoolDefinitionIdParameter();
-        $source_pool_definition = $this->source_pool_definition_factory->getSourcePoolDefinitionByDefinitionId($defId);
+        $source_pool_definition = $this->source_pool_definition_factory->getSourcePoolDefinitionByDefinitionId(
+            $this->fetchSingleSourcePoolDefinitionIdParameter()
+        );
         $available_taxonomy_ids = ilObjTaxonomy::getUsageOfObject($source_pool_definition->getPoolId());
 
         $form = $this->buildEditSourcePoolDefinitionFormGUI();
@@ -831,9 +832,7 @@ class ilTestRandomQuestionSetConfigGUI
 
     protected function preventFormBecauseOfSync(): bool
     {
-        $return = false;
         $last_sync = $this->question_set_config->getLastQuestionSyncTimestamp();
-
         if ($last_sync !== null && $last_sync !== 0 &&
             !$this->isFrozenConfigRequired() && $this->question_set_config->isQuestionSetBuildable()) {
             return true;

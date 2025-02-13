@@ -268,6 +268,7 @@ class ilExAssTypeWikiTeamGUI implements ilExAssignmentTypeGUIInterface
 
         $wiki->setOwner($this->exercise->getOwner());
         $wiki->setOnline(true);
+        $wiki->getObjectProperties()->storePropertyIsOnline(new ilObjectPropertyIsOnline(true));
         $wiki->update();
         $wiki->updateOwner();
 

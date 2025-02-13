@@ -95,8 +95,8 @@ class ilExAssTypeWikiTeam implements ilExAssignmentTypeInterface
         $wiki = new ilObjWiki($a_wiki_ref_id);
         $exp = new WikiHtmlExport($wiki);
         //$exp->setMode(ilWikiHTMLExport::MODE_USER);
-        $file = $exp->buildExportFile();
-
+        $collector = $exp->buildExportFile();
+        $file = $collector->getFilePath();
         $size = filesize($file);
         if ($size) {
             $submission->deleteAllFiles();
@@ -106,9 +106,10 @@ class ilExAssTypeWikiTeam implements ilExAssignmentTypeInterface
                 $file,
                 $a_wiki_ref_id . ".zip"
             );
-            unlink($file);
+            $collector->delete();
             // print version
-            $file = $exp->buildExportFile(true);
+            $collector = $exp->buildExportFile(true);
+            $file = $collector->getFilePath();
             $size = filesize($file);
             if ($size) {
                 $subm->addLocalFile(
@@ -116,7 +117,7 @@ class ilExAssTypeWikiTeam implements ilExAssignmentTypeInterface
                     $file,
                     $a_wiki_ref_id . "print.zip"
                 );
-                unlink($file);
+                $collector->delete();
             }
 
             $this->handleNewUpload($ass, $submission);

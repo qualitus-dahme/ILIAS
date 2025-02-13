@@ -408,14 +408,18 @@ class SubmissionManager
      */
     public function deleteSubmissions(int $user_id, array $ids): void
     {
-
         if (count($ids) == 0) {
             return;
         }
-        // this ensures, the ids belong to user submissions at all
-        foreach ($this->getSubmissionsOfUser($user_id, $ids) as $s) {
+        $all = $this->getAllSubmissionIdsOfUser($user_id);
+        foreach ($ids as $id) {
+            // this ensures, the ids belong to user submissions at all
+            if (!in_array($id, $all)) {
+                continue;
+            }
+            $s = $this->repo->getById($id);
             $this->repo->delete(
-                $s->getId(),
+                $id,
                 $this->stakeholder
             );
             $team_id = $this->team->getTeamForMember($this->ass_id, $user_id);
@@ -429,14 +433,26 @@ class SubmissionManager
         }
     }
 
+    /**
+     * All, include print, include all from team
+     */
+    protected function getAllSubmissionIdsOfUser(int $user_id): array
+    {
+        $subs = [];
+        foreach ($this->getSubmissionsOfUser($user_id) as $s) {
+            $subs[] = $s->getId();
+        }
+        foreach ($this->getSubmissionsOfUser($user_id, null, false, null, true) as $s) {
+            $subs[] = $s->getId();
+        }
+        return $subs;
+    }
+
     public function deleteAllSubmissionsOfUser(int $user_id): void
     {
         $this->deleteSubmissions(
             $user_id,
-            $this->repo->getAllSubmissionIdsOfOwner(
-                $this->ass_id,
-                $user_id
-            )
+            $this->getAllSubmissionIdsOfUser($user_id)
         );
     }
 

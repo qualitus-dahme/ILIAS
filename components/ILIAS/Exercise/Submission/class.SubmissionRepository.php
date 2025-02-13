@@ -179,6 +179,19 @@ class SubmissionRepository implements SubmissionRepositoryInterface
         }
     }
 
+    public function getById(
+        int $id
+    ): ?Submission {
+        $sql = "SELECT * FROM exc_returned" .
+            " WHERE returned_id = " . $this->db->quote($id, "integer");
+        $result = $this->db->query($sql);
+        if ($row = $this->db->fetchAssoc($result)) {
+            return $this->getSubmissionFromRecord($row);
+        }
+        return null;
+    }
+
+
     public function getUserId(int $submission_id): int
     {
         $q = "SELECT user_id FROM exc_returned " .

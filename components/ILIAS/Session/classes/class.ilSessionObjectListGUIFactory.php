@@ -18,6 +18,8 @@
 
 declare(strict_types=1);
 
+declare(strict_types=1);
+
 /**
  * @classDescription List GUI factory for session materials in session objects
  * @author Stefan Meyer <meyer@leifos.com>
@@ -55,6 +57,7 @@ class ilSessionObjectListGUIFactory
         if (!$item_list_gui instanceof ilObjectListGUI) {
             return null;
         }
+        $item_list_gui->enableTimings(false);
         $item_list_gui->enableDelete(false);
         $item_list_gui->enableCut(false);
         $item_list_gui->enableCopy(false);

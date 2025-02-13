@@ -37,9 +37,9 @@ class DatabasePathsParser implements DatabasePathsParserInterface
 {
     use TableNamesHandler;
 
-    protected const JOIN_TABLE = 'join_table';
-    protected const JOIN_CONDITION = 'join_condition';
-    protected const COLUMN_NAME = 'column_name';
+    protected const string JOIN_TABLE = 'join_table';
+    protected const string JOIN_CONDITION = 'join_condition';
+    protected const string COLUMN_NAME = 'column_name';
 
     /**
      * @var string[]

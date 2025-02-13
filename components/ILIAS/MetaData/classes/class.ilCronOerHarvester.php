@@ -31,8 +31,8 @@ use ILIAS\Cron\CronJob;
  */
 class ilCronOerHarvester extends CronJob
 {
-    protected const CRON_JOB_IDENTIFIER = 'meta_oer_harvester';
-    protected const DEFAULT_SCHEDULE_VALUE = 1;
+    protected const string CRON_JOB_IDENTIFIER = 'meta_oer_harvester';
+    protected const int DEFAULT_SCHEDULE_VALUE = 1;
 
     private ilLogger $logger;
     private ilLanguage $lng;

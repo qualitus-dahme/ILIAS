@@ -36,7 +36,7 @@ use ILIAS\MetaData\Paths\FactoryInterface as PathFactory;
 
 class Presentation
 {
-    protected const MAX_PREVIEW_VALUES = 5;
+    protected const int MAX_PREVIEW_VALUES = 5;
 
     protected ElementsPresentation $elements_presentation;
     protected PresentationUtilities $presentation_utils;

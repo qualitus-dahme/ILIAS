@@ -28,7 +28,7 @@ use ILIAS\MetaData\Paths\Navigator\NavigatorFactoryInterface;
 
 class LOMDictionaryInitiator extends BaseDictionaryInitiator
 {
-    protected const MD_SCHEMA = 'LOMv1.0';
+    protected const string MD_SCHEMA = 'LOMv1.0';
 
     protected TagFactory $tag_factory;
 

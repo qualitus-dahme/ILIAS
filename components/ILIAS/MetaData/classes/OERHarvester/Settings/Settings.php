@@ -22,8 +22,8 @@ namespace ILIAS\MetaData\OERHarvester\Settings;
 
 class Settings implements SettingsInterface
 {
-    protected const STORAGE_IDENTIFIER = 'meta_oer';
-    protected const ELIGIBLE_TYPES = [
+    protected const string STORAGE_IDENTIFIER = 'meta_oer';
+    protected const array ELIGIBLE_TYPES = [
         'file',
         'glo',
         'copa',

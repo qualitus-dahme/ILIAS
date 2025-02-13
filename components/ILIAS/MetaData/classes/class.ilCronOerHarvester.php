@@ -135,6 +135,7 @@ class ilCronOerHarvester extends CronJob
         $ex_target->setRequired(true);
         $a_form->addItem($ex_target);
 
+        // copyright selection
         $checkbox_group = new ilCheckboxGroupInputGUI(
             $this->lng->txt('meta_oer_copyright_selection'),
             'copyright'

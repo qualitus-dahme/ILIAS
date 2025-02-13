@@ -61,11 +61,17 @@ class NullCopyrightHelper implements CopyrightHelperInterface
         return $manipulator;
     }
 
+    /**
+     * @return CopyrightInterface[]
+     */
     public function getAllCopyrightPresets(): \Generator
     {
         yield from [];
     }
 
+    /**
+     * @return CopyrightInterface[]
+     */
     public function getNonOutdatedCopyrightPresets(): \Generator
     {
         yield from [];

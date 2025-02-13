@@ -33,6 +33,9 @@ use ILIAS\FileUpload\MimeType;
 use ILIAS\ResourceStorage\Services as IRSS;
 use ILIAS\MetaData\Copyright\Database\Wrapper;
 
+/**
+ * @ilCtrl_Calls ilMDCopyrightConfigurationGUI: ilMDCopyrightUsageGUI, ilMDCopyrightImageUploadHandlerGUI
+ */
 class ilMDCopyrightConfigurationGUI
 {
     protected ilCtrl $ctrl;
@@ -92,6 +95,7 @@ class ilMDCopyrightConfigurationGUI
 
         switch ($next_class) {
             case strtolower(ilMDCopyrightUsageGUI::class):
+                // this command is used if copyrightUsageGUI calls getParentReturn (see ...UsageGUI->setTabs)
                 $this->ctrl->setReturn($this, 'showCopyrightSelection');
                 $entry = $this->repository->getEntry($this->initEntryIdFromQuery());
                 $gui = new ilMDCopyrightUsageGUI($entry);

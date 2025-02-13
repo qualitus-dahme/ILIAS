@@ -743,6 +743,12 @@ class ilMDUtilSelect
         // END PATCH Lucene Search
     }
 
+    /**
+     * Prepare a meta rights copyright and other restrictions
+     * All possible entries in meta_format are shown
+     * @param array $prepend array(value => 'string') of first item. E.g: array(0,'-Please select-')
+     * @return string|array Complete html select
+     */
     // BEGIN PATCH Lucene search
     public static function _getCopyrightAndOtherRestrictionsSelect(
         string $a_selected,
@@ -774,6 +780,12 @@ class ilMDUtilSelect
         // END PATCH Lucene Search
     }
 
+    /**
+     * Prepare a meta rights copyright and other restrictions
+     * All possible entries in meta_format are shown
+     * @param array $prepend array(value => 'string') of first item. E.g: array(0,'-Please select-')
+     * @return string|array Complete html select
+     */
     // BEGIN PATCH Lucene search
     public static function _getPurposeSelect(
         string $a_selected,

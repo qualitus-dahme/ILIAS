@@ -135,7 +135,6 @@ class ilObjSearchLuceneSettingsFormGUI
                 $this->coordinator->refreshLuceneSettings();
             }
             $this->tpl->setOnScreenMessage('success', $this->lng->txt('settings_saved'), true);
-            ilSession::clear('search_last_class');
             $this->ctrl->redirect($this, 'edit');
         } catch (Exception $exception) {
             $this->tpl->setOnScreenMessage('failure', $exception->getMessage());

@@ -17,9 +17,11 @@
 il.ExcIDl = {
 	ajax_url: '',
 
-	init: function (url) {
+	init: function (url, showSignal, closeSignal) {
 		console.log("init url:" + url);
 		this.ajax_url = url;
+		this.showSignal = showSignal;
+		this.closeSignal = closeSignal;
 		il.ExcIDl.initModal();
 	},
 
@@ -99,7 +101,15 @@ il.ExcIDl = {
 
 			il.ExcIDl.parseForm();
 
-			$("#ilExcIDlBody").closest(".il-modal-roundtrip").modal('show');
+			$(document).trigger(
+				this.showSignal,
+				{
+					id: this.showSignal,
+					triggerer: $(this),
+					options: JSON.parse('[]'),
+				},
+			);
+			//$("#ilExcIDlBody").closest(".il-modal-roundtrip").modal('show');
 		}
 	},
 

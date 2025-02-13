@@ -1846,11 +1846,13 @@ class ilExerciseManagementGUI
             $lng->txt("exc_individual_deadline"),
             $this->ui_factory->legacy('<div id="ilExcIDlBody"></div>')
         );
+        $show = $modal->getShowSignal()->getId();
+        $close = $modal->getCloseSignal()->getId();
 
         $ajax_url = $this->ctrl->getLinkTarget($this, "handleIndividualDeadlineCalls", "", true, false);
 
         $tpl->addJavaScript("assets/js/ilExcIDl.js", true, 3);
-        $tpl->addOnLoadCode('il.ExcIDl.init("' . $ajax_url . '");');
+        $tpl->addOnLoadCode("il.ExcIDl.init('" . $ajax_url . "','" . $show . "','" . $close . "');");
 
         ilCalendarUtil::initDateTimePicker();
 
@@ -1965,7 +1967,8 @@ class ilExerciseManagementGUI
                         }
                     }
 
-                    $ass->recalculateLateSubmissions();
+                    $subm = $this->domain->submission($ass->getId());
+                    $subm->recalculateLateSubmissions();
                 }
 
                 echo "ok";

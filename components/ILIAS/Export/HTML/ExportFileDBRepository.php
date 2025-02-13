@@ -37,10 +37,12 @@ class ExportFileDBRepository
 
     public function create(
         int $object_id,
-        string $type = ""
+        string $type = "",
+        string $title = ""
     ): string {
         $rid = $this->irss->createContainer(
-            $this->stakeholder
+            $this->stakeholder,
+            $title
         );
         $this->db->insert('export_files_html', [
             'object_id' => ['integer', $object_id],

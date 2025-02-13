@@ -501,16 +501,22 @@ class IRSSWrapper
     }
 
     public function createContainer(
-        ResourceStakeholder $stakeholder
+        ResourceStakeholder $stakeholder,
+        string $title = ""
     ): string {
         // create empty container resource. empty zips are not allowed, we need at least one file which is hidden
         $empty_zip = $this->archives->zip(
             []
         );
 
+        if ($title === "") {
+            $title = null;
+        }
+
         $rid = $this->irss->manageContainer()->containerFromStream(
             $empty_zip->get(),
-            $stakeholder
+            $stakeholder,
+            $title
         );
         return $rid->serialize();
     }

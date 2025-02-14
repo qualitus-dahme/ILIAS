@@ -308,7 +308,7 @@ class AdditionalInformationGenerator
         return implode(
             '; ',
             array_map(
-                fn($k) => "{$k}: {$this->parseValue($k, $additional_info[$k] ?? '', $environment)}",
+                fn(string $k) => "{$this->getCorrectedTranslationForKey($k)}: {$this->parseValue($k, $additional_info[$k] ?? '', $environment)}",
                 array_keys($additional_info)
             )
         );

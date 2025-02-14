@@ -451,8 +451,7 @@ class ilTestRandomQuestionSetConfigGUI
             $translator,
             $this->source_pool_definition_list,
             !$this->isFrozenConfigRequired() && !$disabled,
-            $this->question_set_config->isQuestionAmountConfigurationModePerPool(),
-            $this->question_set_config->getLastQuestionSyncTimestamp() != 0
+            $this->question_set_config->isQuestionAmountConfigurationModePerPool()
         );
     }
 

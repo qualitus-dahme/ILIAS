@@ -676,7 +676,6 @@ class SubmissionManager
         $lng = $this->domain->lng();
 
         $zip = $DIC->archives()->zip([]);
-        $zip->get();
 
 
         $assTitle = \ilExAssignment::lookupTitle($this->assignment->getId());
@@ -694,14 +693,14 @@ class SubmissionManager
         $parsed_files = $duplicates = array();
         foreach ($filenames as $files) {
 
-            foreach ($files as $filename) {
+            foreach ($files as $file) {
                 // peer review masked filenames, see deliverReturnedFiles()
-                if (isset($filename["tgt"])) {
-                    $newFilename = $filename["tgt"];
-                    $filename = $filename["src"];
+                if (isset($file["tgt"])) {
+                    $newFilename = $file["tgt"];
+                    $filename = $file["src"];
                 } else {
-                    $late = $filename["late"];
-                    $filename = $filename["src"];
+                    $late = $file["late"];
+                    $filename = $file["src"];
 
                     // remove timestamp
                     $newFilename = trim($filename);
@@ -728,11 +727,10 @@ class SubmissionManager
 
                 $newFilename = \ilFileUtils::getASCIIFilename($newFilename);
                 $newFilename = $deliverFilename . DIRECTORY_SEPARATOR . $newFilename;
-
                 $zip->addStream(
                     $this->repo->getStream(
                         $this->ass_id,
-                        $filename["rid"]
+                        $file["rid"]
                     ),
                     $newFilename
                 );

@@ -109,7 +109,7 @@ class ilTestImporter extends ilXmlImporter
         $question_page_parser->setQuestionMapping($qti_parser->getImportMapping());
         $question_page_parser->startParsing();
 
-        $a_mapping = $this->addTexonomyAndQuestionsMapping($qti_parser->getQuestionIdMapping(), $new_obj->getId(), $a_mapping);
+        $a_mapping = $this->addTaxonomyAndQuestionsMapping($qti_parser->getQuestionIdMapping(), $new_obj->getId(), $a_mapping);
 
         if ($new_obj->isRandomTest()) {
             $this->importRandomQuestionSetConfig($new_obj, $xmlfile, $a_mapping);
@@ -139,23 +139,23 @@ class ilTestImporter extends ilXmlImporter
         );
     }
 
-    public function addTexonomyAndQuestionsMapping(
+    public function addTaxonomyAndQuestionsMapping(
         array $question_id_mapping,
         int $new_obj_id,
         ilImportMapping $mapping
     ): ilImportMapping {
         foreach ($question_id_mapping as $old_question_id => $new_question_id) {
             $mapping->addMapping(
-                'Services/Taxonomy',
+                'components/ILIAS/Taxonomy',
                 'tax_item',
-                "tst:quest:$old_question_id",
+                "tst:quest:{$old_question_id}",
                 (string) $new_question_id
             );
 
             $mapping->addMapping(
-                'Services/Taxonomy',
+                'components/ILIAS/Taxonomy',
                 'tax_item_obj_id',
-                "tst:quest:$old_question_id",
+                "tst:quest:{$old_question_id}",
                 (string) $new_obj_id
             );
 
@@ -194,47 +194,43 @@ class ilTestImporter extends ilXmlImporter
 
     protected function finalRandomTestTaxonomyProcessing(
         ilImportMapping $mapping,
-        string $oldTstObjId,
-        string $newTstObjId,
+        string $old_tst_obj_id,
+        string $new_tst_obj_id,
         ilObjTest $test_obj
     ): void {
         $new_tax_ids = $mapping->getMapping(
             'components/ILIAS/Taxonomy',
             'tax_usage_of_obj',
-            $oldTstObjId
+            $old_tst_obj_id
         );
 
         if ($new_tax_ids !== null) {
-            $tax_ids = explode(":", $new_tax_ids);
-
-            foreach ($tax_ids as $tid) {
-                ilObjTaxonomy::saveUsage((int) $tid, (int) $newTstObjId);
+            foreach (explode(':', $new_tax_ids) as $tax_id) {
+                ilObjTaxonomy::saveUsage((int) $tax_id, (int) $new_tst_obj_id);
             }
         }
 
-        $srcPoolDefFactory = new ilTestRandomQuestionSetSourcePoolDefinitionFactory(
-            $this->db,
-            $test_obj
-        );
-
-        $srcPoolDefList = new ilTestRandomQuestionSetSourcePoolDefinitionList(
+        $src_pool_def_list = new ilTestRandomQuestionSetSourcePoolDefinitionList(
             $this->db,
             $test_obj,
-            $srcPoolDefFactory
+            new ilTestRandomQuestionSetSourcePoolDefinitionFactory(
+                $this->db,
+                $test_obj
+            )
         );
 
-        $srcPoolDefList->loadDefinitions();
+        $src_pool_def_list->loadDefinitions();
 
-        foreach ($srcPoolDefList as $definition) {
-            // #21330
-            if (!is_array($definition->getMappedTaxonomyFilter()) || 0 === count($definition->getMappedTaxonomyFilter())) {
+        foreach ($src_pool_def_list as $definition) {
+            $mapped_taxonomy_filter = $definition->getMappedTaxonomyFilter();
+            if ($mapped_taxonomy_filter === []) {
                 continue;
             }
 
             $definition->setMappedTaxonomyFilter(
                 $this->getNewMappedTaxonomyFilter(
                     $mapping,
-                    $definition->getMappedTaxonomyFilter()
+                    $mapped_taxonomy_filter
                 )
             );
             $definition->saveToDb();
@@ -243,39 +239,38 @@ class ilTestImporter extends ilXmlImporter
 
     protected function getNewMappedTaxonomyFilter(
         ilImportMapping $mapping,
-        array $mappedFilter
+        array $mapped_filter
     ): array {
-        $newMappedFilter = [];
-
-        foreach ($mappedFilter as $taxId => $taxNodes) {
-            $newTaxId = $mapping->getMapping(
+        $new_mapped_filter = [];
+        foreach ($mapped_filter as $tax_id => $tax_nodes) {
+            $new_tax_id = $mapping->getMapping(
                 'components/ILIAS/Taxonomy',
                 'tax',
-                (string) $taxId
+                (string) $tax_id
             );
 
-            if (!$newTaxId) {
+            if ($new_tax_id === null) {
                 continue;
             }
 
-            $newMappedFilter[$newTaxId] = [];
+            $new_mapped_filter[$new_tax_id] = [];
 
-            foreach ($taxNodes as $taxNodeId) {
-                $newTaxNodeId = $mapping->getMapping(
+            foreach ($tax_nodes as $tax_node_id) {
+                $new_tax_node_id = $mapping->getMapping(
                     'components/ILIAS/Taxonomy',
                     'tax_tree',
-                    (string) $taxNodeId
+                    (string) $tax_node_id
                 );
 
-                if (!$newTaxNodeId) {
+                if ($new_tax_node_id === null) {
                     continue;
                 }
 
-                $newMappedFilter[$newTaxId][] = $newTaxNodeId;
+                $new_mapped_filter[$new_tax_id][] = $new_tax_node_id;
             }
         }
 
-        return $newMappedFilter;
+        return $new_mapped_filter;
     }
 
     public function importRandomQuestionSetConfig(

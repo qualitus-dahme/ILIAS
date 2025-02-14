@@ -21,6 +21,7 @@ declare(strict_types=1);
 use ILIAS\ResourceStorage\Collection\ResourceCollection;
 use ILIAS\Setup\Environment;
 use ILIAS\Setup\Migration;
+use ILIAS\Setup\CLI\IOWrapper;
 
 class ilBadgeTemplatesFilesMigration implements Migration
 {
@@ -53,6 +54,9 @@ class ilBadgeTemplatesFilesMigration implements Migration
 
     public function step(Environment $environment): void
     {
+        /** @var IOWrapper $io */
+        $io = $environment->getResource(Environment::RESOURCE_ADMIN_INTERACTION);
+
         $this->helper->getDatabase()->setLimit(1);
         $res = $this->helper->getDatabase()->query(
             'SELECT id, image, image_rid FROM ' . self::TABLE_NAME . " WHERE image_rid IS NULL OR image_rid = ''"
@@ -67,7 +71,18 @@ class ilBadgeTemplatesFilesMigration implements Migration
 
         if ($image !== '' && $image !== null) {
             $image_path = $this->getImagePath($id, $image);
-            $identification = $this->helper->movePathToStorage($image_path, ResourceCollection::NO_SPECIFIC_OWNER);
+
+            try {
+                $io->inform("Trying to move badge image template file {$image_path} for id {$id} to the storage service.");
+                $identification = $this->helper->movePathToStorage($image_path, ResourceCollection::NO_SPECIFIC_OWNER);
+                $io->inform('Migration proceeded without error.');
+                $io->inform('Identification: ' . ($identification === null ? 'null' : $identification->serialize()));
+            } catch (Throwable $e) {
+                $io->error("Failed to move badge image template file {$image_path} for id {$id} to the storage service with exception: {$e->getMessage()}");
+                $io->error($e->getTraceAsString());
+                throw $e;
+            }
+
             if ($identification === null) {
                 $identification = '-';
             } else {

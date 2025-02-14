@@ -91,7 +91,12 @@ class CollectionBuilder
         if ($existing->hasSpecificOwner()
             && $existing->getOwner() !== $owner
         ) {
-            throw new \InvalidArgumentException('Invalid owner of collection');
+            // The original plan was that collections could be explicitly assigned to a user as an option.
+            // Such collections can then only be read by that user. However, the concept was never described
+            // and the check has therefore now been deactivated.
+            // See, for example, https://mantis.ilias.de/view.php?id=42127#c112463
+            // throw new \InvalidArgumentException('Invalid owner of collection');
+
         }
         return $existing;
     }

@@ -36,22 +36,21 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class RandomQuestionSetSourcePoolDefinitionListTable implements OrderingBinding
 {
-    protected URI $target;
-    protected URLBuilder $url_builder;
-    protected URLBuilderToken $id_token;
+    private URI $target;
+    private URLBuilder $url_builder;
+    private URLBuilderToken $id_token;
 
     public function __construct(
-        protected readonly \ilCtrlInterface $ctrl,
-        protected readonly \ilLanguage $lng,
-        protected readonly UIFactory $ui_factory,
-        protected readonly DataFactory $data_factory,
-        protected readonly ServerRequestInterface $request,
-        protected readonly TitleColumnsBuilder $title_builder,
-        protected readonly \ilTestQuestionFilterLabelTranslator $taxonomy_translator,
-        protected readonly PoolDefinitionList $source_pool_definition_list,
-        protected readonly bool $editable,
-        protected readonly bool $show_amount,
-        protected readonly bool $show_mapped_taxonomy_filter
+        private readonly \ilCtrlInterface $ctrl,
+        private readonly \ilLanguage $lng,
+        private readonly UIFactory $ui_factory,
+        private readonly DataFactory $data_factory,
+        private readonly ServerRequestInterface $request,
+        private readonly TitleColumnsBuilder $title_builder,
+        private readonly \ilTestQuestionFilterLabelTranslator $taxonomy_translator,
+        private readonly PoolDefinitionList $source_pool_definition_list,
+        private readonly bool $editable,
+        private readonly bool $show_amount
     ) {
         $this->target = $this->data_factory->uri((string) $this->request->getUri());
         $this->url_builder = new URLBuilder($this->target);
@@ -83,24 +82,20 @@ class RandomQuestionSetSourcePoolDefinitionListTable implements OrderingBinding
         }
     }
 
-    protected function getData(): array
+    private function getData(): array
     {
         $data = [];
 
         foreach ($this->source_pool_definition_list as $source_pool_definition) {
+            $taxonomie_filter = $source_pool_definition->getOriginalTaxonomyFilter();
+            if ($taxonomie_filter === []) {
+                $taxonomie_filter = $source_pool_definition->getMappedTaxonomyfilter();
+            }
             $set = [];
-
             $set['def_id'] = $source_pool_definition->getId();
             $set['sequence_position'] = $source_pool_definition->getSequencePosition();
             $set['source_pool_label'] = $source_pool_definition->getPoolTitle();
-            // fau: taxFilter/typeFilter - get the type and taxonomy filter for display
-            if ($this->show_mapped_taxonomy_filter) {
-                // mapped filter will be used after synchronisation
-                $set['taxonomy_filter'] = $source_pool_definition->getMappedTaxonomyFilter();
-            } else {
-                // original filter will be used before synchronisation
-                $set['taxonomy_filter'] = $source_pool_definition->getOriginalTaxonomyFilter();
-            }
+            $set['taxonomy_filter'] = $taxonomie_filter;
             $set['lifecycle_filter'] = $source_pool_definition->getLifecycleFilter();
             $set['type_filter'] = $source_pool_definition->getTypeFilter();
             // fau.
@@ -142,7 +137,7 @@ class RandomQuestionSetSourcePoolDefinitionListTable implements OrderingBinding
     /**
      * @return array<string, Column>
      */
-    protected function getColumns(): array
+    private function getColumns(): array
     {
         $column_factory = $this->ui_factory->table()->column();
         $columns_definition = [
@@ -169,7 +164,7 @@ class RandomQuestionSetSourcePoolDefinitionListTable implements OrderingBinding
     /**
      * @return array<string, Action>
      */
-    protected function getActions(): array
+    private function getActions(): array
     {
         if (!$this->editable) {
             return [];
@@ -188,7 +183,7 @@ class RandomQuestionSetSourcePoolDefinitionListTable implements OrderingBinding
         ];
     }
 
-    protected function getTarget(string $cmd): URI
+    private function getTarget(string $cmd): URI
     {
         return $this->target->withParameter('cmd', $cmd);
     }

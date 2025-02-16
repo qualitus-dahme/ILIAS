@@ -9289,6 +9289,7 @@ exc#:#exc_assignments_deleted#:#The assignments have been deleted.
 exc#:#exc_blog_created#:#Blog successfully created.
 exc#:#exc_blog_returned#:#Assignment Blog
 exc#:#exc_blog_selected#:#The blog has been assigned.
+exc#:#exc_cannot_submit_any_files#:#You cannot submit any files anymore.
 exc#:#exc_chars_remaining#:#Characters remaining:
 exc#:#exc_comment_for_learner_edit#:#Enter in Text Field as Comment
 exc#:#exc_comment_for_learner_info#:#A notification is sent to the user and the feedback will be listed in the user's assignment view.
@@ -9717,6 +9718,7 @@ exc#:#exc_template#:#Template
 exc#:#exc_text_assignment_edit#:#Edit Text
 exc#:#exc_text_assignment_show#:#Show Text
 exc#:#exc_text_saved#:#Text has been saved.
+exc#:#exc_too_many_files#:#The upload contains too many files.
 exc#:#exc_total_exc#:#Total Exercise
 exc#:#exc_total_members#:#Total Exercise Participants
 exc#:#exc_type#:#Type

@@ -9287,6 +9287,7 @@ exc#:#exc_assignments_deleted#:#Die Übungseinheiten wurden gelöscht.
 exc#:#exc_blog_created#:#Blog wurde erstellt.
 exc#:#exc_blog_returned#:#Blog zur Übungseinheit
 exc#:#exc_blog_selected#:#Das Blog wurde verknüpft.
+exc#:#exc_cannot_submit_any_files#:#Sie können keine Dateien mehr einreichen.
 exc#:#exc_chars_remaining#:#Verbleibende Zeichen
 exc#:#exc_comment_for_learner_edit#:#Als Kommentar in Textfeld eingeben
 exc#:#exc_comment_for_learner_info#:#Es wird eine Benachrichtigung an den Teilnehmer gesendet. <br /><br />Die Rückmeldung wird in seiner persönlichen Übungseinheiten-Übersicht angezeigt.
@@ -9715,6 +9716,7 @@ exc#:#exc_template#:#Vorlage
 exc#:#exc_text_assignment_edit#:#Text bearbeiten
 exc#:#exc_text_assignment_show#:#Text anzeigen
 exc#:#exc_text_saved#:#Der Text wurde gespeichert.
+exc#:#exc_too_many_files#:#Der Upload beinhaltet zu viele Dateien.
 exc#:#exc_total_exc#:#Gesamte Übung
 exc#:#exc_total_members#:#Gesamtanzahl an Teilnehmern
 exc#:#exc_type#:#Type

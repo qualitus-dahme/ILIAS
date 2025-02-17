@@ -3323,6 +3323,7 @@ cmix#:#launch_url#:#URL der Ressource
 cmix#:#launch_url_info#:#Geben Sie hier die Internetadresse ein und fügen Sie http:// oder https:// hinzu. Optionen zum Datenschutz sind auch für externe Ressourcen relevant.
 cmix#:#log_options#:#Optionen zur Anzeige der übertragenen Daten
 cmix#:#lrs_authentication#:#Authentifizierung
+cmix#:#lrs_type_not_avail_msg#:#Dieser LRS-Typ ist nicht verfügbar.
 cmix#:#no_substatements_info#:#Mit dieser Option, die nur für den ILIAS LRS-Proxy zur Verfügung steht, kann die Speicherung von untergeordneten Statements unterdrückt werden. Dies kann z.B. die Beantwortung einzelner Aufgaben in einem Test beeinflussen. Dem Content wird mitgeteilt, dass die Statements gespeichert worden wären.
 cmix#:#no_substatements_label#:#Substatements nicht speichern
 cmix#:#online_info#:#Dadurch wird das Objekt für die Benutzer sichtbar und nutzbar.

@@ -3325,6 +3325,7 @@ cmix#:#launch_url#:#URL of the resource
 cmix#:#launch_url_info#:#Insert here the Internet address by adding http:// or https:// . Options for data security are also relevant for remote resources.
 cmix#:#log_options#:#Options for the display of transmitted data
 cmix#:#lrs_authentication#:#Authentication
+cmix#:#lrs_type_not_avail_msg#:#This LRS Type is not available.
 cmix#:#no_substatements_info#:#With this option - which is only available for the ILIAS LRS proxy - the storage of subordinate statements can be suppressed. This can for example affect the answering of single tasks in a test. The content is informed that the statements would have been saved.
 cmix#:#no_substatements_label#:#Do not store substatements
 cmix#:#online_info#:#This makes the object visible and usable for the users.

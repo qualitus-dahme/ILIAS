@@ -769,6 +769,7 @@ assessment#:#fq_precision_info#:#Geben Sie hier die Anzahl der gewünschten Nach
 assessment#:#fq_question_desc#:#Sie definieren Variablen durch die Angabe von $v1, $v2 ... $vn, Ergebnisfelder mit $r1, $r2 .... $rn an den gewünschten Positionen im Text. Klicken Sie dann auf die Schaltfläche „Frage analysieren“, um Bearbeitungsformulare für alle Variablen und Ergebnisse zu erzeugen.
 assessment#:#gap#:#Lücke
 assessment#:#gap_combination#:#Lückentext-Kombination
+assessment#:#gaps#:#Lücken
 assessment#:#glossary_term#:#Glossarbegriff
 assessment#:#grading_mark_msg#:#Sie haben die Note &quot;[mark]&quot; erzielt.
 assessment#:#grading_status_failed_msg#:#Schade, leider haben Sie den Test <b>nicht bestanden</b>.

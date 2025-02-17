@@ -21,9 +21,7 @@ declare(strict_types=1);
 namespace ILIAS\Test\Logging;
 
 use ILIAS\Test\Utilities\TitleColumnsBuilder;
-
 use ILIAS\TestQuestionPool\Questions\GeneralQuestionPropertiesRepository;
-
 use ILIAS\HTTP\Wrapper\RequestWrapper;
 use ILIAS\UI\Factory as UIFactory;
 use ILIAS\UI\Renderer as UIRenderer;
@@ -68,6 +66,7 @@ class TestLogViewer
             $this->logger,
             $this->title_builder,
             $this->question_repository,
+            $this->ui_service,
             $this->ui_factory,
             $this->ui_renderer,
             $this->data_factory,
@@ -82,7 +81,7 @@ class TestLogViewer
         );
 
         return [
-            $log_table->getFilter($this->ui_service),
+            $log_table->getFilter(),
             $log_table->getTable()->withRequest($this->request)
         ];
     }
@@ -98,6 +97,7 @@ class TestLogViewer
             $this->logger,
             $this->title_builder,
             $this->question_repository,
+            $this->ui_service,
             $this->ui_factory,
             $this->ui_renderer,
             $this->data_factory,

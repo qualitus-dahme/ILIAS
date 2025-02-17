@@ -1623,11 +1623,10 @@ class ilObjMediaObject extends ilObject
     public function removeAdditionalFile(
         string $a_file
     ): void {
-        $file = str_replace("..", "", $a_file);
-        $file = ilObjMediaObject::_getDirectory($this->getId()) . "/" . $file;
-        if (is_file($file)) {
-            unlink($file);
-        }
+        $this->manager->removeLocation(
+            $this->getId(),
+            $a_file
+        );
     }
 
 

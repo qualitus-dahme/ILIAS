@@ -17231,6 +17231,22 @@ div[id$=color-picker-menu] {
   z-index: 3;
 }
 
+.c-form__autocomplete {
+  position: absolute;
+  background-color: white;
+  border-left: 1px solid #dddddd;
+  border-right: 1px solid #dddddd;
+  border-bottom: 1px solid #dddddd;
+  margin: 0;
+  padding: 3px;
+  list-style: none;
+  z-index: 1;
+  cursor: default;
+}
+.c-form__autocomplete li:hover {
+  background-color: #e2e8ef;
+}
+
 /* Services/Help */
 #ilHelpText .ilc_text_inline_Strong {
   font-weight: 600;

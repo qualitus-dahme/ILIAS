@@ -708,7 +708,7 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
             $this->test_session,
             $this->object->getId()
         );
-        $finishTasks->performFinishTasks($this->process_locker);
+        $finishTasks->performFinishTasks($this->processLocker);
 
         $this->sendNewPassFinishedNotificationEmailIfActivated(
             $this->test_session->getActiveId(),

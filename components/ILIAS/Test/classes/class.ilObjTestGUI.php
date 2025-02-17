@@ -1508,6 +1508,17 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
             );
         }
 
+        if ($new_obj->getTestLogger()->isLoggingEnabled()) {
+            $new_obj->getTestLogger()->logTestAdministrationInteraction(
+                $new_obj->getTestLogger()->getInteractionFactory()->buildTestAdministrationInteraction(
+                    $new_obj->getRefId(),
+                    $this->user->getId(),
+                    TestAdministrationInteractionTypes::NEW_TEST_CREATED,
+                    []
+                )
+            );
+        }
+
         ilFileUtils::delDir($importdir);
         $this->deleteUploadedImportFile($path_to_uploaded_file_in_temp_dir);
         ilSession::clear('path_to_import_file');

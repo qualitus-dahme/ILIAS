@@ -16,29 +16,16 @@
  *
  *********************************************************************/
 
-namespace ILIAS\MediaCast\Setup;
+declare(strict_types=1);
+
+namespace ILIAS\MediaPool\Setup;
 
 use ILIAS\Setup;
-use ILIAS\Setup\Objective;
-use ILIAS\Setup\Metrics;
 
-/**
- * @author Alexander Killing <killing@leifos.de>
- */
 class Agent extends Setup\Agent\NullAgent
 {
-    public function getUpdateObjective(Setup\Config $config = null): Setup\Objective
-    {
-        return new \ilDatabaseUpdateStepsExecutedObjective(new ilMediaCastDBUpdateSteps());
-    }
-
     public function getMigrations(): array
     {
-        return [new InitLOMForMediaCastMigration()];
-    }
-
-    public function getStatusObjective(Metrics\Storage $storage): Objective
-    {
-        return new \ilDatabaseUpdateStepsMetricsCollectedObjective($storage, new ilMediaCastDBUpdateSteps());
+        return [new InitLOMForMediaPoolMigration()];
     }
 }

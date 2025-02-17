@@ -188,13 +188,15 @@ class ilTestPlayerLayoutProvider extends AbstractModificationProvider implements
             )->withPriority(self::MODIFICATION_PRIORITY);
     }
 
-    public function getLogoModification(CalledContexts $screen_context_stack): ?LogoModification
+    public function getLogoModification(CalledContexts $called_contexts): ?LogoModification
     {
+        if (!$this->isKioskModeEnabled($called_contexts)) {
+            return null;
+        }
         return $this->globalScreen()->layout()->factory()->logo()->withModification(
             static function (?Image $logo): ?Image {
                 return $logo->withAction('');
             }
         )->withPriority(self::MODIFICATION_PRIORITY);
-        ;
     }
 }

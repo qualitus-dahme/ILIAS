@@ -414,7 +414,7 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
             $this->handleSkillTriggering($this->test_session);
         }
 
-        if ($this->logger->isLoggingEnabled()
+        if ($authorized && $this->logger->isLoggingEnabled()
             && !$this->getObject()->getAnonymity()
             && ($interaction = $question_obj->answerToParticipantInteraction(
                 $this->logger->getAdditionalInformationGenerator(),

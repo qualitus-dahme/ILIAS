@@ -165,7 +165,7 @@ class ilLTIConsumerContentGUI
         $ilLTIConsumerLaunch = new ilLTIConsumerLaunch($this->object->getRefId());
         $context = $ilLTIConsumerLaunch->getContext();
         $contextType = $ilLTIConsumerLaunch::getLTIContextType($context["type"]);
-        $contextId = (string)$context["id"];
+        $contextId = (string) $context["id"];
         $contextTitle = $context["title"];
 
         $token = ilCmiXapiAuthToken::fillToken(
@@ -356,7 +356,7 @@ class ilLTIConsumerContentGUI
         $launchContext = $ilLTIConsumerLaunch->getContext();
 
         $launchContextType = ilLTIConsumerLaunch::getLTIContextType($launchContext["type"]);
-        $launchContextId = (string)$launchContext["id"];
+        $launchContextId = (string) $launchContext["id"];
         $launchContextTitle = $launchContext["title"];
 
         $cmixUser = $this->cmixUser;

@@ -18,29 +18,14 @@
 
 declare(strict_types=1);
 
-namespace ILIAS\Blog\Setup;
+namespace ILIAS\MediaPool\Setup;
 
 use ILIAS\Setup;
-use ILIAS\Setup\Objective;
-use ILIAS\Setup\Metrics;
 
-/**
- * @author Alexander Killing <killing@leifos.de>
- */
 class Agent extends Setup\Agent\NullAgent
 {
-    public function getUpdateObjective(?Setup\Config $config = null): Setup\Objective
-    {
-        return new \ilDatabaseUpdateStepsExecutedObjective(new BlogDBUpdateSteps());
-    }
-
     public function getMigrations(): array
     {
-        return [new InitLOMForBlogMigration()];
-    }
-
-    public function getStatusObjective(Metrics\Storage $storage): Objective
-    {
-        return new \ilDatabaseUpdateStepsMetricsCollectedObjective($storage, new BlogDBUpdateSteps());
+        return [new InitLOMForMediaPoolMigration()];
     }
 }

@@ -507,11 +507,6 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
                     $this->redirectAfterMissingRead();
                 }
 
-                if ($this->getTestObject() === null) {
-                    $this->infoScreenObject();
-                    break;
-                }
-
                 $test_session = $this->test_session_factory->getSessionByUserId($this->user->getId());
                 if (!$this->getTestObject()->canShowTestResults($test_session)) {
                     $this->tpl->setOnScreenMessage(

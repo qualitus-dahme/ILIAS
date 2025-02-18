@@ -17395,7 +17395,7 @@ user#:#confirm_logout_for_email_change#:#You changed your email. To finalize thi
 user#:#confirm_logout_for_email_change_with_confirmation#:#Additionally, a confirmation that you control the new email address will be required. After you have logged in again, an email will be sent to you. Please click on the link in the email to confirm that you contoll the address. The change of the email address will only take effect once this second step is also finalized.
 user#:#create_starting_point#:#Create Rule
 user#:#criteria#:#Criteria
-user#:#del_mail_body#:#Hello %1$s, %2$s You have not logged in to %3$s for a long time. Therefore, your ILIAS account is expected to be deleted on %4$s. In order to keep your ILIAS account, you must log in again before the aforementioned date.
+user#:#del_mail_body#:#Hello %1$s, %2$s You have not logged in to %3$s for a long time. Therefore, your ILIAS account %5$s is expected to be deleted on %4$s. In order to keep your ILIAS account, you must log in again before the aforementioned date.
 user#:#del_mail_subject#:#Your ILIAS account will be deleted soon
 user#:#delete_inactive_user_accounts_frequency#:#Frequency
 user#:#delete_inactive_user_accounts_frequency_desc#:#Frequency, in which the deletion and e-mail distribution will be tested.

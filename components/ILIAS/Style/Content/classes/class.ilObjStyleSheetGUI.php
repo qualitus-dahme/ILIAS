@@ -195,6 +195,12 @@ class ilObjStyleSheetGUI extends ilObjectGUI
         $tpl->setContent($this->getCreationFormsHTML($this->getCreateForm()));
     }
 
+    protected function getCreationFormTitle(): string
+    {
+        return $this->lng->txt("sty_create_new_stylesheet");
+    }
+
+
     protected function getCreateForm(): ilPropertyFormGUI
     {
         $ctrl = $this->ctrl;

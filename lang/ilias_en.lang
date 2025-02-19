@@ -10975,6 +10975,8 @@ lm#:#lm_est_reading_time_info#:#In Learning Modules in the repository the estima
 lm#:#lm_insert_chapter#:#Insert chapter
 lm#:#lm_insert_chapter_after#:#Insert chapter after
 lm#:#lm_insert_chapter_before#:#Insert chapter before
+lm#:#lm_insert_chapter_clip_after#:#Insert chapter from clipboard after
+lm#:#lm_insert_chapter_clip_before#:#Insert chapter from clipboard before
 lm#:#lm_insert_layout_after#:#Insert template after
 lm#:#lm_insert_layout_before#:#Insert template before
 lm#:#lm_insert_page#:#Insert page

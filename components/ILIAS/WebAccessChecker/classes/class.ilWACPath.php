@@ -245,9 +245,9 @@ class ilWACPath
         $real_data_dir = realpath("./" . self::DIR_DATA);
         $realpath = realpath("." . $original_path);
 
-        if (!str_starts_with($realpath, $real_data_dir)) {
-            throw new ilWACException(ilWACException::NOT_FOUND, "Path is not in data directory");
-        }
+//        if (!str_starts_with($realpath, $real_data_dir)) {
+//            throw new ilWACException(ilWACException::NOT_FOUND, "Path is not in data directory");
+//        }
 
         $normalized_path = ltrim(
             str_replace(

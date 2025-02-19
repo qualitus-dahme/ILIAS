@@ -183,6 +183,9 @@ class ilObjSAHSLearningModuleGUI extends ilObjectGUI
         // @todo: removed deprecated ilCtrl methods, this needs inspection by a maintainer.
         // $this->ctrl->setCmd("showSummary");
         // $this->ctrl->setCmdClass("ilinfoscreengui");
+
+        $this->ctrl->redirectByClass(ilInfoScreenGUI::class, "showSummary");
+
         $this->infoScreenForward();
     }
 

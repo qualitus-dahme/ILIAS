@@ -4416,7 +4416,7 @@ class ilObjTest extends ilObject
         return $result_array;
     }
 
-    public function &getTestParticipants(): array
+    public function getTestParticipants(): array
     {
         if ($this->getMainSettings()->getGeneralSettings()->getAnonymity()) {
             $query = "
@@ -4485,33 +4485,10 @@ class ilObjTest extends ilObject
             return [];
         }
 
-        $participants = &$this->getTestParticipants();
         $filtered_participants = [];
-        foreach ($participants as $active_id => $participant) {
-            $queryString = '
-				SELECT		tst_test_result.manual
-
-				FROM		tst_test_result
-
-				INNER JOIN	qpl_questions
-				ON			tst_test_result.question_fi = qpl_questions.question_id
-
-				WHERE		tst_test_result.active_fi = %s
-			';
-
-            $result = $this->db->queryF(
-                $queryString,
-                ['integer'],
-                [$active_id]
-            );
-
-            $count = $result->numRows();
-
-            if ($count > 0) {
+        foreach ($this->getTestParticipants() as $active_id => $participant) {
+            if ($participant['tries'] > 0) {
                 switch ($filter) {
-                    case 3: // all users
-                        $filtered_participants[$active_id] = $participant;
-                        break;
                     case 4:
                         if ($this->test_man_scoring_done_helper->isDone((int) $active_id)) {
                             $filtered_participants[$active_id] = $participant;
@@ -4522,21 +4499,8 @@ class ilObjTest extends ilObject
                             $filtered_participants[$active_id] = $participant;
                         }
                         break;
-                    case 6:
-                        // partially scored participants
-                        $found = 0;
-                        while ($row = $this->db->fetchAssoc($result)) {
-                            if ($row['manual']) {
-                                $found++;
-                            }
-                        }
-                        if (($found > 0) && ($found < $count)) {
-                            $filtered_participants[$active_id] = $participant;
-                        }
-                        break;
                     default:
                         $filtered_participants[$active_id] = $participant;
-                        break;
                 }
             }
         }

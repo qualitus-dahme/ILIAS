@@ -1910,12 +1910,10 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
 
     public function historyObject(): void
     {
-        if (!$this->rbac_review->isAssigned($this->user->getId(), SYSTEM_ROLE_ID)
-            && !$this->access->checkAccess('tst_history_read', '', $this->getTestObject()->getRefId())) {
+        if (!$this->getTestObject()->getTestLogger()->isLoggingEnabled()
+            || !$this->rbac_review->isAssigned($this->user->getId(), SYSTEM_ROLE_ID)
+                && !$this->access->checkAccess('tst_history_read', '', $this->getTestObject()->getRefId())) {
             $this->redirectAfterMissingWrite();
-        }
-        if ($this->getTestObject()->getTestLogger() === null) {
-            return;
         }
 
         $here_uri = $this->data_factory->uri(ILIAS_HTTP_PATH

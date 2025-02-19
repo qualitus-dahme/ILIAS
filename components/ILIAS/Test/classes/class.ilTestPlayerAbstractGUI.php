@@ -240,10 +240,8 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
             $this->user->getId()
         );
         if ($participant_access !== ParticipantAccess::ALLOWED) {
-            $this->ilias->raiseError(
-                $participant_access->getAccessForbiddenMessage($this->lng),
-                $this->ilias->error_obj->MESSAGE
-            );
+            $this->tpl->setOnScreenMessage('failure', $participant_access->getAccessForbiddenMessage($this->lng));
+            $this->ctrl->redirectByClass([ilRepositoryGUI::class, ilObjTestGUI::class, TestScreenGUI::class]);
         }
     }
 

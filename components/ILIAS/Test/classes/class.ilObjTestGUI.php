@@ -2153,7 +2153,7 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
         }
 
         if ($this->getTestObject()->getMainSettings()->getAdditionalSettings()->getHideInfoTab()) {
-            $this->ctrl->redirectByClass(TestScreenGUI::class, TestScreenGUI::DEFAULT_CMD);
+            $this->ctrl->redirectByClass([self::class, TestScreenGUI::class], TestScreenGUI::DEFAULT_CMD);
         }
 
         $this->tabs_manager->activateTab(TabsManager::TAB_ID_INFOSCREEN);

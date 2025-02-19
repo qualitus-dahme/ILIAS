@@ -240,10 +240,8 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
             $this->user->getId()
         );
         if ($participant_access !== ParticipantAccess::ALLOWED) {
-            $this->ilias->raiseError(
-                $participant_access->getAccessForbiddenMessage($this->lng),
-                $this->ilias->error_obj->MESSAGE
-            );
+            $this->tpl->setOnScreenMessage('failure', $participant_access->getAccessForbiddenMessage($this->lng));
+            $this->ctrl->redirectByClass([ilRepositoryGUI::class, ilObjTestGUI::class, TestScreenGUI::class]);
         }
     }
 
@@ -414,7 +412,7 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
             $this->handleSkillTriggering($this->test_session);
         }
 
-        if ($this->logger->isLoggingEnabled()
+        if ($authorized && $this->logger->isLoggingEnabled()
             && !$this->getObject()->getAnonymity()
             && ($interaction = $question_obj->answerToParticipantInteraction(
                 $this->logger->getAdditionalInformationGenerator(),
@@ -984,11 +982,6 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
             ilSession::set('tst_pass_finish', 1);
         }
 
-        $this->sendNewPassFinishedNotificationEmailIfActivated(
-            $this->test_session->getActiveId(),
-            $this->test_session->getPass()
-        );
-
         $this->performTestPassFinishedTasks(StatusOfAttempt::FINISHED_BY_PARTICIPANT);
 
         if ($this->logger->isLoggingEnabled()
@@ -1015,6 +1008,11 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
             $this->test_pass_result_repository
         );
         $finishTasks->performFinishTasks($this->process_locker, $status_of_attempt);
+
+        $this->sendNewPassFinishedNotificationEmailIfActivated(
+            $this->test_session->getActiveId(),
+            $this->test_session->getPass()
+        );
     }
 
     protected function sendNewPassFinishedNotificationEmailIfActivated(int $active_id, int $pass)

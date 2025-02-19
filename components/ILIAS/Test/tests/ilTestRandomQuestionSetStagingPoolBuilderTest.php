@@ -31,10 +31,9 @@ class ilTestRandomQuestionSetStagingPoolBuilderTest extends ilTestBaseTestCase
         global $DIC;
         parent::setUp();
 
-        $test_logger = $this->createMock(ILIAS\Test\Logging\TestLogger::class);
         $this->testObj = new ilTestRandomQuestionSetStagingPoolBuilder(
             $DIC['ilDB'],
-            $test_logger,
+            $this->createMock(ILIAS\Test\Logging\TestLogger::class),
             $this->getTestObjMock()
         );
     }

@@ -24,10 +24,8 @@ declare(strict_types=1);
  *
  * @package components\ILIAS/Test
  */
-// hey: fixRandomTestBuildable - iterator interface for collection
-class ilTestRandomQuestionSetQuestionCollection implements
-    Iterator
-    // hey.
+
+class ilTestRandomQuestionSetQuestionCollection implements Iterator
 {
     private $questions = [];
 
@@ -184,7 +182,7 @@ class ilTestRandomQuestionSetQuestionCollection implements
         return $questionIds;
     }
 
-    public function getRandomQuestionCollection($requiredAmount): ilTestRandomQuestionSetQuestionCollection
+    public function getRandomQuestionCollection(int $requiredAmount): ilTestRandomQuestionSetQuestionCollection
     {
         $randomKeys = $this->getRandomArrayKeys($this->questions, $requiredAmount);
 
@@ -197,7 +195,7 @@ class ilTestRandomQuestionSetQuestionCollection implements
         return $randomQuestionCollection;
     }
 
-    private function getRandomArrayKeys($array, $numKeys)
+    private function getRandomArrayKeys(array $array, int $numKeys)
     {
         if ($numKeys < 1) {
             return [];

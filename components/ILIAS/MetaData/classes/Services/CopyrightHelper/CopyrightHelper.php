@@ -105,7 +105,7 @@ class CopyrightHelper implements CopyrightHelperInterface
         $copyright = $this->getRawCopyright($reader);
 
         if (
-            $this->isCopyrightSelectionActive() &&
+            !$this->isCopyrightSelectionActive() ||
             $this->identifier_handler->isIdentifierValid($copyright)
         ) {
             return '';

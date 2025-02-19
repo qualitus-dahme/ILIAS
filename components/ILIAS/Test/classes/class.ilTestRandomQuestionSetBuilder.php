@@ -47,143 +47,133 @@ abstract class ilTestRandomQuestionSetBuilder implements ilTestRandomSourcePoolD
 
     abstract public function performBuild(ilTestSession $testSession);
 
-    public function getSrcPoolDefListRelatedQuestCombinationCollection(ilTestRandomQuestionSetSourcePoolDefinitionList $sourcePoolDefinitionList): ilTestRandomQuestionSetQuestionCollection
-    {
-        $questionStage = new ilTestRandomQuestionSetQuestionCollection();
-
+    public function getSrcPoolDefListRelatedQuestCombinationCollection(
+        ilTestRandomQuestionSetSourcePoolDefinitionList $sourcePoolDefinitionList
+    ): ilTestRandomQuestionSetQuestionCollection {
+        $question_stage = new ilTestRandomQuestionSetQuestionCollection();
         foreach ($sourcePoolDefinitionList as $definition) {
             $questions = $this->getSrcPoolDefRelatedQuestCollection($definition);
-            $questionStage->mergeQuestionCollection($questions);
+            $question_stage->mergeQuestionCollection($questions);
         }
 
-        return $questionStage;
+        return $question_stage;
     }
 
-    /**
-     * @param ilTestRandomQuestionSetSourcePoolDefinition $definition
-     * @return ilTestRandomQuestionSetQuestionCollection
-     */
-    public function getSrcPoolDefRelatedQuestCollection(ilTestRandomQuestionSetSourcePoolDefinition $definition): ilTestRandomQuestionSetQuestionCollection
-    {
-        $questionIds = $this->getQuestionIdsForSourcePoolDefinitionIds($definition);
-        $questionStage = $this->buildSetQuestionCollection($definition, $questionIds);
-
-        return $questionStage;
+    public function getSrcPoolDefRelatedQuestCollection(
+        ilTestRandomQuestionSetSourcePoolDefinition $definition
+    ): ilTestRandomQuestionSetQuestionCollection {
+        return $this->buildSetQuestionCollection(
+            $definition,
+            $this->getQuestionIdsForSourcePoolDefinitionIds($definition)
+        );
     }
 
-    // hey: fixRandomTestBuildable - rename/public-access to be aware for building interface
-    /**
-     * @param ilTestRandomQuestionSetSourcePoolDefinitionList $sourcePoolDefinitionList
-     * @return ilTestRandomQuestionSetQuestionCollection
-     */
-    public function getSrcPoolDefListRelatedQuestUniqueCollection(ilTestRandomQuestionSetSourcePoolDefinitionList $sourcePoolDefinitionList): ilTestRandomQuestionSetQuestionCollection
-    {
-        $combinationCollection = $this->getSrcPoolDefListRelatedQuestCombinationCollection($sourcePoolDefinitionList);
-        return $combinationCollection->getUniqueQuestionCollection();
+    public function getSrcPoolDefListRelatedQuestUniqueCollection(
+        ilTestRandomQuestionSetSourcePoolDefinitionList $sourcePoolDefinitionList
+    ): ilTestRandomQuestionSetQuestionCollection {
+        return $this->getSrcPoolDefListRelatedQuestCombinationCollection($sourcePoolDefinitionList)
+            ->getUniqueQuestionCollection();
     }
-    // hey.
 
-    private function getQuestionIdsForSourcePoolDefinitionIds(ilTestRandomQuestionSetSourcePoolDefinition $definition): array
-    {
+    private function getQuestionIdsForSourcePoolDefinitionIds(
+        ilTestRandomQuestionSetSourcePoolDefinition $definition
+    ): array {
         $this->stagingPoolQuestionList->resetQuestionList();
-
         $this->stagingPoolQuestionList->setPoolId($definition->getPoolId());
 
         if ($this->hasTaxonomyFilter($definition)) {
-            foreach ($definition->getMappedTaxonomyFilter() as $taxId => $nodeIds) {
-                $this->stagingPoolQuestionList->addTaxonomyFilter($taxId, $nodeIds);
+            foreach ($definition->getMappedTaxonomyFilter() as $tax_id => $node_ids) {
+                $this->stagingPoolQuestionList->addTaxonomyFilter($tax_id, $node_ids);
             }
         }
 
-        if (count($definition->getLifecycleFilter())) {
+        if ($definition->getLifecycleFilter() !== []) {
             $this->stagingPoolQuestionList->setLifecycleFilter($definition->getLifecycleFilter());
         }
 
-        // fau: taxFilter/typeFilter - use type filter
         if ($this->hasTypeFilter($definition)) {
             $this->stagingPoolQuestionList->setTypeFilter($definition->getTypeFilter());
         }
-        // fau.
 
         $this->stagingPoolQuestionList->loadQuestions();
-
         return $this->stagingPoolQuestionList->getQuestions();
     }
 
-    private function buildSetQuestionCollection(ilTestRandomQuestionSetSourcePoolDefinition $definition, $questionIds): ilTestRandomQuestionSetQuestionCollection
-    {
-        $setQuestionCollection = new ilTestRandomQuestionSetQuestionCollection();
+    private function buildSetQuestionCollection(
+        ilTestRandomQuestionSetSourcePoolDefinition $definition,
+        array $question_ids
+    ): ilTestRandomQuestionSetQuestionCollection {
+        $set_question_collection = new ilTestRandomQuestionSetQuestionCollection();
 
-        foreach ($questionIds as $questionId) {
-            $setQuestion = new ilTestRandomQuestionSetQuestion();
-
-            $setQuestion->setQuestionId($questionId);
-            $setQuestion->setSourcePoolDefinitionId($definition->getId());
-
-            $setQuestionCollection->addQuestion($setQuestion);
+        foreach ($question_ids as $question_id) {
+            $set_question = new ilTestRandomQuestionSetQuestion();
+            $set_question->setQuestionId($question_id);
+            $set_question->setSourcePoolDefinitionId($definition->getId());
+            $set_question_collection->addQuestion($set_question);
         }
 
-        return $setQuestionCollection;
+        return $set_question_collection;
     }
 
-    private function hasTaxonomyFilter(ilTestRandomQuestionSetSourcePoolDefinition $definition): bool
-    {
-        if (!count($definition->getMappedTaxonomyFilter())) {
+    private function hasTaxonomyFilter(
+        ilTestRandomQuestionSetSourcePoolDefinition $definition
+    ): bool {
+        if ($definition->getMappedTaxonomyFilter() === []) {
             return false;
         }
         return true;
     }
 
-    //	fau: typeFilter - check for existing type filter
-    private function hasTypeFilter(ilTestRandomQuestionSetSourcePoolDefinition $definition): bool
-    {
-        if (count($definition->getTypeFilter())) {
-            return true;
+    private function hasTypeFilter(
+        ilTestRandomQuestionSetSourcePoolDefinition $definition
+    ): bool {
+        if ($definition->getTypeFilter() === []) {
+            return false;
         }
 
-        return false;
+        return true;
     }
-    //	fau.
 
-    protected function storeQuestionSet(ilTestSession $testSession, $questionSet)
-    {
+    protected function storeQuestionSet(
+        ilTestSession $test_session,
+        ilTestRandomQuestionSetQuestionCollection $question_set
+    ): void {
         $position = 0;
-
-        foreach ($questionSet->getQuestions() as $setQuestion) {
-            /* @var ilTestRandomQuestionSetQuestion $setQuestion */
-
-            $setQuestion->setSequencePosition($position++);
-
-            $this->storeQuestion($testSession, $setQuestion);
+        foreach ($question_set->getQuestions() as $set_question) {
+            $set_question->setSequencePosition($position++);
+            $this->storeQuestion($test_session, $set_question);
         }
     }
 
-    private function storeQuestion(ilTestSession $testSession, ilTestRandomQuestionSetQuestion $setQuestion)
-    {
-        $nextId = $this->db->nextId('tst_test_rnd_qst');
+    private function storeQuestion(
+        ilTestSession $test_session,
+        ilTestRandomQuestionSetQuestion $set_question
+    ): void {
+        $next_id = $this->db->nextId('tst_test_rnd_qst');
 
         $this->db->insert('tst_test_rnd_qst', [
-            'test_random_question_id' => ['integer', $nextId],
-            'active_fi' => ['integer', $testSession->getActiveId()],
-            'question_fi' => ['integer', $setQuestion->getQuestionId()],
-            'sequence' => ['integer', $setQuestion->getSequencePosition()],
-            'pass' => ['integer', $testSession->getPass()],
+            'test_random_question_id' => ['integer', $next_id],
+            'active_fi' => ['integer', $test_session->getActiveId()],
+            'question_fi' => ['integer', $set_question->getQuestionId()],
+            'sequence' => ['integer', $set_question->getSequencePosition()],
+            'pass' => ['integer', $test_session->getPass()],
             'tstamp' => ['integer', time()],
-            'src_pool_def_fi' => ['integer', $setQuestion->getSourcePoolDefinitionId()]
+            'src_pool_def_fi' => ['integer', $set_question->getSourcePoolDefinitionId()]
         ]);
     }
 
-    protected function fetchQuestionsFromStageRandomly(ilTestRandomQuestionSetQuestionCollection $questionStage, $requiredQuestionAmount): ilTestRandomQuestionSetQuestionCollection
-    {
-        $questionSet = $questionStage->getRandomQuestionCollection($requiredQuestionAmount);
-
-        return $questionSet;
+    protected function fetchQuestionsFromStageRandomly(
+        ilTestRandomQuestionSetQuestionCollection $questionStage,
+        int $requiredQuestionAmount
+    ): ilTestRandomQuestionSetQuestionCollection {
+        return $questionStage->getRandomQuestionCollection($requiredQuestionAmount);
     }
 
-    protected function handleQuestionOrdering(ilTestRandomQuestionSetQuestionCollection $questionSet)
-    {
+    protected function handleQuestionOrdering(
+        ilTestRandomQuestionSetQuestionCollection $question_set
+    ): void {
         if ($this->testOBJ->getShuffleQuestions()) {
-            $questionSet->shuffleQuestions();
+            $question_set->shuffleQuestions();
         }
     }
 
@@ -221,13 +211,8 @@ abstract class ilTestRandomQuestionSetBuilder implements ilTestRandomSourcePoolD
         );
     }
 
-    //fau: fixRandomTestBuildable - function to get messages
-    /**
-     * @return array
-     */
     public function getCheckMessages(): array
     {
         return $this->checkMessages;
     }
-    // fau.
 }

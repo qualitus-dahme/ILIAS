@@ -186,7 +186,7 @@ class TitleColumnsBuilder
         $linked_title = $this->ui_factory->link()->standard(
             $title,
             $this->ctrl->getLinkTargetByClass(
-                [$target_class_type]
+                [\ilRepositoryGUI::class, $target_class_type]
             )
         );
         $this->ctrl->clearParametersByClass($target_class_type);

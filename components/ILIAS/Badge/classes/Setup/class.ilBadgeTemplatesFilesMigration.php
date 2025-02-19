@@ -21,12 +21,14 @@ declare(strict_types=1);
 use ILIAS\ResourceStorage\Collection\ResourceCollection;
 use ILIAS\Setup\Environment;
 use ILIAS\Setup\Migration;
+use ILIAS\Setup\CLI\IOWrapper;
 
 class ilBadgeTemplatesFilesMigration implements Migration
 {
     private const TABLE_NAME = 'badge_image_template';
 
-    protected ilResourceStorageMigrationHelper $helper;
+    private ilResourceStorageMigrationHelper $helper;
+    private ?IOWrapper $io = null;
 
     public function getLabel(): string
     {
@@ -49,6 +51,10 @@ class ilBadgeTemplatesFilesMigration implements Migration
             new ilBadgeFileStakeholder(),
             $environment
         );
+        $io = $environment->getResource(Environment::RESOURCE_ADMIN_INTERACTION);
+        if ($io instanceof IOWrapper) {
+            $this->io = $io;
+        }
     }
 
     public function step(Environment $environment): void
@@ -67,7 +73,28 @@ class ilBadgeTemplatesFilesMigration implements Migration
 
         if ($image !== '' && $image !== null) {
             $image_path = $this->getImagePath($id, $image);
-            $identification = $this->helper->movePathToStorage($image_path, ResourceCollection::NO_SPECIFIC_OWNER);
+
+            try {
+                $this->inform("Trying to move badge image template file $image_path for id $id to the storage service.");
+                $identification = $this->helper->movePathToStorage($image_path, ResourceCollection::NO_SPECIFIC_OWNER);
+                $this->inform('Migration proceeded without error.');
+                if ($identification === null) {
+                    $this->error(
+                        'IRSS returned NULL as identification when trying to move badge image template ' .
+                        "file $image_path for id $id to the storage service."
+                    );
+                } else {
+                    $this->inform(
+                        "IRSS identification for badge image template with id $id: {$identification->serialize()}",
+                        true
+                    );
+                }
+            } catch (Throwable $e) {
+                $this->error("Failed to move badge image template file $image_path for id $id to the storage service with exception: {$e->getMessage()}");
+                $this->error($e->getTraceAsString());
+                throw $e;
+            }
+
             if ($identification === null) {
                 $identification = '-';
             } else {
@@ -128,5 +155,23 @@ class ilBadgeTemplatesFilesMigration implements Migration
         $row = $this->helper->getDatabase()->fetchObject($res);
 
         return (int) ($row->amount ?? 0);
+    }
+
+    private function inform(string $text, bool $force = false): void
+    {
+        if ($this->io === null || (!$force && !$this->io->isVerbose())) {
+            return;
+        }
+
+        $this->io->inform($text);
+    }
+
+    private function error(string $text): void
+    {
+        if ($this->io === null) {
+            return;
+        }
+
+        $this->io->error($text);
     }
 }

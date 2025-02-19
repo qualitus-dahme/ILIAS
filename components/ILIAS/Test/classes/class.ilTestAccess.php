@@ -217,7 +217,7 @@ class ilTestAccess
             return !$this->isIpv6Between($ip, $range_start, $range_end);
         }
 
-        return null;
+        return false;
     }
 
     private function isIpAllowedToAccessTest(

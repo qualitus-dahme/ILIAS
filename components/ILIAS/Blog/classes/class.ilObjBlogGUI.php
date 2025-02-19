@@ -21,6 +21,7 @@ declare(strict_types=1);
 use ILIAS\GlobalScreen\ScreenContext\ContextServices;
 use ILIAS\Blog\StandardGUIRequest;
 use ILIAS\Blog\Settings\SettingsGUI;
+use ILIAS\Blog\Export\BlogHtmlExport;
 
 /**
  * @ilCtrl_Calls ilObjBlogGUI: ilBlogPostingGUI, ilWorkspaceAccessGUI
@@ -1331,7 +1332,7 @@ class ilObjBlogGUI extends ilObject2GUI implements ilDesktopItemHandling
         string $a_type,
         string $a_id
     ): string {
-        return \ILIAS\Blog\Export\BlogHtmlExport::buildExportLink($a_template, $a_type, $a_id, $this->getKeywords(false));
+        return BlogHtmlExport::buildExportLink($a_template, $a_type, $a_id, $this->getKeywords(false));
     }
 
 
@@ -1855,7 +1856,7 @@ class ilObjBlogGUI extends ilObject2GUI implements ilDesktopItemHandling
     public function buildExportFile(
         bool $a_include_comments = false,
         bool $print_version = false
-    ): string {
+    ): BlogHtmlExport {
         $type = "html";
         $format = explode("_", $this->blog_request->getFormat());
         if (($format[1] ?? "") === "comments" || $a_include_comments) {
@@ -1872,10 +1873,11 @@ class ilObjBlogGUI extends ilObject2GUI implements ilDesktopItemHandling
             $subdir .= "print";
         }
 
-        $blog_export = new \ILIAS\Blog\Export\BlogHtmlExport($this, $exp_dir, $subdir);
+        $blog_export = new BlogHtmlExport($this, $exp_dir, $subdir);
         $blog_export->setPrintVersion($print_version);
         $blog_export->includeComments($a_include_comments);
-        return $blog_export->exportHTML();
+        $blog_export->exportHTML();
+        return $blog_export;
     }
 
     public function getNotesSubId(): int

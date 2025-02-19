@@ -29,119 +29,78 @@ declare(strict_types=1);
  */
 class ilTestRandomQuestionSetStagingPoolQuestionList implements Iterator
 {
-    private ilDBInterface $db;
-    private ilComponentRepository $component_repository;
+    private int $test_obj_id = -1;
+    private int $test_id = -1;
+    private int $pool_id = -1;
+    private array $tax_filters = [];
+    private array $type_filter = [];
+    private array $lifecycle_filter = [];
+    private array $questions = [];
 
-    /**
-     * @var integer
-     */
-    private $testObjId = -1;
-
-    /**
-     * @var integer
-     */
-    private $testId = -1;
-
-    /**
-     * @var integer
-     */
-    private $poolId = -1;
-
-    /**
-     * @var array
-     */
-    private $taxFilters = [];
-
-    // fau: taxFilter/typeFilter - private variable
-    // TODO-RND2017: rename to typesFilter (multiple types allowed)
-    /**
-     * @var array
-     */
-    private $typeFilter = [];
-    // fau.
-
-    /**
-     * @var array
-     */
-    private $lifecycleFilter = [];
-
-    /**
-     * @var array
-     */
-    private $questions = [];
-
-    public function __construct(ilDBInterface $db, ilComponentRepository $component_repository)
-    {
-        $this->db = $db;
-        $this->component_repository = $component_repository;
+    public function __construct(
+        private readonly ilDBInterface $db,
+        private readonly ilComponentRepository $component_repository
+    ) {
     }
 
-    public function setTestObjId($testObjId)
+    public function setTestObjId(int $testObjId): void
     {
-        $this->testObjId = $testObjId;
+        $this->test_obj_id = $testObjId;
     }
 
     public function getTestObjId(): int
     {
-        return $this->testObjId;
+        return $this->test_obj_id;
     }
 
-    public function setTestId($testId)
+    public function setTestId(int $test_id): void
     {
-        $this->testId = $testId;
+        $this->test_id = $test_id;
     }
 
     public function getTestId(): int
     {
-        return $this->testId;
+        return $this->test_id;
     }
 
-    public function setPoolId($poolId)
+    public function setPoolId(int $pool_id): void
     {
-        $this->poolId = $poolId;
+        $this->pool_id = $pool_id;
     }
 
     public function getPoolId(): int
     {
-        return $this->poolId;
+        return $this->pool_id;
     }
 
-    public function addTaxonomyFilter($taxId, $taxNodes)
+    public function addTaxonomyFilter(int $tax_id, array $tax_nodes): void
     {
-        $this->taxFilters[$taxId] = $taxNodes;
+        $this->tax_filters[$tax_id] = $tax_nodes;
     }
 
     public function getTaxonomyFilters(): array
     {
-        return $this->taxFilters;
+        return $this->tax_filters;
     }
 
-    // fau: taxFilter/typeFilter - getter/setter
-    public function getTypeFilter()
+    public function getTypeFilter(): array
     {
-        return $this->typeFilter;
+        return $this->type_filter;
     }
 
-    public function setTypeFilter($typeFilter)
+    public function setTypeFilter(array $type_filter): void
     {
-        $this->typeFilter = $typeFilter;
+        $this->type_filter = $type_filter;
     }
-    // fau.
 
-    /**
-     * @return array
-     */
     public function getLifecycleFilter(): array
     {
-        return $this->lifecycleFilter;
+        return $this->lifecycle_filter;
     }
 
-    /**
-     * @param array $lifecycleFilter
-     */
-    public function setLifecycleFilter(array $lifecycleFilter)
+    public function setLifecycleFilter(array $lifecycle_filter): void
     {
-        $this->lifecycleFilter = $lifecycleFilter;
+        $this->lifecycle_filter = $lifecycle_filter;
     }
 
     public function loadQuestions()
@@ -187,48 +146,37 @@ class ilTestRandomQuestionSetStagingPoolQuestionList implements Iterator
 
     private function getConditionalExpression(): string
     {
-        $CONDITIONS = $this->getTaxonomyFilterExpressions();
+        $conditions = implode(
+            ' AND ',
+            array_merge(
+                $this->getTaxonomyFilterExpressions(),
+                $this->getTypeFilterExpressions(),
+                $this->getLifecycleFilterExpressions()
+            )
+        );
 
-        // fau: taxFilter/typeFilter - add the type filter expression to conditions
-        $CONDITIONS = array_merge($CONDITIONS, $this->getTypeFilterExpressions());
-        // fau.
-
-        $CONDITIONS = array_merge($CONDITIONS, $this->getLifecycleFilterExpressions());
-
-        $CONDITIONS = implode(' AND ', $CONDITIONS);
-
-        return strlen($CONDITIONS) ? 'AND ' . $CONDITIONS : '';
+        return $conditions !== '' ? 'AND ' . $conditions : '';
     }
 
     private function getTaxonomyFilterExpressions(): array
     {
         $expressions = [];
+        foreach ($this->getTaxonomyFilters() as $tax_id => $tax_nodes) {
+            $question_ids = [];
 
-        foreach ($this->getTaxonomyFilters() as $taxId => $tax_nodes) {
-            $questionIds = [];
+            if ($tax_nodes === [] || $tax_nodes === null) {
+                continue;
+            }
 
-            $forceBypass = true;
+            foreach ($tax_nodes as $tax_node) {
+                $tax_items = (new ilTaxNodeAssignment('tst', $this->getTestObjId(), 'quest', $tax_id))
+                    ->getAssignmentsOfNode([$tax_node]);
 
-            foreach ($tax_nodes as $taxNode) {
-                $forceBypass = false;
-
-                $taxTree = new ilTaxonomyTree($taxId);
-
-                $taxNodeAssignment = new ilTaxNodeAssignment('tst', $this->getTestObjId(), 'quest', $taxId);
-
-                $subNodes = $taxTree->getSubTreeIds((int) $taxNode);
-                $subNodes[] = $taxNode;
-
-                $taxItems = $taxNodeAssignment->getAssignmentsOfNode($subNodes);
-
-                foreach ($taxItems as $taxItem) {
-                    $questionIds[$taxItem['item_id']] = $taxItem['item_id'];
+                foreach ($tax_items as $tax_item) {
+                    $question_ids[$tax_item['item_id']] = $tax_item['item_id'];
                 }
             }
-
-            if (!$forceBypass) {
-                $expressions[] = $this->db->in('question_id', $questionIds, false, 'integer');
-            }
+            $expressions[] = $this->db->in('question_id', $question_ids, false, 'integer');
         }
 
         return $expressions;
@@ -236,42 +184,40 @@ class ilTestRandomQuestionSetStagingPoolQuestionList implements Iterator
 
     private function getLifecycleFilterExpressions(): array
     {
-        if (count($this->lifecycleFilter)) {
+        if ($this->lifecycle_filter !== []) {
             return [
-                $this->db->in('lifecycle', $this->lifecycleFilter, false, 'text')
+                $this->db->in('lifecycle', $this->lifecycle_filter, false, 'text')
             ];
         }
 
         return [];
     }
 
-    // fau: taxFilter/typeFilter - get the expressions for a type filter
     private function getTypeFilterExpressions(): array
     {
-        if (count($this->typeFilter)) {
+        if ($this->type_filter !== []) {
             return [
-                $this->db->in('question_type_fi', $this->typeFilter, false, 'integer')
+                $this->db->in('question_type_fi', $this->type_filter, false, 'integer')
             ];
         }
 
         return [];
     }
-    // fau;
 
-    private function isActiveQuestionType(array $questionData): bool
+    private function isActiveQuestionType(array $question_data): bool
     {
-        if (!isset($questionData['plugin'])) {
+        if (!isset($question_data['plugin'])) {
             return false;
         }
 
-        if (!$questionData['plugin']) {
+        if (!$question_data['plugin']) {
             return true;
         }
 
         if (!$this->component_repository->getComponentByTypeAndName(
             ilComponentInfo::TYPE_MODULES,
             'TestQuestionPool'
-        )->getPluginSlotById('qst')->hasPluginName($questionData['plugin_name'])) {
+        )->getPluginSlotById('qst')->hasPluginName($question_data['plugin_name'])) {
             return false;
         }
 
@@ -284,16 +230,16 @@ class ilTestRandomQuestionSetStagingPoolQuestionList implements Iterator
                 'qst'
             )
             ->getPluginByName(
-                $questionData['plugin_name']
+                $question_data['plugin_name']
             )->isActive();
     }
 
     public function resetQuestionList()
     {
         $this->questions = [];
-        $this->taxFilters = [];
-        $this->typeFilter = [];
-        $this->poolId = -1;
+        $this->tax_filters = [];
+        $this->type_filter = [];
+        $this->pool_id = -1;
     }
 
     public function getQuestions(): array
@@ -329,17 +275,16 @@ class ilTestRandomQuestionSetStagingPoolQuestionList implements Iterator
         return key($this->questions) !== null;
     }
 
-    public static function updateSourceQuestionPoolId($testId, $oldPoolId, $newPoolId)
-    {
+    public static function updateSourceQuestionPoolId(
+        int $test_id,
+        int $old_pool_id,
+        int $new_pool_id
+    ): void {
         global $DIC;
-        $db = $DIC['ilDB'];
-
-        $query = "UPDATE tst_rnd_cpy SET qpl_fi = %s WHERE tst_fi = %s AND qpl_fi = %s";
-
-        $db->manipulateF(
-            $query,
+        $DIC['ilDB']->manipulateF(
+            'UPDATE tst_rnd_cpy SET qpl_fi = %s WHERE tst_fi = %s AND qpl_fi = %s',
             ['integer', 'integer', 'integer'],
-            [$newPoolId, $testId, $oldPoolId]
+            [$new_pool_id, $test_id, $old_pool_id]
         );
     }
 }

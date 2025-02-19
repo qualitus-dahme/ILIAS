@@ -230,9 +230,8 @@ class ilTestRandomQuestionSetConfig extends ilTestQuestionSetConfig
 
     public function hasSourcePoolDefinitions(): bool
     {
-        $sourcePoolDefinitionList = $this->buildSourcePoolDefinitionList($this->test_obj);
-
-        return $sourcePoolDefinitionList->savedDefinitionsExist();
+        return $this->buildSourcePoolDefinitionList($this->test_obj)
+            ->savedDefinitionsExist();
     }
 
     public function isQuestionSetBuildable(): bool

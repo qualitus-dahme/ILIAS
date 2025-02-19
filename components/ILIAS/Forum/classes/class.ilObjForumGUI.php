@@ -3672,7 +3672,7 @@ EOD
 
         $sortingDirectionViewControl = $this->uiFactory
             ->viewControl()
-            ->sortation($translatedSortationOptions, $currentSorting)
+            ->sortation($translatedSortationOptions, (string) $currentSorting)
             ->withTargetURL($target, 'viewmode');
         $this->toolbar->addComponent($sortingDirectionViewControl);
     }

@@ -300,6 +300,21 @@ class SubmissionManager
         return $success;
     }
 
+    protected function remainingFilesAllowed(int $user_id): int
+    {
+        $submission = new \ilExSubmission(
+            $this->assignment,
+            $user_id
+        );
+        $max_file = $submission->getAssignment()->getMaxFile();
+        if ($max_file === 0) {
+            return -1;
+        }
+        $cnt_sub = $this->countSubmissionsOfUser($user_id);
+        $max_file -= $cnt_sub;
+        return max($max_file, 0);
+    }
+
     public function addZipUploads(
         int $user_id,
         UploadResult $result
@@ -327,7 +342,8 @@ class SubmissionManager
             $team_id,
             $result,
             $submission->isLate(),
-            $this->stakeholder
+            $this->stakeholder,
+            $this->remainingFilesAllowed($user_id)
         );
         $this->log->debug("99");
         if ($team_id > 0) {
@@ -373,7 +389,6 @@ class SubmissionManager
                 $web_filesystem->deleteDir($internal_dirs);
             }
             $web_filesystem->createDir($internal_dirs);
-
             if ($web_filesystem->has($internal_file_path)) {
                 $web_filesystem->delete($internal_file_path);
             }
@@ -387,6 +402,8 @@ class SubmissionManager
                     $web_filesystem->writeStream($internal_file_path, $stream);
 
                     return ILIAS_ABSOLUTE_PATH .
+                        DIRECTORY_SEPARATOR .
+                        "public" .
                         DIRECTORY_SEPARATOR .
                         ILIAS_WEB_DIR .
                         DIRECTORY_SEPARATOR .
@@ -407,14 +424,18 @@ class SubmissionManager
      */
     public function deleteSubmissions(int $user_id, array $ids): void
     {
-
         if (count($ids) == 0) {
             return;
         }
-        // this ensures, the ids belong to user submissions at all
-        foreach ($this->getSubmissionsOfUser($user_id, $ids) as $s) {
+        $all = $this->getAllSubmissionIdsOfUser($user_id);
+        foreach ($ids as $id) {
+            // this ensures, the ids belong to user submissions at all
+            if (!in_array($id, $all)) {
+                continue;
+            }
+            $s = $this->repo->getById($id);
             $this->repo->delete(
-                $s->getId(),
+                $id,
                 $this->stakeholder
             );
             $team_id = $this->team->getTeamForMember($this->ass_id, $user_id);
@@ -428,14 +449,26 @@ class SubmissionManager
         }
     }
 
+    /**
+     * All, include print, include all from team
+     */
+    protected function getAllSubmissionIdsOfUser(int $user_id): array
+    {
+        $subs = [];
+        foreach ($this->getSubmissionsOfUser($user_id) as $s) {
+            $subs[] = $s->getId();
+        }
+        foreach ($this->getSubmissionsOfUser($user_id, null, false, null, true) as $s) {
+            $subs[] = $s->getId();
+        }
+        return $subs;
+    }
+
     public function deleteAllSubmissionsOfUser(int $user_id): void
     {
         $this->deleteSubmissions(
             $user_id,
-            $this->repo->getAllSubmissionIdsOfOwner(
-                $this->ass_id,
-                $user_id
-            )
+            $this->getAllSubmissionIdsOfUser($user_id)
         );
     }
 
@@ -509,7 +542,7 @@ class SubmissionManager
             $team_map = \ilExAssignmentTeam::getAssignmentTeamMap($ass->getId());
         }
         foreach ($members as $id => $item) {
-            $user_files = $item["files"] ?? null;
+            $user_files = $item["files"] ?? [];
 
             // group by teams
             $team_dir = "";
@@ -582,7 +615,7 @@ class SubmissionManager
 
                 // add file to directory (no zip see end of the function)
                 $dir = $to_path . DIRECTORY_SEPARATOR . $targetdir;
-                \ilFileUtils::makeDir($dir);
+                \ilFileUtils::makeDirParents($dir);
                 $file = $dir . DIRECTORY_SEPARATOR . $targetfile;
                 file_put_contents(
                     $file,
@@ -659,7 +692,6 @@ class SubmissionManager
         $lng = $this->domain->lng();
 
         $zip = $DIC->archives()->zip([]);
-        $zip->get();
 
 
         $assTitle = \ilExAssignment::lookupTitle($this->assignment->getId());
@@ -677,14 +709,14 @@ class SubmissionManager
         $parsed_files = $duplicates = array();
         foreach ($filenames as $files) {
 
-            foreach ($files as $filename) {
+            foreach ($files as $file) {
                 // peer review masked filenames, see deliverReturnedFiles()
-                if (isset($filename["tgt"])) {
-                    $newFilename = $filename["tgt"];
-                    $filename = $filename["src"];
+                if (isset($file["tgt"])) {
+                    $newFilename = $file["tgt"];
+                    $filename = $file["src"];
                 } else {
-                    $late = $filename["late"];
-                    $filename = $filename["src"];
+                    $late = $file["late"];
+                    $filename = $file["src"];
 
                     // remove timestamp
                     $newFilename = trim($filename);
@@ -711,11 +743,10 @@ class SubmissionManager
 
                 $newFilename = \ilFileUtils::getASCIIFilename($newFilename);
                 $newFilename = $deliverFilename . DIRECTORY_SEPARATOR . $newFilename;
-
                 $zip->addStream(
                     $this->repo->getStream(
                         $this->ass_id,
-                        $filename["rid"]
+                        $file["rid"]
                     ),
                     $newFilename
                 );

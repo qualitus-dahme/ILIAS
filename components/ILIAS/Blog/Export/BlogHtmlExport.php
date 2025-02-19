@@ -416,7 +416,17 @@ class BlogHtmlExport
 //        file_put_contents($file, $content);
         $this->collector->addString($content, $a_file);
 
-
         return $file;
     }
+
+    public function delete() : void
+    {
+        $this->collector->delete();
+    }
+
+    public function getFilePath() : string
+    {
+        return $this->collector->getFilePath();
+    }
+
 }

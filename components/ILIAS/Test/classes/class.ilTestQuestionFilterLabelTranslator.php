@@ -26,17 +26,14 @@ declare(strict_types=1);
  */
 class ilTestQuestionFilterLabelTranslator
 {
-    private array $taxonomyTreeIds = [];
-    private array $taxonomyNodeIds = [];
+    private array $taxonomy_tree_ids = [];
+    private array $taxonomy_node_ids = [];
 
-    private array $taxonomyTreeLabels = [];
-    private array $taxonomyNodeLabels = [];
+    private array $taxonomy_tree_labels = [];
+    private array $taxonomy_node_labels = [];
 
-    private array $typeLabels = [];
+    private array $type_labels = [];
 
-    /**
-     * @param ilDBInterface $db
-     */
     public function __construct(
         private ilDBInterface $db,
         private ilLanguage $lng
@@ -44,159 +41,131 @@ class ilTestQuestionFilterLabelTranslator
         $this->loadTypeLabels();
     }
 
-    public function loadLabels(ilTestRandomQuestionSetSourcePoolDefinitionList $sourcePoolDefinitionList)
-    {
-        $this->collectIds($sourcePoolDefinitionList);
+    public function loadLabels(
+        ilTestRandomQuestionSetSourcePoolDefinitionList $source_pool_definition_list
+    ): void {
+        $this->collectIds($source_pool_definition_list);
 
         $this->loadTaxonomyTreeLabels();
         $this->loadTaxonomyNodeLabels();
     }
 
-    private function collectIds(ilTestRandomQuestionSetSourcePoolDefinitionList $sourcePoolDefinitionList)
-    {
-        foreach ($sourcePoolDefinitionList as $definition) {
-            /** @var ilTestRandomQuestionSetSourcePoolDefinition $definition */
-
-            // fau: taxFilter/typeFilter - get ids from new taxonomy filter
-
-            // original filter will be shown before synchronisation
-            foreach ($definition->getOriginalTaxonomyFilter() as $taxId => $nodeIds) {
-                $this->taxonomyTreeIds[] = $taxId;
-                foreach ($nodeIds as $nodeId) {
-                    $this->taxonomyNodeIds[] = $nodeId;
-                }
+    private function collectIds(
+        ilTestRandomQuestionSetSourcePoolDefinitionList $source_pool_definition_list
+    ): void {
+        foreach ($source_pool_definition_list as $definition) {
+            foreach ($definition->getOriginalTaxonomyFilter() as $tax_id => $node_ids) {
+                $this->taxonomy_tree_ids[] = $tax_id;
+                $this->taxonomy_node_ids = array_merge($this->taxonomy_node_ids, $node_ids);
             }
 
             // mapped filter will be shown after synchronisation
-            foreach ($definition->getMappedTaxonomyFilter() as $taxId => $nodeIds) {
-                $this->taxonomyTreeIds[] = $taxId;
-                foreach ($nodeIds as $nodeId) {
-                    $this->taxonomyNodeIds[] = $nodeId;
-                }
+            foreach ($definition->getMappedTaxonomyFilter() as $tax_id => $node_ids) {
+                $this->taxonomy_tree_ids[] = $tax_id;
+                $this->taxonomy_node_ids = array_merge($this->taxonomy_node_ids, $node_ids);
             }
-
-            #$this->taxonomyTreeIds[] = $definition->getMappedFilterTaxId();
-            #$this->taxonomyNodeIds[] = $definition->getMappedFilterTaxNodeId();
-            // fau.
         }
     }
 
-    private function loadTaxonomyTreeLabels()
+    private function loadTaxonomyTreeLabels(): void
     {
-        $IN_taxIds = $this->db->in('obj_id', $this->taxonomyTreeIds, false, 'integer');
+        $res = $this->db->queryF(
+            "
+                SELECT		obj_id tax_tree_id,
+                            title tax_tree_title
 
-        $query = "
-			SELECT		obj_id tax_tree_id,
-						title tax_tree_title
+                FROM		object_data
 
-			FROM		object_data
-
-			WHERE		$IN_taxIds
-			AND			type = %s
-		";
-
-        $res = $this->db->queryF($query, ['text'], ['tax']);
+                WHERE		{$this->db->in('obj_id', $this->taxonomy_tree_ids, false, 'integer')}
+                AND			type = %s
+            ",
+            ['text'],
+            ['tax']
+        );
 
         while ($row = $this->db->fetchAssoc($res)) {
-            $this->taxonomyTreeLabels[ $row['tax_tree_id'] ] = $row['tax_tree_title'];
+            $this->taxonomy_tree_labels[ $row['tax_tree_id'] ] = $row['tax_tree_title'];
         }
     }
 
     private function loadTaxonomyNodeLabels()
     {
-        $IN_nodeIds = $this->db->in('tax_node.obj_id', $this->taxonomyNodeIds, false, 'integer');
+        $res = $this->db->query("
+            SELECT		tax_node.obj_id tax_node_id,
+                        tax_node.title tax_node_title
 
-        $query = "
-					SELECT		tax_node.obj_id tax_node_id,
-								tax_node.title tax_node_title
+            FROM		tax_node
 
-					FROM		tax_node
-
-					WHERE		$IN_nodeIds
-				";
-
-        $res = $this->db->query($query);
+            WHERE		{$this->db->in('tax_node.obj_id', $this->taxonomy_node_ids, false, 'integer')}
+        ");
 
         while ($row = $this->db->fetchAssoc($res)) {
-            $this->taxonomyNodeLabels[ $row['tax_node_id'] ] = $row['tax_node_title'];
+            $this->taxonomy_node_labels[ $row['tax_node_id'] ] = $row['tax_node_title'];
         }
     }
 
-    private function loadTypeLabels()
+    private function loadTypeLabels(): void
     {
         foreach (ilObjQuestionPool::_getQuestionTypes(true) as $translation => $data) {
-            $this->typeLabels[$data['question_type_id']] = $translation;
+            $this->type_labels[$data['question_type_id']] = $translation;
         }
     }
 
-    public function getTaxonomyTreeLabel($taxonomyTreeId)
+    public function getTaxonomyTreeLabel(int $taxonomy_tree_id): string
     {
-        return $this->taxonomyTreeLabels[$taxonomyTreeId];
+        return $this->taxonomy_tree_labels[$taxonomy_tree_id];
     }
 
-    public function getTaxonomyNodeLabel($taxonomyTreeId)
+    public function getTaxonomyNodeLabel(int $taxonomy_node_id): string
     {
-        return $this->taxonomyNodeLabels[$taxonomyTreeId];
+        return $this->taxonomy_node_labels[$taxonomy_node_id];
     }
 
-    public function loadLabelsFromTaxonomyIds($taxonomyIds)
+    public function loadLabelsFromTaxonomyIds(array $taxonomy_ids): void
     {
-        $this->taxonomyTreeIds = $taxonomyIds;
+        $this->taxonomy_tree_ids = $taxonomy_ids;
 
         $this->loadTaxonomyTreeLabels();
     }
 
-    // fau: taxFilter/typeFilter - get a labels for filters
-    /**
-     * Get the label for a taxonomy filter
-     * @param array 	taxId => [nodeId, ...]
-     * @param string	delimiter for separate taxonomy conditions
-     * @param string	delimiter between taxonomy name and node list
-     * @param string	delimiter between nodes in the node list
-     */
-    public function getTaxonomyFilterLabel($filter = [], $filterDelimiter = ' + ', $taxNodeDelimiter = ': ', $nodesDelimiter = ', '): string
-    {
+    public function getTaxonomyFilterLabel(
+        array $filter = [],
+        string $filter_delimiter = ' + ',
+        string $tax_node_delimiter = ': ',
+        string $nodes_delimiter = ', '
+    ): string {
         $labels = [];
-        foreach ($filter as $taxId => $nodeIds) {
+        foreach ($filter as $tax_id => $node_ids) {
             $nodes = [];
-            foreach ($nodeIds as $nodeId) {
-                $nodes[] = $this->getTaxonomyNodeLabel($nodeId);
+            foreach ($node_ids as $node_id) {
+                $nodes[] = $this->getTaxonomyNodeLabel((int) $node_id);
             }
-            $labels[] = $this->getTaxonomyTreeLabel($taxId) . $taxNodeDelimiter . implode($nodesDelimiter, $nodes);
+            $labels[] = $this->getTaxonomyTreeLabel($tax_id)
+                . $tax_node_delimiter
+                . implode($nodes_delimiter, $nodes);
         }
-        return implode($filterDelimiter, $labels);
+        return implode($filter_delimiter, $labels);
     }
 
-    /**
-     * Get the label for a lifecycle filter
-     * @param array $filter	list of lifecycle identifiers
-     */
-    public function getLifecycleFilterLabel($filter = []): string
+    public function getLifecycleFilterLabel(array $filter = []): string
     {
+        $lifecycle_translations = ilAssQuestionLifecycle::getDraftInstance()->getSelectOptions($this->lng);
+
         $lifecycles = [];
-
-        $lifecycleTranslations = ilAssQuestionLifecycle::getDraftInstance()->getSelectOptions($this->lng);
-
         foreach ($filter as $lifecycle) {
-            $lifecycles[] = $lifecycleTranslations[$lifecycle];
+            $lifecycles[] = $lifecycle_translations[$lifecycle];
         }
         asort($lifecycles);
         return implode(', ', $lifecycles);
     }
 
-    /**
-     * Get the label for a type filter
-     * @param array $filter	list of type ids
-     */
-    public function getTypeFilterLabel($filter = []): string
+    public function getTypeFilterLabel(array $filter = []): string
     {
         $types = [];
-
         foreach ($filter as $type_id) {
-            $types[] = $this->typeLabels[$type_id];
+            $types[] = $this->type_labels[$type_id];
         }
         asort($types);
         return implode(', ', $types);
     }
-    // fau.
 }

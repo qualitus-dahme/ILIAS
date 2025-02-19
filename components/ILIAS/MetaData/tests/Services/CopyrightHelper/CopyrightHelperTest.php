@@ -446,7 +446,7 @@ class CopyrightHelperTest extends TestCase
         $reader = $this->getReader('valid_5');
 
         $this->assertSame(
-            'valid_5',
+            '',
             $helper->readCustomCopyright($reader)
         );
     }

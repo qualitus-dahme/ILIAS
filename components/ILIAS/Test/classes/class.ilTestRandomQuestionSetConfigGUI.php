@@ -451,8 +451,7 @@ class ilTestRandomQuestionSetConfigGUI
             $translator,
             $this->source_pool_definition_list,
             !$this->isFrozenConfigRequired() && !$disabled,
-            $this->question_set_config->isQuestionAmountConfigurationModePerPool(),
-            $this->question_set_config->getLastQuestionSyncTimestamp() != 0
+            $this->question_set_config->isQuestionAmountConfigurationModePerPool()
         );
     }
 
@@ -615,8 +614,9 @@ class ilTestRandomQuestionSetConfigGUI
     {
         $this->question_set_config->loadFromDb();
 
-        $defId = $this->fetchSingleSourcePoolDefinitionIdParameter();
-        $source_pool_definition = $this->source_pool_definition_factory->getSourcePoolDefinitionByDefinitionId($defId);
+        $source_pool_definition = $this->source_pool_definition_factory->getSourcePoolDefinitionByDefinitionId(
+            $this->fetchSingleSourcePoolDefinitionIdParameter()
+        );
         $available_taxonomy_ids = ilObjTaxonomy::getUsageOfObject($source_pool_definition->getPoolId());
 
         $form = $this->buildEditSourcePoolDefinitionFormGUI();
@@ -800,10 +800,14 @@ class ilTestRandomQuestionSetConfigGUI
             foreach ($pool_ids as $pool_id) {
                 $lost_pool = $this->source_pool_definition_list->getLostPool($pool_id);
 
-                $deriver = new ilTestRandomQuestionSetPoolDeriver($this->db, $this->component_repository, $this->test_obj);
-                $deriver->setSourcePoolDefinitionList($this->source_pool_definition_list);
-                $deriver->setTargetContainerRef($target_ref);
-                $deriver->setOwnerId($this->user->getId());
+                $deriver = new ilTestRandomQuestionSetPoolDeriver(
+                    $this->db,
+                    $this->component_repository,
+                    $this->test_obj,
+                    $this->source_pool_definition_list,
+                    $this->user->getId(),
+                    $target_ref
+                );
                 $new_pool = $deriver->derive($lost_pool);
 
                 $srcPoolDefinition = $this->source_pool_definition_list->getDefinitionBySourcePoolId($new_pool->getId());
@@ -827,9 +831,7 @@ class ilTestRandomQuestionSetConfigGUI
 
     protected function preventFormBecauseOfSync(): bool
     {
-        $return = false;
         $last_sync = $this->question_set_config->getLastQuestionSyncTimestamp();
-
         if ($last_sync !== null && $last_sync !== 0 &&
             !$this->isFrozenConfigRequired() && $this->question_set_config->isQuestionSetBuildable()) {
             return true;

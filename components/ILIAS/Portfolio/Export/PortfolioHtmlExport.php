@@ -43,6 +43,7 @@ class PortfolioHtmlExport
     protected bool $include_comments = false;
     protected bool $print_version = false;
     protected \ILIAS\Style\Content\Object\ObjectFacade $content_style_domain;
+    protected static bool $gs_initialized = false;
 
     public function __construct(
         \ilObjPortfolioBaseGUI $portfolio_gui
@@ -57,10 +58,13 @@ class PortfolioHtmlExport
         $this->global_screen = $DIC->globalScreen();
         $this->lng = $DIC->language();
 
-        $this->global_screen->tool()->context()->current()->addAdditionalData(
-            \ilHTMLExportViewLayoutProvider::HTML_EXPORT_RENDERING,
-            true
-        );
+        if (!self::$gs_initialized) {
+            $this->global_screen->tool()->context()->current()->addAdditionalData(
+                \ilHTMLExportViewLayoutProvider::HTML_EXPORT_RENDERING,
+                true
+            );
+            self::$gs_initialized = true;
+        }
 
         $this->content_style_domain = $DIC
             ->contentStyle()
@@ -157,14 +161,10 @@ class PortfolioHtmlExport
                 $this->writeExportFile("prtf_" . $page["id"] . ".html", $tpl->printToString());
                 $this->co_page_html_export->collectPageElements("prtf:pg", $page["id"]);
 
-                /*
-                if (!$has_index && is_file($this->target_dir . "/prtf_" . $page["id"] . ".html")) {	// #20144
-                    copy(
-                        $this->target_dir . "/prtf_" . $page["id"] . ".html",
-                        $this->target_dir . "/index.html"
-                    );
+                if (!$has_index) {	// #20144
+                    $this->collector->addString($tpl->printToString(), "index.html");
                     $has_index = true;
-                }*/
+                }
             }
         }
     }
@@ -186,7 +186,8 @@ class PortfolioHtmlExport
         $print_view = $this->portfolio_gui->getPrintView();
         $print_view->setOffline(true);
         $html = $print_view->renderPrintView();
-        file_put_contents($this->target_dir . "/index.html", $html);
+        //file_put_contents($this->target_dir . "/index.html", $html);
+        $this->collector->addString($html, "index.html");
     }
 
     /**
@@ -283,9 +284,19 @@ class PortfolioHtmlExport
         return $ep_tpl->get();
     }
 
-    function deliver(string $filename, bool $remove = false) : void
+    public function deliver(string $filename, bool $remove = false) : void
     {
         $this->collector->deliver($filename);
+        $this->delete();
+    }
+
+    public function delete() : void
+    {
         $this->collector->delete();
+    }
+
+    public function getFilePath() : string
+    {
+        return $this->collector->getFilePath();
     }
 }

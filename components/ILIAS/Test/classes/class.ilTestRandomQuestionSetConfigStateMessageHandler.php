@@ -157,9 +157,15 @@ class ilTestRandomQuestionSetConfigStateMessageHandler
     {
         if ($this->isNoAvailableQuestionPoolsHintRequired()) {
             $this->addValidationReport($this->lng->txt('tst_msg_rand_quest_set_no_pools_available'));
-        } elseif ($this->getLostPools()) {
+            return;
+        }
+
+        if ($this->getLostPools()) {
             $this->setSyncInfoMessage($this->buildLostPoolsReportMessage());
-        } elseif (!$this->questionSetConfig->isQuestionAmountConfigComplete()) {
+            return;
+        }
+
+        if (!$this->questionSetConfig->isQuestionAmountConfigComplete()) {
             $this->addValidationReport($this->lng->txt('tst_msg_rand_quest_set_incomplete_quest_amount_cfg'));
 
             if ($this->isQuestionAmountConfigPerTestHintRequired()) {
@@ -169,25 +175,41 @@ class ilTestRandomQuestionSetConfigStateMessageHandler
                         $this->buildGeneralConfigSubTabLink()
                     )
                 );
-            } elseif ($this->isQuestionAmountConfigPerPoolHintRequired()) {
+                return;
+            }
+
+            if ($this->isQuestionAmountConfigPerPoolHintRequired()) {
                 $this->addValidationReport(
                     sprintf(
                         $this->lng->txt('tst_msg_rand_quest_set_change_quest_amount_here'),
                         $this->buildQuestionSelectionSubTabLink()
                     )
                 );
+                return;
             }
-        } elseif (!$this->questionSetConfig->hasSourcePoolDefinitions()) {
+        }
+
+        if (!$this->questionSetConfig->hasSourcePoolDefinitions()) {
             $this->addValidationReport($this->lng->txt('tst_msg_rand_quest_set_no_src_pool_defs'));
-        } elseif ($this->questionSetConfig->getLastQuestionSyncTimestamp() === 0 ||
+            return;
+        }
+
+        if ($this->questionSetConfig->getLastQuestionSyncTimestamp() === 0 ||
             $this->questionSetConfig->getLastQuestionSyncTimestamp() === null) {
             $this->setSyncInfoMessage($this->buildNotSyncedMessage());
-        } elseif (!$this->questionSetConfig->isQuestionSetBuildable()) {
+            return;
+        }
+
+        if (!$this->questionSetConfig->isQuestionSetBuildable()) {
             $this->setValidationFailed(true);
             $this->addValidationReport($this->lng->txt('tst_msg_rand_quest_set_pass_not_buildable'));
             $this->addValidationReport(implode('<br />', $this->questionSetConfig->getBuildableMessages()));
-        } elseif ($this->questionSetConfig->getLastQuestionSyncTimestamp()) {
+            return;
+        }
+
+        if ($this->questionSetConfig->getLastQuestionSyncTimestamp()) {
             $this->setSyncInfoMessage($this->buildLastSyncMessage());
+            return;
         }
     }
 

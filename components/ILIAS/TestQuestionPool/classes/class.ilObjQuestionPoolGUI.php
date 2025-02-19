@@ -1085,7 +1085,7 @@ class ilObjQuestionPoolGUI extends ilObjectGUI implements ilCtrlBaseClassInterfa
     /**
      * list questions of question pool
      */
-    public function questionsObject(RoundTripModal $import_questions_modal = null): void
+    public function questionsObject(?RoundTripModal $import_questions_modal = null): void
     {
         if (!$this->access->checkAccess("read", "", $this->request_data_collector->getRefId())) {
             $this->infoScreenForward();
@@ -1151,7 +1151,7 @@ class ilObjQuestionPoolGUI extends ilObjectGUI implements ilCtrlBaseClassInterfa
         throw new ilTestQuestionPoolException('question id does not relate to parent object!');
     }
 
-    private function createQuestionFormObject(Form $form = null): void
+    private function createQuestionFormObject(?Form $form = null): void
     {
         $this->help->setScreenId('assQuestions');
         if ($this->global_test_settings->isPageEditorEnabled()) {
@@ -1711,13 +1711,12 @@ class ilObjQuestionPoolGUI extends ilObjectGUI implements ilCtrlBaseClassInterfa
             $this->lng->txt('qpl_settings_subtab_general'),
             $this->ctrl->getLinkTargetByClass(ilObjQuestionPoolSettingsGeneralGUI::class),
         );
-        if ($this->object->getShowTaxonomies()) {
-            $tabs->addSubTab(
-                'tax_settings',
-                $this->lng->txt('qpl_settings_subtab_taxonomies'),
-                $this->ctrl->getLinkTargetByClass(ilTaxonomySettingsGUI::class, ''),
-            );
-        }
+
+        $tabs->addSubTab(
+            'tax_settings',
+            $this->lng->txt('qpl_settings_subtab_taxonomies'),
+            $this->ctrl->getLinkTargetByClass(ilTaxonomySettingsGUI::class, ''),
+        );
     }
 
     public function infoScreenObject(): void
@@ -1804,7 +1803,7 @@ class ilObjQuestionPoolGUI extends ilObjectGUI implements ilCtrlBaseClassInterfa
             $this->component_repository,
             $this->rbac_system,
             $this->user,
-            $this->object->getShowTaxonomies() ? $this->taxonomy->domain() : null,
+            $this->taxonomy->domain(),
             $this->notes_service,
             $this->object->getId(),
             $this->request_data_collector->getRefId()

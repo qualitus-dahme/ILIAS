@@ -42,7 +42,7 @@ use JetBrains\PhpStorm\NoReturn;
  */
 class ilMDVocabulariesGUI
 {
-    protected const MAX_CONFIRMATION_VALUES = 5;
+    protected const int MAX_CONFIRMATION_VALUES = 5;
 
     protected ilCtrl $ctrl;
     protected HTTP $http;

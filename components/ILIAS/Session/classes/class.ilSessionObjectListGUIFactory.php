@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -16,8 +14,11 @@ declare(strict_types=1);
  * https://www.ilias.de
  * https://github.com/ILIAS-eLearning
  *
- ********************************************************************
- */
+ *********************************************************************/
+
+declare(strict_types=1);
+
+declare(strict_types=1);
 
 /**
  * @classDescription List GUI factory for session materials in session objects
@@ -56,6 +57,7 @@ class ilSessionObjectListGUIFactory
         if (!$item_list_gui instanceof ilObjectListGUI) {
             return null;
         }
+        $item_list_gui->enableTimings(false);
         $item_list_gui->enableDelete(false);
         $item_list_gui->enableCut(false);
         $item_list_gui->enableCopy(false);

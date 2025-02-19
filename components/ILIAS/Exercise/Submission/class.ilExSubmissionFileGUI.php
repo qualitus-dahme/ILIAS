@@ -185,7 +185,7 @@ class ilExSubmissionFileGUI extends ilExSubmissionBaseGUI
 
     // Display form for single file upload
     public function uploadFormObject(
-        ilPropertyFormGUI $a_form = null
+        ?ilPropertyFormGUI $a_form = null
     ): void {
         if (!$this->submission->canSubmit()) {
             $this->ctrl->redirect($this, "submissionScreen");
@@ -210,7 +210,7 @@ class ilExSubmissionFileGUI extends ilExSubmissionBaseGUI
     }
 
     public function uploadZipFormObject(
-        \ILIAS\Repository\Form\FormAdapterGUI $a_form = null
+        ?\ILIAS\Repository\Form\FormAdapterGUI $a_form = null
     ): void {
         if (!$this->submission->canSubmit()) {
             $this->ctrl->redirect($this, "submissionScreen");
@@ -368,19 +368,30 @@ class ilExSubmissionFileGUI extends ilExSubmissionBaseGUI
         $title = $result->getName();
         //$this->submission->addFileUpload($result);
         $subm = $this->domain->submission($this->assignment->getId());
+        $mess = "";
         if ($this->submission->canSubmit()) {
-            $this->log->debug("-------------------------------------");
-            $subm->addZipUploads(
-                $this->user->getid(),
-                $result
-            );
+            try {
+                $subm->addZipUploads(
+                    $this->user->getid(),
+                    $result
+                );
+                return new \ILIAS\FileUpload\Handler\BasicHandlerResult(
+                    '',
+                    \ILIAS\FileUpload\Handler\HandlerResult::STATUS_OK,
+                    $title,
+                    ''
+                );
+            } catch (ilExcTooManyFilesSubmittedException $e) {
+                $mess = $this->lng->txt("exc_too_many_files");
+            }
+        } else {
+            $mess = $this->lng->txt("exc_cannot_submit_any_files");
         }
-
         return new \ILIAS\FileUpload\Handler\BasicHandlerResult(
             '',
-            \ILIAS\FileUpload\Handler\HandlerResult::STATUS_OK,
+            \ILIAS\FileUpload\Handler\HandlerResult::STATUS_FAILED,
             $title,
-            ''
+            $mess
         );
     }
 

@@ -1,6 +1,5 @@
 <?php
 
-declare(strict_types=1);
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -17,6 +16,7 @@ declare(strict_types=1);
  *
  *********************************************************************/
 
+declare(strict_types=1);
 /**
  * Class ilObjLTIAdministrationGUI
  * @author Jesús López <lopez@leifos.com>
@@ -135,7 +135,7 @@ class ilObjLTIAdministrationGUI extends ilObjectGUI
         }
     }
 
-    protected function initSettingsForm(ilPropertyFormGUI $form = null): void
+    protected function initSettingsForm(?ilPropertyFormGUI $form = null): void
     {
         if (!($form instanceof ilPropertyFormGUI)) {
             $form = $this->getSettingsForm();
@@ -230,7 +230,7 @@ class ilObjLTIAdministrationGUI extends ilObjectGUI
 
     // consumers
 
-    protected function initConsumerForm(ilPropertyFormGUI $form = null): void
+    protected function initConsumerForm(?ilPropertyFormGUI $form = null): void
     {
         if (!($form instanceof ilPropertyFormGUI)) {
             $form = $this->getConsumerForm();
@@ -309,7 +309,7 @@ class ilObjLTIAdministrationGUI extends ilObjectGUI
      * Edit consumer
      * @param ilPropertyFormGUI $a_form
      */
-    protected function editConsumer(ilPropertyFormGUI $a_form = null): void
+    protected function editConsumer(?ilPropertyFormGUI $a_form = null): void
     {
         $this->ctrl->setParameter($this, "cid", $this->consumer_id);
 

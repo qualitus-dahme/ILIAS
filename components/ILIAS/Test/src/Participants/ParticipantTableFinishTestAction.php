@@ -119,6 +119,19 @@ class ParticipantTableFinishTestAction implements TableAction
             return null;
         }
 
+        if (!$this->test_obj->getResetProcessingTime() && count($selected_participants) > 1) {
+            foreach ($selected_participants as $participant) {
+                if ($participant->hasUnfinishedAttempts()) {
+                    $this->tpl->setOnScreenMessage(
+                        \ilGlobalTemplateInterface::MESSAGE_TYPE_FAILURE,
+                        $this->lng->txt('finish_test_more_than_one_selected'),
+                        true
+                    );
+                    return null;
+                }
+            }
+        }
+
         // This is required here because of late test object binding
         $test_session_factory = new \ilTestSessionFactory(
             $this->test_obj,

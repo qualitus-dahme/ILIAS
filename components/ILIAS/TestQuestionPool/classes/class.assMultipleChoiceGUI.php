@@ -193,10 +193,8 @@ class assMultipleChoiceGUI extends assQuestionGUI implements ilGuiQuestionScorin
             foreach ($this->object->answers as $index => $answer) {
                 $points_checked = $answer->getPointsChecked();
                 $points_unchecked = $answer->getPointsUnchecked();
-                if ($points_checked > $points_unchecked) {
-                    if ($points_checked > 0) {
-                        $user_solution[] = ['value1' => $index];
-                    }
+                if ($points_checked > $points_unchecked && $points_checked > 0) {
+                    $user_solution[] = ['value1' => $index];
                 }
             }
         }

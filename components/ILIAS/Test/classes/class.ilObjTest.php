@@ -462,7 +462,6 @@ class ilObjTest extends ilObject
                 [
                     'test_id' => ['integer', $next_id],
                     'obj_fi' => ['integer', $this->getId()],
-                    'author' => ['text', $this->getAuthor()],
                     'created' => ['integer', time()],
                     'tstamp' => ['integer', time()],
                     'template_id' => ['integer', $this->getTemplate()]
@@ -471,16 +470,6 @@ class ilObjTest extends ilObject
 
             $this->test_id = $next_id;
         } else {
-            $this->db->update(
-                'tst_tests',
-                [
-                    'author' => ['text', $this->getAuthor()],
-                ],
-                [
-                    'test_id' => ['integer', $this->getTestId()]
-                ]
-            );
-
             if ($this->evalTotalPersons() > 0) {
                 // reset the finished status of participants if the nr of test passes did change
                 if ($this->getNrOfTries() > 0) {
@@ -4049,7 +4038,7 @@ class ilObjTest extends ilObject
         $author_data = $this->lo_metadata->read($this->getId(), 0, $this->getType(), $path_to_authors)
                                          ->allData($path_to_authors);
 
-        return $this->lo_metadata->dataHelper()->makePresentableAsList(',', ...$author_data);
+        return $this->lo_metadata->dataHelper()->makePresentableAsList(', ', ...$author_data);
     }
 
     /**
@@ -4168,6 +4157,17 @@ class ilObjTest extends ilObject
 
         $obj_settings = new ilLPObjSettings($this->getId());
         $obj_settings->cloneSettings($new_obj->getId());
+
+        if ($new_obj->getTestLogger()->isLoggingEnabled()) {
+            $new_obj->getTestLogger()->logTestAdministrationInteraction(
+                $new_obj->getTestLogger()->getInteractionFactory()->buildTestAdministrationInteraction(
+                    $new_obj->getRefId(),
+                    $this->user->getId(),
+                    TestAdministrationInteractionTypes::NEW_TEST_CREATED,
+                    []
+                )
+            );
+        }
 
         return $new_obj;
     }
@@ -7348,7 +7348,7 @@ class ilObjTest extends ilObject
         return $this->score_settings_repo;
     }
 
-    public function updateTestResultCache(int $active_id, ilAssQuestionProcessLocker $process_locker = null): void
+    public function updateTestResultCache(int $active_id, ?ilAssQuestionProcessLocker $process_locker = null): void
     {
         $pass = ilObjTest::_getResultPass($active_id);
 
@@ -7441,8 +7441,8 @@ class ilObjTest extends ilObject
     public function updateTestPassResults(
         int $active_id,
         int $pass,
-        ilAssQuestionProcessLocker $process_locker = null,
-        int $test_obj_id = null
+        ?ilAssQuestionProcessLocker $process_locker = null,
+        ?int $test_obj_id = null
     ): array {
         $data = $this->getQuestionCountAndPointsForPassOfParticipant($active_id, $pass);
         $time = $this->getWorkingTimeOfParticipantForPass($active_id, $pass);

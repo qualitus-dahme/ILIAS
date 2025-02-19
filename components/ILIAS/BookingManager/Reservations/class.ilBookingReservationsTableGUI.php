@@ -56,9 +56,9 @@ class ilBookingReservationsTableGUI extends ilTable2GUI
         int $a_ref_id,
         ilObjBookingPool $pool,
         bool $a_show_all,
-        array $a_filter_pre = null,
-        int $a_group_id = null,
-        array $context_obj_ids = null
+        ?array $a_filter_pre = null,
+        ?int $a_group_id = null,
+        ?array $context_obj_ids = null
     ) {
         global $DIC;
 
@@ -266,7 +266,7 @@ class ilBookingReservationsTableGUI extends ilTable2GUI
     }
 
     public function initFilter(
-        array $a_filter_pre = null
+        ?array $a_filter_pre = null
     ): void {
         if (is_array($a_filter_pre) &&
             isset($a_filter_pre["object"])) {
@@ -645,7 +645,6 @@ class ilBookingReservationsTableGUI extends ilTable2GUI
             $uname = ilUserUtil::getNamePresentation($a_set['user_id'], false, true, "", true);
         }
         $this->tpl->setVariable("TXT_CURRENT_USER", $uname);
-
         if ($this->has_schedule) {
             $this->tpl->setVariable(
                 "VALUE_DATE",
@@ -710,7 +709,7 @@ class ilBookingReservationsTableGUI extends ilTable2GUI
         }
 
         // reservation information
-        if ($a_set['user_id'] == $ilUser->getId() || $ilAccess->checkAccess('write', '', $this->ref_id)) {
+        if ($a_set['user_id'] == $ilUser->getId() || $ilAccess->canManageAllReservations($this->ref_id)) {
             if ($a_set['post_text'] !== "" || $a_set['post_file'] !== "") {
                 $ilCtrl->setParameter($this->parent_obj, 'reservation_id', $a_set['booking_reservation_id']);
                 $ilCtrl->setParameter($this->parent_obj, 'object_id', $a_set['object_id']);

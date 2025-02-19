@@ -103,7 +103,7 @@ class ilExerciseManagementGUI
      * @param InternalService $service
      * @param ilExAssignment|null       $a_ass
      */
-    public function __construct(InternalService $service, ilExAssignment $a_ass = null)
+    public function __construct(InternalService $service, ?ilExAssignment $a_ass = null)
     {
         global $DIC;
 
@@ -1310,7 +1310,7 @@ class ilExerciseManagementGUI
      * Save assignment status (participant view)
      * @throws ilExcUnknownAssignmentTypeException
      */
-    public function saveStatusParticipantObject(array $selected_ass_ids = null): void
+    public function saveStatusParticipantObject(?array $selected_ass_ids = null): void
     {
         $ilCtrl = $this->ctrl;
 
@@ -1344,7 +1344,7 @@ class ilExerciseManagementGUI
      * @throws ilExcUnknownAssignmentTypeException
      */
     public function saveStatusAllObject(
-        array $a_selected = null,
+        ?array $a_selected = null,
         bool $a_redirect = true
     ): void {
         $user_ids = $this->listed_participants;
@@ -1542,7 +1542,7 @@ class ilExerciseManagementGUI
     }
 
     public function adoptTeamsFromGroupObject(
-        ilPropertyFormGUI $a_form = null
+        ?ilPropertyFormGUI $a_form = null
     ): void {
         $ilCtrl = $this->ctrl;
         $ilTabs = $this->tabs_gui;
@@ -1741,7 +1741,7 @@ class ilExerciseManagementGUI
 
 
     public function showMultiFeedbackObject(
-        FormAdapterGUI $form = null
+        ?FormAdapterGUI $form = null
     ): void {
         $lng = $this->lng;
         $tpl = $this->tpl;
@@ -1846,11 +1846,13 @@ class ilExerciseManagementGUI
             $lng->txt("exc_individual_deadline"),
             $this->ui_factory->legacy()->content('<div id="ilExcIDlBody"></div>')
         );
+        $show = $modal->getShowSignal()->getId();
+        $close = $modal->getCloseSignal()->getId();
 
         $ajax_url = $this->ctrl->getLinkTarget($this, "handleIndividualDeadlineCalls", "", true, false);
 
         $tpl->addJavaScript("assets/js/ilExcIDl.js", true, 3);
-        $tpl->addOnLoadCode('il.ExcIDl.init("' . $ajax_url . '");');
+        $tpl->addOnLoadCode("il.ExcIDl.init('" . $ajax_url . "','" . $show . "','" . $close . "');");
 
         ilCalendarUtil::initDateTimePicker();
 
@@ -1965,7 +1967,8 @@ class ilExerciseManagementGUI
                         }
                     }
 
-                    $ass->recalculateLateSubmissions();
+                    $subm = $this->domain->submission($ass->getId());
+                    $subm->recalculateLateSubmissions();
                 }
 
                 echo "ok";
@@ -2149,13 +2152,14 @@ class ilExerciseManagementGUI
 
         $obj_dir = $this->assignment->getAssignmentType()->getStringIdentifier() . "_" . $obj_id;
 
-        $index_html_file = ILIAS_WEB_DIR .
+        $index_html_file =
+            ILIAS_WEB_DIR .
             DIRECTORY_SEPARATOR .
             CLIENT_ID .
             DIRECTORY_SEPARATOR .
             dirname($zip_internal_path) .
-            DIRECTORY_SEPARATOR .
-            $obj_dir .
+            //DIRECTORY_SEPARATOR .
+            //$obj_dir .
             DIRECTORY_SEPARATOR .
             "index.html";
         $this->log->debug("index html file: " . $index_html_file);

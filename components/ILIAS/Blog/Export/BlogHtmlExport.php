@@ -171,7 +171,7 @@ class BlogHtmlExport
      * @throws \ilTemplateException
      */
     public function exportHTMLPages(
-        string $a_link_template = null,
+        ?string $a_link_template = null,
         ?\Closure $a_tpl_callback = null,
         ?\ilCOPageHTMLExport $a_co_page_html_export = null,
         string $a_index_name = "index.html"
@@ -207,12 +207,10 @@ class BlogHtmlExport
             $file = self::buildExportLink($a_link_template, "list", $month, $this->keywords);
             $file = $this->writeExportFile($file, $tpl, $list, $nav);
 
-            /*
-                        if (!$has_index) {
-                            copy($file, $this->target_dir . "/" . $a_index_name);
-                            $has_index = true;
-                        }
-            */
+            if (!$has_index) {
+                $file = $this->writeExportFile($a_index_name, $tpl, $list, $nav);
+                $has_index = true;
+            }
         }
 
         // keywords
@@ -418,7 +416,17 @@ class BlogHtmlExport
         //        file_put_contents($file, $content);
         $this->collector->addString($content, $a_file);
 
-
         return $file;
     }
+
+    public function delete(): void
+    {
+        $this->collector->delete();
+    }
+
+    public function getFilePath(): string
+    {
+        return $this->collector->getFilePath();
+    }
+
 }

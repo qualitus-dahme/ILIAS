@@ -19,7 +19,6 @@
 /**
  * User Interface for Table Editing
  * @author Alexander Killing <killing@leifos.de>
-
  * See https://mantis.ilias.de/view.php?id=32856
  * @ilCtrl_Calls ilPCTableGUI: ilAssGenFeedbackPageGUI
  */
@@ -464,9 +463,9 @@ class ilPCTableGUI extends ilPageContentGUI
         string $content,
         string $a_mode = "table_edit",
         string $a_submode = "",
-        ilPCTable $a_table_obj = null,
+        ?ilPCTable $a_table_obj = null,
         bool $unmask = true,
-        ilPageObject $page_object = null
+        ?ilPageObject $page_object = null
     ): string {
         global $DIC;
 
@@ -1175,8 +1174,15 @@ class ilPCTableGUI extends ilPageContentGUI
                     );
 
                     $cs = $node2->getAttribute("ColSpan");
+                    $width = (int) $node2->getAttribute("Width");
                     $rs = $node2->getAttribute("RowSpan");
-                    $dtpl->setVariable("WIDTH", "140");
+                    if ($width > 0) {
+                        $dtpl->setVariable("WIDTH", $width);
+                    }
+                    $align = (string) $node2->getAttribute("HorizontalAlign");
+                    if ($align !== "") {
+                        $dtpl->setVariable("ALIGN", $align);
+                    }
                     $dtpl->setVariable("HEIGHT", "80");
                     if ($cs > 1) {
                         $dtpl->setVariable("COLSPAN", 'colspan="' . $cs . '"');

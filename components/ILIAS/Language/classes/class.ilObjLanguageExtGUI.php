@@ -14,8 +14,7 @@
  * https://www.ilias.de
  * https://github.com/ILIAS-eLearning
  *
- ********************************************************************
- */
+ *********************************************************************/
 
 declare(strict_types=1);
 
@@ -833,6 +832,7 @@ class ilObjLanguageExtGUI extends ilObjectGUI
                 $this->ctrl->getLinkTargetByClass("ilObjLanguageFolderGUI")
             );
 
+            $this->ctrl->setParameter($this, "obj_id", $this->id);
             $this->tabs_gui->addTab(
                 "edit",
                 $this->lng->txt("edit"),
@@ -927,7 +927,7 @@ class ilObjLanguageExtGUI extends ilObjectGUI
     // new entries
     //
 
-    protected function buildMissingEntries(array $a_missing = null): string
+    protected function buildMissingEntries(?array $a_missing = null): string
     {
         global $DIC;
         $ilCtrl = $DIC->ctrl();
@@ -951,7 +951,7 @@ class ilObjLanguageExtGUI extends ilObjectGUI
         return implode("\n", $res);
     }
 
-    public function addNewEntryObject(ilPropertyFormGUI $a_form = null): void
+    public function addNewEntryObject(?ilPropertyFormGUI $a_form = null): void
     {
         global $DIC;
         $tpl = $DIC["tpl"];
@@ -967,7 +967,7 @@ class ilObjLanguageExtGUI extends ilObjectGUI
         $tpl->setContent($a_form->getHTML());
     }
 
-    protected function initAddNewEntryForm(string $a_id = null): ilPropertyFormGUI
+    protected function initAddNewEntryForm(?string $a_id = null): ilPropertyFormGUI
     {
         global $DIC;
         $ilCtrl = $DIC->ctrl();

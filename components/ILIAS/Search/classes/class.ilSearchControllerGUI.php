@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * https://github.com/ILIAS-eLearning
  *
  *********************************************************************/
+
+declare(strict_types=1);
 
 use ILIAS\HTTP\GlobalHttpState;
 use ILIAS\Refinery\Factory;
@@ -64,58 +64,19 @@ class ilSearchControllerGUI implements ilCtrlBaseClassInterface
         $this->user = $DIC->user();
     }
 
-    public function getLastClass(): string
-    {
-        if (ilSearchSettings::getInstance()->enabledLucene()) {
-            $default = 'illucenesearchgui';
-        } else {
-            $default = 'ilsearchgui';
-        }
-
-        $root_id = 0;
-        if ($this->http->wrapper()->post()->has('root_id')) {
-            $root_id = $this->http->wrapper()->post()->retrieve(
-                'root_id',
-                $this->refinery->kindlyTo()->int()
-            );
-        }
-        if ($root_id == self::TYPE_USER_SEARCH) {
-            $default = 'illuceneusersearchgui';
-        }
-
-        $this->setLastClass($default);
-        return ilSession::get('search_last_class') ?? $default;
-    }
-    public function setLastClass(string $a_class): void
-    {
-        ilSession::set('search_last_class', $a_class);
-    }
-
-    public function setCmdClass(string $a_cmd_class): void
-    {
-        if ($this->ctrl->getNextClass($this) === '') {
-            // @todo: removed deprecated ilCtrl methods, this needs inspection by a maintainer.
-            // $this->ctrl->setCmdClass($a_cmd_class);
-        }
-    }
-
     public function executeCommand(): void
     {
         // Check hacks
         if (!$this->system->checkAccess('search', ilSearchSettings::_getSearchSettingRefId())) {
             $this->ilias->raiseError($this->lng->txt("permission_denied"), $this->ilias->error_obj->MESSAGE);
         }
-        $forward_class = $this->ctrl->getNextClass($this) ? $this->ctrl->getNextClass($this) : $this->getLastClass();
+        $forward_class = $this->ctrl->getNextClass($this);
         switch ($forward_class) {
             case 'illucenesearchgui':
-                $this->setLastClass('illucenesearchgui');
-                $this->setCmdClass(ilLuceneSearchGUI::class);
                 $this->ctrl->forwardCommand(new ilLuceneSearchGUI());
                 break;
 
             case 'illuceneadvancedsearchgui':
-                $this->setLastClass('illuceneadvancedsearchgui');
-                $this->setCmdClass(ilLuceneAdvancedSearchGUI::class);
                 $this->ctrl->forwardCommand(new ilLuceneAdvancedSearchGUI());
                 break;
 
@@ -123,25 +84,16 @@ class ilSearchControllerGUI implements ilCtrlBaseClassInterface
                 if ($this->user->getId() === ANONYMOUS_USER_ID) {
                     $this->ilias->raiseError($this->lng->txt("permission_denied"), $this->ilias->error_obj->MESSAGE);
                 }
-                $this->setLastClass('illuceneusersearchgui');
-                $this->setCmdClass(ilLuceneUserSearchGUI::class);
                 $this->ctrl->forwardCommand(new ilLuceneUserSearchGUI());
                 break;
 
             case 'iladvancedsearchgui':
-                // Remember last class
-                $this->setLastClass('iladvancedsearchgui');
-                $this->setCmdClass(ilAdvancedSearchGUI::class);
                 $this->ctrl->forwardCommand(new ilAdvancedSearchGUI());
                 break;
 
             case 'ilsearchgui':
-                // Remember last class
-                $this->setLastClass('ilsearchgui');
-                // no break
             default:
                 $search_gui = new ilSearchGUI();
-                $this->setCmdClass(ilSearchGUI::class);
                 $this->ctrl->forwardCommand($search_gui);
                 break;
         }

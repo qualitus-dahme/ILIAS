@@ -38,8 +38,8 @@ class ilLDAPRoleAssignmentRule
     private int $rule_id;
 
     private int $server_id = 0;
-    private bool$add_on_update = false;
-    private bool$remove_on_update = false;
+    private bool $add_on_update = false;
+    private bool $remove_on_update = false;
     private int $plugin_id = 0;
     private string $attribute_value = '';
     private string $attribute_name = '';

@@ -19,7 +19,6 @@
 declare(strict_types=1);
 
 use ILIAS\User\UserGUIRequest;
-
 use ILIAS\Language\Language;
 use ILIAS\UI\Factory as UIFactory;
 
@@ -122,7 +121,7 @@ class ilCustomUserFieldsGUI
         $this->main_tpl->setContent($tab->getHTML());
     }
 
-    public function addField(ilPropertyFormGUI $a_form = null): void
+    public function addField(?ilPropertyFormGUI $a_form = null): void
     {
         if (!$a_form) {
             $a_form = $this->initForm('create');
@@ -300,7 +299,7 @@ class ilCustomUserFieldsGUI
                     break;
 
                 default:
-                    $plugin = ilCustomUserFieldsHelper::getInstance()->getPluginForType((string) $udf_type);
+                    $plugin = ilCustomUserFieldsHelper::getInstance()->getPluginForType($udf_type);
                     if ($plugin instanceof ilUDFDefinitionPlugin) {
                         $plugin->addDefinitionTypeOptionsToRadioOption($op, $this->field_id);
                     }
@@ -381,7 +380,7 @@ class ilCustomUserFieldsGUI
         ilPropertyFormGUI $form,
         ilUserDefinedFields $user_field_definitions,
         array &$access,
-        array $a_field_permissions = null
+        ?array $a_field_permissions = null
     ): bool {
         $perm_map = [];
 
@@ -480,7 +479,7 @@ class ilCustomUserFieldsGUI
         $this->addField($form);
     }
 
-    public function edit(ilPropertyFormGUI $a_form = null): void
+    public function edit(?ilPropertyFormGUI $a_form = null): void
     {
         if (!$a_form) {
             $a_form = $this->initForm('edit');

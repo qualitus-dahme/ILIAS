@@ -59,7 +59,7 @@ interface CopyrightHelperInterface
      * Returns the custom copyright information from the LOM of
      * the reader's object.
      *
-     * If copyright selection is active, and one of the preset
+     * If copyright selection is inactive, or one of the preset
      * copyright options was selected for the object, this returns
      * an empty string.
      */

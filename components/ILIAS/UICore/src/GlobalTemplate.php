@@ -13,8 +13,9 @@
  * us at:
  * https://www.ilias.de
  * https://github.com/ILIAS-eLearning
- */
- 
+ *
+ *********************************************************************/
+
 declare(strict_types=1);
 
 namespace ILIAS\UICore;
@@ -280,7 +281,7 @@ interface GlobalTemplate
     /**
      * overwrites ITX::addBlockFile
      */
-    public function addBlockFile(string $var, string $block, string $template_name, string $in_module = null): bool;
+    public function addBlockFile(string $var, string $block, string $template_name, ?string $in_module = null): bool;
 
     /**
      * check if block exists in actual template

@@ -506,8 +506,19 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
                 if ((!$this->access->checkAccess("read", "", $this->testrequest->getRefId()))) {
                     $this->redirectAfterMissingRead();
                 }
+
+                $test_session = $this->test_session_factory->getSessionByUserId($this->user->getId());
+                if (!$this->getTestObject()->canShowTestResults($test_session)) {
+                    $this->tpl->setOnScreenMessage(
+                        'info',
+                        $this->lng->txt('tst_res_tab_msg_no_lp_access'),
+                    );
+                    break;
+                }
+
                 $this->prepareOutput();
                 $this->addHeaderAction();
+
                 $this->tabs_manager->activateTab(TabsManager::TAB_ID_LEARNING_PROGRESS);
                 $new_gui = new ilLearningProgressGUI(ilLearningProgressGUI::LP_CONTEXT_REPOSITORY, $this->getTestObject()->getRefId());
                 $this->ctrl->forwardCommand($new_gui);
@@ -973,7 +984,7 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
 
     protected function forwardCommandToQuestionPreview(
         string $cmd,
-        assQuestionGUI $question_gui = null
+        ?assQuestionGUI $question_gui = null
     ): void {
         $this->prepareOutput();
 
@@ -1508,6 +1519,17 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
             );
         }
 
+        if ($new_obj->getTestLogger()->isLoggingEnabled()) {
+            $new_obj->getTestLogger()->logTestAdministrationInteraction(
+                $new_obj->getTestLogger()->getInteractionFactory()->buildTestAdministrationInteraction(
+                    $new_obj->getRefId(),
+                    $this->user->getId(),
+                    TestAdministrationInteractionTypes::NEW_TEST_CREATED,
+                    []
+                )
+            );
+        }
+
         ilFileUtils::delDir($importdir);
         $this->deleteUploadedImportFile($path_to_uploaded_file_in_temp_dir);
         ilSession::clear('path_to_import_file');
@@ -1615,7 +1637,7 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
         $this->ctrl->redirect($this, self::SHOW_QUESTIONS_CMD);
     }
 
-    private function insertQuestionsObject(array $selected_array = null): void
+    private function insertQuestionsObject(?array $selected_array = null): void
     {
         if (($selected_array ?? $this->testrequest->getQuestionIds()) === []) {
             $this->tpl->setOnScreenMessage('info', $this->lng->txt('tst_insert_missing_question'), true);
@@ -1628,7 +1650,7 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
         return;
     }
 
-    public function createQuestionFormObject(Form $form = null): void
+    public function createQuestionFormObject(?Form $form = null): void
     {
         $this->tabs_manager->getQuestionsSubTabs();
         $this->tabs_manager->activateSubTab(TabsManager::SUBTAB_ID_QST_LIST_VIEW);
@@ -2131,7 +2153,7 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
         }
 
         if ($this->getTestObject()->getMainSettings()->getAdditionalSettings()->getHideInfoTab()) {
-            $this->ctrl->redirectByClass(TestScreenGUI::class, TestScreenGUI::DEFAULT_CMD);
+            $this->ctrl->redirectByClass([self::class, TestScreenGUI::class], TestScreenGUI::DEFAULT_CMD);
         }
 
         $this->tabs_manager->activateTab(TabsManager::TAB_ID_INFOSCREEN);
@@ -2461,7 +2483,7 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
     }
 
     public function copyAndLinkQuestionsToPoolObject(
-        int $ref_id = null,
+        ?int $ref_id = null,
         array $question_ids = []
     ) {
 

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -18,8 +16,9 @@ declare(strict_types=1);
  *
  *********************************************************************/
 
-/** @noinspection ForgottenDebugOutputInspection */
+declare(strict_types=1);
 
+/** @noinspection ForgottenDebugOutputInspection */
 use JetBrains\PhpStorm\NoReturn;
 
 /**
@@ -893,7 +892,7 @@ class ilSCORM13PlayerGUI
         $g_data = json_decode(file_get_contents('php://input'));
 
 	if ($g_data == null) return;
-	    
+
         //Step 1: Get the writeable stores for this SCO that already have values
         $query = 'SELECT dm.target_id, sd.store '
                . 'FROM cp_datamap dm '

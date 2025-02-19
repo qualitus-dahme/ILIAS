@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * https://github.com/ILIAS-eLearning
  *
  *********************************************************************/
+
+declare(strict_types=1);
 
 require_once __DIR__ . '/../lib/html-it/IT.php';
 require_once __DIR__ . '/../lib/html-it/ITX.php';
@@ -221,7 +221,7 @@ class ilTemplate extends HTML_Template_ITX
         return parent::parseCurrentBlock();
     }
 
-    public function addBlockFile(string $var, string $block, string $tplname, string $in_module = null): bool
+    public function addBlockFile(string $var, string $block, string $tplname, ?string $in_module = null): bool
     {
         global $DIC;
 
@@ -318,7 +318,7 @@ class ilTemplate extends HTML_Template_ITX
     /**
      * @throws ilSystemStyleException
      */
-    protected function getTemplatePath(string $a_tplname, string $a_in_module = null): string
+    protected function getTemplatePath(string $a_tplname, ?string $a_in_module = null): string
     {
         $fname = "";
         if (strpos($a_tplname, "/") === false) {
@@ -374,7 +374,7 @@ class ilTemplate extends HTML_Template_ITX
      * but distincts templates of different services with the same name.
      * This is used by the UI plugin hook for template input/output
      */
-    public function getTemplateIdentifier(string $a_tplname, string $a_in_module = null): string
+    public function getTemplateIdentifier(string $a_tplname, ?string $a_in_module = null): string
     {
         if (strpos($a_tplname, "/") === false) {
             if (null !== $a_in_module) {

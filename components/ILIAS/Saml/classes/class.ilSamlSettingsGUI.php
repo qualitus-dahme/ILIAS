@@ -22,6 +22,7 @@ use ILIAS\Refinery\Factory as Refinery;
 use ILIAS\DI\RBACServices;
 use ILIAS\HTTP\GlobalHttpState;
 use ILIAS\Data\Factory;
+use ILIAS\UI\Component\Input\Container\Form\Standard as StandardForm;
 
 /**
  * Class ilSamlSettingsGUI
@@ -47,6 +48,7 @@ final class ilSamlSettingsGUI
     private const LNG_LOGIN_FORM = 'login_form';
     private const LNG_CANCEL = 'cancel';
 
+    private const CMD_SHOW_SETTINGS = 'showSettings';
     private const CMD_SAVE_NEW_IDP = 'saveNewIdp';
     private const CMD_SAVE_SETTINGS = 'saveSettings';
     private const CMD_SHOW_IDP_SETTINGS = 'showIdpSettings';
@@ -64,8 +66,8 @@ final class ilSamlSettingsGUI
     private const GLOBAL_COMMANDS = [
         self::DEFAULT_CMD,
         'showAddIdpForm',
-        'showSettings',
-        'saveSettings',
+        self::CMD_SHOW_SETTINGS,
+        self::CMD_SAVE_SETTINGS,
         'showNewIdpForm',
         'saveNewIdp',
     ];
@@ -105,7 +107,6 @@ final class ilSamlSettingsGUI
     private readonly ilCtrlInterface $ctrl;
     private readonly ilLanguage $lng;
     private readonly ilGlobalTemplateInterface $tpl;
-    private readonly ilAccessHandler $access;
     private readonly RBACServices $rbac;
     private readonly ilErrorHandling $error_handler;
     private readonly ilTabsGUI $tabs;
@@ -126,7 +127,6 @@ final class ilSamlSettingsGUI
         $this->ctrl = $DIC->ctrl();
         $this->tpl = $DIC->ui()->mainTemplate();
         $this->lng = $DIC->language();
-        $this->access = $DIC->access();
         $this->rbac = $DIC->rbac();
         $this->error_handler = $DIC['ilErr'];
         $this->tabs = $DIC->tabs();
@@ -359,8 +359,8 @@ final class ilSamlSettingsGUI
 
                 $this->tabs->addSubTabTarget(
                     'settings',
-                    $this->ctrl->getLinkTarget($this, 'showSettings'),
-                    ['showSettings', self::CMD_SAVE_SETTINGS],
+                    $this->ctrl->getLinkTarget($this, self::CMD_SHOW_SETTINGS),
+                    [self::CMD_SHOW_SETTINGS, self::CMD_SAVE_SETTINGS],
                     self::class
                 );
                 break;
@@ -413,7 +413,7 @@ final class ilSamlSettingsGUI
             $this->addAttributeRuleFieldToForm($form, $definition['field_name'], 'udf_' . $definition['field_id']);
         }
 
-        if (!$this->access->checkAccess(self::PERMISSION_WRITE, '', $this->ref_id)) {
+        if (!$this->rbac->system()->checkAccess(self::PERMISSION_WRITE, $this->ref_id)) {
             foreach ($form->getItems() as $item) {
                 $item->setDisabled(true);
             }
@@ -494,23 +494,26 @@ final class ilSamlSettingsGUI
         $this->tpl->setContent($form->getHTML());
     }
 
-    private function getSettingsForm(): ilPropertyFormGUI
+    /**
+     * @param array<string, mixed> $values
+     */
+    private function getSettingsForm(array $values = []): StandardForm
     {
-        $form = new ilPropertyFormGUI();
-        $form->setFormAction($this->ctrl->getFormAction($this, self::CMD_SAVE_SETTINGS));
-        $form->setTitle($this->lng->txt('auth_saml_configure'));
+        $access = $this->rbac->system()->checkAccess(self::PERMISSION_WRITE, $this->ref_id);
+        $form = $this->ui_factory->input()->container()->form()->standard(
+            $this->ctrl->getFormAction($this, $access ? self::CMD_SAVE_SETTINGS : self::CMD_SHOW_SETTINGS),
+            [
+                self::LNG_LOGIN_FORM => $this->ui_factory->input()->field()->checkbox(
+                    $this->lng->txt('auth_saml_login_form'),
+                    $this->lng->txt('auth_saml_login_form_info')
+                )
+                    ->withValue((bool) ($values[self::LNG_LOGIN_FORM] ?? true))
+                    ->withDisabled(!$access),
+            ]
+        );
 
-        $show_login_form = new ilCheckboxInputGUI($this->lng->txt('auth_saml_login_form'), self::LNG_LOGIN_FORM);
-        $show_login_form->setInfo($this->lng->txt('auth_saml_login_form_info'));
-        $show_login_form->setValue('1');
-        $form->addItem($show_login_form);
-
-        if (!$this->access->checkAccess(self::PERMISSION_WRITE, '', $this->ref_id)) {
-            foreach ($form->getItems() as $item) {
-                $item->setDisabled(true);
-            }
-        } else {
-            $form->addCommandButton(self::CMD_SAVE_SETTINGS, $this->lng->txt(self::CMD_SAVE));
+        if (!$access) {
+            $form = $form->withSubmitLabel($this->lng->txt('refresh'));
         }
 
         return $form;
@@ -544,27 +547,29 @@ final class ilSamlSettingsGUI
     {
         $this->ensureWriteAccess();
 
-        $form = $this->getSettingsForm();
-        if ($form->checkInput()) {
-            ilSamlSettings::getInstance()->setLoginFormStatus((bool) $form->getInput(self::LNG_LOGIN_FORM));
+        $form = $this->getSettingsForm()->withRequest($this->httpState->request());
+        if (!$form->getError()) {
+            $data = $form->getData();
+            ilSamlSettings::getInstance()->setLoginFormStatus($data[self::LNG_LOGIN_FORM]);
             $this->tpl->setOnScreenMessage(self::MESSAGE_TYPE_SUCCESS, $this->lng->txt(self::LNG_SAVED_SUCCESSFULLY));
         }
-
-        $form->setValuesByPost();
 
         $this->showSettings($form);
     }
 
-    private function showSettings(?ilPropertyFormGUI $form = null): void
+    private function showSettings(?StandardForm $form = null): void
     {
-        if (!($form instanceof ilPropertyFormGUI)) {
-            $form = $this->getSettingsForm();
-            $form->setValuesByArray([
-                self::LNG_LOGIN_FORM => ilSamlSettings::getInstance()->isDisplayedOnLoginPage(),
+        if (!$form) {
+            $form = $this->getSettingsForm([
+                self::LNG_LOGIN_FORM => ilSamlSettings::getInstance()->isDisplayedOnLoginPage()
             ]);
         }
 
-        $this->tpl->setContent($form->getHTML());
+        $title = $this->ui_factory->item()->standard($this->lng->txt('auth_saml_configure'));
+        $this->tpl->setContent($this->ui_renderer->render([
+            $title,
+            $form
+        ]));
     }
 
     private function getIdpSettingsForm(): ilPropertyFormGUI
@@ -609,7 +614,7 @@ final class ilSamlSettingsGUI
         $sync->addSubItem($migr);
         $form->addItem($sync);
 
-        if (!$this->access->checkAccess(self::PERMISSION_WRITE, '', $this->ref_id)) {
+        if (!$this->rbac->system()->checkAccess(self::PERMISSION_WRITE, $this->ref_id)) {
             foreach ($form->getItems() as $item) {
                 $item->setDisabled(true);
             }

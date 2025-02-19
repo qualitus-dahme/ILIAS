@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * https://github.com/ILIAS-eLearning
  *
  *********************************************************************/
+
+declare(strict_types=1);
 
 use ILIAS\Style\Content\Access;
 use ILIAS\Style\Content;
@@ -194,6 +194,12 @@ class ilObjStyleSheetGUI extends ilObjectGUI
 
         $tpl->setContent($this->getCreationFormsHTML($this->getCreateForm()));
     }
+
+    protected function getCreationFormTitle(): string
+    {
+        return $this->lng->txt("sty_create_new_stylesheet");
+    }
+
 
     protected function getCreateForm(): ilPropertyFormGUI
     {

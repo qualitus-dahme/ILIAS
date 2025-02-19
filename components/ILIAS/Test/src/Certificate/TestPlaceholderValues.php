@@ -104,6 +104,9 @@ class TestPlaceholderValues implements \ilCertificatePlaceholderValues
         $testObject = $this->objectHelper->getInstanceByObjId($obj_id);
 
         $active_id = $testObject->getActiveIdOfUser($user_id);
+        if ($active_id === null) {
+            throw new \ilInvalidCertificateException('No active id found for user ' . $user_id . ' and object ' . $obj_id);
+        }
         $pass = $this->testObjectHelper->getResultPass($active_id);
 
         $result_array = $testObject->getTestResult($active_id);

@@ -30,7 +30,7 @@ use ILIAS\UI\Factory as UIFactory;
 
 class DataRetrieval implements BaseDataRetrieval
 {
-    protected const MAX_PREVIEW_VALUES = 5;
+    protected const int MAX_PREVIEW_VALUES = 5;
 
     protected VocabManager $vocab_manager;
     protected Presentation $presentation;
@@ -117,7 +117,7 @@ class DataRetrieval implements BaseDataRetrieval
         return count($this->getVocabs());
     }
 
-    protected function getVocabs(Range $range = null): array
+    protected function getVocabs(?Range $range = null): array
     {
         if (isset($this->vocabs)) {
             $vocabs = $this->vocabs;

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * https://github.com/ILIAS-eLearning
  *
  *********************************************************************/
+
+declare(strict_types=1);
 
 use Psr\Http\Message\RequestInterface;
 
@@ -259,7 +259,7 @@ class ilTaggingGUI
 
     public static function initJavascript(
         string $a_ajax_url,
-        ilGlobalTemplateInterface $a_main_tpl = null
+        ?ilGlobalTemplateInterface $a_main_tpl = null
     ): void {
         global $DIC;
 
@@ -303,7 +303,7 @@ class ilTaggingGUI
     // Get tagging js call
     public static function getListTagsJSCall(
         string $a_hash,
-        string $a_update_code = null
+        ?string $a_update_code = null
     ): string {
         if ($a_update_code === null) {
             $a_update_code = "null";

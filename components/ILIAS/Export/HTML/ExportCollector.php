@@ -43,16 +43,17 @@ class ExportCollector
         if ($this->rid !== "") {
             throw $this->data->exportException("HTML Export has been initialised twice.");
         }
-        $this->rid = $this->repo->create(
-            $this->obj_id,
-            $this->type
-        );
-
         if ($zipname === "") {
             $date = time();
             $zipname = $date . "__" . IL_INST_ID . "__" .
                 \ilObject::_lookupType($this->obj_id) . "_" . $this->obj_id . ".zip";
         }
+        $this->rid = $this->repo->create(
+            $this->obj_id,
+            $this->type,
+            $zipname
+        );
+
         //$this->repo->rename($this->rid, $zipname);
 
         return $this->rid;
@@ -123,6 +124,11 @@ class ExportCollector
             $source_dir_path,
             $target_dir_path
         );
+    }
+
+    public function getFilePath(): string
+    {
+        return $this->repo->getFilePath($this->rid);
     }
 
     public function deliver(string $filename): void

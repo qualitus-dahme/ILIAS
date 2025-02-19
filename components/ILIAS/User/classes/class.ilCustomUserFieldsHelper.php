@@ -69,10 +69,10 @@ class ilCustomUserFieldsHelper
     /**
      * Get plugin for udf type
      */
-    public function getPluginForType(string $a_type): ?ilUDFDefinitionPlugin
+    public function getPluginForType(int $type): ?ilUDFDefinitionPlugin
     {
         foreach ($this->getActivePlugins() as $plugin) {
-            if ($plugin->getDefinitionType() == $a_type) {
+            if ($plugin->getDefinitionType() === $type) {
                 return $plugin;
             }
         }

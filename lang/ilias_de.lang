@@ -259,6 +259,7 @@ administration#:#language_scope_unchanged#:#Unveränderte Einträge
 administration#:#language_scope_unchanged_info#:#Exportiert alle Datenbank-Einträge, die gegenüber den Standardwerten nicht verändert wurden. Dies ist das Gegenteil zu "Nur lokale Änderungen". Beide Dateien zusammen ergeben ein Gesamt-Backup der Sprache in der Datenbank.
 administration#:#language_settings#:#Spracheinstellungen
 administration#:#language_statistics#:#Statistik
+administration#:#language_translation#:#Seitenübersetzung
 administration#:#language_translation_enabled#:#Seitenübersetzung aktiviert
 administration#:#language_variables_saved#:#Die Änderungen an den Sprachvariablen wurden erfolgreich gespeichert.
 administration#:#log_scan#:#Untersuchungsergebnisse festhalten
@@ -747,6 +748,7 @@ assessment#:#finish_pass_for_user_confirmation#:#Wollen Sie den Test Durchlauf f
 assessment#:#finish_pass_for_user_in_processing_time#:#WARNUNG: die Bearbeitungszeit für diesen Benutzer ist noch nicht vorbei! Sie sollten den Testlauf nur bei zwingendem Grund (z.B. Ausschluss vom Test) beenden.
 assessment#:#finish_test#:#Test beenden
 assessment#:#finish_test_all#:#Sind Sie sicher, dass die den Testdurchlauf für alle Teilnehmer beenden möchten?
+assessment#:#finish_test_more_than_one_selected#:#Wenn der Test nur einen Durchgang zulässt, darf nur ein einziger Teilnehmer ausgewählt werden, um den Durchgang zu beenden.
 assessment#:#finish_test_multiple#:#Sind Sie sicher, dass Sie den Testdurchlauf für folgende Teilnehmer beenden möchten?
 assessment#:#finish_test_no_valid_participants_selected#:#Für die gewählten Teilnehmer gibt es keine aktiven Testdurchläufe und können daher nicht beendet werden.
 assessment#:#finish_test_single#:#Sind Sie sicher, dass Sie den Testdurchlauf für den Teilnehmer "%s" beenden möchten?
@@ -770,6 +772,7 @@ assessment#:#fq_precision_info#:#Geben Sie hier die Anzahl der gewünschten Nach
 assessment#:#fq_question_desc#:#Sie definieren Variablen durch die Angabe von $v1, $v2 ... $vn, Ergebnisfelder mit $r1, $r2 .... $rn an den gewünschten Positionen im Text. Klicken Sie dann auf die Schaltfläche „Frage analysieren“, um Bearbeitungsformulare für alle Variablen und Ergebnisse zu erzeugen.
 assessment#:#gap#:#Lücke
 assessment#:#gap_combination#:#Lückentext-Kombination
+assessment#:#gaps#:#Lücken
 assessment#:#glossary_term#:#Glossarbegriff
 assessment#:#grading_mark_msg#:#Sie haben die Note &quot;[mark]&quot; erzielt.
 assessment#:#grading_status_failed_msg#:#Schade, leider haben Sie den Test <b>nicht bestanden</b>.
@@ -1837,6 +1840,7 @@ assessment#:#tst_res_jump_to_participant_hint_opt#:#Zu Teilnehmer springen
 assessment#:#tst_res_lo_objectives_header#:#Relevante Lernziele
 assessment#:#tst_res_lo_try_header#:#Versuch
 assessment#:#tst_res_lo_try_n#:#%s. Versuch
+assessment#:#tst_res_tab_msg_no_lp_access#:#Sie dürfen aktuell nicht auf Ihren Lernfortschritt zugreifen, da der Zugriff auf die Testresultate nicht freigegeben ist.
 assessment#:#tst_res_tab_msg_res_after_date#:#Die Testergebnisse werden Ihnen hier zu folgendem Datum präsentiert: %s
 assessment#:#tst_res_tab_msg_res_after_date_no_res#:#Wenn Sie den Test durchführen werden Ihnen hier zu folgendem Datum die Testergebnisse präsentiert: %s
 assessment#:#tst_res_tab_msg_res_after_finish_test#:#Wenn Sie den Test abgeschlossen haben werden Ihnen hier die Testergebnisse präsentiert.
@@ -9276,6 +9280,7 @@ exc#:#exc_assignments_deleted#:#Die Übungseinheiten wurden gelöscht.
 exc#:#exc_blog_created#:#Blog wurde erstellt.
 exc#:#exc_blog_returned#:#Blog zur Übungseinheit
 exc#:#exc_blog_selected#:#Das Blog wurde verknüpft.
+exc#:#exc_cannot_submit_any_files#:#Sie können keine Dateien mehr einreichen.
 exc#:#exc_chars_remaining#:#Verbleibende Zeichen
 exc#:#exc_comment_for_learner_edit#:#Als Kommentar in Textfeld eingeben
 exc#:#exc_comment_for_learner_info#:#Es wird eine Benachrichtigung an den Teilnehmer gesendet. <br /><br />Die Rückmeldung wird in seiner persönlichen Übungseinheiten-Übersicht angezeigt.
@@ -9704,6 +9709,7 @@ exc#:#exc_template#:#Vorlage
 exc#:#exc_text_assignment_edit#:#Text bearbeiten
 exc#:#exc_text_assignment_show#:#Text anzeigen
 exc#:#exc_text_saved#:#Der Text wurde gespeichert.
+exc#:#exc_too_many_files#:#Der Upload beinhaltet zu viele Dateien.
 exc#:#exc_total_exc#:#Gesamte Übung
 exc#:#exc_total_members#:#Gesamtanzahl an Teilnehmern
 exc#:#exc_type#:#Type
@@ -15453,7 +15459,7 @@ search#:#search_show_inactive_user#:#Inaktive Benutzer anzeigen
 search#:#search_show_inactive_user_info#:#In der Benutzersuche werden auch Benutzer angezeigt, deren Konto nicht aktiv ist.
 search#:#search_show_limited_user#:#Zeitlich begrenzte Benutzer anzeigen
 search#:#search_show_limited_user_info#:#In der Benutzersuche werden auch Benutzer mit zeitlichem begrenztem Zugang angezeigt, die entweder noch nicht oder nicht mehr auf ILIAS zugreifen können.
-search#:#search_sort_by#:#Sortierung: %s
+search#:#search_sort_by#:#Sortierung:
 search#:#search_sort_creation_date_asc#:#Ältestes
 search#:#search_sort_creation_date_desc#:#Neuestes
 search#:#search_sort_generic_asc#:#%s, aufst.
@@ -17363,7 +17369,7 @@ user#:#confirm_logout_for_email_change#:#Sie haben Ihre E-Mail-Adresse geändert
 user#:#confirm_logout_for_email_change_with_confirmation#:#Im Anschluss wird Ihnen eine E-Mail auf die neue E-Mail gesendet, um zu bestätigen, dass diese Adresse Ihnen gehört. Erst nachdem Sie den Link in der E-Mail angeklickt haben, wird die Adresse in Ihrem Profil geändert.
 user#:#create_starting_point#:#Regel erstellen
 user#:#criteria#:#Kriterium
-user#:#del_mail_body#:#Hallo %1$s, %2$s Sie haben sich seit längerer Zeit nicht mehr auf %3$s angemeldet. Daher wird ihr ILIAS-Konto voraussichtlich am %4$s gelöscht. Um Ihr ILIAS-Konto zu behalten, müssen Sie sich vor dem genannten Tag erneut einloggen.
+user#:#del_mail_body#:#Hallo %1$s, %2$s Sie haben sich seit längerer Zeit nicht mehr auf %3$s angemeldet. Daher wird ihr ILIAS-Konto %5$s voraussichtlich am %4$s gelöscht. Um Ihr ILIAS-Konto zu behalten, müssen Sie sich vor dem genannten Tag erneut einloggen.
 user#:#del_mail_subject#:#Ihr ILIAS-Konto wird bald gelöscht
 user#:#delete_inactive_user_accounts_frequency#:#Intervall
 user#:#delete_inactive_user_accounts_frequency_desc#:#Intervall, mit welchem auf Löschung sowie auf E-Mail-Versand getestet wird.

@@ -13,7 +13,8 @@
  * us at:
  * https://www.ilias.de
  * https://github.com/ILIAS-eLearning
- */
+ *
+ *********************************************************************/
 
 declare(strict_types=1);
 
@@ -62,7 +63,7 @@ class ilECSUserConsentModalGUI
     public function __construct(
         int $a_usr_id,
         int $a_ref_id,
-        ilRemoteObjectBaseGUI $remote_gui = null
+        ?ilRemoteObjectBaseGUI $remote_gui = null
     ) {
         global $DIC;
 

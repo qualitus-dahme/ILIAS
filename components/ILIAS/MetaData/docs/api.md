@@ -840,8 +840,9 @@ possible, the former should be used.
 Note that if copyright selection is active, objects with no copyright
 information in their LOM are treated like they are under the default
 preset copyright licence. Conversely, if copyright selection is inactive,
-all copyright information is treated as custom.
-
+all objects are treated like they have no copyright information.
+The respective LOM fields can however still be accessed via the
+[reader](#read).
 
 `prepareCreateOrUpdateOfCopyrightFromPreset` and `prepareCreateOrUpdateOfCustomCopyright`
 can be used in conjunction with a `Manipulator` (see [above](#manipulate))

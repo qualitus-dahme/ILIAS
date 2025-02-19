@@ -14,8 +14,7 @@
  * https://www.ilias.de
  * https://github.com/ILIAS-eLearning
  *
- ********************************************************************
- */
+ *********************************************************************/
 
 declare(strict_types=1);
 
@@ -461,7 +460,7 @@ class ilLanguage implements \ILIAS\Language\Language
      * $a_lang_key language key string or array of language keys
      */
 
-    public function toJS($a_lang_key, ilGlobalTemplateInterface $a_tpl = null): void
+    public function toJS($a_lang_key, ?ilGlobalTemplateInterface $a_tpl = null): void
     {
         global $DIC;
         $tpl = $DIC["tpl"];
@@ -486,7 +485,7 @@ class ilLanguage implements \ILIAS\Language\Language
      *
      * $a_map array of key value pairs (key is text string, value is content)
      */
-    public function toJSMap(array $a_map, ilGlobalTemplateInterface $a_tpl = null): void
+    public function toJSMap(array $a_map, ?ilGlobalTemplateInterface $a_tpl = null): void
     {
         global $DIC;
         $tpl = $DIC["tpl"];

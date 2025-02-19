@@ -79,10 +79,20 @@ class ilObjLanguageFolderGUI extends ilObjectGUI
 
         if ($this->checkPermissionBool("write")) {
             // refresh
-            $refresh = $this->ui_factory->link()->standard(
-                $this->lng->txt("refresh_languages"),
-                $this->getUrl("confirmRefresh")
+            $ids = $this->confirmRefreshObject();
+            $modal = $this->buildConfirmModal(
+                $ids,
+                'refresh_languages',
+                'confirmRefresh',
+                'lang_refresh_confirm_selected',
+                "lang_refresh_confirm_info"
             );
+            $refresh = $this->ui_factory->button()->standard(
+                $this->lng->txt("refresh_languages"),
+                ''
+            )->withOnClick($modal->getShowSignal());
+
+            $this->toolbar->addComponent($modal);
             $this->toolbar->addComponent($refresh);
 
             // check languages
@@ -875,7 +885,7 @@ class ilObjLanguageFolderGUI extends ilObjectGUI
         ilUtil::deliverData($res, "lang_deprecated.csv");
     }
 
-    protected function getUrl(string $action, array $lang_ids = null): string
+    protected function getUrl(string $action, ?array $lang_ids = null): string
     {
         $url_builder = $this->url_builder->withParameter($this->action_token, $action);
         if($lang_ids) {

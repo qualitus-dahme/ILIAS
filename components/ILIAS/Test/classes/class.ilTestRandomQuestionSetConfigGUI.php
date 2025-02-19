@@ -280,7 +280,7 @@ class ilTestRandomQuestionSetConfigGUI
         return $this->testrequest->raw(self::HTTP_PARAM_AFTER_REBUILD_QUESTION_STAGE_CMD);
     }
 
-    private function showGeneralConfigFormCmd(ilTestRandomQuestionSetGeneralConfigFormGUI $form = null): void
+    private function showGeneralConfigFormCmd(?ilTestRandomQuestionSetGeneralConfigFormGUI $form = null): void
     {
         $disabled_form = $this->preventFormBecauseOfSync();
 
@@ -451,8 +451,7 @@ class ilTestRandomQuestionSetConfigGUI
             $translator,
             $this->source_pool_definition_list,
             !$this->isFrozenConfigRequired() && !$disabled,
-            $this->question_set_config->isQuestionAmountConfigurationModePerPool(),
-            $this->question_set_config->getLastQuestionSyncTimestamp() != 0
+            $this->question_set_config->isQuestionAmountConfigurationModePerPool()
         );
     }
 
@@ -499,7 +498,7 @@ class ilTestRandomQuestionSetConfigGUI
         $this->tpl->setContent($selector->getHTML(true));
     }
 
-    private function showCreateSourcePoolDefinitionFormCmd(ilTestRandomQuestionSetPoolDefinitionFormGUI $form = null): void
+    private function showCreateSourcePoolDefinitionFormCmd(?ilTestRandomQuestionSetPoolDefinitionFormGUI $form = null): void
     {
         $this->question_set_config->loadFromDb();
 
@@ -595,7 +594,7 @@ class ilTestRandomQuestionSetConfigGUI
         return $form;
     }
 
-    private function showEditSourcePoolDefinitionFormCmd(ilTestRandomQuestionSetPoolDefinitionFormGUI $form = null): void
+    private function showEditSourcePoolDefinitionFormCmd(?ilTestRandomQuestionSetPoolDefinitionFormGUI $form = null): void
     {
         $this->question_set_config->loadFromDb();
 
@@ -800,10 +799,14 @@ class ilTestRandomQuestionSetConfigGUI
             foreach ($pool_ids as $pool_id) {
                 $lost_pool = $this->source_pool_definition_list->getLostPool($pool_id);
 
-                $deriver = new ilTestRandomQuestionSetPoolDeriver($this->db, $this->component_repository, $this->test_obj);
-                $deriver->setSourcePoolDefinitionList($this->source_pool_definition_list);
-                $deriver->setTargetContainerRef($target_ref);
-                $deriver->setOwnerId($this->user->getId());
+                $deriver = new ilTestRandomQuestionSetPoolDeriver(
+                    $this->db,
+                    $this->component_repository,
+                    $this->test_obj,
+                    $this->source_pool_definition_list,
+                    $this->user->getId(),
+                    $target_ref
+                );
                 $new_pool = $deriver->derive($lost_pool);
 
                 $srcPoolDefinition = $this->source_pool_definition_list->getDefinitionBySourcePoolId($new_pool->getId());

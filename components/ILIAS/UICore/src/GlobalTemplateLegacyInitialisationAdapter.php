@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * This file is part of ILIAS, a powerful learning management system
+ * published by ILIAS open source e-Learning e.V.
+ *
+ * ILIAS is licensed with the GPL-3.0,
+ * see https://www.gnu.org/licenses/gpl-3.0.en.html
+ * You should have received a copy of said license along with the
+ * source code, too.
+ *
+ * If this is not the case or you just want to try ILIAS, you'll find
+ * us at:
+ * https://www.ilias.de
+ * https://github.com/ILIAS-eLearning
+ *
+ *********************************************************************/
+
 declare(strict_types=1);
 
 namespace ILIAS\UICore;
@@ -235,7 +251,7 @@ class GlobalTemplateLegacyInitialisationAdapter implements GlobalTemplate
         return $this->getLegacyGlobalTemplateInstance()->touchBlock($block);
     }
 
-    public function addBlockFile(string $var, string $block, string $template_name, string $in_module = null): bool
+    public function addBlockFile(string $var, string $block, string $template_name, ?string $in_module = null): bool
     {
         return $this->getLegacyGlobalTemplateInstance()->addBlockFile($var, $block, $template_name, $in_module);
     }

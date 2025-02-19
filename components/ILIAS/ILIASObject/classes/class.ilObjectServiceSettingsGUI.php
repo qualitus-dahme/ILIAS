@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * https://github.com/ILIAS-eLearning
  *
  *********************************************************************/
+
+declare(strict_types=1);
 
 /**
  * GUI class for service settings (calendar, notes, comments)
@@ -474,7 +474,7 @@ class ilObjectServiceSettingsGUI
      * Edit tool settings (calendar, news, comments, ...)
      * @param ilPropertyFormGUI $form
      */
-    protected function editSettings(ilPropertyFormGUI $form = null): void
+    protected function editSettings(?ilPropertyFormGUI $form = null): void
     {
         if (!$form instanceof ilPropertyFormGUI) {
             // TODO: cant find initSettingsForm, is editSettings ever called?

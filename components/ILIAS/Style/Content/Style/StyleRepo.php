@@ -178,7 +178,6 @@ class StyleRepo
     ): void {
         $from_rid = $this->readRid($from_style_id);
         $to_rid = $this->irss->cloneContainer($from_rid);
-        var_dump($to_rid);
         if ($to_rid !== "") {
             $this->db->update(
                 "style_data",

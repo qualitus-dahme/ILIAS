@@ -266,7 +266,7 @@ class ilExSubmissionObjectGUI extends ilExSubmissionBaseGUI
         string $a_info,
         string $a_cmd,
         string $a_explorer_cmd,
-        array $a_items = null
+        ?array $a_items = null
     ): void {
         if (!$this->submission->canSubmit()) {
             $this->tpl->setOnScreenMessage('info', $this->lng->txt("exercise_time_over"), true);
@@ -510,7 +510,7 @@ class ilExSubmissionObjectGUI extends ilExSubmissionBaseGUI
     }
 
     protected function createPortfolioTemplateObject(
-        ilPropertyFormGUI $a_form = null
+        ?ilPropertyFormGUI $a_form = null
     ): void {
         if (!$this->submission->canSubmit()) {
             $this->tpl->setOnScreenMessage('info', $this->lng->txt("exercise_time_over"), true);
@@ -764,7 +764,8 @@ class ilExSubmissionObjectGUI extends ilExSubmissionBaseGUI
 
         $blog_gui = new ilObjBlogGUI($blog_id, ilObject2GUI::WORKSPACE_NODE_ID);
         if ($blog_gui->getObject()) {
-            $file = $blog_gui->buildExportFile();
+            $export = $blog_gui->buildExportFile();
+            $file = $export->getFilePath();
             $size = filesize($file);
             if ($size) {
                 $this->submission->deleteAllFiles();
@@ -774,10 +775,11 @@ class ilExSubmissionObjectGUI extends ilExSubmissionBaseGUI
                     $file,
                     $blog_id . ".zip"
                 );
-                unlink($file);
+                $export->delete();
 
                 // print version
-                $file = $blog_gui->buildExportFile(false, true);
+                $blog_gui->buildExportFile(false, true);
+                $file = $export->getFilePath();
                 $size = filesize($file);
                 if ($size) {
                     $subm->addLocalFile(
@@ -785,7 +787,7 @@ class ilExSubmissionObjectGUI extends ilExSubmissionBaseGUI
                         $file,
                         $blog_id . "print.zip"
                     );
-                    unlink($file);
+                    $export->delete();
                 }
 
                 $this->handleNewUpload();
@@ -813,7 +815,9 @@ class ilExSubmissionObjectGUI extends ilExSubmissionBaseGUI
         if ($prtf->getTitle()) {
             $port_gui = new ilObjPortfolioGUI($prtf_id);
             $port_export = new PortfolioHtmlExport($port_gui);
-            $file = $port_export->exportHtml();
+            $port_export->exportHtml();
+
+            $file = $port_export->getFilePath();
 
             $size = filesize($file);
             if ($size) {
@@ -824,11 +828,13 @@ class ilExSubmissionObjectGUI extends ilExSubmissionBaseGUI
                     $file,
                     $prtf_id . ".zip"
                 );
-                unlink($file);
+                $port_export->delete();
 
                 // print version
+                $port_export = new PortfolioHtmlExport($port_gui);
                 $port_export->setPrintVersion(true);
-                $file = $port_export->exportHtml();
+                $port_export->exportHtml();
+                $file = $port_export->getFilePath();
                 $size = filesize($file);
 
                 if ($size) {
@@ -837,7 +843,7 @@ class ilExSubmissionObjectGUI extends ilExSubmissionBaseGUI
                         $file,
                         $prtf_id . "print.zip"
                     );
-                    unlink($file);
+                    $file = $port_export->delete();
                 }
 
                 $this->handleNewUpload();
@@ -852,7 +858,7 @@ class ilExSubmissionObjectGUI extends ilExSubmissionBaseGUI
      */
     public static function initGUIForSubmit(
         int $a_ass_id,
-        int $a_user_id = null
+        ?int $a_user_id = null
     ): ilExSubmissionObjectGUI {
         global $DIC;
 

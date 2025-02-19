@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * This file is part of ILIAS, a powerful learning management system
+ * published by ILIAS open source e-Learning e.V.
+ *
+ * ILIAS is licensed with the GPL-3.0,
+ * see https://www.gnu.org/licenses/gpl-3.0.en.html
+ * You should have received a copy of said license along with the
+ * source code, too.
+ *
+ * If this is not the case or you just want to try ILIAS, you'll find
+ * us at:
+ * https://www.ilias.de
+ * https://github.com/ILIAS-eLearning
+ *
+ *********************************************************************/
+
 declare(strict_types=1);
 
 namespace ILIAS\UI\examples\Tree\Node\KeyValue;
@@ -10,7 +26,7 @@ namespace ILIAS\UI\examples\Tree\Node\KeyValue;
  *   Example for rendering a tree node with key values.
  *
  * expected output: >
- *   ILIAS shows a collapsed tree with four entries. The label from the entries are displayed as names. Right next to them
+ *   ILIAS shows an expanded, but collapsible tree with four entries. The label from the entries are displayed as names. Right next to them
  *   "value" is written in a small, grey and italic font. Two entries include an icon each. Als two entries can get clicked
  *   which opens a new website in the same browser tab.
  * ---

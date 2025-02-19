@@ -13,8 +13,8 @@
  * https://www.ilias.de
  * https://github.com/ILIAS-eLearning
  *
- ********************************************************************
- */
+ *********************************************************************/
+
 declare(strict_types=1);
 
 use ILIAS\UI\Component\Table;
@@ -88,8 +88,8 @@ class ilOrgUnitPositionDBRepository implements OrgUnitPositionRepository, Table\
      * @return ilOrgUnitPosition[]
      */
     public function getAllPositions(
-        Range $range = null,
-        Order $order = null
+        ?Range $range = null,
+        ?Order $order = null
     ): array {
         $sql_order_part = $order ? $order->join('ORDER BY', fn(...$o) => implode(' ', $o)) : '';
         $sql_range_part = $range ? sprintf('LIMIT %2$s OFFSET %1$s', ...$range->unpack()) : '';

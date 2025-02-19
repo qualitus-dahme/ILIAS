@@ -543,7 +543,7 @@ class Renderer extends AbstractComponentRenderer
                 $glyph = $glyph->withUnavailableAction();
             }
 
-            $action = $this->getUIFactory()->button()->standard($default_renderer->render($glyph), '#');
+            $action = $this->getUIFactory()->button()->standard('', '#')->withSymbol($glyph);
 
             if ($component->isDisabled()) {
                 $action = $action->withUnavailableAction();
@@ -739,7 +739,18 @@ class Renderer extends AbstractComponentRenderer
     protected function renderSection(F\Section $section, RendererInterface $default_renderer): string
     {
         $inputs_html = $default_renderer->render($section->getInputs());
-        return $this->wrapInFormContext($section, $section->getLabel(), $inputs_html);
+
+        $headline_tpl = $this->getTemplate("tpl.headlines.html", true, true);
+        $headline_tpl->setVariable("HEADLINE", $section->getLabel());
+        $nesting_level = $section->getNestingLevel() + 2;
+        if ($nesting_level > 6) {
+            $nesting_level = 6;
+        };
+        $headline_tpl->setVariable("LEVEL", $nesting_level);
+
+        $headline_html = $headline_tpl->get();
+
+        return $this->wrapInFormContext($section, $headline_html, $inputs_html);
     }
 
     protected function renderUrlField(F\Url $component, RendererInterface $default_renderer): string

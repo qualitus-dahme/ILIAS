@@ -167,7 +167,7 @@ class TestScoringByParticipantGUI extends \ilTestServiceGUI
         $this->showManScoringParticipantsTable();
     }
 
-    private function showManScoringParticipantScreen(\ilPropertyFormGUI $form = null): void
+    private function showManScoringParticipantScreen(?\ilPropertyFormGUI $form = null): void
     {
         $active_id = $this->fetchActiveIdParameter();
 
@@ -329,7 +329,7 @@ class TestScoringByParticipantGUI extends \ilTestServiceGUI
 
         $scorer = new TestScoring($this->object, $this->user, $this->db, $this->lng);
         $scorer->setPreserveManualScores(true);
-        $scorer->recalculateSolutions();
+        $scorer->recalculateSolution($active_id, $pass);
 
         if ($this->object->getAnonymity() == 0) {
             $user_name = \ilObjUser::_lookupName(\ilObjTestAccess::_getParticipantId($active_id));

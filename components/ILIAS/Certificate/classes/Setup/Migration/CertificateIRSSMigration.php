@@ -30,6 +30,7 @@ use ilDatabaseUpdatedObjective;
 use ilResourceStorageMigrationHelper;
 use ILIAS\Certificate\File\ilCertificateTemplateStakeholder;
 use ILIAS\ResourceStorage\Identification\ResourceIdentification;
+use ILIAS\Setup\CLI\IOWrapper;
 
 class CertificateIRSSMigration implements Migration
 {
@@ -38,6 +39,7 @@ class CertificateIRSSMigration implements Migration
     private ilResourceStorageMigrationHelper $helper;
     private ilDBInterface $db;
     private ilCertificateTemplateStakeholder $stakeholder;
+    private ?IOWrapper $io = null;
 
     public function getLabel(): string
     {
@@ -61,6 +63,10 @@ class CertificateIRSSMigration implements Migration
         $this->db = $environment->getResource(Environment::RESOURCE_DATABASE);
         $this->helper = new ilResourceStorageMigrationHelper(new ilCertificateTemplateStakeholder(), $environment);
         $this->stakeholder = new ilCertificateTemplateStakeholder();
+        $io = $environment->getResource(Environment::RESOURCE_ADMIN_INTERACTION);
+        if ($io instanceof IOWrapper) {
+            $this->io = $io;
+        }
     }
 
     /**
@@ -110,42 +116,57 @@ class CertificateIRSSMigration implements Migration
             ['certificate', 'cert_bg_image']
         );
         $row = $this->db->fetchAssoc($result);
-        if (isset($row['value']) && $row['value'] !== '' && is_file(
-            ILIAS_ABSOLUTE_PATH . '/' . ILIAS_WEB_DIR . '/' . CLIENT_ID . '/certificates/default/' . $row['value']
-        )) {
-            if ($hotrun) {
-                $resource_id = $this->helper->movePathToStorage(
-                    ILIAS_ABSOLUTE_PATH . '/' . ILIAS_WEB_DIR . '/' . CLIENT_ID . '/certificates/default/' . $row['value'],
-                    $this->stakeholder->getOwnerOfNewResources(),
-                    null,
-                    null,
-                    true
-                );
-                $image_ident = '-';
-                if ($resource_id instanceof ResourceIdentification) {
-                    $image_ident = $resource_id->serialize();
-                }
 
-                $this->updateDefaultBackgroundImagePaths(
-                    '/certificates/default/' . $row['value'],
-                    $image_ident
-                );
+        if (!isset($row['value']) || $row['value'] === '') {
+            return 0;
+        }
 
-                $query = '
+        $path_to_file = ILIAS_ABSOLUTE_PATH . '/' . ILIAS_WEB_DIR . '/' . CLIENT_ID . '/certificates/default/' . $row['value'];
+        if (!is_file($path_to_file)) {
+            return 0;
+        }
+
+        if (!$hotrun) {
+            return 1;
+        }
+
+        $this->inform("Migrating global default certificate background image: $path_to_file");
+        $resource_id = $this->helper->movePathToStorage(
+            $path_to_file,
+            $this->stakeholder->getOwnerOfNewResources(),
+            null,
+            null,
+            true
+        );
+
+        $image_ident = '-';
+        if ($resource_id instanceof ResourceIdentification) {
+            $image_ident = $resource_id->serialize();
+            $this->inform(
+                "IRSS identification for global default certificate background image: $image_ident",
+                true
+            );
+        } else {
+            $this->error(
+                'IRSS returned NULL as identification when trying to move global default background image ' .
+                "file $path_to_file to the storage service."
+            );
+        }
+
+        $this->updateDefaultBackgroundImagePaths(
+            '/certificates/default/' . $row['value'],
+            $image_ident
+        );
+
+        $query = '
                         UPDATE settings
                         SET value = %s
                         WHERE module = %s AND keyword = %s';
-                $this->db->manipulateF(
-                    $query,
-                    [ilDBConstants::T_TEXT, ilDBConstants::T_TEXT, ilDBConstants::T_TEXT],
-                    [$image_ident, 'certificate', 'cert_bg_image']
-                );
-
-                return 0;
-            }
-
-            return 1;
-        }
+        $this->db->manipulateF(
+            $query,
+            [ilDBConstants::T_TEXT, ilDBConstants::T_TEXT, ilDBConstants::T_TEXT],
+            [$image_ident, 'certificate', 'cert_bg_image']
+        );
 
         return 0;
     }
@@ -183,8 +204,10 @@ class CertificateIRSSMigration implements Migration
             return;
         }
 
+        $full_path = ILIAS_ABSOLUTE_PATH . '/' . ILIAS_WEB_DIR . '/' . CLIENT_ID . '/' . ltrim($filepath. '/');
+
         $resource_id = $this->helper->movePathToStorage(
-            ILIAS_ABSOLUTE_PATH . '/' . ILIAS_WEB_DIR . '/' . CLIENT_ID . $filepath,
+            $full_path,
             $this->stakeholder->getOwnerOfNewResources(),
             null,
             null,
@@ -194,6 +217,15 @@ class CertificateIRSSMigration implements Migration
         $image_ident = '-';
         if ($resource_id instanceof ResourceIdentification) {
             $image_ident = $resource_id->serialize();
+            $this->inform(
+                "IRSS identification for image path $full_path when migrating table $table: $image_ident",
+                true
+            );
+        } else {
+            $this->error(
+                'IRSS returned NULL as identification when trying to move ' .
+                "file $full_path to the storage service for table $table."
+            );
         }
 
         $query = "
@@ -274,7 +306,14 @@ class CertificateIRSSMigration implements Migration
 
         $paths += (int) ($row['count'] ?? 0);
 
-        return (int) ceil($paths / self::NUMBER_OF_STEPS);
+        $num_steps = (int) ceil($paths / self::NUMBER_OF_STEPS);
+
+        $this->inform(
+            "Remaining certificate background image/tile image paths: $paths / Number of steps: $num_steps",
+            true
+        );
+
+        return $num_steps;
     }
 
     public function updateDefaultBackgroundImagePaths(string $old_relative_path, string $new_rid): void
@@ -312,5 +351,23 @@ class CertificateIRSSMigration implements Migration
                 '/certificates/default/background.jpg'
             ]
         );
+    }
+
+    private function inform(string $text, bool $force = false): void
+    {
+        if ($this->io === null || (!$force && !$this->io->isVerbose())) {
+            return;
+        }
+
+        $this->io->inform($text);
+    }
+
+    private function error(string $text): void
+    {
+        if ($this->io === null) {
+            return;
+        }
+
+        $this->io->error($text);
     }
 }

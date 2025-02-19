@@ -447,7 +447,7 @@ class ilObjTest extends ilObject implements ilMarkSchemaAware
                 [
                     'test_id' => ['integer', $next_id],
                     'obj_fi' => ['integer', $this->getId()],
-                    'author' => ['text', $this->getAuthor()],
+                    'author' => ['text', mb_substr($this->getAuthor(), 0, 50)],
                     'created' => ['integer', time()],
                     'tstamp' => ['integer', time()],
                     'template_id' => ['integer', $this->getTemplate()],
@@ -477,7 +477,7 @@ class ilObjTest extends ilObject implements ilMarkSchemaAware
             $this->db->update(
                 'tst_tests',
                 [
-                    'author' => ['text', $this->getAuthor()],
+                    'author' => ['text', mb_substr($this->getAuthor(), 0, 50)],
                     'broken' => ['integer', (int) $this->isTestFinalBroken()]
                 ],
                 [
@@ -1748,7 +1748,7 @@ class ilObjTest extends ilObject implements ilMarkSchemaAware
             return (int) $row['active_id'];
         }
 
-        return 0;
+        return null;
     }
 
     public static function _getActiveIdOfUser($user_id = "", $test_id = "")
@@ -4363,7 +4363,7 @@ class ilObjTest extends ilObject implements ilMarkSchemaAware
                 }
             }
         }
-        return join(",", $author);
+        return join(", ", $author);
     }
 
     /**
@@ -4444,8 +4444,11 @@ class ilObjTest extends ilObject implements ilMarkSchemaAware
         $new_obj->setTmpCopyWizardCopyId($copy_id);
         $this->cloneMetaData($new_obj);
 
+        $new_obj->mark_schema = clone $this->mark_schema;
+        $new_obj->setTemplate($this->getTemplate());
         $new_obj->saveToDb();
         $new_obj->addToNewsOnOnline(false, $new_obj->getObjectProperties()->getPropertyIsOnline()->getIsOnline());
+
         $this->getMainSettingsRepository()->store(
             $this->getMainSettings()->withTestId($new_obj->getTestId())
                 ->withIntroductionSettings(
@@ -4461,9 +4464,6 @@ class ilObjTest extends ilObject implements ilMarkSchemaAware
         $this->getScoreSettingsRepository()->store(
             $this->getScoreSettings()->withTestId($new_obj->getTestId())
         );
-
-        $new_obj->mark_schema = clone $this->mark_schema;
-        $new_obj->setTemplate($this->getTemplate());
 
         // clone certificate
         $pathFactory = new ilCertificatePathFactory();

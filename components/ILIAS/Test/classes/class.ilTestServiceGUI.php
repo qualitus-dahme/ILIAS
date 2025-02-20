@@ -655,7 +655,7 @@ class ilTestServiceGUI
         $session = $this->test_session_factory->getSession();
         if ($this->getObjectiveOrientedContainer()->isObjectiveOrientedPresentationRequired()
             || $this->object->getScoreSettings()->getScoringSettings()->getPassScoring() === ilObjTest::SCORE_LAST_PASS
-                && $session->getLastFinishedPass() < $session->getPass()) {
+                && $session->getLastFinishedPass() < $session->getLastStartedPass()) {
             return false;
         }
 

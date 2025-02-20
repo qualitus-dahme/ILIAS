@@ -84,12 +84,19 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
 
     public function executeCommand()
     {
-        $this->checkReadAccess();
-
         $this->tabs->clearTargets();
 
         $cmd = $this->ctrl->getCmd();
         $next_class = $this->ctrl->getNextClass($this);
+
+        if (($read_access = $this->checkReadAccess()) !== true) {
+            if ($cmd === 'autosave') {
+                echo $this->lng->txt('autosave_failed') . ': ' . $read_access;
+                exit;
+            }
+            $this->tpl->setOnScreenMessage('failure', $read_access);
+            $this->ctrl->redirectByClass([ilRepositoryGUI::class, ilObjTestGUI::class, TestScreenGUI::class]);
+        }
 
         $this->ctrl->saveParameter($this, "sequence");
         $this->ctrl->saveParameter($this, "pmode");
@@ -229,10 +236,10 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
     abstract protected function buildTestPassQuestionList();
     abstract protected function populateQuestionOptionalMessage();
 
-    protected function checkReadAccess()
+    protected function checkReadAccess(): bool|string
     {
         if (!$this->rbac_system->checkAccess('read', $this->object->getRefId())) {
-            $this->ilias->raiseError($this->lng->txt('cannot_execute_test'), $this->ilias->error_obj->MESSAGE);
+            return $this->lng->txt('cannot_execute_test');
         }
 
         $participant_access = (new ilTestAccess($this->object->getRefId()))->isParticipantAllowed(
@@ -240,9 +247,10 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
             $this->user->getId()
         );
         if ($participant_access !== ParticipantAccess::ALLOWED) {
-            $this->tpl->setOnScreenMessage('failure', $participant_access->getAccessForbiddenMessage($this->lng));
-            $this->ctrl->redirectByClass([ilRepositoryGUI::class, ilObjTestGUI::class, TestScreenGUI::class]);
+            return $participant_access->getAccessForbiddenMessage($this->lng);
         }
+
+        return true;
     }
 
     protected function checkTestExecutable()

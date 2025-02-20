@@ -10976,6 +10976,7 @@ lm#:#lm_est_reading_time_info#:#In Lernmodulen kann eine geschätzte Lesezeit er
 lm#:#lm_insert_chapter#:#Kapitel einfügen
 lm#:#lm_insert_chapter_after#:#Kapitel danach einfügen
 lm#:#lm_insert_chapter_before#:#Kapitel davor einfügen
+lm#:#lm_insert_chapter_clip#:#Kapitel aus Zwischenablage einfügen
 lm#:#lm_insert_chapter_clip_after#:#Kapitel aus Zwischenablage danach einfügen
 lm#:#lm_insert_chapter_clip_before#:#Kapitel aus Zwischenablage davor einfügen
 lm#:#lm_insert_layout_after#:#Vorlage danach einfügen

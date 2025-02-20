@@ -296,7 +296,12 @@ final class ilContainerResourceGUI implements UploadHandler
             $this->abortWithPermissionDenied();
             return;
         }
-        $this->main_tpl->setOnScreenMessage('success', $this->language->txt('rids_appended'), true);
+        if ($this->http->request()->getParsedBody() === []) { // nothing uploaded
+            $this->main_tpl->setOnScreenMessage('failure', $this->language->txt('rids_appended_failed'), true);
+        } else {
+            $this->main_tpl->setOnScreenMessage('success', $this->language->txt('rids_appended'), true);
+        }
+
         $this->ctrl->redirect($this, self::CMD_INDEX);
     }
 

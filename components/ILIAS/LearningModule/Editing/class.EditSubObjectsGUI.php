@@ -335,6 +335,9 @@ class EditSubObjectsGUI
     public function insertChapterBefore(): void
     {
         $parent = $this->sub_obj_id;
+        if ($parent === 0) {
+            $parent = $this->lm_tree->getRootId();
+        }
         $target_id = $this->request->getTargetId();
         $before_target = \ilTree::POS_FIRST_NODE;
         foreach ($this->lm_tree->getChilds($parent) as $node) {
@@ -356,7 +359,6 @@ class EditSubObjectsGUI
     ): void {
         $lng = $this->domain->lng();
         $ctrl = $this->gui->ctrl();
-
         $chap = new \ilStructureObject($this->lm);
         $chap->setType("st");
         $chap->setTitle($lng->txt("cont_new_chap"));

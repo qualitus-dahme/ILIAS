@@ -15976,6 +15976,7 @@ style#:#sty_caption#:#Caption
 style#:#sty_caption_class#:#Caption
 style#:#sty_carousel_templates#:#Carousel Templates
 style#:#sty_cat_assignments#:#Style/Category Assignments
+style#:#sty_change_user_assignment#:#Change User Assignment
 style#:#sty_characteristic_already_exists#:#A style class with this title already exists within this style.
 style#:#sty_class#:#Style Class
 style#:#sty_class_name#:#Class Name
@@ -16074,6 +16075,7 @@ style#:#sty_min_height#:#Minimum Height
 style#:#sty_move_lm_styles#:#Change Style of Learning Modules
 style#:#sty_move_style#:#Change Style
 style#:#sty_move_user_styles#:#Change Style of Users
+style#:#sty_move_user_styles_saved#:#The assignment of the users assigned to skind-id %s has been changed to skin-id %s.
 style#:#sty_msg_characteristic_must_only_include#:#The title of style classes must start with a letter, does not use spaces and only include the following characters:
 style#:#sty_msg_color_must_only_include#:#The color name may only include the following characters:
 style#:#sty_msg_input_must_be_numeric#:#Input must be numeric.

@@ -111,7 +111,7 @@ class ParticipantTable implements DataRetrieval
                 'ip_range' => $record->getClientIpTo() !== '' || $record->getClientIpFrom() !== ''
                     ? sprintf('%s - %s', $record->getClientIpFrom(), $record->getClientIpTo())
                     : '',
-                'total_attempts' => $record->getAttemptOverviewInformation()->getNrOfAttempts(),
+                'total_attempts' => $record->getAttemptOverviewInformation()?->getNrOfAttempts() ?? 0,
                 'extra_time' => $record->getExtraTime() > 0 ? sprintf('%d min', $record->getExtraTime()) : '',
                 'total_duration' => $total_duration > 0 ? sprintf('%d min', $total_duration / 60) : '',
                 'remaining_duration' => sprintf('%d min', $record->getRemainingDuration($processing_time, $reset_time_on_new_attempt) / 60),

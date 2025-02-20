@@ -204,7 +204,7 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
                 break;
 
             default:
-                if (ilTestPlayerCommands::isTestExecutionCommand($cmd)) {
+                if ($cmd !== 'autosave' && ilTestPlayerCommands::isTestExecutionCommand($cmd)) {
                     $this->checkTestExecutable();
                 }
 
@@ -861,6 +861,11 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
      */
     public function autosaveCmd(): void
     {
+        $test_can_run = $this->object->isExecutable($this->test_session, $this->test_session->getUserId());
+        if (!$test_can_run['executable']) {
+            echo $test_can_run['errormessage'];
+            exit;
+        }
         if ($this->testrequest->getPostKeys() === []) {
             echo '';
             exit;

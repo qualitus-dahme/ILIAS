@@ -94,7 +94,7 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
                 echo $this->lng->txt('autosave_failed') . ': ' . $read_access;
                 exit;
             }
-            $this->tpl->setOnScreenMessage('failure', $read_access);
+            $this->tpl->setOnScreenMessage('failure', $read_access, true);
             $this->ctrl->redirectByClass([ilRepositoryGUI::class, ilObjTestGUI::class, TestScreenGUI::class]);
         }
 

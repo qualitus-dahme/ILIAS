@@ -3055,7 +3055,7 @@ CREATE TABLE `cp_item` (
                            `id` varchar(200) DEFAULT NULL,
                            `isvisible` varchar(32) DEFAULT NULL,
                            `parameters` varchar(255) DEFAULT NULL,
-                           `resourceid` varchar(200) DEFAULT NULL,
+                           `resourceid` varchar(1000) DEFAULT NULL,
                            `sequencingid` varchar(50) DEFAULT NULL,
                            `timelimitaction` varchar(30) DEFAULT NULL,
                            `title` varchar(255) DEFAULT NULL,

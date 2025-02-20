@@ -5171,6 +5171,7 @@ common#:#object_copy_in_progress#:#Der Kopiervorgang wurde gestartet.
 common#:#object_duplicated#:#Objekt kopiert
 common#:#object_id#:#Objekt-ID
 common#:#object_imported#:#Objekt importiert
+common#:#object_list#:#Objektliste
 common#:#objects#:#Objekte
 common#:#objf#:#Objektdefinitionen
 common#:#objs_bibl#:#Literaturlisten
@@ -10657,6 +10658,7 @@ irss#:#revision_status_20#:#Entwurf
 irss#:#revisions#:#Verfügbare Revisionen
 irss#:#rid_deleted#:#Datei entfernt
 irss#:#rids_appended#:#Ressource(n) hinzugefügt
+irss#:#rids_appended_failed#:#Keine Ressource(n) hinzugefügt
 irss#:#rids_deleted#:#Ressource(n) gelöscht
 irss#:#rids_updated#:#Ressource(n) aktualisiert
 irss#:#sorting#:#Sortierung
@@ -10974,6 +10976,8 @@ lm#:#lm_est_reading_time_info#:#In Lernmodulen kann eine geschätzte Lesezeit er
 lm#:#lm_insert_chapter#:#Kapitel einfügen
 lm#:#lm_insert_chapter_after#:#Kapitel danach einfügen
 lm#:#lm_insert_chapter_before#:#Kapitel davor einfügen
+lm#:#lm_insert_chapter_clip_after#:#Kapitel aus Zwischenablage danach einfügen
+lm#:#lm_insert_chapter_clip_before#:#Kapitel aus Zwischenablage davor einfügen
 lm#:#lm_insert_layout_after#:#Vorlage danach einfügen
 lm#:#lm_insert_layout_before#:#Vorlage davor einfügen
 lm#:#lm_insert_page#:#Seite einfügen

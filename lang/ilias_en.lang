@@ -5173,6 +5173,7 @@ common#:#object_copy_in_progress#:#Started Copying.
 common#:#object_duplicated#:#Object copied
 common#:#object_id#:#Object-ID
 common#:#object_imported#:#Object imported
+common#:#object_list#:#List of Objects
 common#:#objects#:#Objects
 common#:#objf#:#Object definitions
 common#:#objs_bibl#:#Bibliographies
@@ -10657,6 +10658,7 @@ irss#:#revision_status_20#:#Draft
 irss#:#revisions#:#Available Revisions
 irss#:#rid_deleted#:#File removed
 irss#:#rids_appended#:#Resource(s) added
+irss#:#rids_appended_failed#:#No Resource(s) added
 irss#:#rids_deleted#:#Resource(s) deleted
 irss#:#rids_updated#:#Ressource(n) updated
 irss#:#sorting#:#Default Ordering
@@ -10974,6 +10976,8 @@ lm#:#lm_est_reading_time_info#:#In Learning Modules in the repository the estima
 lm#:#lm_insert_chapter#:#Insert chapter
 lm#:#lm_insert_chapter_after#:#Insert chapter after
 lm#:#lm_insert_chapter_before#:#Insert chapter before
+lm#:#lm_insert_chapter_clip_after#:#Insert chapter from clipboard after
+lm#:#lm_insert_chapter_clip_before#:#Insert chapter from clipboard before
 lm#:#lm_insert_layout_after#:#Insert template after
 lm#:#lm_insert_layout_before#:#Insert template before
 lm#:#lm_insert_page#:#Insert page

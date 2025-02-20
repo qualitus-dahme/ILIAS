@@ -69,7 +69,8 @@ class EditSubObjectsGUI
                     "insertPageClip", "insertPageClipBefore", "insertPageClipAfter",
                     "insertChapterClip", "insertChapterClipBefore", "insertChapterClipAfter",
                     "activatePages",
-                    "insertLayoutBefore", "insertLayoutAfter", "insertPageFromLayout"
+                    "insertLayoutBefore", "insertLayoutAfter", "insertPageFromLayout",
+                    "switchToLanguage", "editMasterLanguage"
                 ])) {
                     $this->$cmd();
                 }
@@ -96,6 +97,21 @@ class EditSubObjectsGUI
     {
         $this->getTable()->handleCommand();
     }
+
+    public function switchToLanguage(): void
+    {
+        $ctrl = $this->gui->ctrl();
+        $ctrl->setParameter($this, "transl", $this->request->getToTranslation());
+        $ctrl->redirect($this, "list");
+    }
+
+    public function editMasterLanguage(): void
+    {
+        $ctrl = $this->gui->ctrl();
+        $ctrl->setParameter($this, "transl", "-");
+        $ctrl->redirect($this, "list");
+    }
+
 
     protected function list(): void
     {

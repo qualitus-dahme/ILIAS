@@ -82,6 +82,7 @@ class GUIService
         );
         $table = $table
             ->ordering("saveOrder")
+            ->iconColumn("type", $lng->txt("type"))
             ->textColumn("title", $lng->txt("title"));
 
         if ($type === "st") {

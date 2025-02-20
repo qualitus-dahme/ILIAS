@@ -549,6 +549,11 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
      */
     public function autosaveCmd(): void
     {
+        $test_can_run = $this->object->isExecutable($this->test_session, $this->test_session->getUserId());
+        if (!$test_can_run['executable']) {
+            echo $test_can_run['errormessage'];
+            exit;
+        }
         if (!is_countable($_POST) || count($_POST) === 0) {
             echo '';
             exit;

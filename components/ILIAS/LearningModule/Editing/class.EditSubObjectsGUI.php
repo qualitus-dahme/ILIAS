@@ -411,25 +411,27 @@ class EditSubObjectsGUI
         $tree = $this->domain->lmTree($this->lm_id);
         $table = $this->getTable();
         $data = $table->getData();
-        if (is_array($data)) {
-            foreach ($data as $id) {
-                $curnode = $tree->getNodeData($id);
-                if ($tree->isInTree($id)) {
-                    //$tree->deleteTree($curnode);
+        $parent = ($this->sub_obj_id > 0)
+            ? $this->sub_obj_id
+            : $tree->readRootId();
+        if (!is_array($data)) {
+            return;
+        }
+
+        // note: moveTree has a bug and does not use the last parameter
+        // target will always be "last node"
+        // since all chapters must follow all pages
+        // we can simple call moveTree in the correct order for the chapters
+        // but if we order the pages, we must append all chapters to the data first
+        if ($this->sub_type === "pg") {
+            foreach ($tree->getChilds($parent) as $child) {
+                if ($child["type"] == "st") {
+                    $data[] = $child["child"];
                 }
             }
-            $after = \ilTree::POS_FIRST_NODE;
-            foreach ($data as $id) {
-                $parent = ($this->sub_obj_id > 0)
-                    ? $this->sub_obj_id
-                    : $tree->readRootId();
-                if ($this->sub_type === "st") {
-                    $tree->moveTree((int) $id, $parent);
-                } else {
-                    $tree->moveTree((int) $id, $parent, $after);
-                    $after = $id;
-                }
-            }
+        }
+        foreach ($data as $id) {
+            $tree->moveTree((int) $id, $parent);
         }
         $mt->setContent("success", $lng->txt("msg_obj_modified"), true);
         $this->gui->ctrl()->redirect($this, "list");

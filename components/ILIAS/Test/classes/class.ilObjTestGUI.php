@@ -507,17 +507,18 @@ class ilObjTestGUI extends ilObjectGUI implements ilCtrlBaseClassInterface, ilDe
                     $this->redirectAfterMissingRead();
                 }
 
+                $this->prepareOutput();
+                $this->addHeaderAction();
+
                 $test_session = $this->test_session_factory->getSessionByUserId($this->user->getId());
-                if (!$this->getTestObject()->canShowTestResults($test_session)) {
+                if (!$this->checkPermissionBool('write')
+                    && !$this->getTestObject()->canShowTestResults($test_session)) {
                     $this->tpl->setOnScreenMessage(
                         'info',
                         $this->lng->txt('tst_res_tab_msg_no_lp_access'),
                     );
                     break;
                 }
-
-                $this->prepareOutput();
-                $this->addHeaderAction();
 
                 $this->tabs_manager->activateTab(TabsManager::TAB_ID_LEARNING_PROGRESS);
                 $new_gui = new ilLearningProgressGUI(ilLearningProgressGUI::LP_CONTEXT_REPOSITORY, $this->getTestObject()->getRefId());

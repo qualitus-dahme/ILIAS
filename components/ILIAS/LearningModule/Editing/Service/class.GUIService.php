@@ -70,13 +70,15 @@ class GUIService
     ): \ILIAS\LearningModule\Table\TableAdapterGUI {
         $lng = $this->domain->lng();
         $user = $this->domain->user();
+        $transl = $this->request()->getTranslation();
         $table = new \ILIAS\LearningModule\Table\TableAdapterGUI(
             "subobj",
             $title,
             $this->domain->subObjectRetrieval(
                 $lm_id,
                 $type,
-                $this->request()->getObjId()
+                $this->request()->getObjId(),
+                $transl
             ),
             $parent_gui
         );
@@ -84,6 +86,10 @@ class GUIService
             ->ordering("saveOrder")
             ->iconColumn("type", $lng->txt("type"))
             ->textColumn("title", $lng->txt("title"));
+        if (!in_array($transl, ["-", ""])) {
+            $table = $table->textColumn("trans_title", $lng->txt("title") .
+            " (".$lng->txt("meta_l_". $transl).")");
+        }
 
         if ($type === "st") {
             $acts = [

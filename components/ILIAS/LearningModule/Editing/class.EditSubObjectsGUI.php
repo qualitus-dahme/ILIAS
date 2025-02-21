@@ -29,6 +29,7 @@ use ILIAS\UI\Component\Input\Container\Form\Standard;
 
 class EditSubObjectsGUI
 {
+    protected string $lang;
     protected array $page_layouts;
     protected EditingGUIRequest $request;
     protected int $lm_id;
@@ -50,6 +51,7 @@ class EditSubObjectsGUI
         $this->page_layouts = \ilPageLayout::activeLayouts(
             \ilPageLayout::MODULE_LM
         );
+        $this->lang = $this->request->getTranslation();
     }
 
     public function executeCommand(): void
@@ -123,7 +125,8 @@ class EditSubObjectsGUI
         $retrieval = $this->domain->subObjectRetrieval(
             $this->lm_id,
             $this->sub_type,
-            $this->sub_obj_id
+            $this->sub_obj_id,
+            $this->lang
         );
 
         $ml_head = \ilObjLearningModuleGUI::getMultiLangHeader($this->lm_id, $this);
@@ -396,10 +399,29 @@ class EditSubObjectsGUI
     {
         $lng = $this->domain->lng();
         $this->gui->ctrl()->setParameterByClass(self::class, "edit_id", $id);
-        return $this
+        $ot = \ilObjectTranslation::getInstance($this->lm->getId());
+        $ml = "";
+        if ($ot->getContentActivated()) {
+            $ml = " (".$lng->txt("meta_l_" .$ot->getMasterLanguage()) . ")";
+        }
+
+        $form = $this
             ->gui
             ->form(self::class, "saveTitle")
-            ->text("title", $lng->txt('title'), "", ilLMObject::_lookupTitle($id));
+            ->text("title", $lng->txt('title') . $ml, "", ilLMObject::_lookupTitle($id));
+        if ($ot->getContentActivated()) {
+            foreach ($ot->getLanguages() as $lang) {
+                $code = $lang->getLanguageCode();
+                if ($code === $ot->getMasterLanguage()) {
+                    continue;
+                }
+                $lmobjtrans = new \ilLMObjTranslation($id, $code);
+                $title = $lmobjtrans->getTitle();
+                $form = $form->text("title_" . $code, $lng->txt('title') . " (" . $lng->txt("meta_l_" . $code) . ")",
+                    "", $title);
+            }
+        }
+        return $form;
     }
 
     public function editTitle(int $id): void
@@ -414,7 +436,18 @@ class EditSubObjectsGUI
         $lng = $this->domain->lng();
         $form = $this->getEditTitleForm($this->request->getEditId());
         if ($form->isValid()) {
-            \ilLMObject::_writeTitle($this->request->getEditId(), $form->getData("title"));
+            \ilLMObject::saveTitle($this->request->getEditId(), $form->getData("title"));
+
+            $ot = \ilObjectTranslation::getInstance($this->lm->getId());
+            if ($ot->getContentActivated()) {
+                foreach ($ot->getLanguages() as $lang) {
+                    $code = $lang->getLanguageCode();
+                    if ($code === $ot->getMasterLanguage()) {
+                        continue;
+                    }
+                    \ilLMObject::saveTitle($this->request->getEditId(), $form->getData("title_" . $code), $code);
+                }
+            }
         }
         $mt->setContent("success", $lng->txt("msg_obj_modified"), true);
         $this->gui->ctrl()->redirect($this, "list");

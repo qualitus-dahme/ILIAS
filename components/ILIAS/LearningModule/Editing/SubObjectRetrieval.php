@@ -32,11 +32,21 @@ class SubObjectRetrieval implements RetrievalInterface
     public function __construct(
         protected \ilLMTree $lm_tree,
         protected $type = "",
-        protected $current_node = 0
+        protected $current_node = 0,
+        protected $transl = ""
     ) {
         global $DIC;
         $this->f = $DIC->ui()->factory();
         $this->lng = $DIC->language();
+    }
+
+    public function getChildTitle(array $child): string
+    {
+        if (!in_array($this->transl, ["-", ""])) {
+            $lmobjtrans = new \ilLMObjTranslation($child["child"], $this->transl);
+            return $lmobjtrans->getTitle();
+        }
+        return $child["title"];
     }
 
     protected function getChilds(): array
@@ -92,10 +102,15 @@ class SubObjectRetrieval implements RetrievalInterface
                 $img = "standard/icon_st.svg";
                 $alt = $this->lng->txt("st");
             }
+            $trans_title = "";
+            if (!in_array($this->transl, ["-", ""])) {
+                $trans_title = $this->getChildTitle($child);
+            }
             yield [
                 "id" => $child["child"],
                 "type" => $this->f->symbol()->icon()->custom(\ilUtil::getImagePath($img), $alt),
-                "title" => $child["title"]
+                "title" => $child["title"],
+                "trans_title" => $trans_title
             ];
         }
     }

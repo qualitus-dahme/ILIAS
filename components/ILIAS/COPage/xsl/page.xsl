@@ -1283,7 +1283,7 @@
 			<!-- determine location -->
 			<xsl:variable name="data">
 				<xsl:if test="$curType = 'LocalFile'">
-					<xsl:value-of select="$webspace_path"/>mobs/mm_<xsl:value-of select="substring-after($cmobid,'mob_')"/>/<xsl:value-of select="//MediaObject[@Id=$cmobid]/MediaItem[@Purpose = 'Standard']/Location"/>
+					<xsl:value-of select="//MediaObject[@Id=$cmobid]/MediaItem[@Purpose = 'Standard']/Location"/>
 				</xsl:if>
 				<xsl:if test="$curType = 'Reference'">
 					<xsl:value-of select="//MediaObject[@Id=$cmobid]/MediaItem[@Purpose = 'Standard']/Location"/>

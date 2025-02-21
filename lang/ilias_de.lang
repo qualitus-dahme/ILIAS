@@ -5142,8 +5142,8 @@ common#:#obj_tool_setting_custom_metadata#:#Benutzerdefinierte Metadaten
 common#:#obj_tool_setting_custom_metadata_info#:#Im Reiter „Metadaten“ können Datensätze verwaltet werden. Damit können weitere Informationen zu dem Objekt eingegeben und dieses genauer beschrieben werden.
 common#:#obj_tool_setting_news#:#Neuigkeiten
 common#:#obj_tool_setting_news_info#:#Der Block „Neuigkeiten“ wird im Reiter „Inhalt“ angezeigt.
-common#:#obj_tos#:#Nutzungsvereinbarungen
-common#:#obj_tos_desc#:#Nutzungsvereinbarungen verwalten
+common#:#obj_tos#:#Nutzungsvereinbarung
+common#:#obj_tos_desc#:#Nutzungsvereinbarung verwalten
 common#:#obj_trac#:#Zugriffsstatistiken und Lernfortschritt
 common#:#obj_trac_desc#:#Statistik- und Lernfortschrittseinstellungen und Übersicht
 common#:#obj_tst#:#Test
@@ -5805,11 +5805,11 @@ common#:#tos_no_agreement_description#:#Aktuell wird in dieser Installation kein
 common#:#tos_refuse_acceptance#:#Akzeptanz der Nutzungsvereinbarung ablehnen
 common#:#tos_usr_agreement#:#Nutzungsvereinbarung
 common#:#tos_usr_agreement_footer_intro#:#Zu dieser Nutzungsvereinbarung haben Sie ihr Einverständnis erklärt.
-common#:#tos_withdraw_consent_description#:#Widerrufen Sie hier die Zustimmung zu den Nutzungsvereinbarungen.
+common#:#tos_withdraw_consent_description#:#Widerrufen Sie hier die Zustimmung zur Nutzungsvereinbarung.
 common#:#tos_withdraw_consent_description_external#:#Bitte kehren Sie zu Ihrer Herkunftsinstallation zurück, und loggen Sie sich erneut ein, um den Widerrufsvorgang abzuschließen.
 common#:#tos_withdraw_consent_description_internal#:#Bitte loggen Sie sich wieder ein, um den Widerrufsvorgang abzuschließen.
 common#:#tos_withdraw_consent_header#:#Einverständnis zur Nutzungsvereinbarung widerrufen
-common#:#tos_withdraw_consent_info#:#Widerrufen der Zustimmung zu den Nutzungsvereinbarungen
+common#:#tos_withdraw_consent_info#:#Zustimmung zur Nutzungsvereinbarung widerrufen
 common#:#tos_withdraw_consent_info_external#:#Bitte benachrichtigen Sie den zuständigen Administrator Ihres Autorisierungssystems, und teilen Sie Ihre Absicht mit.
 common#:#total#:#Gesamt
 common#:#tracking_settings#:#Einstellungen
@@ -6049,12 +6049,12 @@ common#:#withdrawal_complete#:#Widerrufsvorgang abgeschlossen.
 common#:#withdrawal_complete_deleted#:#Widerrufsvorgang ist abgeschlossen. Der ILIAS-Konto wurde gelöscht.
 common#:#withdrawal_complete_redirect#:#Widerrufsvorgang ist abgeschlossen. Zur Löschung des ILIAS-Kontos nehmen Sie bitte Kontakt zu Ihrer Organisation auf.
 common#:#withdrawal_mail_info#:#Die folgende Nachricht wird in Ihrem Auftrag versandt, wenn Sie bestätigen:[BR][BR]
-common#:#withdrawal_mail_subject#:#Widerruf Einverständnis zu Nutzungsvereinbarungen
+common#:#withdrawal_mail_subject#:#Einverständnis zur Nutzungsvereinbarung widerrufen
 common#:#withdrawal_mail_text#:#Guten Tag,[BR][BR]hiermit widerrufe ich mein Einverständnis zur Nutzungsvereinbarung Ihrer ILIAS-Installation. Bitte leiten Sie die entsprechenden Maßnahmen ein.[BR][BR]Name: %1$s[BR]Anmeldename: %2$s[BR]Externes Konto: %3$s[BR][BR]Mit freundlichen Grüßen[BR]%1$s
-common#:#withdrawal_sure_account#:#Are you sure you want to confirm the withdrawal of your consent?###26 08 2024 new variable
-common#:#withdrawal_sure_account_deletion#:#Are you sure you want to confirm the withdrawal of your consent? This will result in your user account being irrevocably deleted.###26 08 2024 new variable
-common#:#withdrawal_sure_account_deletion_no_consent_yet#:#Sind Sie sicher, dass Sie Ihr Einverständnis zu den Nutzungsvereinbarungen nicht erteilen möchten? Ihr ILIAS-Konto wird in Folge dessen unwiderruflich gelöscht.
-common#:#withdrawal_sure_account_no_consent_yet#:#Sind Sie sicher, dass Sie Ihr Einverständnis zu den Nutzungsvereinbarungen nicht erteilen möchten?
+common#:#withdrawal_sure_account#:#Sind Sie sicher, dass Sie Ihr Einverständnis zur Nutzungsvereinbarung widerrufen wollen?
+common#:#withdrawal_sure_account_deletion#:#Sind Sie sicher, dass Sie Ihr Einverständnis zur Nutzungsvereinbarung widerrufen wollen? Ihr Benutzerkonto und der damit verbundene Inhalt wird dann unwiderruflich gelöscht.
+common#:#withdrawal_sure_account_deletion_no_consent_yet#:#Sind Sie sicher, dass Sie Ihr Einverständnis zur Nutzungsvereinbarung nicht erteilen möchten? Ihr ILIAS-Konto wird in Folge dessen unwiderruflich gelöscht.
+common#:#withdrawal_sure_account_no_consent_yet#:#Sind Sie sicher, dass Sie Ihr Einverständnis zur Nutzungsvereinbarung nicht erteilen möchten?
 common#:#wizard_search_list#:#Ihre Suche ergab folgende Ergebnisse. Bitte wählen Sie eines aus.
 common#:#wizard_title_info#:#Geben Sie bitte den Titel ein, um das Objekt zu suchen, das Sie kopieren wollen. Auch Teile des Titels reichen aus. Klicken Sie auf „Suchen“, um die Treffer angezeigt zu bekommen.
 common#:#write#:#Schreiben
@@ -13843,7 +13843,7 @@ ps#:#ps_cdf_required#:#Pflichtfeld
 ps#:#ps_cdf_select_one#:#Bitte treffen Sie eine Auswahl.
 ps#:#ps_cdf_type#:#Typ
 ps#:#ps_cdf_value#:#Wert
-ps#:#ps_cdf_warning_modify#:#Achtung: mindestens ein Benutzer hat der Nutzungsvereinbarung bereits zugestimmt. Das Ändern von Datenfeldern bewirkt, dass diese Nutzungsvereinbarungen zurückgesetzt wird.
+ps#:#ps_cdf_warning_modify#:#Achtung: mindestens ein Benutzer hat der Nutzungsvereinbarung bereits zugestimmt. Das Ändern von Datenfeldern bewirkt, dass diese Nutzungsvereinbarung zurückgesetzt wird.
 ps#:#ps_crs_user_fields#:#Persönliche Angaben zu diesem Kurs
 ps#:#ps_error_message_https_header_missing#:#Die automatische HTTPS-Erkennung erfordert einen Header-Namen und einen Header-Wert.
 ps#:#ps_error_message_invalid_login_max_attempts#:#Maximale Anzahl von Anmeldeversuchen darf nicht kleiner als 0 sein.
@@ -13907,7 +13907,7 @@ ps#:#ps_type_select_long#:#Auswahlliste (feste Werte)
 ps#:#ps_type_text#:#Textfeld
 ps#:#ps_type_txt_long#:#Textfeld (beliebige Werte)
 ps#:#ps_user_selection#:#Benutzerauswahl
-ps#:#ps_warning_modify#:#Achtung: mindestens ein Benutzer hat der Nutzungsvereinbarung bereits zugestimmt. Das Ändern der Einstellungen bewirkt, dass diese Nutzungsvereinbarungen zurückgesetzt werden.
+ps#:#ps_warning_modify#:#Achtung: mindestens ein Benutzer hat der Nutzungsvereinbarung bereits zugestimmt. Das Ändern der Einstellungen bewirkt, dass die Nutzungsvereinbarung zurückgesetzt wird.
 ps#:#rbac_log#:#Rechteeinstellungs-Log
 ps#:#rbac_log_age#:#Log-Einträge vorhalten
 ps#:#rbac_log_age_info#:#Maximales Alter der Log-Einträge in Monaten
@@ -17052,20 +17052,20 @@ tbl#:#tbl_template_delete#:#Gespeicherte Ansicht löschen
 tbl#:#tbl_template_deleted#:#Die gespeicherte Ansicht wurde gelöscht.
 tbl#:#tbl_templates#:#Ansicht
 tos#:#tos_accept_usr_agreement_anonymous#:#Nutzungsvereinbarung
-tos#:#tos_accept_usr_agreement_anonymous_intro#:#Bevor Sie zu ILIAS wechseln, akzeptieren Sie die folgenden Nutzungsvereinbarungen.
+tos#:#tos_accept_usr_agreement_anonymous_intro#:#Bevor Sie zu ILIAS wechseln, akzeptieren Sie die folgende Nutzungsvereinbarung.
 tos#:#tos_account_reg_not_possible#:#Eine Selbstregistrierung ist aktuell nicht möglich, da keine Nutzungsvereinbarung angeboten wird. Bitte kontaktieren Sie Ihre <a href="%1$s">ILIAS-Administration</a> für weitere Informationen.
-tos#:#tos_agree_date#:#Nutzungsvereinbarungen zugestimmt am
-tos#:#tos_agreement#:#Nutzungsvereinbarungen
-tos#:#tos_disabled_no_docs_left#:#Die Nutzungsvereinbarungen wurden deaktiviert, da alle Dokumente gelöscht wurden. Erstellen Sie mindestens ein Dokument, bevor Sie die Nutzungsvereinbarungen wieder aktivieren.
-tos#:#tos_last_reset_date#:#Die Nutzungsvereinbarungen wurden zuletzt am %s zurückgesetzt. Setzen Sie die Nutzungsvereinbarungen nur zurück, wenn sich diese in der Zwischenzeit geändert haben und eine Zustimmung zu dieser geänderten Vereinbarung gewünscht ist.
-tos#:#tos_never_reset#:#Die Nutzungsvereinbarungen wurden bisher noch nicht zurückgesetzt. Setzen Sie die Nutzungsvereinbarungen nur zurück, wenn sich diese in der Zwischenzeit geändert haben und eine Zustimmung zu dieser geänderten Vereinbarung gewünscht ist.
-tos#:#tos_no_documents_exist#:#Aktuell liegen keine Nutzungsvereinbarungsdokumente vor.
-tos#:#tos_no_documents_exist_cant_save#:#Aktuell liegen keine Nutzungsvereinbarungen vor. Bitte erstellen Sie mindestens ein Dokument um den Service zu aktivieren.
-tos#:#tos_reset_for_all_users#:#Nutzungsvereinbarungen zurücksetzen
-tos#:#tos_reset_successful#:#Die Nutzungsvereinbarungen wurden erfolgreich zurückgesetzt.
+tos#:#tos_agree_date#:#Nutzungsvereinbarung zugestimmt am
+tos#:#tos_agreement#:#Nutzungsvereinbarung
+tos#:#tos_disabled_no_docs_left#:#Die Nutzungsvereinbarung wurde deaktiviert, da alle Dokumente gelöscht wurden. Erstellen Sie mindestens ein Dokument, bevor Sie die Nutzungsvereinbarung wieder aktivieren.
+tos#:#tos_last_reset_date#:#Die Nutzungsvereinbarung wurden zuletzt am %s zurückgesetzt. Setzen Sie die Nutzungsvereinbarung nur zurück, wenn sich diese in der Zwischenzeit geändert haben und eine Zustimmung zu dieser geänderten Vereinbarung gewünscht ist.
+tos#:#tos_never_reset#:#Die Nutzungsvereinbarung wurden bisher noch nicht zurückgesetzt. Setzen Sie die Nutzungsvereinbarung nur zurück, wenn sich diese in der Zwischenzeit geändert haben und eine Zustimmung zu dieser geänderten Vereinbarung gewünscht ist.
+tos#:#tos_no_documents_exist#:#Aktuell liegen keine Dokumente für die Nutzungsvereinbarung vor.
+tos#:#tos_no_documents_exist_cant_save#:#Aktuell liegt keine Nutzungsvereinbarung vor. Bitte erstellen Sie mindestens ein Dokument um den Service zu aktivieren.
+tos#:#tos_reset_for_all_users#:#Nutzungsvereinbarung zurücksetzen
+tos#:#tos_reset_successful#:#Die Nutzungsvereinbarung wurde erfolgreich zurückgesetzt.
 tos#:#tos_status_desc#:#Benutzer werden zum Unterzeichnen der Nutzungsvereinbarung aufgefordert, bevor sie ILIAS nutzen können.
-tos#:#tos_status_enable#:#Nutzungsvereinbarungen aktivieren
-tos#:#tos_sure_reset_tos#:#Sind Sie sicher, dass die Nutzungsvereinbarungen für alle Benutzer im System zurückgesetzt werden sollen? Dies betrifft auch jene Anmeldekonten, die z.B. für die SOAP Web-Services genutzt werden.
+tos#:#tos_status_enable#:#Nutzungsvereinbarung aktivieren
+tos#:#tos_sure_reset_tos#:#Sind Sie sicher, dass die Nutzungsvereinbarung für alle Benutzer im System zurückgesetzt werden soll? Dies betrifft auch jene Anmeldekonten, die z.B. für die SOAP-Web-Services genutzt werden.
 tos#:#tos_withdrawal_usr_deletion#:#Löschung des ILIAS-Kontos beim Widerruf der Nutzungsvereinbarung
 tos#:#tos_withdrawal_usr_deletion_desc#:#Wird die Zustimmung zur Nutzungsvereinbarung widerrufen, erfolgt automatisch die Löschung des ILIAS-Kontos.
 trac#:#cmix_lp_mode_deactivated#:#Lernfortschritt wird deaktiviert

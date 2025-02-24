@@ -14041,15 +14041,15 @@ rbac#:#book_read#:#Buchungen in Buchungspool durchführen
 rbac#:#book_visible#:#Buchungspool ist sichtbar
 rbac#:#book_write#:#Buchungsobjekte anlegen und Einstellungen des Buchungspools bearbeiten
 rbac#:#cadm_edit_permission#:#Rechteeinstellungen der Administration für Benutzerkontakte ändern
-rbac#:#cadm_read#:#Administration für Benutzerkontakte lesen
-rbac#:#cadm_visible#:#Administration für Benutzerkontakte ist sichtbar
-rbac#:#cadm_write#:#Administration für Benutzerkontakte editieren
+rbac#:#cadm_read#:#Einstellungen in der Benutzerkontakte-Administration einsehen
+rbac#:#cadm_visible#:#Administrationsknoten „Benutzerkontakte“ sehen
+rbac#:#cadm_write#:#Einstellungen zu Benutzerkontakten bearbeiten
 rbac#:#cals_add_consultation_hours#:#Benutzer kann in Kalender Sprechstundentermine anlegen und bearbeiten
 rbac#:#cals_edit_event#:#Öffentliche Kalender und Termine in ILIAS anlegen und verwalten
-rbac#:#cals_edit_permission#:#Rechteeinstellung der Administration ändern
-rbac#:#cals_read#:#Lesezugriff auf Einstellungen der Kalender-Administration
-rbac#:#cals_visible#:#Kalender-Administration sind sichtbar
-rbac#:#cals_write#:#Einstellungen der Kalender-Administration bearbeiten
+rbac#:#cals_edit_permission#:#Rechteeinstellungen der Administration für den Kalender ändern
+rbac#:#cals_read#:#Einstellungen der Kalender-Administration einsehen
+rbac#:#cals_visible#:#Administrationsknoten „Kalender“ sehen
+rbac#:#cals_write#:#Globale Einstellungen zum Kalender bearbeiten
 rbac#:#cat_administrate_users#:#Lokale Anmeldekonten verwalten
 rbac#:#cat_cat_administrate_users#:#Lokale Anmeldekonten können angelegt und verwaltet werden
 rbac#:#cat_copy#:#Kategorie kopieren
@@ -14064,9 +14064,9 @@ rbac#:#catr_delete#:#Kategorielinks verschieben oder löschen
 rbac#:#catr_edit_permission#:#Rechteeinstellungen ändern
 rbac#:#catr_visible#:#Kategorielinks sind sichtbar und können genutzt werden
 rbac#:#catr_write#:#Einstellungen der Kategorielinks bearbeiten
-rbac#:#cert_edit_permission#:#Rechteeinstellungen in Administration ändern
-rbac#:#cert_read#:#Lesezugriff auf die Zertifikatsverwaltung
-rbac#:#cert_visible#:#Zertifikatsverwaltung ist sichtbar
+rbac#:#cert_edit_permission#:#Rechteeinstellungen der Zertifikatsverwaltung ändern
+rbac#:#cert_read#:#Einstellung in der Zertifikatsverwaltung einsehen
+rbac#:#cert_visible#:#Administrationsknoten „Zertifikate“ sehen
 rbac#:#cert_write#:#Einstellungen der Zertifikatsverwaltung bearbeiten
 rbac#:#change_existing_object_type_desc#:#Wenn aktiviert, werden auch die Rechte von bereits vorhandenen Objekten dieses Typs geändert. Ansonsten gilt die Rechteänderung nur für künftig erstellte Objekte.
 rbac#:#change_existing_objects#:#Vorhandene Objekte ändern

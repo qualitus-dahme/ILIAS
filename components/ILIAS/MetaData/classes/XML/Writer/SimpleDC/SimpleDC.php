@@ -437,6 +437,9 @@ class SimpleDC implements SimpleDCInterface
         if ($value === '') {
             return null;
         }
-        return $xml->addChild($name, $value, "http://purl.org/dc/elements/1.1/");
+        $child_xml = $xml->addChild($name, null, "http://purl.org/dc/elements/1.1/");
+        /** @noinspection PhpVariableVariableInspection */
+        $xml->$name = $value;
+        return $child_xml;
     }
 }

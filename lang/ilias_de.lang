@@ -13967,10 +13967,10 @@ rating#:#rating_rate_x_of_5#:#Mit %s von 5 Sternen bewerten
 rating#:#rating_remove#:#Bewertung entfernen
 rating#:#rating_update_positions#:#Reihenfolge speichern
 rating#:#rating_your_rating#:#Ihre Bewertung
-rbac#:#accs_edit_permission#:#Rechteeinstellungen der Einstellungen Barrierefreiheit ändern
-rbac#:#accs_read#:#Einstellungen Barrierefreiheit in Administration können gelesen werden
-rbac#:#accs_visible#:#Einstellungen Barrierefreiheit in Administration sind sichtbar
-rbac#:#accs_write#:#Einstellungen Barrierefreiheit in Administration können bearbeiten werden
+rbac#:#accs_edit_permission#:#Rechteeinstellungen für die Einstellungen zur Barrierefreiheit ändern
+rbac#:#accs_read#:#Einstellungen zur Barrierefreiheit einsehen
+rbac#:#accs_visible#:#Administrationsknoten „Barrierefreiheit“ sehen
+rbac#:#accs_write#:#Einstellungen zur Barrierefreiheit bearbeiten
 rbac#:#activate_wiki_protection#:#Schreibschutz aktivieren
 rbac#:#active_preconditions#:#Definierte Vorbedingungen
 rbac#:#add_consultation_hours#:#Sprechstundentermine anlegen
@@ -13979,35 +13979,35 @@ rbac#:#add_pages#:#Seiten erstellen
 rbac#:#add_reply#:#Antwort anlegen
 rbac#:#add_thread#:#Thema anlegen
 rbac#:#adm_edit_permission#:#Rechteeinstellungen für die Allgemeinen Einstellungen der Administration ändern
-rbac#:#adm_read#:#Allgemeine Einstellungen der Administration können gelesen werden
-rbac#:#adm_visible#:#Allgemeine Einstellungen sind sichtbar
-rbac#:#adm_write#:#Allgemeine Einstellungen in Administration können bearbeiten werden
-rbac#:#adn_edit_permission#:#Rechteeinstellungen für Administration der Ankündigungen ändern
-rbac#:#adn_read#:#Lesezugriff auf Administration für Ankündigungen
-rbac#:#adn_visible#:#Administration für Ankündigungen ist sichtbar.
+rbac#:#adm_read#:#Allgemeine Einstellungen der Administration bearbeiten
+rbac#:#adm_visible#:#Administrationsknoten „Allgemeine Einstellungen“ sehen
+rbac#:#adm_write#:#Allgemeine Einstellungen in der Administration bearbeiten
+rbac#:#adn_edit_permission#:#Rechteeinstellungen für die Verwaltung der Ankündigungen ändern
+rbac#:#adn_read#:#Einstellungen für Ankündigungen in der Administration einsehen
+rbac#:#adn_visible#:#Administrationsknoten „Ankündigungen“ sehen
 rbac#:#adn_write#:#Ankündigungen erstellen und verwalten
 rbac#:#adopt_perm_from_template#:#Rechteeinstellungen kopieren
-rbac#:#adve_edit_permission#:#Rechteeinstellungen ändern
-rbac#:#adve_read#:#Zugriff auf die Editor-Administration
-rbac#:#adve_visible#:#Editor-Administration ist sichtbar
-rbac#:#adve_write#:#Einstellungen in der Editor-Administration bearbeiten
+rbac#:#adve_edit_permission#:#Rechteeinstellungen der Editor-Administration ändern
+rbac#:#adve_read#:#Einstellungen zur Editor-Administration einsehen
+rbac#:#adve_visible#:#Administrationsknoten „Editor“ sehen
+rbac#:#adve_write#:#Einstellungen für den Editor bearbeiten
 rbac#:#amend_grading#:#Abschließende Bewertung ändern
-rbac#:#assf_edit_permission#:#Rechteeinstellungen ändern
-rbac#:#assf_read#:#Zugriff auf die Test und Assessment-Administration
-rbac#:#assf_visible#:#Test und Assessment-Administration ist sichtbar
-rbac#:#assf_write#:#Bearbeiten der Test und Assessment-Administration
-rbac#:#auth_edit_permission#:#Rechteeinstellungen für die Administration ändern
-rbac#:#auth_read#:#Lesezugriff auf Administration für Authentifizierung / Neuanmeldung
-rbac#:#auth_visible#:#Administration für Authentifizierung / Neuanmeldung ist sichtbar
-rbac#:#auth_write#:#Einstellungen für Authentifizierung / Neuanmeldung bearbeiten
+rbac#:#assf_edit_permission#:#Rechteeinstellungen für die Verwaltung des Test&Assessments ändern
+rbac#:#assf_read#:#Einstellungen in der Test&Assessment-Administration einsehen
+rbac#:#assf_visible#:#Administrationsknoten „Test&Assessment“ sehen
+rbac#:#assf_write#:#Einstellungen in Test&Assessment-Verwaltung ändern
+rbac#:#auth_edit_permission#:#Rechteeinstellungen für die Verwaltung von „Authentifizierung / Neuanmeldung“ ändern
+rbac#:#auth_read#:#Einstellungen für „Authentifizierung / Neuanmeldung“ einsehen
+rbac#:#auth_visible#:#Administrationsknoten „Authentifizierung / Neuanmeldung“ sehen
+rbac#:#auth_write#:#Einstellungen für „Authentifizierung / Neuanmeldung“ bearbeiten
 rbac#:#awra_edit_permission#:#Rechteeinstellungen für die Verwaltung der „Wer ist online?“-Anzeige ändern
-rbac#:#awra_read#:#Lesezugriff auf Verwaltung der „Wer ist online?“-Anzeige
-rbac#:#awra_visible#:#Verwaltung der „Wer ist online?“-Anzeige ist sichtbar
-rbac#:#awra_write#:#Schreibzugriff auf Verwaltung der „Wer ist online?“-Anzeige
-rbac#:#bdga_edit_permission#:#Rechteeinstellungen ändern
-rbac#:#bdga_read#:#Badge-Verwaltung lesen
-rbac#:#bdga_visible#:#Badge-Verwaltung ist sichtbar
-rbac#:#bdga_write#:#Badge-Verwaltung bearbeiten
+rbac#:#awra_read#:#Einstellungen der „Wer ist online?“-Anzeige einsehen
+rbac#:#awra_visible#:#Administrationsknoten „Wer ist online?“ sehen
+rbac#:#awra_write#:#Einstellungen der „Wer ist online?“-Anzeige ändern
+rbac#:#bdga_edit_permission#:#Rechteeinstellungen für die Verwaltung der „Badges“ ändern
+rbac#:#bdga_read#:#Einstellungen der „Badges“-Verwaltung einsehen
+rbac#:#bdga_visible#:#Administrationsknoten „Badges“ sehen
+rbac#:#bdga_write#:#Einstellungen der „Badges“ bearbeiten
 rbac#:#bibl_copy#:#Literaturliste kopieren
 rbac#:#bibl_delete#:#Literaturliste löschen
 rbac#:#bibl_edit_permission#:#Rechteeinstellungen ändern
@@ -14016,14 +14016,14 @@ rbac#:#bibl_visible#:#Literaturliste ist sichtbar
 rbac#:#bibl_write#:#Literaturliste bearbeiten
 rbac#:#bibs_copy#:#Literaturlisten kopieren
 rbac#:#bibs_delete#:#Bibliothek-Eintrag löschen
-rbac#:#bibs_edit_permission#:#Rechteeinstellungen ändern
-rbac#:#bibs_read#:#Literaturlisten-Administration lesen
-rbac#:#bibs_visible#:#Literaturlisten-Administration ist sichtbar
-rbac#:#bibs_write#:#Einstellungen und Bibliotheken bearbeiten
-rbac#:#blga_edit_permission#:#Rechteeinstellungen in Administration ändern
-rbac#:#blga_read#:#Lesezugriff auf Blog-Administration
-rbac#:#blga_visible#:#Blog-Administration ist sichtbar
-rbac#:#blga_write#:#Einstellungen in Blog-Administration bearbeiten
+rbac#:#bibs_edit_permission#:#Rechteeinstellungen für die Verwaltung der Literaturlisten ändern
+rbac#:#bibs_read#:#Einstellungen der Literaturlisten-Verwaltung einsehen
+rbac#:#bibs_visible#:#Administrationsknoten „Literaturliste“ sehen
+rbac#:#bibs_write#:#Einstellungen der Literaturlisten und Bibliotheken bearbeiten
+rbac#:#blga_edit_permission#:#Rechteeinstellungen für die Verwaltung der Blogs ändern
+rbac#:#blga_read#:#Einstellungen der Blog-Administration einsehen
+rbac#:#blga_visible#:#Administrationsknoten „Blog“ sehen
+rbac#:#blga_write#:#Einstellungen in der Blog-Administration bearbeiten
 rbac#:#blog_contribute#:#Benutzer darf Beiträge hinzufügen
 rbac#:#blog_copy#:#Blog kopieren
 rbac#:#blog_delete#:#Blog löschen

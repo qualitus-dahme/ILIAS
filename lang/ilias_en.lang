@@ -7250,7 +7250,6 @@ content#:#cont_update_section#:#Update Section
 content#:#cont_update_skills#:#Edit Competence
 content#:#cont_update_verification#:#Edit Certificate
 content#:#cont_upload_dir#:#Upload directory
-content#:#cont_upload_dir_info#:#Server directory from which large SCORM and HTML packages can be copied instead of being uploaded. Only ILIAS administrators will see a selection of files from this directory. Please enter a full server path without trailing slash.
 content#:#cont_upload_file#:#Upload File
 content#:#cont_upload_multi_srt_howto#:#This feature allows you to upload multiple subtitle (srt) files in a zip file for all media objects. Your .zip file should contain all .srt files on the top level (no subdirectories). The file names should end with '_&lt;lang code&gt;.srt' where lang code is e.g. 'en', 'it', 'de'. The rest of the filename should correspond to the name of the video file, e.g. 'my_video.mp4' ➜ 'my_video_en.srt'.
 content#:#cont_uploaded_file#:#Existing File
@@ -7331,8 +7330,6 @@ content#:#lm_only_one_download_per_type#:#Only one file per type (XML, HTML) can
 content#:#lm_rate_page#:#Rate page
 content#:#lm_rating#:#Rate Learning Module
 content#:#mep_folder_created#:#Added new folder.
-content#:#mob_upload_dir#:#Upload Directory
-content#:#mob_upload_dir_info#:#Server directory from which multiple files can be used to create media objects in media pools. Only ILIAS administrators will see a selection of files from this directory. Please enter a full server path without trailing slash.
 content#:#msg_entry_added#:#Menu entry added
 content#:#msg_entry_removed#:#Menu entry removed
 content#:#msg_entry_updated#:#Menu entry updated
@@ -13269,8 +13266,6 @@ pd#:#pd_enable_user_publish_info#:#If enabled, users can publish their profiles,
 pd#:#pd_ended#:#Ended
 pd#:#pd_export_profile#:#Export Personal Data
 pd#:#pd_import_personal_data#:#Import Personal Data
-pd#:#pd_my_memberships_intro#:#Welcome to Your Memberships
-pd#:#pd_my_memberships_intro2#:#This is your personal space for all courses and groups you participate in. Currently, there aren't any memberships assigned to you. To become a member of a course or group, there are two ways:<br /><ol><li>You can join courses or groups provided that joining them has been allowed by their administrators.</li><li>An administratrator of a course or group can assign a membership to you.</li></ol><br />In any case, the respective objects will appear automatically in this place.
 pd#:#pd_my_memberships_sort_default#:#Default of Sort Option
 pd#:#pd_no_items_to_manage#:#No items available for removal.
 pd#:#pd_not_dated#:#Not Dated

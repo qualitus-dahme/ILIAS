@@ -98,7 +98,7 @@ class ilLTIConsumerLaunch
     }
 
 
-       /**
+    /**
      * sign request data with OAuth
      *
      * @param array $a_params (    "method => signature methos

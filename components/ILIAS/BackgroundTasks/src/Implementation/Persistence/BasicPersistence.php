@@ -64,6 +64,41 @@ class BasicPersistence implements Persistence
             ['integer', 'integer', 'integer'],
             [defined('ANONYMOUS_USER_ID') ? \ANONYMOUS_USER_ID : 13, State::FINISHED, State::USER_INTERACTION]
         );
+
+        // remove old finished buckets
+        $this->db->manipulateF(
+            "DELETE FROM il_bt_bucket WHERE state = %s AND last_heartbeat < %s",
+            ['integer', 'integer'],
+            [State::FINISHED, time() - 60 * 60 * 24 * 30] // older than 30 days
+        );
+
+        // remove old buckets with other states
+        $this->db->manipulateF(
+            "DELETE FROM il_bt_bucket WHERE state != %s AND last_heartbeat < %s",
+            ['integer', 'integer'],
+            [State::FINISHED, time() - 60 * 60 * 24 * 180] // older than 180 days
+        );
+
+        // remove tasks without a bucket
+        $this->db->manipulate(
+            "DELETE FROM il_bt_task WHERE bucket_id NOT IN (SELECT id FROM il_bt_bucket)"
+        );
+
+        // remove value to bucket links without a bucket
+        $this->db->manipulate(
+            "DELETE FROM il_bt_value_to_task WHERE bucket_id NOT IN (SELECT id FROM il_bt_bucket)"
+        );
+
+        // remove value to bucket links without a task
+        $this->db->manipulate(
+            "DELETE FROM il_bt_value_to_task WHERE task_id NOT IN (SELECT id FROM il_bt_task)"
+        );
+
+        // remove values without a task
+        $this->db->manipulate(
+            "DELETE FROM il_bt_value WHERE id NOT IN (SELECT value_id FROM il_bt_value_to_task)"
+        );
+
     }
 
     public function setConnector(\arConnector $c): void

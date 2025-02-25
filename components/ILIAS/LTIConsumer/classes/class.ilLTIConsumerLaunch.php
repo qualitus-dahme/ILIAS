@@ -18,7 +18,9 @@
 
 declare(strict_types=1);
 
-use ILIAS\LTIOAuth;
+use ceLTIc\LTI\OAuth\OAuthConsumer;
+use ceLTIc\LTI\OAuth\OAuthRequest;
+use ceLTIc\LTI\OAuth\OAuthSignatureMethod_HMAC_SHA1;
 
 /**
  * Class ilObjLTIConsumerLaunch
@@ -108,26 +110,19 @@ class ilLTIConsumerLaunch
      * 					data => array (key => value)
      * 				)
      *
-     * @return array|string	signed data
+     * @return array	signed data
      */
-    public static function signOAuth(array $a_params)
+    public static function signOAuth(array $a_params): array
     {
         switch ($a_params['sign_method']) {
             case "HMAC_SHA1":
-                $method = new ILIAS\LTIOAuth\OAuthSignatureMethod_HMAC_SHA1();
+                $method = new OAuthSignatureMethod_HMAC_SHA1();
                 break;
-            case "PLAINTEXT":
-                $method = new ILIAS\LTIOAuth\OAuthSignatureMethod_PLAINTEXT();
-                break;
-                //            case "RSA_SHA1":
-                //                $method = new ILIAS\LTIOAuth\OAuthSignatureMethod_RSA_SHA1();
-                //                break;
-
             default:
-                return "ERROR: unsupported signature method!";
+                throw new Exception("Unknown signature method: " . $a_params['sign_method']);
         }
-        $consumer = new ILIAS\LTIOAuth\OAuthConsumer($a_params["key"], $a_params["secret"], $a_params["callback"]);
-        $request = ILIAS\LTIOAuth\OAuthRequest::from_consumer_and_token($consumer, $a_params["token"], $a_params["http_method"], $a_params["url"], $a_params["data"]);
+        $consumer = new OAuthConsumer($a_params["key"], $a_params["secret"], $a_params["callback"]);
+        $request = OAuthRequest::from_consumer_and_token($consumer, $a_params["token"], $a_params["http_method"], $a_params["url"], $a_params["data"]);
         $request->sign_request($method, $consumer, $a_params["token"]);
 
         // Pass this back up "out of band" for debugging

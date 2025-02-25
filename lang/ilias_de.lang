@@ -2890,8 +2890,6 @@ chatroom#:#chat_osc_accepts_messages_yes#:#Empfängt Chat-Nachrichten
 chatroom#:#chat_osc_add_user#:#Weitere Benutzer zum Chat hinzufügen
 chatroom#:#chat_osc_conversations#:#Chat
 chatroom#:#chat_osc_doesnt_accept_msg#:#Chatten nicht möglich
-chatroom#:#chat_osc_dont_accept_msg#:#Sie können aktuell von anderen Personen nicht zu einem Chat eingeladen werden. Dies können Sie bei Bedarf in Ihren %s ändern.
-chatroom#:#chat_osc_dont_accept_msg_link_txt#:#'Persönlichen Einstellungen'
 chatroom#:#chat_osc_head_grp_x_persons#:#%s Benutzer
 chatroom#:#chat_osc_invite_to_conversation#:#Zu Chat hinzufügen
 chatroom#:#chat_osc_leave_grp_conv#:#Chat verlassen

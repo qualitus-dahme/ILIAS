@@ -98,19 +98,19 @@ class ilLTIConsumerLaunch
     }
 
 
-
-    /**
+       /**
      * sign request data with OAuth
      *
-     * @param array (	"method => signature methos
-     * 					"key" => consumer key
-     * 					"secret" => shared secret
-     * 					"token"	=> request token
-     * 					"url" => request url
-     * 					data => array (key => value)
-     * 				)
+     * @param array $a_params (    "method => signature methos
+     *                    "key" => consumer key
+     *                    "secret" => shared secret
+     *                    "token"    => request token
+     *                    "url" => request url
+     *                    data => array (key => value)
+     *                )
      *
-     * @return array	signed data
+     * @return array    signed data
+     * @throws Exception
      */
     public static function signOAuth(array $a_params): array
     {
@@ -121,6 +121,7 @@ class ilLTIConsumerLaunch
             default:
                 throw new Exception("Unknown signature method: " . $a_params['sign_method']);
         }
+
         $consumer = new OAuthConsumer($a_params["key"], $a_params["secret"], $a_params["callback"]);
         $request = OAuthRequest::from_consumer_and_token($consumer, $a_params["token"], $a_params["http_method"], $a_params["url"], $a_params["data"]);
         $request->sign_request($method, $consumer, $a_params["token"]);

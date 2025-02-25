@@ -147,19 +147,6 @@ class ilLTIViewGUI
         if ($baseclass == 'illtiroutergui') {
             return;
         }
-
-        $target = ilSession::get('lti_init_target');
-        if ($target) {
-            list($type, $ref_id) = explode('_', $target);
-
-            ilSession::clear('lti_init_target');
-
-            ilUtil::redirect(
-                "ilias.php?baseClass=ilRepositoryGUI&ref_id=" . $ref_id
-                . "&cmd=view"
-                . "&cmdClass=ilobj" . strtolower($type) . "gui"
-            );
-        }
     }
 
     /**

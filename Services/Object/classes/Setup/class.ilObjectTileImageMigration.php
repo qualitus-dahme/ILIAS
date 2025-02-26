@@ -110,6 +110,7 @@ class ilObjectTileImageMigration implements Migration
                 . 'could not be migrated. The database entry linking the image to the object '
                 . 'was removed, the path to the image has been left on the system.'
             );
+            return;
         }
         $this->flavour_builder->get($rid, $this->flavour_definition, true);
 

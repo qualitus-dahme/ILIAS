@@ -284,10 +284,13 @@ class ilAuthProviderLTI extends \ilAuthProvider implements \ilAuthProviderInterf
             $this->getLogger()->debug((string) var_export(ilSession::get('lti_context_ids'), true));
         }
 
-        if (isset($this->messageParameters['launch_presentation_css_url'])) {
+        if (!empty($this->messageParameters['launch_presentation_return_url'])) {
+            $post['launch_presentation_return_url'] = $this->messageParameters['launch_presentation_return_url'];
+        }
+        if (!empty($this->messageParameters['launch_presentation_css_url'])) {
             $post['launch_presentation_css_url'] = $this->messageParameters['launch_presentation_css_url'];
         }
-        if (isset($this->messageParameters['resource_link_title'])) {
+        if (!empty($this->messageParameters['resource_link_title'])) {
             $post['resource_link_title'] = $this->messageParameters['resource_link_title'];
         }
 

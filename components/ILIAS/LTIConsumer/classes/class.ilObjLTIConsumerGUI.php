@@ -864,8 +864,9 @@ class ilObjLTIConsumerGUI extends ilObject2GUI
             case strtolower(ilInfoScreenGUI::class):
 
                 $DIC->tabs()->activateTab(self::TAB_ID_INFO);
-                $this->infoScreen();
-
+                $info = new ilInfoScreenGUI($this);
+                $this->configureInfoScreen($info);
+                $this->ctrl->forwardCommand($info);
                 break;
 
             default:
@@ -1083,18 +1084,10 @@ class ilObjLTIConsumerGUI extends ilObject2GUI
 
     protected function infoScreen(): void
     {
-        global $DIC;
-        /* @var \ILIAS\DI\Container $DIC */
-
-        $DIC->tabs()->activateTab(self::TAB_ID_INFO);
-
-        // @todo: removed deprecated ilCtrl methods, this needs inspection by a maintainer.
-        // $DIC->ctrl()->setCmd("showSummary");
-        // $DIC->ctrl()->setCmdClass("ilinfoscreengui");
-        $this->infoScreenForward();
+        $this->ctrl->redirectByClass(ilInfoScreenGUI::class, "showSummary");
     }
 
-    protected function infoScreenForward(): void
+    protected function configureInfoScreen(ilInfoScreenGUI $info): void
     {
         global $DIC;
         /* @var \ILIAS\DI\Container $DIC */
@@ -1107,7 +1100,6 @@ class ilObjLTIConsumerGUI extends ilObject2GUI
 
         $this->handleAvailablityMessage();
 
-        $info = new ilInfoScreenGUI($this);
 
         $info->enablePrivateNotes();
 
@@ -1176,8 +1168,6 @@ class ilObjLTIConsumerGUI extends ilObject2GUI
             );
         }
 
-        // FINISHED INFO SCREEN, NOW FORWARD
-        $this->ctrl->forwardCommand($info);
     }
 
     protected function handleAvailablityMessage(): void

@@ -33,6 +33,19 @@ class ilAuthProviderLTI extends \ilAuthProvider implements \ilAuthProviderInterf
     private ?ilLTITool $provider = null;
     private ?array $messageParameters = null;
 
+    protected string $launchReturnUrl = "";
+
+    private ?ilLogger $logger = null;
+
+    /**
+     * Constructor
+     */
+    public function __construct(ilAuthCredentials $credentials)
+    {
+        parent::__construct($credentials);
+        $this->logger = ilLoggerFactory::getLogger('ltis');
+    }
+
     /**
      * Get auth mode by key
      * @param string $a_auth_mode
@@ -218,10 +231,24 @@ class ilAuthProviderLTI extends \ilAuthProvider implements \ilAuthProviderInterf
     public function doAuthentication(\ilAuthStatus $status): bool
     {
         global $DIC;
+        $post = [];
 
         $lti_provider = new ilLTITool(new ilLTIDataConnector());
 
+        if ($DIC->http()->wrapper()->post()->has('launch_presentation_return_url')) {
+            $this->launchReturnUrl = $DIC->http()->wrapper()->post()->retrieve('launch_presentation_return_url', $DIC->refinery()->kindlyTo()->string());
+            setcookie("launch_presentation_return_url", $this->launchReturnUrl, time() + 86400, "/", "", true, true);
+            $this->logger->info("Setting launch_presentation_return_url in cookie storage " . $this->launchReturnUrl);
+        }
         $lti_provider->handleRequest();
+        $this->provider = $lti_provider;
+        $this->messageParameters = $this->provider->getMessageParameters();
+
+        if (!$DIC->http()->wrapper()->post()->has('launch_presentation_return_url')) {
+            $this->launchReturnUrl = $_COOKIE['launch_presentation_return_url'] ?? "";
+            $this->logger->info("Catching launch_presentation_return_url from cookies" . $this->launchReturnUrl);
+            $post["launch_presentation_return_url"] = $this->launchReturnUrl;
+        }
 
         if (!$lti_provider->ok) {
             $this->getLogger()->info('LTI authentication failed with message: ' . $lti_provider->reason);
@@ -231,9 +258,6 @@ class ilAuthProviderLTI extends \ilAuthProvider implements \ilAuthProviderInterf
         } else {
             $this->getLogger()->debug('LTI authentication success');
         }
-
-        $this->provider = $lti_provider;
-        $this->messageParameters = $this->provider->getMessageParameters();
 
         if (empty($this->messageParameters)) {
             $status->setReason('empty_lti_message_parameters');
@@ -260,12 +284,6 @@ class ilAuthProviderLTI extends \ilAuthProvider implements \ilAuthProviderInterf
             $this->getLogger()->debug((string) var_export(ilSession::get('lti_context_ids'), true));
         }
 
-
-        $post = [];
-
-        if (isset($this->messageParameters['launch_presentation_return_url'])) {
-            $post['launch_presentation_return_url'] = $this->messageParameters['launch_presentation_return_url'];
-        }
         if (isset($this->messageParameters['launch_presentation_css_url'])) {
             $post['launch_presentation_css_url'] = $this->messageParameters['launch_presentation_css_url'];
         }

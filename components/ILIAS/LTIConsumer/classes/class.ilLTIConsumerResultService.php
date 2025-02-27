@@ -18,6 +18,11 @@
 
 declare(strict_types=1);
 
+use ceLTIc\LTI\OAuth\OAuthRequest;
+use ceLTIc\LTI\OAuth\OAuthServer;
+use ceLTIc\LTI\OAuth\OAuthSignatureMethod_HMAC_SHA1;
+use ceLTIc\LTI\OAuthDataStore;
+
 /**
  * Class ilObjLTIConsumerLaunch
  *
@@ -359,22 +364,27 @@ class ilLTIConsumerResultService
 
     /**
      * Check the reqest signature
-     * @return bool|Exception    Exception or true
+     * @return bool    Exception or true
      */
-    private function checkSignature(string $a_key, string $a_secret)
+    private function checkSignature(string $a_key, string $a_secret): bool
     {
-        $store = new TrivialOAuthDataStore();
-        $store->add_consumer($a_key, $a_secret);
+        $platform = new ilLTIPlatform();
 
-        $server = new \ILIAS\LTIOAuth\OAuthServer($store);
-        $method = new \ILIAS\LTIOAuth\OAuthSignatureMethod_HMAC_SHA1();
+        $platform->setKey($a_key);
+        $platform->setSecret($a_secret);
+
+        $store = new OAuthDataStore($platform);
+
+        $server = new OAuthServer($store);
+        $method = new OAuthSignatureMethod_HMAC_SHA1();
         $server->add_signature_method($method);
 
-        $request = \ILIAS\LTIOAuth\OAuthRequest::from_request();
+        $request = OAuthRequest::from_request();
+
         try {
             $server->verify_request($request);
         } catch (Exception $e) {
-            return $e;
+            return false;
         }
         return true;
     }

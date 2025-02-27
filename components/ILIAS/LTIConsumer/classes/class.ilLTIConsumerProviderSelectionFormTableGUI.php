@@ -101,6 +101,10 @@ class ilLTIConsumerProviderSelectionFormTableGUI extends ilPropertyFormGUI
 
     public function setData(array $data): void
     {
+        global $DIC;
+        foreach ($data as $key => $value) {
+            $data[$key]["own_provider"] = $value['creator'] == $DIC->user()->getId();
+        }
         $this->table->setData($data);
     }
 }

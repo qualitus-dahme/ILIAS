@@ -33,6 +33,19 @@ class ilAuthProviderLTI extends \ilAuthProvider implements \ilAuthProviderInterf
     private ?ilLTITool $provider = null;
     private ?array $messageParameters = null;
 
+    protected string $launchReturnUrl = "";
+
+    private ?ilLogger $logger = null;
+
+    /**
+     * Constructor
+     */
+    public function __construct(ilAuthCredentials $credentials)
+    {
+        parent::__construct($credentials);
+        $this->logger = ilLoggerFactory::getLogger('ltis');
+    }
+
     /**
      * Get auth mode by key
      * @param string $a_auth_mode
@@ -210,31 +223,34 @@ class ilAuthProviderLTI extends \ilAuthProvider implements \ilAuthProviderInterf
 
     /**
      * Do authentication
-     * @param \ilAuthStatus $status
+     * @param ilAuthStatus $status
      * @return bool
+     * @throws ilPasswordException
+     * @throws ilUserException
      */
     public function doAuthentication(\ilAuthStatus $status): bool
     {
         global $DIC;
-        //fix for Ilias Consumer
-        // schneider: required?
-        if ($DIC->http()->wrapper()->post()->has('launch_presentation_document_target') &&
-            $DIC->http()->wrapper()->post()->retrieve(
-                'launch_presentation_document_target',
-                $DIC->refinery()->kindlyTo()->string()
-            )) {
-            // TODO move to session-variable
-            //            $_POST['launch_presentation_document_target'] = 'window';
+        $post = [];
+
+        $lti_provider = new ilLTITool(new ilLTIDataConnector());
+
+        if ($DIC->http()->wrapper()->post()->has('launch_presentation_return_url')) {
+            $this->launchReturnUrl = $DIC->http()->wrapper()->post()->retrieve('launch_presentation_return_url', $DIC->refinery()->kindlyTo()->string());
+            setcookie("launch_presentation_return_url", $this->launchReturnUrl, time() + 86400, "/", "", true, true);
+            $this->logger->info("Setting launch_presentation_return_url in cookie storage " . $this->launchReturnUrl);
+        }
+        $lti_provider->handleRequest();
+        $this->provider = $lti_provider;
+        $this->messageParameters = $this->provider->getMessageParameters();
+
+        if (!$DIC->http()->wrapper()->post()->has('launch_presentation_return_url')) {
+            $this->launchReturnUrl = $_COOKIE['launch_presentation_return_url'] ?? "";
+            $this->logger->info("Catching launch_presentation_return_url from cookies" . $this->launchReturnUrl);
+            $post["launch_presentation_return_url"] = $this->launchReturnUrl;
         }
 
-        $this->dataConnector = new ilLTIDataConnector();
-
-        $lti_provider = new ilLTITool($this->dataConnector);
-        // $lti_provider = new Tool\Tool($this->dataConnector);
-        $ok = true;
-        $lti_provider->handleRequest();
-
-        if (!$ok) {
+        if (!$lti_provider->ok) {
             $this->getLogger()->info('LTI authentication failed with message: ' . $lti_provider->reason);
             $status->setReason($lti_provider->reason);
             $status->setStatus(ilAuthStatus::STATUS_AUTHENTICATION_FAILED);
@@ -243,37 +259,18 @@ class ilAuthProviderLTI extends \ilAuthProvider implements \ilAuthProviderInterf
             $this->getLogger()->debug('LTI authentication success');
         }
 
-        /**
-         * @var ilLTIPlatform
-         */
-        //LTI 1.1
-        // sm: this does only load the standard lti date connector, not the ilLTIPlatform with extended data, like prefix.
-        // schneider: not required. platform is already initialized by authenticate function in Tool lib
-        /*
-        $consumer = ilLTIPlatform::fromConsumerKey(
-            $DIC->http()->wrapper()->post()->retrieve('oauth_consumer_key', $DIC->refinery()->kindlyTo()->string()),
-            $this->dataConnector
-        );
-        */
-        $this->provider = $lti_provider;
-        $this->messageParameters = $this->provider->getMessageParameters();
-
         if (empty($this->messageParameters)) {
             $status->setReason('empty_lti_message_parameters');
             $status->setStatus(ilAuthStatus::STATUS_AUTHENTICATION_FAILED);
             return false;
         }
 
-        $platformId = $this->messageParameters['platform_id'];
-        $clientId = $this->provider->platform->clientId;
-        $deploymentId = $this->messageParameters['deployment_id'];
-
-        $platform = ilLTIPlatform::fromPlatformId($platformId, $clientId, $deploymentId, $this->dataConnector);
+        $platform = ilLTIPlatform::fromConsumerKey($this->provider->platform->getKey(), $this->provider->platform->getDataConnector());
 
         $this->ref_id = $platform->getRefId();
-        // stores ref_ids of all lti consumer within active LTI User Session
+
         $lti_context_ids = ilSession::get('lti_context_ids');
-        // if session object exists only add ref_id if not already exists
+
         if (isset($lti_context_ids) && is_array($lti_context_ids)) {
             if (!in_array($this->ref_id, $lti_context_ids)) {
                 $this->getLogger()->debug("push new lti ref_id: " . $this->ref_id);
@@ -287,36 +284,37 @@ class ilAuthProviderLTI extends \ilAuthProvider implements \ilAuthProviderInterf
             $this->getLogger()->debug((string) var_export(ilSession::get('lti_context_ids'), true));
         }
 
-        // store POST into Consumer Session
-        //        $post = (array) $DIC->http()->wrapper()->post();
-        $post = [];
-        if ($DIC->http()->wrapper()->post()->has('launch_presentation_return_url')) {
-            $post['launch_presentation_return_url'] = $DIC->http()->wrapper()->post()->retrieve('launch_presentation_return_url', $DIC->refinery()->kindlyTo()->string());
+        if (!empty($this->messageParameters['launch_presentation_return_url'])) {
+            $post['launch_presentation_return_url'] = $this->messageParameters['launch_presentation_return_url'];
         }
-        if ($DIC->http()->wrapper()->post()->has('launch_presentation_css_url')) {
-            $post['launch_presentation_css_url'] = $DIC->http()->wrapper()->post()->retrieve('launch_presentation_css_url', $DIC->refinery()->kindlyTo()->string());
+        if (!empty($this->messageParameters['launch_presentation_css_url'])) {
+            $post['launch_presentation_css_url'] = $this->messageParameters['launch_presentation_css_url'];
         }
-        if ($DIC->http()->wrapper()->post()->has('resource_link_title')) {
-            $post['resource_link_title'] = $DIC->http()->wrapper()->post()->retrieve('resource_link_title', $DIC->refinery()->kindlyTo()->string());
+        if (!empty($this->messageParameters['resource_link_title'])) {
+            $post['resource_link_title'] = $this->messageParameters['resource_link_title'];
         }
 
         ilSession::set('lti_' . $this->ref_id . '_post_data', $post);
-        ilSession::set('lti_init_target', ilObject::_lookupType($this->ref_id, true) . '_' . $this->ref_id);
 
-        // lti service activation
+        /** @var ilObjectDefinition $obj_definition */
+        $obj_definition = $DIC["objDefinition"];
+
+        ilSession::set('lti_init_target', $obj_definition->getClassName(ilObject::_lookupType($this->ref_id, true)) . '_' . $this->ref_id);
+
         if (!$platform->enabled) {
             $this->getLogger()->warning('Consumer is not enabled');
             $status->setReason('lti_consumer_inactive');
             $status->setStatus(ilAuthStatus::STATUS_AUTHENTICATION_FAILED);
             return false;
         }
-        // global activation status
+
         if (!$platform->getActive()) {
             $this->getLogger()->warning('Consumer is not active');
             $status->setReason('lti_consumer_inactive');
             $status->setStatus(ilAuthStatus::STATUS_AUTHENTICATION_FAILED);
             return false;
         }
+
         $lti_id = $platform->getExtConsumerId();
         if (!$lti_id) {
             $status->setReason('lti_auth_failed_invalid_key');
@@ -326,7 +324,6 @@ class ilAuthProviderLTI extends \ilAuthProvider implements \ilAuthProviderInterf
 
         $this->getLogger()->debug('Using prefix:' . $platform->getPrefix());
 
-        // Use user_id as username instead of user email to avoid problems with uniqueness of the lti user.
         $this->getCredentials()->setUsername($this->messageParameters['user_id']);
 
         $internal_account = $this->findUserId(

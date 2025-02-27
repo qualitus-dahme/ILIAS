@@ -733,6 +733,7 @@ class ilObjLTIConsumer extends ilObject2
             $toolConsumerInstanceGuid .= implode(".", array_reverse(explode("/", $parseIliasUrl["path"])));
         }
         $toolConsumerInstanceGuid .= $parseIliasUrl["host"];
+
         $launch_vars = [
             "lti_message_type" => "basic-lti-launch-request",
             "lti_version" => "LTI-1p0",
@@ -752,9 +753,9 @@ class ilObjLTIConsumer extends ilObject2
             "context_label" => $contextType . " " . $contextId,
             "launch_presentation_locale" => $this->lng->getLangKey(),
             "launch_presentation_document_target" => $documentTarget,
-            "launch_presentation_width" => "",
+            //"launch_presentation_width" => "",
             //recommended
-            "launch_presentation_height" => "",
+            //"launch_presentation_height" => "",
             //recommended
             "launch_presentation_return_url" => $returnUrl,
             "tool_consumer_instance_guid" => $toolConsumerInstanceGuid,
@@ -878,9 +879,9 @@ class ilObjLTIConsumer extends ilObject2
             "context_label" => $contextType . " " . $contextId,
             "launch_presentation_locale" => $this->lng->getLangKey(),
             "launch_presentation_document_target" => $documentTarget,
-            "launch_presentation_width" => "",
+            //"launch_presentation_width" => "",
             //recommended
-            "launch_presentation_height" => "",
+            //"launch_presentation_height" => "",
             //recommended
             "launch_presentation_return_url" => $returnUrl,
             "tool_consumer_instance_guid" => $toolConsumerInstanceGuid,

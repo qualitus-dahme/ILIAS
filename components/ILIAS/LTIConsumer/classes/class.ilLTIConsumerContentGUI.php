@@ -245,6 +245,7 @@ class ilLTIConsumerContentGUI
         $output .= sprintf('<input type="hidden" name="%s" value="%s" />', 'lti_message_hint', $ltiMessageHint) . "\n";
         $output .= sprintf('<input type="hidden" name="%s" value="%s" />', 'client_id', $this->object->getProvider()->getClientId()) . "\n";
         $output .= sprintf('<input type="hidden" name="%s" value="%s" />', 'lti_deployment_id', $this->object->getProvider()->getId()) . "\n";
+        $output .= sprintf('<input type="hidden" name="%s" value="%s" />', 'launch_presentation_return_url', $returnUrl) . "\n";
         $output .= $button;
         $output .= '</form>';
         $output .= '<span id ="lti_launched" style="display:none">' . $this->lng->txt("launched") . '</span>';
@@ -254,6 +255,7 @@ class ilLTIConsumerContentGUI
             document.getElementById("lti_launch_form").style.display = "none";
             document.getElementById("lti_launched").style.display = "inline";
         }</script>';
+        //dump($output);exit();
         return($output);
     }
 

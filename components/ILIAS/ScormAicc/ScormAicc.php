@@ -20,8 +20,17 @@ declare(strict_types=1);
 
 namespace ILIAS;
 
+use ILIAS\Component\Activities\Activity;
+use ILIAS\Data\Factory as DataFactory;
+use ILIAS\ScormAicc\Activities\GetSCORMCompletionStatusActivity;
+use ILIAS\ScormAicc\Activities\GetSCORMServiceInfoActivity;
+use ILIAS\ScormAicc\Activities\HasSCORMCertificateActivity;
+use ILIAS\ScormAicc\Activities\HelloSCORMActivity;
+use ILIAS\ScormAicc\Services\ScormService;
+
 class ScormAicc implements Component\Component
 {
+    #[\Override]
     public function init(
         array | \ArrayAccess &$define,
         array | \ArrayAccess &$implement,
@@ -32,11 +41,34 @@ class ScormAicc implements Component\Component
         array | \ArrayAccess &$pull,
         array | \ArrayAccess &$internal,
     ): void {
+        $internal[ScormService::class] = static fn(): ScormService => new ScormService();
+
+        $contribute[Activity::class] = static fn(): Activity => new HasSCORMCertificateActivity(
+            $pull[DataFactory::class],
+            $internal[ScormService::class],
+        );
+
+        $contribute[Activity::class] = static fn(): Activity => new GetSCORMCompletionStatusActivity(
+            $pull[DataFactory::class],
+            $internal[ScormService::class],
+        );
+
+        $contribute[Activity::class] = static fn(): Activity => new HelloSCORMActivity(
+            $pull[DataFactory::class],
+            $internal[ScormService::class],
+        );
+
+        $contribute[Activity::class] = static fn(): Activity => new GetSCORMServiceInfoActivity(
+            $pull[DataFactory::class],
+            $internal[ScormService::class],
+        );
+
         $contribute[Component\Resource\PublicAsset::class] = static fn() => new class () implements Component\Resource\PublicAsset {
             public function getSource(): string
             {
                 return "components/ILIAS/ScormAicc/scripts";
             }
+
             public function getTarget(): string
             {
                 return "components/ILIAS/ScormAicc/scripts";
@@ -48,6 +80,7 @@ class ScormAicc implements Component\Component
             {
                 return "components/ILIAS/ScormAicc/templates/default/debug.html";
             }
+
             public function getTarget(): string
             {
                 return "components/ILIAS/ScormAicc/templates/default/debug.html";
@@ -59,6 +92,7 @@ class ScormAicc implements Component\Component
             {
                 return "components/ILIAS/ScormAicc/templates/default/dummy.html";
             }
+
             public function getTarget(): string
             {
                 return "components/ILIAS/ScormAicc/templates/default/dummy.html";

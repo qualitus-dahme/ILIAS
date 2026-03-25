@@ -30,7 +30,6 @@ class SettingsImplementation implements Settings
     public function __construct(
         private readonly Language $lng,
         private readonly \ilSetting $settings,
-        private readonly \ilGlobalTemplateInterface $tpl,
         private readonly UIFactory $ui_factory,
         private readonly Refinery $refinery,
         private readonly ConfigurationRepository $user_settings_configuration_repository,
@@ -105,9 +104,13 @@ class SettingsImplementation implements Settings
     }
 
     public function performAdditionalChecks(
+        \ilGlobalTemplateInterface $tpl,
         \ilPropertyFormGUI $form
     ): bool {
-        return $this->checkStartingPointValue($form);
+        return $this->checkStartingPointValue(
+            $tpl,
+            $form
+        );
     }
 
     /**
@@ -366,9 +369,17 @@ class SettingsImplementation implements Settings
         return $form[$section_key][$setting->getIdentifier()];
     }
 
-    private function checkStartingPointValue(\ilPropertyFormGUI $form): bool
-    {
+    private function checkStartingPointValue(
+        \ilGlobalTemplateInterface $tpl,
+        \ilPropertyFormGUI $form
+    ): bool {
         return $form->getInput('additional') === ''
-            || $this->user_settings_configuration_repository->getByIdentifier('starting_point')->validateUserChoice($this->tpl, $this->lng, $form);
+            || $this->user_settings_configuration_repository
+                ->getByIdentifier('starting_point')
+                ->validateUserChoice(
+                    $tpl,
+                    $this->lng,
+                    $form
+                );
     }
 }

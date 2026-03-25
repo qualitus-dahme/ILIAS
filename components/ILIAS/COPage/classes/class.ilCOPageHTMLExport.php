@@ -140,7 +140,7 @@ class ilCOPageHTMLExport
             } else {
                 $this->export_collector->addDirectory(
                     ilObjStyleSheet::getBasicImageDir(),
-                    "/basic_style/images"
+                    "/assets/basic_style/images"
                 );
                 $this->export_collector->addFile(
                     "../components/ILIAS/COPage/css/content.css",
@@ -161,7 +161,7 @@ class ilCOPageHTMLExport
                     $this->export_collector->addContainerDirectory(
                         $res_id->serialize(),
                         "",
-                        "content_style"
+                        "assets/content_style"
                     );
                 }
             }
@@ -493,8 +493,12 @@ class ilCOPageHTMLExport
         $this->global_screen->layout()->meta()->reset();
         $tpl = new ilGlobalTemplate($template_file, true, true, "components/ILIAS/COPage");
         $this->getPreparedMainTemplate($tpl);
-        $tpl->addCss(\ilUtil::getStyleSheetLocation());
-        $tpl->addCss(ilObjStyleSheet::getContentStylePath($this->getContentStyleId()));
+        $this->global_screen->layout()->meta()->addCss(
+            \ilUtil::getStyleSheetLocation()
+        );
+        $this->global_screen->layout()->meta()->addCss(
+            \ilObjStyleSheet::getExportContentStylePath()
+        );
         $tpl->addCss(ilObjStyleSheet::getSyntaxStylePath());
         return $tpl;
     }

@@ -23,6 +23,7 @@ namespace ILIAS\Survey\Settings;
 use ILIAS\Survey\InternalGUIService;
 use ILIAS\Survey\Mode\UIModifier;
 use ILIAS\Survey\InternalDomainService;
+use ilSvyStandardPurifier;
 
 /**
  * Settings form
@@ -375,7 +376,7 @@ class SettingsFormGUI
 
         // anonymization
         if ($feature_config->supportsAccessCodes()) {
-            $codes = new \ilCheckboxInputGUI($lng->txt("survey_access_codes"), "acc_codes");
+            $codes = new \ilCheckboxInputGUI($lng->txt("survey_access_code"), "acc_codes");
             $codes->setInfo($lng->txt("survey_access_codes_info"));
             $codes->setChecked(!$survey->isAccessibleWithoutCode());
             $form->addItem($codes);
@@ -883,8 +884,15 @@ class SettingsFormGUI
         } else {
             $survey->setEndDate("");
         }
-        $survey->setIntroduction($form->getInput("introduction"));
-        $survey->setOutro($form->getInput("outro"));
+
+        $purifier = new ilSvyStandardPurifier();
+
+        $introduction = $form->getInput("introduction");
+        $introduction = $purifier->purify($introduction);
+        $survey->setIntroduction($introduction);
+        $outro = $form->getInput("outro");
+        $outro = $purifier->purify($outro);
+        $survey->setOutro($outro);
         $survey->setShowQuestionTitles((bool) $form->getInput("show_question_titles"));
 
         // "separate mail for each participant finished"

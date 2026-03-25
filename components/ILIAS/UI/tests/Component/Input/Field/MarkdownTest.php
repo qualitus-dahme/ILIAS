@@ -273,7 +273,7 @@ class MarkdownTest extends ILIAS_UI_TestBase
                         </div>
                             <div class=\"c-field-markdown__preview hidden\"></div>
                              <textarea id=\"id_1\" class=\"c-field-textarea\" name=\"name_0\" minlength=\"$min\" maxlength=\"$max\"></textarea>
-                            <div class=\"ui-input-textarea-remainder\"> ui_chars_remaining<span data-action=\"remainder\">$max</span></div>
+                            <div class=\"ui-input-textarea-remainder\" aria-live=\"polite\"> ui_chars_remaining<span data-action=\"remainder\">$max</span></div>
                         </div>
 
                 </div>
@@ -357,7 +357,7 @@ class MarkdownTest extends ILIAS_UI_TestBase
         $expected = $this->brutallyTrimHTML(
             "
             <fieldset class=\"c-input\" data-il-ui-component=\"markdown-field-input\" data-il-ui-input-name=\"name_0\" id=\"id_8\" tabindex=\"0\">
-                <label>$label<span class=\"asterisk\" aria-label=\"required_field\">*</span></label>
+                <label>$label<span class=\"sr-only\">required_field</span><span class=\"asterisk\" aria-hidden=\"true\">*</span></label>
                 <div class=\"c-input__field\">
 
                         <div class=\"c-field-markdown\">

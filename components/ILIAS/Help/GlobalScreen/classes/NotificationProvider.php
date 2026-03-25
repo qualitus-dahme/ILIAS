@@ -50,10 +50,13 @@ class NotificationProvider extends AbstractNotificationProvider
 
     public function getAdministrativeNotifications(): array
     {
-        if (!$this->gd_admin->areIdentifiersVisible()) {
+        $screen_id_visible = $this->gd_admin->areIdentifiersVisible();
+        if (defined("OH_REF_ID") && (int) OH_REF_ID > 0) {
+            $screen_id_visible = true;
+        }
+        if (!$screen_id_visible) {
             return [];
         }
-
 
         $adns = [];
         $i = fn(string $id): IdentificationInterface => $this->if->identifier($id);

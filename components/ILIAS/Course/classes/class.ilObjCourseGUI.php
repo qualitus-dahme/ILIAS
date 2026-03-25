@@ -1413,7 +1413,7 @@ class ilObjCourseGUI extends ilContainerGUI
         switch ($a_tab) {
             case "properties":
                 $this->tabs_gui->addSubTabTarget(
-                    "crs_settings",
+                    "general",
                     $this->ctrl->getLinkTarget($this, 'edit'),
                     "edit",
                     get_class($this)
@@ -2125,7 +2125,6 @@ class ilObjCourseGUI extends ilContainerGUI
                 break;
 
             case strtolower(PublicProfileGUI::class):
-                $this->tpl->enableDragDropFileUpload(null);
                 $this->setSubTabs('members');
                 $this->tabs_gui->setTabActive('members');
 

@@ -74,6 +74,7 @@ class ilObjContentPageGUI extends ilObject2GUI implements ilContentPageObjectCon
         $this->lng->loadLanguageModule('style');
         $this->lng->loadLanguageModule('content');
         $this->lng->loadLanguageModule('rep');
+        $this->lng->loadLanguageModule('obj');
 
         if ($this->object instanceof ilObjContentPage) {
             $this->infoScreenEnabled = (bool) ilContainer::_lookupContainerSetting(
@@ -219,14 +220,6 @@ class ilObjContentPageGUI extends ilObject2GUI implements ilContentPageObjectCon
 
         $this->addToNavigationHistory();
 
-        if (!$this->in_page_editor_style_context &&
-            strtolower($nextClass) !== strtolower(ilObjectContentStyleSettingsGUI::class) &&
-            (strtolower($cmd) !== strtolower(self::UI_CMD_EDIT) || strtolower($nextClass) !== strtolower(
-                ilContentPagePageGUI::class
-            ))) {
-            $this->renderHeaderActions();
-        }
-
         switch (strtolower($nextClass)) {
             case strtolower(TranslationGUI::class):
                 $this->checkPermission('write');
@@ -358,7 +351,7 @@ class ilObjContentPageGUI extends ilObject2GUI implements ilContentPageObjectCon
                 $this->prepareOutput();
                 $this->tabs_gui->activateTab(self::UI_TAB_ID_MD);
 
-                $md_gui = new ilMDEditorGUI($this->object->getId(), 0, $this->object->getType());
+                $md_gui = new ilMDEditorGUI($this->object->getId(), 0, $this->object->getType(), $this->object->getRefId());
                 $md_gui->addObserver($this->object, 'MDUpdateListener', 'General');
                 $this->ctrl->forwardCommand($md_gui);
                 break;
@@ -417,6 +410,15 @@ class ilObjContentPageGUI extends ilObject2GUI implements ilContentPageObjectCon
 
                 parent::executeCommand();
         }
+
+        if (!$this->in_page_editor_style_context &&
+            strtolower($nextClass) !== strtolower(ilObjectContentStyleSettingsGUI::class) &&
+            (strtolower($cmd) !== strtolower(self::UI_CMD_EDIT) || strtolower($nextClass) !== strtolower(
+                ilContentPagePageGUI::class
+            ))) {
+            $this->renderHeaderActions();
+        }
+
     }
 
     protected function addToDesk(): void

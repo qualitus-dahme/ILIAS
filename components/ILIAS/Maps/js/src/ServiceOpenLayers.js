@@ -14,7 +14,7 @@
  */
 
 import View from 'ol/View';
-import Map from 'ol/Map';
+import OLMap from 'ol/Map';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 import {defaults as control} from 'ol/control';
@@ -95,7 +95,7 @@ export default class ServiceOpenLayers {
      * @return 	{void}
      */
     initMap(id, replace_marker) {
-        this.map = new Map({
+        this.map = new OLMap({
             layers: [
                 new TileLayer({
                     preload: 4,
@@ -120,6 +120,26 @@ export default class ServiceOpenLayers {
             }
             this.updateInputFields(id, center);
         });
+
+        // OpenLayers cannot render a map without a size. Use a ResizeObserver to update
+        // the map once the container has a real size (fixing Mantis #0046339).
+        const el = document.getElementById(id);
+
+        if (!el) return;
+
+        const resizeObserver = new ResizeObserver((entries) => {
+            for (const entry of entries) {
+                const rect = entry.contentRect;
+
+                if (rect.width && rect.height) {
+                    this.map.updateSize();
+                    resizeObserver.unobserve(el);
+                    resizeObserver.disconnect();
+                }
+            }
+        });
+
+        resizeObserver.observe(el);
     }
 
     /**

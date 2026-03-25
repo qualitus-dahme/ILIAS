@@ -71,7 +71,7 @@ class ilMMSubItemTableComponent implements OrderingRetrieval
         private Pons $pons,
         TokenContainer $token_container,
         private ilMMItemRepository $repository,
-        private ilMMItemFacadeInterface $parent_item,
+        private ?ilMMItemFacadeInterface $parent_item,
         private bool $write_access
     ) {
         $this->ui_factory = $this->pons->out()->ui()->factory();
@@ -82,15 +82,21 @@ class ilMMSubItemTableComponent implements OrderingRetrieval
 
     public function getRows(OrderingRowBuilder $row_builder, array $visible_column_ids): Generator
     {
-        foreach ($this->repository->getSubItemsForTable($this->parent_item) as $top_item) {
-            $id = $top_item['identification'];
+        if ($this->parent_item === null) {
+            $items = $this->repository->getLostItems();
+        } else {
+            $items = $this->repository->getSubItemsForTable($this->parent_item);
+        }
+
+        foreach ($items as $sub_item) {
+            $id = $sub_item['identification'];
             $item = $this->repository->getItemFacade(
                 $this->repository->resolveIdentificationFromString($id)
             );
 
             $remark = $item->getStatus() !== null ? $this->ui_renderer->render($item->getStatus()) : '';
 
-            if (preg_match('/^-[a-zA-Z0-9_]+-$/', $remark)) {
+            if (preg_match('/^-\w+-$/', $remark)) {
                 // this is a language variable, translate it
                 $remark = $this->pons->i18n()->t(substr($remark, 1, -1));
             }
@@ -131,77 +137,86 @@ class ilMMSubItemTableComponent implements OrderingRetrieval
 
     public function get(): Component|array
     {
+        if ($this->write_access) {
+            $actions = [
+                self::ACTION_EDIT => $this->ui_factory->table()->action()->single(
+                    $this->pons->i18n()->t('edit'),
+                    $this->url_builder->withURI(
+                        $this->pons->flow()->getHereAsURI(ilMMSubItemGUI::CMD_EDIT)
+                    ),
+                    $this->token
+                )->withAsync(true),
+                self::ACTION_TRANSLATE => $this->ui_factory->table()->action()->single(
+                    $this->pons->i18n()->t('translate'),
+                    $this->url_builder->withURI(
+                        $this->pons->flow()->getTranslationAsURI()
+                    ),
+                    $this->token
+                )->withAsync(true),
+                self::ACTION_ACTIVATE => $this->ui_factory->table()->action()->standard(
+                    $this->pons->i18n()->t('activate'),
+                    $this->url_builder->withURI(
+                        $this->pons->flow()->getHereAsURI(ilMMSubItemGUI::CMD_ACTIVATE)
+                    ),
+                    $this->token
+                ),
+                self::ACTION_DEACTIVATE => $this->ui_factory->table()->action()->standard(
+                    $this->pons->i18n()->t('deactivate'),
+                    $this->url_builder->withURI(
+                        $this->pons->flow()->getHereAsURI(ilMMSubItemGUI::CMD_DEACTIVATE)
+                    ),
+                    $this->token
+                ),
+                self::ACTION_MOVE => $this->ui_factory->table()->action()->standard(
+                    $this->pons->i18n()->t('move'),
+                    $this->url_builder->withURI(
+                        $this->pons->flow()->getHereAsURI(ilMMSubItemGUI::CMD_CONFIRM_MOVE)
+                    ),
+                    $this->token
+                )->withAsync(true),
+                self::ACTION_DELETE => $this->ui_factory->table()->action()->standard(
+                    $this->pons->i18n()->t('delete'),
+                    $this->url_builder->withURI(
+                        $this->pons->flow()->getHereAsURI(ilMMSubItemGUI::CMD_CONFIRM_DELETE)
+                    ),
+                    $this->token
+                )->withAsync(true),
+            ];
+        } else {
+            $actions = [];
+        }
         return [
-            $this->ui_factory->table()->ordering(
-                $this,
-                $this->pons->flow()->getHereAsURI(ilMMSubItemGUI::CMD_SAVE_ORDER),
-                $this->parent_item->getDefaultTitle(),
-                [
-                    'title' => $this->ui_factory->table()->column()->text(
-                        $this->pons->i18n()->t('title', 'sub'),
-                    ),
-                    'active' => $this->ui_factory->table()->column()->boolean(
-                        $this->pons->i18n()->t('active', 'sub'),
-                        $this->pons->out()->ok(),
-                        $this->pons->out()->nok(),
-                    ),
-                    'status' => $this->ui_factory->table()->column()->text(
-                        $this->pons->i18n()->t('status', 'sub'),
-                    ),
-                    'type' => $this->ui_factory->table()->column()->text(
-                        $this->pons->i18n()->t('type', 'topitem'),
-                    ),
-                    'provider' => $this->ui_factory->table()->column()->text(
-                        $this->pons->i18n()->t('provider', 'topitem'),
-                    ),
-                ]
-            )->withRequest($this->pons->in()->request())
-                             ->withActions(
-                                 [
-                                     self::ACTION_EDIT => $this->ui_factory->table()->action()->single(
-                                         $this->pons->i18n()->t('edit'),
-                                         $this->url_builder->withURI(
-                                             $this->pons->flow()->getHereAsURI(ilMMSubItemGUI::CMD_EDIT)
-                                         ),
-                                         $this->token
-                                     )->withAsync(true),
-                                     self::ACTION_TRANSLATE => $this->ui_factory->table()->action()->single(
-                                         $this->pons->i18n()->t('translate'),
-                                         $this->url_builder->withURI(
-                                             $this->pons->flow()->getTranslationAsURI()
-                                         ),
-                                         $this->token
-                                     )->withAsync(true),
-                                     self::ACTION_ACTIVATE => $this->ui_factory->table()->action()->standard(
-                                         $this->pons->i18n()->t('activate'),
-                                         $this->url_builder->withURI(
-                                             $this->pons->flow()->getHereAsURI(ilMMSubItemGUI::CMD_ACTIVATE)
-                                         ),
-                                         $this->token
-                                     ),
-                                     self::ACTION_DEACTIVATE => $this->ui_factory->table()->action()->standard(
-                                         $this->pons->i18n()->t('deactivate'),
-                                         $this->url_builder->withURI(
-                                             $this->pons->flow()->getHereAsURI(ilMMSubItemGUI::CMD_DEACTIVATE)
-                                         ),
-                                         $this->token
-                                     ),
-                                     self::ACTION_MOVE => $this->ui_factory->table()->action()->standard(
-                                         $this->pons->i18n()->t('move'),
-                                         $this->url_builder->withURI(
-                                             $this->pons->flow()->getHereAsURI(ilMMSubItemGUI::CMD_CONFIRM_MOVE)
-                                         ),
-                                         $this->token
-                                     )->withAsync(true),
-                                     self::ACTION_DELETE => $this->ui_factory->table()->action()->standard(
-                                         $this->pons->i18n()->t('delete'),
-                                         $this->url_builder->withURI(
-                                             $this->pons->flow()->getHereAsURI(ilMMSubItemGUI::CMD_CONFIRM_DELETE)
-                                         ),
-                                         $this->token
-                                     )->withAsync(true),
-                                 ]
-                             )
+            $this
+                ->ui_factory
+                ->table()
+                ->ordering(
+                    $this,
+                    $this->pons->flow()->getHereAsURI(ilMMSubItemGUI::CMD_SAVE_ORDER),
+                    $this->parent_item?->getDefaultTitle() ?? $this->pons->i18n()->t('mme_lost_items'),
+                    [
+                        'title' => $this->ui_factory->table()->column()->text(
+                            $this->pons->i18n()->t('title', 'sub'),
+                        ),
+                        'active' => $this->ui_factory->table()->column()->boolean(
+                            $this->pons->i18n()->t('active', 'sub'),
+                            $this->pons->out()->ok(),
+                            $this->pons->out()->nok(),
+                        ),
+                        'status' => $this->ui_factory->table()->column()->text(
+                            $this->pons->i18n()->t('status', 'sub'),
+                        ),
+                        'type' => $this->ui_factory->table()->column()->text(
+                            $this->pons->i18n()->t('type', 'topitem'),
+                        ),
+                        'provider' => $this->ui_factory->table()->column()->text(
+                            $this->pons->i18n()->t('provider', 'topitem'),
+                        ),
+                    ]
+                )->withRequest(
+                    $this->pons->in()->request()
+                )
+                ->withOrderingDisabled(!$this->write_access)
+                ->withActions($actions)
         ];
     }
 }

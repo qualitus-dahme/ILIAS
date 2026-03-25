@@ -226,6 +226,7 @@ class ilObjTaxonomyGUI extends ilObject2GUI
      */
     public function createAssignedTaxonomy(): void
     {
+        $this->requested_new_type = "tax";
         $this->create();
     }
 
@@ -336,6 +337,7 @@ class ilObjTaxonomyGUI extends ilObject2GUI
         $tpl = $this->tpl;
         $ilHelp = $this->help;
 
+        $this->showTree();
         $this->setTabs("list_items");
         $ilHelp->setSubScreenId("create_node");
 
@@ -470,6 +472,7 @@ class ilObjTaxonomyGUI extends ilObject2GUI
         $ilCtrl = $this->ctrl;
         $ilHelp = $this->help;
         $body = $this->request->getParsedBody();
+        $this->showTree();
 
         if (!isset($body["id"])) {
             $this->tpl->setOnScreenMessage('failure', $this->lng->txt("no_checkbox"), true);
@@ -775,6 +778,7 @@ class ilObjTaxonomyGUI extends ilObject2GUI
     {
         $tpl = $this->tpl;
 
+        $this->showTree();
         $this->setTabs("settings");
 
         $form = $this->initSettingsForm();

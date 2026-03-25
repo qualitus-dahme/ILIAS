@@ -88,7 +88,7 @@ class ilGroupParticipantsTableGUI extends ilParticipantTableGUI
         $this->addColumn($this->lng->txt('grp_mem_contacts'), 'contact');
         $this->addColumn($this->lng->txt('grp_notification'), 'notification');
 
-        $this->addColumn($this->lng->txt('actions'), 'optional', '', false, 'ilMembershipRowActionsHeader');
+        $this->addColumn($this->lng->txt('actions'), '', '', false, 'ilMembershipRowActionsHeader');
         $this->setDefaultOrderField('roles');
 
         $this->setRowTemplate("tpl.show_participants_row.html", "components/ILIAS/Group");
@@ -207,7 +207,7 @@ class ilGroupParticipantsTableGUI extends ilParticipantTableGUI
 
                 default:
                     $this->tpl->setCurrentBlock('custom_fields');
-                    $this->tpl->setVariable('VAL_CUST', is_array($a_set[$field] ?? '') ? implode(', ', $a_set[$field]) : (string) $a_set[$field]);
+                    $this->tpl->setVariable('VAL_CUST', is_array($a_set[$field] ?? '') ? implode(', ', $a_set[$field]) : (string) ($a_set[$field] ?? ''));
                     $this->tpl->parseCurrentBlock();
                     break;
             }

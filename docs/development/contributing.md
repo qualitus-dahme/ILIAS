@@ -99,7 +99,7 @@ be assigned by the Technical Board or Authorities:
 
 | Label           | Description                                                                                                                                                               |
 |-----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| authorities     | The label `authorities` has to be assigned to PRs that contain updates to the authorities of a component.
+| authorities     | The label `authorities` has to be assigned to PRs that contain updates to the authorities of a component.                                                                 |
 | bugfix          | PRs with the label `bugfix` propose a solution for a reported bug in the official Bugtracker https://mantis.ilias.de                                                      |
 | dependencies    | The label `dependecies` is used for PRs which propose new or updated dependencies. Please don't forget to also add the label `jour fixe`, when proposing new dependencies.|
 | documentation   | The label `documentation` has to be assigned to PRs adding or updating documentation.                                                                                     |
@@ -107,10 +107,13 @@ be assigned by the Technical Board or Authorities:
 | javascript      | The label `javascript` has to be set for PRs changing Javascript code.                                                                                                    |
 | jour fixe       | PRs which should be discussed during the next Jour Fixe are labeled with this `jour fixe`. Please set this label at least 2 days before the envisaged date of Jour Fixe.  |
 | kitchen sink    | All contributions to the Kitchen Sink Project are labeled accordingly.                                                                                                    |
+| css/html        | The label `css/html` is used for PRs which propose changes to CSS/SCSS or HTML files.                                                                                     |
 | Looking for Shepherd | The label `Looking for Shepherd` has to be set for PRs which changes made for unmaintained components.                                                      |
 | php             | The label `php` has to be set for PRs changing PHP code.                                                                                                                  |
 | roadmap         | The label `roadmap` is assigned to PRs that contain strategical or tactical discussions of technical topics regarding the future of a component.                          |
 | technical board | This label is given for PRs which will be discussed in a meeting of the Technical Board. The label will be removed after the discussion.                                  |
+| accessibility   | The label `accessibility` is assigned to PRs which address accessibility in some way, spawned by new features, bugfixes or general improvements.                          |
+| translations    | The label `translations` is assigned to PRs which update translation files, located in the `lang/` directory of the repository.                                           |
 
 <a name="looking-for-shepherd"></a>
 #### Looking for Shepherd

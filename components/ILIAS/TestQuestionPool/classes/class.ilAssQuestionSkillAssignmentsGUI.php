@@ -79,7 +79,8 @@ class ilAssQuestionSkillAssignmentsGUI
         private readonly Refinery $refinery,
         private readonly HTTP $http,
         private readonly ilToolbarGUI $toolbar,
-        private readonly ilTabsGUI $tabs
+        private readonly ilTabsGUI $tabs,
+        private readonly ?ilObjTest $test_object = null
     ) {
         $this->data_factory = new DataFactory();
     }
@@ -164,6 +165,8 @@ class ilAssQuestionSkillAssignmentsGUI
         if ($this->isAvoidManipulationRedirectRequired($command)) {
             $this->ctrl->redirect($this, self::CMD_SHOW_SKILL_QUEST_ASSIGNS);
         }
+
+        $this->keepAssignmentParameters();
 
         if (in_array($command, [self::CMD_EDIT_SKILL_QUEST_ASSIGNS])) {
             $this->modifyTabs();
@@ -276,6 +279,7 @@ class ilAssQuestionSkillAssignmentsGUI
 
     private function updateSkillQuestionAssignmentsCmd(): void
     {
+        $this->keepAssignmentParameters();
         $question_id = $this->request_data_collector->getQuestionId();
 
         if ($this->isTestQuestion($question_id)) {
@@ -339,12 +343,12 @@ class ilAssQuestionSkillAssignmentsGUI
             }
         }
 
-        $this->ctrl->redirect($this, self::CMD_EDIT_SKILL_QUEST_ASSIGNS);
+        $this->editSkillQuestionAssignmentCmd();
     }
 
     private function showSkillSelectionCmd(): void
     {
-        $this->ctrl->saveParameter($this, 'q_id');
+        $this->keepAssignmentParameters();
         $question_id = $this->request_data_collector->getQuestionId();
 
         $assignmentList = new ilAssQuestionSkillAssignmentList($this->db);
@@ -390,8 +394,8 @@ class ilAssQuestionSkillAssignmentsGUI
         $question_id = $this->request_data_collector->getQuestionId();
         $question_gui ??= assQuestionGUI::_getQuestionGUI('', $question_id);
 
-        $row_id_parameter = $this->request_data_collector->strArray(EditSkillsOfQuestionTableActions::FULL_ROW_ID_PARAMETER);
-        [1 => $skill_base_id, 2 => $skill_tref_id] = explode('_', $row_id_parameter[0]);
+        $row_id_parameter = $this->request_data_collector->getRowIdParameter(EditSkillsOfQuestionTableActions::FULL_ROW_ID_PARAMETER);
+        [1 => $skill_base_id, 2 => $skill_tref_id] = explode('_', $row_id_parameter);
         $assignment ??= $this->buildQuestionSkillAssignment($question_id, (int) $skill_base_id, (int) $skill_tref_id);
 
         $form ??= $this->buildSkillQuestionAssignmentPropertiesForm($question_gui->getObject(), $assignment);
@@ -406,7 +410,7 @@ class ilAssQuestionSkillAssignmentsGUI
         if ($this->isTestQuestion($question_id)) {
             $question_gui = assQuestionGUI::_getQuestionGUI('', $question_id);
 
-            $row_id_parameter = $this->request_data_collector->string(EditSkillsOfQuestionTableActions::FULL_ROW_ID_PARAMETER);
+            $row_id_parameter = $this->request_data_collector->getRowIdParameter(EditSkillsOfQuestionTableActions::FULL_ROW_ID_PARAMETER);
             [1 => $skill_base_id, 2 => $skill_tref_id] = explode('_', $row_id_parameter);
             $assignment = $this->buildQuestionSkillAssignment($question_id, (int) $skill_base_id, (int) $skill_tref_id);
 
@@ -427,9 +431,13 @@ class ilAssQuestionSkillAssignmentsGUI
             }
 
             if ($assignment->hasEvalModeBySolution()) {
+                /** @var ?ilLogicalAnswerComparisonExpressionInputGUI $sol_cmp_expr_input */
                 $sol_cmp_expr_input = $form->getItemByPostVar('solution_compare_expressions');
 
-                if (!$this->checkSolutionCompareExpressionInput($sol_cmp_expr_input, $question_gui->getObject())) {
+                if (
+                    $sol_cmp_expr_input instanceof ilLogicalAnswerComparisonExpressionInputGUI
+                    && !$this->checkSolutionCompareExpressionInput($sol_cmp_expr_input, $question_gui->getObject())
+                ) {
                     $this->tpl->setOnScreenMessage('failure', $this->lng->txt('form_input_not_valid'));
                     $this->showSkillQuestionAssignmentPropertiesFormCmd($question_gui, $assignment, $form);
                     return;
@@ -438,7 +446,7 @@ class ilAssQuestionSkillAssignmentsGUI
                 $assignment->initSolutionComparisonExpressionList();
                 $assignment->getSolutionComparisonExpressionList()->reset();
 
-                foreach ($sol_cmp_expr_input->getValues() as $expression) {
+                foreach ($sol_cmp_expr_input?->getValues() ?? [] as $expression) {
                     $assignment->getSolutionComparisonExpressionList()->add($expression);
                 }
             } else {
@@ -461,7 +469,7 @@ class ilAssQuestionSkillAssignmentsGUI
             }
         }
 
-        $this->ctrl->redirect($this, self::CMD_SHOW_SKILL_QUEST_ASSIGNS);
+        $this->ctrl->redirect($this, self::CMD_EDIT_SKILL_QUEST_ASSIGNS);
     }
 
     private function buildSkillQuestionAssignmentPropertiesForm(
@@ -513,6 +521,38 @@ class ilAssQuestionSkillAssignmentsGUI
                 SkillAssignmentViewControlMode::tryFrom($mode) ?? SkillAssignmentViewControlMode::ALL
             )
         ));
+
+        if (
+            $this->test_object instanceof ilObjTest
+            && $this->test_object->isSkillServiceToBeConsidered()
+            && $this->hasFixedQuestionSetSkillAssignsLowerThanBarrier()
+        ) {
+            $this->tpl->setOnScreenMessage('info', $this->getSkillAssignBarrierInfo());
+        }
+    }
+
+    private function hasFixedQuestionSetSkillAssignsLowerThanBarrier(): bool
+    {
+        if (!$this->test_object?->isFixedTest()) {
+            return false;
+        }
+
+        $assignmentList = new ilAssQuestionSkillAssignmentList($this->db);
+        $assignmentList->setParentObjId($this->test_object->getId());
+        $assignmentList->loadFromDb();
+
+        return $assignmentList->hasSkillsAssignedLowerThanBarrier();
+    }
+
+    private function getSkillAssignBarrierInfo(): string
+    {
+        return !$this->test_object instanceof ilObjTest
+            ? ''
+            : sprintf(
+                $this->lng->txt('tst_skill_triggerings_num_req_answers_not_reached_warn'),
+                $this->test_object->getGlobalSettings()->getSkillTriggeringNumberOfAnswers()
+            );
+
     }
 
     private function editSkillQuestionAssignmentCmd(): void
@@ -521,6 +561,8 @@ class ilAssQuestionSkillAssignmentsGUI
         $assignment_list->loadFromDb();
         $assignment_list->loadAdditionalSkillData();
 
+        $this->keepAssignmentParameters();
+
         $edit_uri = $this->data_factory->uri(
             ILIAS_HTTP_PATH . '/' . $this->ctrl->getLinkTargetByClass(
                 self::class,
@@ -528,6 +570,11 @@ class ilAssQuestionSkillAssignmentsGUI
             )
         );
 
+        $this->ctrl->setParameterByClass(
+            ilAssQuestionSkillAssignmentsGUI::class,
+            'q_id',
+            $this->request_data_collector->getQuestionId()
+        );
         $this->toolbar->addComponent(
             $this->ui_factory->button()->standard(
                 $this->lng->txt('tst_manage_competence_select_skills'),
@@ -535,8 +582,9 @@ class ilAssQuestionSkillAssignmentsGUI
                     [ilAssQuestionSkillAssignmentsGUI::class],
                     self::CMD_SHOW_SKILL_SELECT
                 )
-            )
+            )->withUnavailableAction(!$this->isAssignmentEditingEnabled())
         );
+        $this->ctrl->setParameterByClass(ilAssQuestionSkillAssignmentsGUI::class, 'q_id', null);
 
         $components = (new EditSkillsOfQuestionTable(
             $this->request_data_collector,
@@ -545,14 +593,20 @@ class ilAssQuestionSkillAssignmentsGUI
             $this->lng,
             (new EditSkillsOfQuestionTableActions(
                 $this->tpl,
-                [EditSkillsOfQuestionTableEditAction::ACTION_ID => new EditSkillsOfQuestionTableEditAction($this->ui_factory, $this->lng)]
+                [
+                    EditSkillsOfQuestionTableEditAction::ACTION_ID => new EditSkillsOfQuestionTableEditAction(
+                        $this->ui_factory,
+                        $this->lng,
+                        $this->isAssignmentEditingEnabled()
+                    )
+                ]
             ))
         ))->getComponents(new URLBuilder($edit_uri));
 
         $this->tpl->setContent($this->ui_renderer->render($components));
     }
 
-    private function isSyncOriginalPossibleAndAllowed($questionId): bool
+    private function isSyncOriginalPossibleAndAllowed(int $questionId): bool
     {
         $questionData = $this->question_list->getDataArrayForQuestionId($questionId);
 
@@ -583,7 +637,7 @@ class ilAssQuestionSkillAssignmentsGUI
         $confirmation->setFormAction($this->ctrl->getFormAction($this));
         $confirmation->addHiddenItem('q_id', $this->request_data_collector->getQuestionId());
         $confirmation->setConfirm($this->lng->txt('yes'), self::CMD_SYNC_ORIGINAL);
-        $confirmation->setCancel($this->lng->txt('no'), self::CMD_SHOW_SKILL_QUEST_ASSIGNS);
+        $confirmation->setCancel($this->lng->txt('no'), self::CMD_EDIT_SKILL_QUEST_ASSIGNS);
 
         $this->tpl->setContent($this->ctrl->getHTML($confirmation));
     }
@@ -604,7 +658,7 @@ class ilAssQuestionSkillAssignmentsGUI
             $this->tpl->setOnScreenMessage('success', $this->lng->txt('qpl_qst_skl_assign_synced_to_orig'), true);
         }
 
-        $this->ctrl->redirect($this, self::CMD_SHOW_SKILL_QUEST_ASSIGNS);
+        $this->ctrl->redirect($this, self::CMD_EDIT_SKILL_QUEST_ASSIGNS);
     }
 
     private function buildSkillQuestionAssignmentList(): ilAssQuestionSkillAssignmentList
@@ -705,8 +759,10 @@ class ilAssQuestionSkillAssignmentsGUI
         return $this->question_list->isInList($questionId);
     }
 
-    private function checkSolutionCompareExpressionInput($input, assQuestion $question): bool
-    {
+    private function checkSolutionCompareExpressionInput(
+        ilLogicalAnswerComparisonExpressionInputGUI $input,
+        assQuestion $question
+    ): bool {
         $errors = [];
 
         foreach ($input->getValues() as $expression) {
@@ -717,10 +773,8 @@ class ilAssQuestionSkillAssignmentsGUI
             }
         }
 
-        if (count($errors)) {
-            $alert = $this->lng->txt('ass_lac_validation_error');
-            $alert .= '<br />' . implode('<br />', $errors);
-            $input->setAlert($alert);
+        if ($errors !== []) {
+            $input->setAlert($this->lng->txt('ass_lac_validation_error') . '<br />' . implode('<br />', $errors));
             return false;
         }
 
@@ -742,8 +796,13 @@ class ilAssQuestionSkillAssignmentsGUI
         return false;
     }
 
-    private function validateSolutionCompareExpression(ilAssQuestionSolutionComparisonExpression $expression, $question): bool
-    {
+    /**
+     * @throws ilAssLacException
+     */
+    private function validateSolutionCompareExpression(
+        ilAssQuestionSolutionComparisonExpression $expression,
+        assQuestion $question
+    ): bool|string {
         try {
             $question_provider = new ilAssLacQuestionProvider();
             $question_provider->setQuestion($question);
@@ -751,11 +810,7 @@ class ilAssQuestionSkillAssignmentsGUI
                 (new ilAssLacConditionParser())->parse($expression->getExpression())
             );
         } catch (ilAssLacException $e) {
-            if ($e instanceof ilAssLacFormAlertProvider) {
-                return $e->getFormAlert($this->lng);
-            }
-
-            throw $e;
+            return $e instanceof ilAssLacFormAlertProvider ? $e->getFormAlert($this->lng) : throw $e;
         }
 
         return true;
@@ -775,11 +830,12 @@ class ilAssQuestionSkillAssignmentsGUI
         }
     }
 
-    private function getSkillSelectorHeader($questionId): string
+    private function getSkillSelectorHeader(int $questionId): string
     {
-        $questionData = $this->question_list->getDataArrayForQuestionId($questionId);
-
-        return sprintf($this->lng->txt('qpl_qst_skl_selection_for_question_header'), $questionData['title']);
+        return sprintf(
+            $this->lng->txt('qpl_qst_skl_selection_for_question_header'),
+            $this->question_list->getDataArrayForQuestionId($questionId)['title']
+        );
     }
 
     private function sortAlphabetically($array)

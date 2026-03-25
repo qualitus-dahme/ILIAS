@@ -20,10 +20,12 @@ declare(strict_types=1);
 
 /**
  * @ilCtrl_Calls ilMDSettingsControllerGUI: ilMDCopyrightConfigurationGUI, ilMDOERSettingsGUI, ilMDVocabulariesGUI
+ * @ilCtrl_Calls ilMDSettingsControllerGUI: ilMDPublishingSettingsGUI
  */
 class ilMDSettingsControllerGUI
 {
     protected const string OER_SETTINGS_TAB = 'md_oer_settings';
+    protected const string PUBLISHING_SETTINGS_TAB = 'publishing_settings';
     protected const string COPYRIGHT_CONFIG_TAB = 'md_copyright_config';
     protected const string VOCABULARIES_TAB = 'md_vocabularies';
 
@@ -57,10 +59,7 @@ class ilMDSettingsControllerGUI
 
         $this->setTabs();
 
-        if (
-            !$this->access_service->hasCurrentUserVisibleAccess() ||
-            !$this->access_service->hasCurrentUserReadAccess()
-        ) {
+        if (!$this->access_service->hasCurrentUserReadAccess()) {
             throw new ilPermissionException($this->lng->txt('no_permission'));
         }
 
@@ -83,6 +82,12 @@ class ilMDSettingsControllerGUI
                 $this->ctrl->forwardCommand($gui);
                 break;
 
+            case strtolower(ilMDPublishingSettingsGUI::class):
+                $this->tabs_gui->activateSubTab(self::PUBLISHING_SETTINGS_TAB);
+                $gui = new ilMDPublishingSettingsGUI($this->parent_obj_gui);
+                $this->ctrl->forwardCommand($gui);
+                break;
+
             default:
                 $this->tabs_gui->activateSubTab(self::OER_SETTINGS_TAB);
                 $this->ctrl->redirectByClass(
@@ -95,10 +100,7 @@ class ilMDSettingsControllerGUI
 
     protected function setTabs(): void
     {
-        if (
-            !$this->access_service->hasCurrentUserVisibleAccess() ||
-            !$this->access_service->hasCurrentUserReadAccess()
-        ) {
+        if (!$this->access_service->hasCurrentUserReadAccess()) {
             return;
         }
 
@@ -108,6 +110,15 @@ class ilMDSettingsControllerGUI
             $this->ctrl->getLinkTargetByClass(
                 ilMDOERSettingsGUI::class,
                 'showOERSettings'
+            )
+        );
+
+        $this->tabs_gui->addSubTab(
+            self::PUBLISHING_SETTINGS_TAB,
+            $this->lng->txt('md_publishing'),
+            $this->ctrl->getLinkTargetByClass(
+                ilMDPublishingSettingsGUI::class,
+                'showPublishingSettings'
             )
         );
 

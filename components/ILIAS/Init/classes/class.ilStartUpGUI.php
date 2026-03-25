@@ -31,6 +31,7 @@ use ILIAS\DataProtection\Consumer as DataProtection;
 use ILIAS\components\Authentication\Logout\ConfigurableLogoutTarget;
 use ILIAS\LegalDocuments\Conductor;
 use ILIAS\components\Authentication\Pages\AuthPageEditorContext;
+use ILIAS\AuthApache\AuthFrontendCredentialsApache;
 
 /**
  * @ilCtrl_Calls ilStartUpGUI: ilAccountRegistrationGUI, ilPasswordAssistanceGUI, ilLoginPageGUI, ilDashboardGUI
@@ -308,7 +309,7 @@ class ilStartUpGUI implements ilCtrlBaseClassInterface, ilCtrlSecurityInterface
         $credentials->setPassword($soapPw);
         $credentials->tryAuthenticationOnLoginPage();
 
-        $frontend = new ilAuthFrontendCredentialsApache($this->httpRequest, $this->ctrl);
+        $frontend = new AuthFrontendCredentialsApache($this->http, $this->refinery, $this->ctrl);
         $frontend->tryAuthenticationOnLoginPage();
 
         $tpl = self::initStartUpTemplate('tpl.login.html');
@@ -663,7 +664,7 @@ class ilStartUpGUI implements ilCtrlBaseClassInterface, ilCtrlSecurityInterface
     {
         $this->getLogger()->debug('Trying apache authentication');
 
-        $credentials = new ilAuthFrontendCredentialsApache($this->httpRequest, $this->ctrl);
+        $credentials = new AuthFrontendCredentialsApache($this->http, $this->refinery, $this->ctrl);
         $credentials->initFromRequest();
 
         $provider_factory = new ilAuthProviderFactory();
@@ -797,6 +798,15 @@ class ilStartUpGUI implements ilCtrlBaseClassInterface, ilCtrlSecurityInterface
         ?ILIAS\UI\Component\Input\Container\Form\Form $form = null
     ): string {
         global $tpl;
+
+        $shib_is_default_without_local_login = (
+            (int) $this->setting->get('auth_mode') === ilAuthUtils::AUTH_SHIBBOLETH &&
+            !$this->setting->get('shib_auth_allow_local', '0')
+        );
+
+        if ($shib_is_default_without_local_login) {
+            return $page_editor_html;
+        }
 
         return $this->substituteLoginPageElements(
             $tpl,
@@ -1730,6 +1740,19 @@ class ilStartUpGUI implements ilCtrlBaseClassInterface, ilCtrlSecurityInterface
         if (isset($params['action']) && $params['action'] === 'logout') {
             $logout_url = $params['logout_url'] ?? '';
             $this->logger->info(sprintf('Requested SAML logout: %s', $logout_url));
+            $host = fn($url) => parse_url($url ?: '', PHP_URL_HOST);
+
+            // Invalid URL's will be catched by this too ($host($logout_url) is null but not in array).
+            if (!in_array($host($logout_url), array_filter([
+                'localhost',
+                $host($this->dic->iliasIni()->readVariable('server', 'http_path')),
+                $host($this->dic->settings()->get('soap_wsdl_path')),
+                $host((new ilSetting('auth'))->get('logout_behaviour_url')),
+                ...explode(',', $this->dic->settings()->get('allowed_hosts', '')),
+            ]), true)) {
+                throw new Exception('Redirect URL not allowed');
+            }
+
             $auth->logout($logout_url);
         }
 
@@ -1917,10 +1940,6 @@ class ilStartUpGUI implements ilCtrlBaseClassInterface, ilCtrlSecurityInterface
         $defaults = ['lang' => $DIC->user()->getCurrentLanguage()];
         $parameters = '&' . http_build_query(array_merge($defaults, $parameters));
 
-        $DIC->ctrl()->setTargetScript('logout.php');
-        $url = $DIC->ctrl()->getLinkTargetByClass([self::class], 'doLogout') . $parameters;
-        $DIC->ctrl()->setTargetScript('ilias.php');
-
-        return $url;
+        return $DIC->ctrl()->getLinkTargetByClass([self::class], 'doLogout') . $parameters;
     }
 }

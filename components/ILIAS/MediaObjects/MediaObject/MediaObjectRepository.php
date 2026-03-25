@@ -42,10 +42,14 @@ class MediaObjectRepository
         \ilMobStakeholder $stakeholder,
         int $from_mob_id = 0
     ): void {
+        $rid = "";
         if ($from_mob_id > 0) {
             $from_rid = $this->getRidForMobId($from_mob_id);
-            $rid = $this->irss->cloneContainer($from_rid);
-        } else {
+            if ($from_rid !== "") {
+                $rid = $this->irss->cloneContainer($from_rid);
+            }
+        }
+        if ($rid === "") {
             $rid = $this->irss->createContainer(
                 $stakeholder,
                 "mob.zip"
@@ -175,12 +179,20 @@ class MediaObjectRepository
 
     public function getLocalSrc(int $mob_id, string $location): string
     {
-        return $this->irss->getContainerUri($this->getRidForMobId($mob_id), $location);
+        $rid = $this->getRidForMobId($mob_id);
+        if ($rid === "") {
+            return "";
+        }
+        return $this->irss->getContainerUri($rid, $location);
     }
 
     public function hasLocalFile(int $mob_id, string $location): bool
     {
-        return $this->irss->hasContainerEntry($this->getRidForMobId($mob_id), $location);
+        $rid = $this->getRidForMobId($mob_id);
+        if ($rid === "") {
+            return false;
+        }
+        return $this->irss->hasContainerEntry($rid, $location);
     }
 
     public function getLocationStream(
@@ -191,6 +203,20 @@ class MediaObjectRepository
             $this->getRidForMobId($mob_id),
             $location
         );
+    }
+
+    public function getLocationContent(
+        int $mob_id,
+        string $location
+    ): string {
+        $content = "";
+        if (str_starts_with($location, "/")) {
+            $location = substr($location, 1);
+        }
+        if ($this->irss->hasContainerEntry($this->getRidForMobId($mob_id), $location)) {
+            $content = stream_get_contents($this->getLocationStream($mob_id, $location)->detach());
+        }
+        return $content;
     }
 
     public function getInfoOfEntry(

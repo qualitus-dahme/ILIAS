@@ -67,7 +67,15 @@ class EntriesTable implements OrderingRetrieval
         $nok = $this->pons->out()->nok();
 
         foreach ($this->repository->allForParent($this->group->getId()) as $entry) {
-            $title = $this->translations_repository->get($entry)->getDefault()?->getTranslation() ?? $entry->getTitle();
+            if ($entry->isCore()) {
+                $title = $this->collector->getSingleItemFromRaw(
+                    $this->identification->fromSerializedIdentification($entry->getId()),
+                )?->getTitle() ?? 'Unknown';
+            } else {
+                $title = $this->translations_repository->get($entry)->getDefault()?->getTranslation(
+                ) ?? $entry->getTitle();
+            }
+
             $row = $row_builder->buildOrderingRow(
                 $this->hash($entry->getId()),
                 [
@@ -110,25 +118,25 @@ class EntriesTable implements OrderingRetrieval
                 [
                     'edit' => $this->ui_factory->table()->action()->single(
                         $this->translator->translate('edit', 'entry'),
-                        $this->url_builder->withURI($flow->getHereAsURI('edit')),
+                        $this->url_builder->withURI($flow->getHereAsURI(\ilFooterEntriesGUI::CMD_EDIT)),
                         $this->id_token
                     )->withAsync(true),
 
                     'toggle_activation' => $this->ui_factory->table()->action()->standard(
                         $this->translator->translate('toggle_activation', 'entry'),
-                        $this->url_builder->withURI($flow->getHereAsURI('toggleActivation')),
+                        $this->url_builder->withURI($flow->getHereAsURI(\ilFooterEntriesGUI::CMD_TOGGLE_ACTIVATION)),
                         $this->id_token
                     )->withAsync(false),
 
                     'delete' => $this->ui_factory->table()->action()->standard(
                         $this->translator->translate('delete', 'entry'),
-                        $this->url_builder->withURI($flow->getHereAsURI('confirmDelete')),
+                        $this->url_builder->withURI($flow->getHereAsURI(\ilFooterEntriesGUI::CMD_CONFIRM_DELETE)),
                         $this->id_token
                     )->withAsync(true),
 
                     'move' => $this->ui_factory->table()->action()->standard(
                         $this->translator->translate('move', 'entry'),
-                        $this->url_builder->withURI($flow->getHereAsURI('selectMove')),
+                        $this->url_builder->withURI($flow->getHereAsURI(\ilFooterEntriesGUI::CMD_SELECT_MOVE)),
                         $this->id_token
                     )->withAsync(true),
 

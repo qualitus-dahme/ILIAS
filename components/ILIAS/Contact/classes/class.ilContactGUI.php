@@ -86,7 +86,8 @@ class ilContactGUI implements ilCtrlSecurityInterface
             $this->ui_factory,
             $this->lng,
             $DIC->uiService(),
-            $this->http
+            $this->http,
+            $this->linkToProfile(...)
         );
         $this->lng->loadLanguageModule('buddysystem');
     }
@@ -374,7 +375,38 @@ class ilContactGUI implements ilCtrlSecurityInterface
             return;
         }
 
+        if ($action === 'unlink') {
+            $this->ctrl->setParameterByClass(self::class, 'user_id', current($user_ids));
+            $this->ctrl->redirectByClass(self::class, 'confirmUnlinkContact');
+        }
+
         $this->updateRelationState(current($user_ids), $action);
+    }
+
+    private function confirmUnlinkContact(): void
+    {
+        $this->activateTab('my_contacts');
+        $this->tabs_gui->activateSubTab('buddy_view_table');
+
+        $user_id = $this->http->wrapper()->query()->retrieve('user_id', $this->refinery->kindlyTo()->int());
+
+        $confirmation_gui = new ilConfirmationGUI();
+        $confirmation_gui->setHeaderText($this->lng->txt('buddy_confirm_unlink'));
+        $confirmation_gui->addItem('user_id', (string) $user_id, ilObjUser::_lookupLogin($user_id));
+        $confirmation_gui->setConfirm($this->lng->txt('confirm'), 'unlinkContact');
+        $confirmation_gui->setCancel($this->lng->txt('cancel'), 'showContacts');
+        $confirmation_gui->setFormAction($this->ctrl->getFormActionByClass(self::class, 'showContacts'));
+
+        $this->tpl->setContent($confirmation_gui->getHTML());
+        $this->tpl->printToStdout();
+    }
+
+    private function unlinkContact(): void
+    {
+        $user_id = $this->http->wrapper()->post()->retrieve('user_id', $this->refinery->kindlyTo()->int());
+
+        $this->updateRelationState($user_id, 'unlink');
+        $this->ctrl->redirectByClass(self::class, 'showContacts');
     }
 
     private function updateRelationState(int $user, string $action): void
@@ -637,5 +669,21 @@ class ilContactGUI implements ilCtrlSecurityInterface
             $url->withParameter($p, $param),
             $token
         );
+    }
+
+    private function linkToProfile(int $user, string $label): string
+    {
+        $public_profile = ilObjUser::_lookupPref($user, 'public_profile');
+        if (($this->user->isAnonymous() || $public_profile !== 'y') && $public_profile !== 'g') {
+            return $label;
+        }
+
+        $this->ctrl->setParameterByClass(PublicProfileGUI::class, 'user', (string) $user);
+        $profile_target = $this->ctrl->getLinkTargetByClass(
+            PublicProfileGUI::class,
+            'getHTML'
+        );
+
+        return $this->ui_renderer->render($this->ui_factory->link()->standard($label, $profile_target));
     }
 }

@@ -20,13 +20,11 @@ The Legacy-UIComponents-Service has been lingering and causing problems for user
 ## Removal
 
 ### ILIAS 9
-* Advanced Selection List
 * Character Selector
 * Checkbox List Overlay
 
 ### ILIAS 10
 * Glyph
-* Grouped List
 * Lightbox
 * Modal
 * Overlay
@@ -34,12 +32,13 @@ The Legacy-UIComponents-Service has been lingering and causing problems for user
 * Tooltip
 
 ### ILIAS 11
-* Progress Bar
+* –
 
 ### ILIAS 12
 * Confirmation & Confirmation Table
 * Explorer & Explorer2
 * Nested List
+* Progress Bar
 * Syntax Highlighter (only used in in Page Editor, move there?)
 * Tabs
 * Text Highlighter

@@ -185,7 +185,7 @@ class Setting implements SettingDefinition
         if ($default_starting_point !== Repository::START_REPOSITORY_OBJ
             || ($ref_id = $this->starting_point_repository->getSystemDefaultStartingObject()) === null
             || ($obj_id = \ilObject::_lookupObjId($ref_id)) === 0) {
-            return $starting_point;
+            return $lng->txt($starting_point);
         }
         return $lng->txt('obj_' . \ilObject::_lookupType($obj_id)) . ' - ' . \ilObject::_lookupTitle($obj_id);
     }
@@ -225,7 +225,7 @@ class Setting implements SettingDefinition
         Language $lng,
         \ilPropertyFormGUI $form
     ): bool {
-        if ($form->getInput($this->getIdentifier()) !== Repository::START_REPOSITORY_OBJ) {
+        if ((int) $form->getInput($this->getIdentifier()) !== Repository::START_REPOSITORY_OBJ) {
             return true;
         }
 
@@ -244,7 +244,7 @@ class Setting implements SettingDefinition
     ): CustomConstraint {
         return $refinery->custom()->constraint(
             function (array $v): bool {
-                if ($v[0] !== Repository::START_REPOSITORY_OBJ) {
+                if ((int) $v[0] !== Repository::START_REPOSITORY_OBJ) {
                     return true;
                 }
                 if (!is_int($v[1]['usr_start_ref_id']) || !\ilObject::_exists($v[1]['usr_start_ref_id'], true)) {

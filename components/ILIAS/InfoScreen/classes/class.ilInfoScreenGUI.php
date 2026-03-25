@@ -538,7 +538,7 @@ class ilInfoScreenGUI
                     $this->addProperty(
                         $lng->txt("owner"),
                         $ownerObj->getPublicName(),
-                        $ilCtrl->getLinkTargetByClass(PublicProfileGUI::class, "getHTML")
+                        $ilCtrl->getLinkTargetByClass([ilPublicProfileBaseClassGUI::class, PublicProfileGUI::class], "getHTML")
                     );
                 } else {
                     $this->addProperty($lng->txt("owner"), $ownerObj->getPublicName());
@@ -1187,8 +1187,9 @@ class ilInfoScreenGUI
             $properties[] = [
                 "condition" => ilConditionHandlerGUI::translateOperator(
                     $condition['trigger_obj_id'],
-                    $condition['operator']
-                ) . ' ' . $condition['value'],
+                    $condition['operator'],
+                    $condition['value']
+                ),
                 "title" => ilObject::_lookupTitle($condition['trigger_obj_id']),
                 "link" => ilLink::_getLink($condition['trigger_ref_id'])
             ];

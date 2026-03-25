@@ -98,6 +98,7 @@ class ilAdministrationGUI implements ilCtrlBaseClassInterface
         $this->ctrl = $DIC->ctrl();
         $this->global_screen = $DIC->globalScreen();
 
+        $this->lng->loadLanguageModule('administration');
         $this->lng->loadLanguageModule('benchmark');
 
         $context = $this->global_screen->tool()->context();
@@ -180,6 +181,9 @@ class ilAdministrationGUI implements ilCtrlBaseClassInterface
             $obj_type = ilObject::_lookupType($this->cur_ref_id, true);
             $class_name = $this->obj_definition->getClassName($obj_type);
             $next_class = strtolower("ilObj" . $class_name . "GUI");
+
+            // #47446: redirect to remove the "return" command which is not implemented by all GUIs
+            $this->ctrl->redirectByClass($next_class);
         }
 
         // forward all other classes to gui commands

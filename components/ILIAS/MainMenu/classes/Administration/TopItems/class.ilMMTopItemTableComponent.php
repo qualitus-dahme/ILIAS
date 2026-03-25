@@ -146,10 +146,113 @@ class ilMMTopItemTableComponent implements OrderingRetrieval
                 !$item->canBeDeactivated(),
             );
         }
+
+        // Lost Items
+        if ($this->repository->hasLostItems()) {
+            yield $row_builder->buildOrderingRow(
+                $this->hash('lost_items'),
+                [
+                    'title' => $this->ui_factory->link()->standard(
+                        $this->pons->i18n()->t('mme_lost_items'),
+                        (string) $this->url_builder
+                            ->withURI(
+                                $this->pons->flow()->getTargetURI(ilMMSubItemGUI::class, ilMMSubItemGUI::CMD_DEFAULT)
+                            )
+                            ->withParameter($this->token, $this->hash('lost_items'))
+                            ->buildURI()
+                    ),
+                    'active' => false,
+                    'status' => '',
+                    'sub_items' => '-',
+                    'css_id' => "mm_lost_items",
+                    'type' => '-',
+                    'provider' => '-',
+                ]
+            )->withDisabledAction(
+                self::ACTION_EDIT,
+                true
+            )->withDisabledAction(
+                self::ACTION_TRANSLATE,
+                true
+            )->withDisabledAction(
+                self::ACTION_ACTIVATE,
+                true
+            )->withDisabledAction(
+                self::ACTION_DEACTIVATE,
+                true,
+            )->withDisabledAction(
+                self::ACTION_MOVE,
+                true
+            )->withDisabledAction(
+                self::ACTION_DELETE,
+                true
+            )->withDisabledAction(
+                self::ACTION_EDIT_SUB_TEMS,
+                true
+            );
+
+        }
+
     }
 
     public function get(): Component|array
     {
+        $actions = [
+            self::ACTION_EDIT_SUB_TEMS => $this->ui_factory->table()->action()->single(
+                $this->pons->i18n()->t('edit_sub_tems'),
+                $this->url_builder->withURI(
+                    $this->pons->flow()->getTargetURI(ilMMSubItemGUI::class, ilMMSubItemGUI::CMD_DEFAULT)
+                ),
+                $this->token
+            ),
+        ];
+        if ($this->write_access) {
+            $actions = array_merge($actions, [
+                self::ACTION_EDIT => $this->ui_factory->table()->action()->single(
+                    $this->pons->i18n()->t('edit'),
+                    $this->url_builder->withURI(
+                        $this->pons->flow()->getHereAsURI(ilMMTopItemGUI::CMD_EDIT)
+                    ),
+                    $this->token
+                )->withAsync(true),
+                self::ACTION_TRANSLATE => $this->ui_factory->table()->action()->single(
+                    $this->pons->i18n()->t('translate'),
+                    $this->url_builder->withURI(
+                        $this->pons->flow()->getTranslationAsURI()
+                    ),
+                    $this->token
+                )->withAsync(true),
+                self::ACTION_ACTIVATE => $this->ui_factory->table()->action()->standard(
+                    $this->pons->i18n()->t('activate'),
+                    $this->url_builder->withURI(
+                        $this->pons->flow()->getHereAsURI(ilMMTopItemGUI::CMD_ACTIVATE)
+                    ),
+                    $this->token
+                ),
+                self::ACTION_DEACTIVATE => $this->ui_factory->table()->action()->standard(
+                    $this->pons->i18n()->t('deactivate'),
+                    $this->url_builder->withURI(
+                        $this->pons->flow()->getHereAsURI(ilMMTopItemGUI::CMD_DEACTIVATE)
+                    ),
+                    $this->token
+                ),
+                self::ACTION_MOVE => $this->ui_factory->table()->action()->standard(
+                    $this->pons->i18n()->t('move'),
+                    $this->url_builder->withURI(
+                        $this->pons->flow()->getHereAsURI(ilMMTopItemGUI::CMD_SELECT_PARENT)
+                    ),
+                    $this->token
+                )->withAsync(true),
+                self::ACTION_DELETE => $this->ui_factory->table()->action()->standard(
+                    $this->pons->i18n()->t('delete'),
+                    $this->url_builder->withURI(
+                        $this->pons->flow()->getHereAsURI(ilMMTopItemGUI::CMD_CONFIRM_DELETE)
+                    ),
+                    $this->token
+                )->withAsync(true),
+            ]);
+        }
+
         return [
             $this->ui_factory
                 ->table()
@@ -180,59 +283,10 @@ class ilMMTopItemTableComponent implements OrderingRetrieval
                         ),
                     ]
                 )
+                ->withOrderingDisabled(!$this->write_access)
                 ->withRequest($this->pons->in()->request())
                 ->withActions(
-                    [
-                        self::ACTION_EDIT_SUB_TEMS => $this->ui_factory->table()->action()->single(
-                            $this->pons->i18n()->t('edit_sub_tems'),
-                            $this->url_builder->withURI(
-                                $this->pons->flow()->getTargetURI(ilMMSubItemGUI::class, ilMMSubItemGUI::CMD_DEFAULT)
-                            ),
-                            $this->token
-                        ),
-                        self::ACTION_EDIT => $this->ui_factory->table()->action()->single(
-                            $this->pons->i18n()->t('edit'),
-                            $this->url_builder->withURI(
-                                $this->pons->flow()->getHereAsURI(ilMMTopItemGUI::CMD_EDIT)
-                            ),
-                            $this->token
-                        )->withAsync(true),
-                        self::ACTION_TRANSLATE => $this->ui_factory->table()->action()->single(
-                            $this->pons->i18n()->t('translate'),
-                            $this->url_builder->withURI(
-                                $this->pons->flow()->getTranslationAsURI()
-                            ),
-                            $this->token
-                        )->withAsync(true),
-                        self::ACTION_ACTIVATE => $this->ui_factory->table()->action()->standard(
-                            $this->pons->i18n()->t('activate'),
-                            $this->url_builder->withURI(
-                                $this->pons->flow()->getHereAsURI(ilMMTopItemGUI::CMD_ACTIVATE)
-                            ),
-                            $this->token
-                        ),
-                        self::ACTION_DEACTIVATE => $this->ui_factory->table()->action()->standard(
-                            $this->pons->i18n()->t('deactivate'),
-                            $this->url_builder->withURI(
-                                $this->pons->flow()->getHereAsURI(ilMMTopItemGUI::CMD_DEACTIVATE)
-                            ),
-                            $this->token
-                        ),
-                        self::ACTION_MOVE => $this->ui_factory->table()->action()->standard(
-                            $this->pons->i18n()->t('move'),
-                            $this->url_builder->withURI(
-                                $this->pons->flow()->getHereAsURI(ilMMTopItemGUI::CMD_SELECT_PARENT)
-                            ),
-                            $this->token
-                        )->withAsync(true),
-                        self::ACTION_DELETE => $this->ui_factory->table()->action()->standard(
-                            $this->pons->i18n()->t('delete'),
-                            $this->url_builder->withURI(
-                                $this->pons->flow()->getHereAsURI(ilMMTopItemGUI::CMD_CONFIRM_DELETE)
-                            ),
-                            $this->token
-                        )->withAsync(true),
-                    ]
+                    $actions
                 )
         ];
     }

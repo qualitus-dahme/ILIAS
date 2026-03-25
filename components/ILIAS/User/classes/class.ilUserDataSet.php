@@ -308,7 +308,12 @@ class ilUserDataSet extends ilDataSet
             case "usr":
                 // only users themselves import their profiles!
                 // thus we can map the import id of the dataset to the current user
-                $a_mapping->addMapping('components/ILIAS/User', 'usr', $a_rec['Id'], $this->current_user->getId());
+                $a_mapping->addMapping(
+                    'components/ILIAS/User',
+                    'usr',
+                    $a_rec['Id'],
+                    (string) $this->current_user->getId()
+                );
                 break;
 
             case "usr_profile":

@@ -20,6 +20,8 @@ declare(strict_types=1);
 
 namespace ILIAS\LDAP\Server\UI;
 
+use ILIAS\Data\Range;
+
 readonly class ServerTable implements \ILIAS\UI\Component\Table\DataRetrieval
 {
     private \ILIAS\UI\URLBuilder $url_builder;
@@ -38,7 +40,8 @@ readonly class ServerTable implements \ILIAS\UI\Component\Table\DataRetrieval
         private \ilCtrlInterface $ctrl,
         private \Psr\Http\Message\ServerRequestInterface $http_request,
         private \ILIAS\Data\URI $action_url,
-        private bool $has_write_access
+        private bool $has_write_access,
+        private bool $has_read_access
     ) {
         [
             $this->url_builder,
@@ -96,7 +99,7 @@ readonly class ServerTable implements \ILIAS\UI\Component\Table\DataRetrieval
     ): \Generator {
         foreach ($this->getRecords($range, $order) as $server) {
             $title = $server['name'];
-            if ($this->has_write_access) {
+            if ($this->has_read_access) {
                 $this->ctrl->setParameter($this->parent_gui, 'ldap_server_id', $server['server_id']);
                 $title = $this->ui_renderer->render(
                     $this->ui_factory->link()->standard(
@@ -179,32 +182,37 @@ readonly class ServerTable implements \ILIAS\UI\Component\Table\DataRetrieval
      */
     private function getActions(): array
     {
-        if (!$this->has_write_access) {
-            return [];
-        }
+        $actions = [];
 
-        return [
-            'editServerSettings' => $this->ui_factory->table()->action()->single(
-                $this->lng->txt('edit'),
+        if ($this->has_read_access || $this->has_write_access) {
+            $actions['editServerSettings'] = $this->ui_factory->table()->action()->single(
+                $this->has_write_access ? $this->lng->txt('edit') : $this->lng->txt('view'),
                 $this->url_builder->withParameter($this->action_parameter_token, 'editServerSettings'),
                 $this->row_id_token
-            ),
-            'activateServer' => $this->ui_factory->table()->action()->single(
+            );
+        }
+
+        if ($this->has_write_access) {
+            $actions['activateServer'] = $this->ui_factory->table()->action()->single(
                 $this->lng->txt('activate'),
                 $this->url_builder->withParameter($this->action_parameter_token, 'activateServer'),
                 $this->row_id_token
-            ),
-            'deactivateServer' => $this->ui_factory->table()->action()->single(
+            );
+
+            $actions['deactivateServer'] = $this->ui_factory->table()->action()->single(
                 $this->lng->txt('deactivate'),
                 $this->url_builder->withParameter($this->action_parameter_token, 'deactivateServer'),
                 $this->row_id_token
-            ),
-            'confirmDeleteServerSettings' => $this->ui_factory->table()->action()->single(
+            );
+
+            $actions['confirmDeleteServerSettings'] = $this->ui_factory->table()->action()->single(
                 $this->lng->txt('delete'),
                 $this->url_builder->withParameter($this->action_parameter_token, 'confirmDeleteServerSettings'),
                 $this->row_id_token
-            )
-        ];
+            );
+        }
+
+        return $actions;
     }
 
     public function getComponent(): \ILIAS\UI\Component\Table\Table
@@ -216,8 +224,9 @@ readonly class ServerTable implements \ILIAS\UI\Component\Table\DataRetrieval
                 $this->lng->txt('ldap_servers'),
                 $this->getColumnDefinition(),
             )
-            ->withId(self::class)
+            ->withId(str_replace('\\', '', self::class))
             ->withOrder(new \ILIAS\Data\Order('title', \ILIAS\Data\Order::ASC))
+            ->withRange(new Range(0, 100))
             ->withActions($this->getActions())
             ->withRequest($this->http_request);
     }

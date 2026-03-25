@@ -1059,6 +1059,7 @@ class ilTable2GUI extends ilTableGUI
                         : $column["width"];
                     $this->tpl->setVariable("TBL_COLUMN_WIDTH", " style=\"width:" . $width . "\"");
                 }
+                $this->tpl->setVariable("TXT_SELECTION", $this->lng->txt("tbl_selection"));
                 $this->tpl->parseCurrentBlock();
                 continue;
             }
@@ -1495,8 +1496,6 @@ class ilTable2GUI extends ilTableGUI
         if (count($filter) == 0 && count($opt_filter) == 0) {
             return;
         }
-
-        ilYuiUtil::initConnection();
 
         $ccnt = 0;
 

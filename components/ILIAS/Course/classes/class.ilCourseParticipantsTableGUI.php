@@ -113,7 +113,7 @@ class ilCourseParticipantsTableGUI extends ilParticipantTableGUI
         $this->addColumn($this->lng->txt('crs_blocked'), 'blocked');
         $this->addColumn($this->lng->txt('crs_notification_list_title'), 'notification');
 
-        $this->addColumn($this->lng->txt('actions'), 'optional', '', false, 'ilMembershipRowActionsHeader');
+        $this->addColumn($this->lng->txt('actions'), '', '', false, 'ilMembershipRowActionsHeader');
 
         $this->setRowTemplate("tpl.show_participants_row.html", "components/ILIAS/Course");
 
@@ -235,7 +235,7 @@ class ilCourseParticipantsTableGUI extends ilParticipantTableGUI
 
                 default:
                     $this->tpl->setCurrentBlock('custom_fields');
-                    $this->tpl->setVariable('VAL_CUST', is_array($a_set[$field] ?? '') ? implode(', ', $a_set[$field]) : (string) $a_set[$field]);
+                    $this->tpl->setVariable('VAL_CUST', is_array($a_set[$field] ?? '') ? implode(', ', $a_set[$field]) : (string) ($a_set[$field] ?? ''));
                     $this->tpl->parseCurrentBlock();
                     break;
             }

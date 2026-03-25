@@ -242,8 +242,8 @@ class ilAuthFrontend implements ilAuthFrontendInterface
             return false;
         }
 
-        // check simultaneos logins
-        $this->logger->debug('Check simutaneous login');
+        // check simultaneous logins
+        $this->logger->debug('Check simultaneous login');
         if (!$this->checkSimultaneousLogins($user)) {
             $this->logger->info('Authentication failed: simultaneous logins forbidden for user: ' . $this->getStatus()->getAuthenticatedUserId());
             $this->getStatus()->setStatus(ilAuthStatus::STATUS_AUTHENTICATION_FAILED);

@@ -184,6 +184,15 @@ class RequestDataCollector implements RequestDataCollectorInterface
         );
     }
 
+    public function getRowIdParameter(string $key): string|int
+    {
+        return $this->get($key, $this->refinery->byTrying([
+            $this->refinery->kindlyTo()->int(),
+            $this->refinery->kindlyTo()->string(),
+            $this->refinery->custom()->transformation(fn(array $v): string|int => $v[0])
+        ]));
+    }
+
     /**
      * @return array|string<int>
      */
@@ -198,9 +207,9 @@ class RequestDataCollector implements RequestDataCollectorInterface
         return $query->retrieve(
             $key,
             $this->refinery->custom()->transformation(
-                static fn(array|string $value): array|string => $value === 'ALL_OBJECTS' || $value[0] === 'ALL_OBJECTS'
+                static fn($v): array|string => $v === 'ALL_OBJECTS' || $v[0] === 'ALL_OBJECTS'
                     ? 'ALL_OBJECTS'
-                    : array_map('intval', $value)
+                    : $v
             )
         );
     }

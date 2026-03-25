@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace ILIAS\Test\Participants;
 
+use ILIAS\Language\Language;
 use ILIAS\Test\Results\Data\AttemptOverview;
 
 class Participant
@@ -35,6 +36,7 @@ class Participant
         private readonly string $firstname = '',
         private readonly string $lastname = '',
         private readonly string $login = '',
+        private readonly ?string $importname = null,
         private readonly string $matriculation = '',
         private int $extra_time = 0,
         private readonly int $attempts = 0,
@@ -84,6 +86,11 @@ class Participant
     public function getLogin(): string
     {
         return $this->login;
+    }
+
+    public function getImportname(): ?string
+    {
+        return $this->importname;
     }
 
     public function getMatriculation(): string
@@ -234,5 +241,21 @@ class Participant
     public function isScoringFinalized(): bool
     {
         return $this->scoring_finalized;
+    }
+
+    public function getDisplayName(Language $language): string
+    {
+        $display_name = '';
+
+        if ($this->firstname) {
+            $display_name .= $this->firstname . ' ';
+        }
+        if ($this->lastname) {
+            $display_name .= $this->lastname;
+        }
+
+        return $this->user_id === ANONYMOUS_USER_ID && $this->importname !== null && $this->importname !== ''
+            ? "{$this->importname} ({$language->txt('imported')})"
+            : $display_name;
     }
 }

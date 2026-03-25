@@ -35,16 +35,21 @@ class ilMMSubItemGUI extends ilMMBaseGUI
 
     private TokenContainer $sub_token;
     private TokenContainer $top_token;
-    private ilMMItemFacadeInterface $parent_item;
+    private ?ilMMItemFacadeInterface $parent_item = null;
 
     public function __construct(Pons $pons)
     {
         parent::__construct($pons);
         $this->sub_token = $this->pons->in()->buildToken('sub', 'id');
         $this->top_token = $this->pons->in()->buildToken('top', 'id');
-        $this->parent_item = $this->repository->getItemFacadeForIdentificationString(
-            $this->pons->in()->getFirstFromRequest($this->top_token->token())
-        );
+        $identification = $this->pons->in()->getFirstFromRequest($this->top_token->token());
+        if ($identification === 'lost_items' || $identification === null) {
+            $this->parent_item = null;
+        } else {
+            $this->parent_item = $this->repository->getItemFacadeForIdentificationString(
+                $identification
+            );
+        }
     }
 
     #[\Override]
@@ -117,9 +122,15 @@ class ilMMSubItemGUI extends ilMMBaseGUI
 
         $form = $this->buildForm();
 
-        if ($save && $form->save()) {
-            $this->pons->out()->success($this->lng->t('item_updated'), true);
-            $this->pons->flow()->redirect(self::CMD_DEFAULT);
+        if ($save) {
+            if ($form->save()) {
+                $this->pons->out()->success($this->lng->t('item_updated'), true);
+                $this->pons->flow()->redirect(self::CMD_DEFAULT);
+            } else {
+                $this->pons->in()->keep($this->sub_token->token());
+                $this->pons->out()->out($form->get());
+                return;
+            }
         }
 
         $this->pons->out()->outAsyncAsModal(
@@ -132,7 +143,7 @@ class ilMMSubItemGUI extends ilMMBaseGUI
     protected function index(): void
     {
         $write_access = $this->access->hasUserPermissionTo('write');
-        if ($write_access) {
+        if ($write_access && $this->parent_item !== null) {
             // ADD NEW
             $form = $this->buildForm();
             $add_modal = $this->ui->factory()->modal()->roundtrip(

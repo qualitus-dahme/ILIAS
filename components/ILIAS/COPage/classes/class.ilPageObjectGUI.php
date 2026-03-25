@@ -1788,7 +1788,7 @@ class ilPageObjectGUI
         $wb_path = ilFileUtils::getWebspaceDir("output") . "/";
         $enlarge_path = ilUtil::getImagePath("media/enlarge.svg");
         $params = array('mode' => $mode, 'enlarge_path' => $enlarge_path,
-            'link_params' => "ref_id=" . $this->requested_ref_id,'fullscreen_link' => "",
+            'link_params' => "ref_id=" . $this->requested_ref_id,'fullscreen_link' => $this->getFullscreenLink(),
                         'enable_html_mob' => ilObjMediaObject::isTypeAllowed("html") ? "y" : "n",
             'ref_id' => $this->requested_ref_id, 'webspace_path' => $wb_path);
         $output = $this->xsl->process($xml, $params);
@@ -2458,11 +2458,9 @@ class ilPageObjectGUI
     {
         $this->setBackToEditTabs();
 
-        $atpl = new ilTemplate("tpl.page_activation.php", true, true, "components/ILIAS/COPage");
         $this->initActivationForm();
         $this->getActivationFormValues();
-        $atpl->setVariable("FORM", $this->form->getHTML());
-        $this->tpl->setContent($atpl->get());
+        $this->tpl->setContent($this->form->getHTML());
     }
 
     /**

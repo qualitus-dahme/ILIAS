@@ -373,7 +373,8 @@ class ilObjStyleSheet extends ilObject
             "a" => ["hover"],
             "div" => ["hover", "before"],
             "img" => ["hover"],
-            "li" => ["before"]
+            "li" => ["before"],
+            "input" => ["hover"],
         ];
 
     // core styles these styles MUST exists -> see also basic_style/style.xml
@@ -945,6 +946,12 @@ class ilObjStyleSheet extends ilObject
         }
 
         return $chars;
+    }
+
+    public function hasCharacteristic(string $type, string $char): bool
+    {
+        $chars = $this->getCharacteristics($type);
+        return in_array($char, $chars);
     }
 
     public function setCharacteristics(array $a_chars): void
@@ -1559,7 +1566,7 @@ class ilObjStyleSheet extends ilObject
 
     public static function getExportContentStylePath(): string
     {
-        return "content_style/style.css";
+        return "assets/content_style/style.css";
     }
 
     /**

@@ -413,7 +413,9 @@ class ilUserImportParser extends ilSaxParser
                 }
                 $this->user_obj->setLanguage($a_attribs['Language'] ?? '');
                 $this->user_obj->setImportId($a_attribs['Id'] ?? '');
-                $this->action = (is_null($a_attribs['Action'])) ? 'Insert' : $a_attribs['Action'];
+                $this->action = isset($a_attribs['Action'])
+                    ? $a_attribs['Action']
+                    : 'Insert';
                 $this->current_user_password = null;
                 $this->current_user_password_type = null;
                 $this->currActive = null;
@@ -1116,7 +1118,7 @@ class ilUserImportParser extends ilSaxParser
                             if ($this->tagContained('PostalCode')) {
                                 $update_user->setZipcode($this->user_obj->getZipcode());
                             }
-                            if ($this->tagContained('SelCountry')) {
+                            if ($this->tagContained('SelCountry') && mb_strlen($this->cdata) === 2) {
                                 $update_user->setCountry($this->user_obj->getCountry());
                             }
                             if ($this->tagContained('PhoneOffice')) {
@@ -1337,11 +1339,11 @@ class ilUserImportParser extends ilSaxParser
                 break;
 
             case 'Country':
-                $this->user_obj->setCountry($this->getCDataWithoutTags($this->cdata));
-                break;
-
             case 'SelCountry':
-                $this->user_obj->setSelectedCountry($this->getCDataWithoutTags($this->cdata));
+                if (mb_strlen($this->cdata) !== 2) {
+                    break;
+                }
+                $this->user_obj->setCountry($this->getCDataWithoutTags($this->cdata));
                 break;
 
             case 'PhoneOffice':
@@ -1493,7 +1495,15 @@ class ilUserImportParser extends ilSaxParser
                     break;
                 }
 
-                $this->udf_data[$field_id] = strip_tags($this->cdata, ilRTESettings::_getUsedHTMLTags('textarea'));
+                $data = json_decode(
+                    strip_tags($this->cdata),
+                    true
+                ) ?? $this->cdata;
+                if ($data === '') {
+                    break;
+                }
+
+                $this->udf_data[$field_id] = $data;
 
                 break;
             case 'AccountInfo':
@@ -1688,17 +1698,11 @@ class ilUserImportParser extends ilSaxParser
                 break;
 
             case 'Country':
-                $this->user_obj->setCountry($this->cdata);
-                break;
-
             case 'SelCountry':
                 if (mb_strlen($this->cdata) !== 2) {
-                    $this->logFailure(
-                        $this->user_obj->getLogin(),
-                        sprintf($this->lng->txt('usrimport_xml_element_content_illegal'), 'SelCountry', $this->stripTags($this->cdata))
-                    );
+                    break;
                 }
-                $this->user_obj->setSelectedCountry($this->cdata);
+                $this->user_obj->setCountry($this->cdata);
                 break;
 
             case 'PhoneOffice':
@@ -1815,6 +1819,9 @@ class ilUserImportParser extends ilSaxParser
                 }
                 break;
             case 'TimeLimitFrom':
+                if ($this->cdata === '') {
+                    break;
+                }
                 // Accept datetime or Unix timestamp
                 if (strtotime($this->cdata) === false && !is_numeric($this->cdata)) {
                     $this->logFailure($this->user_obj->getLogin(), sprintf($this->lng->txt('usrimport_xml_element_content_illegal'), 'TimeLimitFrom', $this->stripTags($this->cdata)));
@@ -1822,6 +1829,9 @@ class ilUserImportParser extends ilSaxParser
                 $this->user_obj->setTimeLimitFrom((int) $this->cdata);
                 break;
             case 'TimeLimitUntil':
+                if ($this->cdata === '') {
+                    break;
+                }
                 // Accept datetime or Unix timestamp
                 if (strtotime($this->cdata) === false && !is_numeric($this->cdata)) {
                     $this->logFailure($this->user_obj->getLogin(), sprintf($this->lng->txt('usrimport_xml_element_content_illegal'), 'TimeLimitUntil', $this->stripTags($this->cdata)));

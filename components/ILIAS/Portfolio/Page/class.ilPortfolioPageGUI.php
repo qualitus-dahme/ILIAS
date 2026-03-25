@@ -81,14 +81,6 @@ class ilPortfolioPageGUI extends ilPageObjectGUI
             ilObjStyleSheet::getSyntaxStylePath()
         );
         $tpl->parseCurrentBlock();
-
-        $tpl->setCurrentBlock("ContentStyle");
-        $tpl->setVariable(
-            "LOCATION_CONTENT_STYLESHEET",
-            ilObjStyleSheet::getContentStylePath(0)
-        );
-        $tpl->parseCurrentBlock();
-
         $this->requested_ppage = $this->port_request->getPortfolioPageId();
     }
 

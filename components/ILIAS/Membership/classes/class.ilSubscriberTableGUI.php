@@ -92,7 +92,6 @@ class ilSubscriberTableGUI extends ilTable2GUI
         $this->addMultiCommand('addToClipboard', $this->lng->txt('clipboard_add_btn'));
         // end-patch clipboard
 
-        $this->setPrefix('subscribers');
         $this->setSelectAllCheckbox('subscribers', true);
         $this->setRowTemplate("tpl.show_subscribers_row.html", "components/ILIAS/Membership");
 
@@ -315,7 +314,7 @@ class ilSubscriberTableGUI extends ilTable2GUI
         // Custom user data fields
         if (is_array($udf_ids)) {
             $a_user_data = array_reduce(
-                $this->profile->getDataForMultiple($usr_ids),
+                iterator_to_array($this->profile->getDataForMultiple($usr_ids)),
                 function (array $c, ProfileData $v) use ($udf_ids): array {
                     if (!$this->checkAcceptance($v->getId())) {
                         return $c;
@@ -324,6 +323,7 @@ class ilSubscriberTableGUI extends ilTable2GUI
                     foreach ($udf_ids as $field_id) {
                         $c[$v->getId()]['udf_' . $field_id] = implode(', ', $v->getAdditionalFieldByIdentifier($field_id) ?? []);
                     }
+                    return $c;
                 },
                 $a_user_data
             );

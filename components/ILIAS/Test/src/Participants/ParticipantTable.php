@@ -108,11 +108,11 @@ class ParticipantTable implements DataRetrieval
             $total_duration = $record->getTotalDuration($processing_time);
             $status_of_attempt = $record->getAttemptOverviewInformation()?->getStatusOfAttempt() ?? StatusOfAttempt::NOT_YET_STARTED;
             $row = [
-                'name' => $this->test_object->buildName($record->getUserId(), $record->getFirstname(), $record->getLastname()),
+                'name' => $record->getDisplayName($this->lng),
                 'login' => $record->getLogin(),
                 'matriculation' => $record->getMatriculation(),
                 'total_time_on_task' => $record->getAttemptOverviewInformation()?->getHumanReadableTotalTimeOnTask() ?? '',
-                'status_of_attempt' => $this->lng->txt($status_of_attempt->value),
+                'status_of_attempt' => $status_of_attempt->getTranslation($this->lng),
                 'id_of_attempt' => $record->getAttemptOverviewInformation()?->getExamId(),
                 'ip_range' => $record->getClientIpTo() !== '' || $record->getClientIpFrom() !== ''
                     ? sprintf('%s - %s', $record->getClientIpFrom(), $record->getClientIpTo())
@@ -160,7 +160,10 @@ class ParticipantTable implements DataRetrieval
             }
 
             yield $this->table_actions->onDataRow(
-                $row_builder->buildDataRow((string) $record->getUserId(), $row),
+                $row_builder->buildDataRow(
+                    "{$record->getUserId()}_{$record->getActiveId()}",
+                    $row
+                ),
                 $record
             );
         }
@@ -216,11 +219,13 @@ class ParticipantTable implements DataRetrieval
             ) => $a->getRemainingDuration($processing_time, $reset_time_on_new_attempt)
                 <=> $b->getRemainingDuration($processing_time, $reset_time_on_new_attempt),
             'last_access' => static fn(Participant $a, Participant $b) => $a->getLastAccess() <=> $b->getLastAccess(),
-            'status_of_attempt' => static fn(
+            'status_of_attempt' => fn(
                 Participant $a,
                 Participant $b
-            ) => $a->getAttemptOverviewInformation()?->getStatusOfAttempt()
-                <=> $b->getAttemptOverviewInformation()?->getStatusOfAttempt(),
+            ) => strcmp(
+                $a->getAttemptOverviewInformation()?->getStatusOfAttempt()?->getTranslation($this->lng) ?? StatusOfAttempt::NOT_YET_STARTED->getTranslation($this->lng),
+                $b->getAttemptOverviewInformation()?->getStatusOfAttempt()?->getTranslation($this->lng) ?? StatusOfAttempt::NOT_YET_STARTED->getTranslation($this->lng)
+            ),
             'reached_points' => static fn(
                 Participant $a,
                 Participant $b
@@ -239,8 +244,8 @@ class ParticipantTable implements DataRetrieval
             'test_passed' => static fn(
                 Participant $a,
                 Participant $b
-            ) => $a->getAttemptOverviewInformation()?->hasPassingMark()
-                <=> $b->getAttemptOverviewInformation()?->hasPassingMark(),
+            ) => $b->getAttemptOverviewInformation()?->hasPassingMark()
+                <=> $a->getAttemptOverviewInformation()?->hasPassingMark(),
             'mark' => static fn(
                 Participant $a,
                 Participant $b
@@ -405,7 +410,8 @@ class ParticipantTable implements DataRetrieval
 
         if ($this->test_access->checkParticipantsResultsAccess()) {
             $columns['reached_points'] = $column_factory->text($this->lng->txt('tst_reached_points'))
-                ->withIsSortable(true);
+                ->withIsSortable(true)
+                ->withOrderingLabels(...$column_factory->number($this->lng->txt('tst_reached_points'))->getOrderingLabels());
             $columns['nr_of_answered_questions'] = $column_factory->text($this->lng->txt('tst_answered_questions'))
                 ->withIsOptional(true, false)
                 ->withIsSortable(true);

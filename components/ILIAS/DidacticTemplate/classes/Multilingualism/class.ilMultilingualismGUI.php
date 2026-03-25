@@ -52,7 +52,7 @@ class ilMultilingualismGUI
         $this->lom_services = $DIC->learningObjectMetadata();
 
         $this->obj_trans = ilMultilingualism::getInstance($a_obj_id, $a_type);
-        $this->request = new \ILIAS\Multilingualism\StandardGUIRequest(
+        $this->request = new \ILIAS\DidacticTemplate\Multilingualism\StandardGUIRequest(
             $DIC->http(),
             $DIC->refinery()
         );
@@ -141,7 +141,7 @@ class ilMultilingualismGUI
         $ilToolbar = $this->toolbar;
         if ($this->getTitleDescrOnlyMode()) {
             $ilToolbar->addButton(
-                $this->lng->txt("obj_add_languages"),
+                $this->lng->txt("didactic_translation_add_languages"),
                 $this->ctrl->getLinkTarget($this, "addLanguages")
             );
         }
@@ -260,7 +260,7 @@ class ilMultilingualismGUI
         }
 
         if ($a_add) {
-            $form->setTitle($lng->txt("obj_add_languages"));
+            $form->setTitle($lng->txt("didactic_translation_add_languages"));
             $form->addCommandButton("saveLanguages", $lng->txt("save"));
         } else {
             if ($this->getTitleDescrOnlyMode()) {

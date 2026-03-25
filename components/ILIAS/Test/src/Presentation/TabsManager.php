@@ -91,11 +91,19 @@ class TabsManager
     public function activateTab(string $tab_id): void
     {
         switch ($tab_id) {
+            case self::TAB_ID_QUESTIONS:
             case self::TAB_ID_PARTICIPANTS:
             case self::TAB_ID_YOUR_RESULTS:
             case self::TAB_ID_SETTINGS:
+            case self::TAB_ID_MANUAL_SCORING:
+            case self::TAB_ID_CORRECTION:
             case self::TAB_ID_TEST:
+            case self::TAB_ID_EXPORT:
             case self::TAB_ID_LEARNING_PROGRESS:
+            case self::TAB_ID_META_DATA:
+            case self::TAB_ID_PERMISSIONS:
+            case self::TAB_ID_HISTORY:
+            case self::TAB_ID_INFOSCREEN:
                 $this->tabs->activateTab($tab_id);
         }
     }
@@ -111,6 +119,8 @@ class TabsManager
 
             case self::SUBTAB_ID_QST_LIST_VIEW:
             case self::SUBTAB_ID_QST_PAGE_VIEW:
+            case self::QUESTIONS_SUBTAB_ID_RANDOM_SETTINGS:
+            case self::QUESTIONS_SUBTAB_ID_RANDOM_POOLS:
 
             case self::SETTINGS_SUBTAB_ID_GENERAL:
             case self::SETTINGS_SUBTAB_ID_MARK_SCHEMA:
@@ -118,6 +128,8 @@ class TabsManager
             case self::SETTINGS_SUBTAB_ID_EDIT_INTRODUCTION_PAGE:
             case self::SETTINGS_SUBTAB_ID_EDIT_CONCLUSION_PAGE:
             case self::SETTINGS_SUBTAB_ID_CERTIFICATE:
+            case self::SETTINGS_SUBTAB_ID_ASSIGN_SKILL_TRESHOLDS:
+            case self::SETTINGS_SUBTAB_ID_ASSIGN_SKILLS_TO_QUESTIONS:
             case self::SETTINGS_SUBTAB_ID_PERSONAL_DEFAULT_SETTINGS:
                 $this->tabs->activateSubTab($sub_tab_id);
         }
@@ -440,7 +452,9 @@ class TabsManager
                     $this->ctrl->getLinkTargetByClass(
                         [\ilObjTestGUI::class, ConsecutiveScoringGUI::class],
                         ConsecutiveScoringGUI::DEFAULT_COMMAND
-                    )
+                    ),
+                    '',
+                    [ConsecutiveScoringGUI::class]
                 );
             }
         }
@@ -702,21 +716,19 @@ class TabsManager
     public function needsYourResultsTab(): bool
     {
         return $this->test_session->reportableResultsAvailable($this->test_object)
-            || $this->test_session->getActiveId() !== 0
-                && $this->test_object->canShowSolutionPrintview($this->test_session->getUserId());
+            || (
+                $this->test_session->getActiveId() !== 0
+                && $this->test_object->canShowSolutionPrintview($this->test_session->getUserId())
+            );
     }
 
     protected function getYourResultsTabTarget(): string
     {
-        if ($this->needsLoResultsSubTab()) {
-            return $this->ctrl->getLinkTargetByClass([\ilObjTestGUI::class, \ilTestResultsGUI::class, \ilTestEvalObjectiveOrientedGUI::class]);
-        }
-
-        if ($this->needsYourSolutionsSubTab()) {
-            return $this->ctrl->getLinkTargetByClass([\ilTestResultsGUI::class, \ilMyTestSolutionsGUI::class, \ilTestEvaluationGUI::class]);
-        }
-
-        return $this->ctrl->getLinkTargetByClass([\ilTestResultsGUI::class, \ilMyTestResultsGUI::class, \ilTestEvaluationGUI::class]);
+        return $this->ctrl->getLinkTargetByClass(
+            $this->needsLoResultsSubTab()
+                ? [\ilObjTestGUI::class, \ilTestResultsGUI::class, \ilTestEvalObjectiveOrientedGUI::class]
+                : [\ilTestResultsGUI::class, \ilMyTestResultsGUI::class, \ilTestEvaluationGUI::class]
+        );
     }
 
     protected function needsYourResultsSubTab(): bool
@@ -800,7 +812,10 @@ class TabsManager
             $this->tabs->addSubTab(
                 self::SUBTAB_ID_MY_SOLUTIONS,
                 $this->lng->txt('tst_list_of_answers_show'),
-                $this->ctrl->getLinkTargetByClass([\ilTestResultsGUI::class, \ilMyTestSolutionsGUI::class, \ilTestEvaluationGUI::class])
+                $this->ctrl->getLinkTargetByClass(
+                    [\ilTestResultsGUI::class, \ilMyTestResultsGUI::class, \ilTestEvaluationGUI::class],
+                    'outUserListOfAnswerPasses'
+                )
             );
         }
     }

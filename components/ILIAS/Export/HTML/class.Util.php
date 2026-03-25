@@ -152,6 +152,10 @@ class Util
         $target_dir = $this->target_dir;
         $css = $global_screen->layout()->meta()->getCss();
         foreach ($css->getItemsInOrderOfDelivery() as $item) {
+            // skip dummy "assets/content_style/style.css"
+            if (str_contains($item->getContent(), "assets/content_style")) {
+                continue;
+            }
             $this->exportResourceFile($target_dir, $item->getContent());
         }
         $js = $global_screen->layout()->meta()->getJs();

@@ -151,7 +151,10 @@ class ParticipantTable implements DataRetrieval
             }
 
             yield $this->table_actions->onDataRow(
-                $row_builder->buildDataRow((string) $record->getUserId(), $row),
+                $row_builder->buildDataRow(
+                    "{$record->getUserId()}_{$record->getActiveId()}",
+                    $row
+                ),
                 $record
             );
         }
@@ -259,7 +262,7 @@ class ParticipantTable implements DataRetrieval
         }
 
         return $this->ui_service->filter()->standard(
-            'participant_filter',
+            "participant_filter_{$this->test_request->getRefId()}",
             $action,
             $filter_inputs,
             $is_input_initially_rendered,

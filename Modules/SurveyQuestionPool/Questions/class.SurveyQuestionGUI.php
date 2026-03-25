@@ -16,6 +16,7 @@
  *
  *********************************************************************/
 
+use ILIAS\LegalDocuments\HTMLPurifier;
 use ILIAS\SurveyQuestionPool\Editing\EditingGUIRequest;
 use ILIAS\SurveyQuestionPool\Editing\EditManager;
 
@@ -27,6 +28,7 @@ use ILIAS\SurveyQuestionPool\Editing\EditManager;
  */
 abstract class SurveyQuestionGUI
 {
+    protected \ILIAS\Survey\InternalDomainService $domain;
     protected \ILIAS\Survey\InternalGUIService $gui;
     protected EditingGUIRequest $request;
     protected EditManager $edit_manager;
@@ -88,6 +90,7 @@ abstract class SurveyQuestionGUI
             ->domain()
             ->editing();
         $this->gui = $DIC->survey()->internal()->gui();
+        $this->domain = $DIC->survey()->internal()->domain();
     }
 
     abstract protected function initObject(): void;
@@ -330,7 +333,14 @@ abstract class SurveyQuestionGUI
             $this->object->label = ($form->getInput("label"));
             $this->object->setAuthor($form->getInput("author"));
             $this->object->setDescription($form->getInput("description"));
-            $this->object->setQuestiontext($form->getInput("question"));
+
+            $tags = ilObjAdvancedEditing::_getUsedHTMLTags("survey");
+            $purifier = new HTMLPurifier($tags);
+            $question = $form->getInput("question");
+
+            $question = $purifier->purify($question);
+
+            $this->object->setQuestiontext($question);
             $this->object->setObligatory($form->getInput("obligatory"));
 
             $this->importEditFormValues($form);
@@ -378,6 +388,15 @@ abstract class SurveyQuestionGUI
                     $this->ctrl->setParameter($this, 'rtrn', 1);
                 }
                 $this->ctrl->redirect($this, 'originalSyncForm');
+            }
+
+            // if we got a survey, already save in survey
+            if ($this->request->getNewForSurvey() > 0) {
+                $survey = new ilObjSurvey($this->request->getNewForSurvey());
+                $this->domain->sequence(
+                    $survey->getSurveyId(),
+                    $survey
+                )->appendQuestion($this->object->getId());  // will check if question is already in survey
             }
 
             $this->tpl->setOnScreenMessage('success', $this->lng->txt("msg_obj_modified"), true);

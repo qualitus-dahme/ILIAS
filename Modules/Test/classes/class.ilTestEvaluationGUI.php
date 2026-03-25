@@ -59,7 +59,8 @@ class ilTestEvaluationGUI extends ilTestServiceGUI
 
         $this->processLockerFactory = new ilTestProcessLockerFactory(
             new ilSetting('assessment'),
-            $this->db
+            $this->db,
+            ilLoggerFactory::getLogger('tst')
         );
     }
 
@@ -186,6 +187,12 @@ class ilTestEvaluationGUI extends ilTestServiceGUI
 
         $counter = 1;
         if (count($participantData->getActiveIds()) > 0) {
+            $test_participants = $this->getObject()?->getTestParticipants() ?? [];
+            $test_participant_list = new ilTestParticipantList($this->object, $this->user, $this->lng, $this->db);
+            if ($test_participants !== []) {
+                $test_participant_list->initializeFromDbRows($test_participants);
+            }
+
             foreach ($participantData->getActiveIds() as $active_id) {
                 if (!isset($found_participants[$active_id]) || !($found_participants[$active_id] instanceof ilTestEvaluationUserData)) {
                     continue;
@@ -204,17 +211,17 @@ class ilTestEvaluationGUI extends ilTestServiceGUI
                 }
                 if (!$remove) {
                     // build the evaluation row
-                    $evaluationrow = [];
-                    if ($this->object->getAnonymity()) {
-                        $evaluationrow['name'] = $counter;
-                        $evaluationrow['login'] = '';
+                    if ($this->getObject()?->getAnonymity()) {
+                        $participant = $test_participant_list->getParticipantByActiveId($active_id);
+                        $evaluationrow = [
+                            'name' => $participant ? $test_participant_list->buildFullname($participant) : '',
+                            'login' => ''
+                        ];
                     } else {
-                        $evaluationrow['name'] = $userdata->getName();
-                        if (strlen($userdata->getLogin())) {
-                            $evaluationrow['login'] = "[" . $userdata->getLogin() . "]";
-                        } else {
-                            $evaluationrow['login'] = '';
-                        }
+                        $evaluationrow = [
+                            'name' => $userdata->getName(),
+                            'login' => $userdata->getLogin() !== '' ? "[{$userdata->getLogin()}]" : ''
+                        ];
                     }
 
                     $evaluationrow['reached'] = $userdata->getReached();
@@ -919,7 +926,10 @@ class ilTestEvaluationGUI extends ilTestServiceGUI
 
         $template = new ilTemplate("tpl.il_as_tst_pass_details_overview_participants.html", true, true, "Modules/Test");
         $this->populateExamId($template, $active_id, (int) $pass);
-        $this->populatePassFinishDate($template, ilObjTest::lookupLastTestPassAccess($active_id, $pass));
+        $last_finished_pass = $testSession->getLastFinishedPass() ?? -1;
+        if ($last_finished_pass >= $pass) {
+            $this->populatePassFinishDate($template, ilObjTest::lookupLastTestPassAccess($active_id, $pass));
+        }
 
         $toolbar = $this->buildUserTestResultsToolbarGUI();
         if (ilSession::get('tst_results_show_best_solutions')) {
@@ -1004,8 +1014,10 @@ class ilTestEvaluationGUI extends ilTestServiceGUI
 
             $template = new ilTemplate("tpl.il_as_tst_pass_details_overview_participants.html", true, true, "Modules/Test");
             $this->populateExamId($template, $active_id, (int) $pass);
-            $this->populatePassFinishDate($template, ilObjTest::lookupLastTestPassAccess($active_id, $pass));
-
+            $last_finished_pass = $this->testSessionFactory->getSession($active_id)->getLastFinishedPass() ?? -1;
+            if ($last_finished_pass >= $pass) {
+                $this->populatePassFinishDate($template, ilObjTest::lookupLastTestPassAccess($active_id, $pass));
+            }
             $pass_results = $this->results_factory->getPassResultsFor(
                 $this->object,
                 $active_id,
@@ -1099,7 +1111,8 @@ class ilTestEvaluationGUI extends ilTestServiceGUI
         $passOverViewTableGUI->setTitle($testResultHeaderLabelBuilder->getPassOverviewHeaderLabel());
         $template->setVariable("PASS_OVERVIEW", $passOverViewTableGUI->getHTML());
 
-        if ($this->isGradingMessageRequired()) {
+        $last_finished_pass = $testSession->getLastFinishedPass() ?? -1;
+        if ($this->isGradingMessageRequired() && $last_finished_pass >= ilObjTest::_getResultPass($active_id)) {
             $gradingMessageBuilder = $this->getGradingMessageBuilder($active_id);
             $gradingMessageBuilder->buildList();
 
@@ -1108,7 +1121,7 @@ class ilTestEvaluationGUI extends ilTestServiceGUI
             $template->parseCurrentBlock();
         }
 
-        $user_data = $this->getAdditionalUsrDataHtmlAndPopulateWindowTitle($testSession, $active_id, true);
+        $user_data = $this->getAdditionalUsrDataHtmlAndPopulateWindowTitle($active_id);
         $user_id = $this->object->_getUserIdFromActiveId($active_id);
 
         if (!$this->getObjectiveOrientedContainer()->isObjectiveOrientedPresentationRequired()) {
@@ -1222,7 +1235,10 @@ class ilTestEvaluationGUI extends ilTestServiceGUI
         $tpl->setVariable("FORMACTION", $this->ctrl->getFormAction($this));
 
         $this->populateExamId($tpl, $active_id, (int) $pass);
-        $this->populatePassFinishDate($tpl, ilObjTest::lookupLastTestPassAccess($active_id, $pass));
+        $last_finished_pass = $testSession->getLastFinishedPass() ?? -1;
+        if ($last_finished_pass >= $pass) {
+            $this->populatePassFinishDate($tpl, ilObjTest::lookupLastTestPassAccess($active_id, $pass));
+        }
 
         $this->setCss();
 
@@ -1317,13 +1333,14 @@ class ilTestEvaluationGUI extends ilTestServiceGUI
         $template->setVariable("PASS_OVERVIEW", $overview);
         $template->parseCurrentBlock();
 
-        if ($this->isGradingMessageRequired()) {
+        $last_finished_pass = $testSession->getLastFinishedPass() ?? -1;
+        if ($this->isGradingMessageRequired() && $last_finished_pass >= ilObjTest::_getResultPass($active_id)) {
             $gradingMessageBuilder = $this->getGradingMessageBuilder($active_id);
             $gradingMessageBuilder->buildMessage();
             $gradingMessageBuilder->sendMessage();
         }
 
-        $user_data = $this->getAdditionalUsrDataHtmlAndPopulateWindowTitle($testSession, $active_id, true);
+        $user_data = $this->getAdditionalUsrDataHtmlAndPopulateWindowTitle($active_id);
 
         if (!$this->getObjectiveOrientedContainer()->isObjectiveOrientedPresentationRequired()) {
             if ($this->object->getAnonymity()) {
@@ -1415,7 +1432,7 @@ class ilTestEvaluationGUI extends ilTestServiceGUI
         $template->setVariable("PRINT_TEXT", $this->lng->txt("print"));
         $template->setVariable("PRINT_URL", "javascript:window.print();");
 
-        $user_data = $this->getAdditionalUsrDataHtmlAndPopulateWindowTitle($testSession, $active_id, true);
+        $user_data = $this->getAdditionalUsrDataHtmlAndPopulateWindowTitle($active_id);
         $template->setVariable("USER_DATA", $user_data);
         $template->setVariable("TEXT_LIST_OF_ANSWERS", $this->lng->txt("tst_list_of_answers"));
         if (strlen($signature)) {

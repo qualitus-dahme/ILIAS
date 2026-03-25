@@ -115,7 +115,7 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
     protected function initProcessLocker($activeId)
     {
         $ilDB = $this->db;
-        $processLockerFactory = new ilTestProcessLockerFactory($this->assSettings, $ilDB);
+        $processLockerFactory = new ilTestProcessLockerFactory($this->assSettings, $ilDB, ilLoggerFactory::getLogger('tst'));
         $this->processLocker = $processLockerFactory->withContextId((int) $activeId)->getLocker();
     }
 
@@ -758,16 +758,21 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
         }
 
         // redirect after test
-        $redirection_url = $this->object->getMainSettings()->getFinishingSettings()->getRedirectionUrl();
-        if (!empty($redirection_url)
-            && !$this->object->canShowTestResults($this->test_session)
+        if (!$this->object->canShowTestResults($this->test_session)
             && $this->object->getMainSettings()->getFinishingSettings()->getRedirectionMode() !== ilObjTest::REDIRECT_NONE) {
-            if ($this->object->isRedirectModeKiosk()) {
-                if ($this->object->getKioskMode()) {
+            $redirection_url = $this->object->getMainSettings()->getFinishingSettings()->getRedirectionUrl();
+            if ($this->object->getMainSettings()->getFinishingSettings()->getRedirectionMode() === ilObjTest::REDIRECT_ALWAYS_TO_LOGOUT) {
+                $redirection_url = ilStartUpGUI::logoutUrl();
+            }
+
+            if (!empty($redirection_url)) {
+                if ($this->object->isRedirectModeKiosk()) {
+                    if ($this->object->getKioskMode()) {
+                        ilUtil::redirect($redirection_url);
+                    }
+                } else {
                     ilUtil::redirect($redirection_url);
                 }
-            } else {
-                ilUtil::redirect($redirection_url);
             }
         }
 
@@ -1418,7 +1423,7 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
 
         $this->tpl->setCurrentBlock("adm_content");
         $this->tpl->setVariable("TXT_ANSWER_SHEET", $this->lng->txt("tst_list_of_answers"));
-        $user_data = $this->getAdditionalUsrDataHtmlAndPopulateWindowTitle($this->test_session, $active_id, true);
+        $user_data = $this->getAdditionalUsrDataHtmlAndPopulateWindowTitle($active_id);
         $signature = $this->getResultsSignature();
         $this->tpl->setVariable("USER_DETAILS", $user_data);
         $this->tpl->setVariable("SIGNATURE", $signature);
@@ -1426,9 +1431,11 @@ abstract class ilTestPlayerAbstractGUI extends ilTestServiceGUI
         $this->tpl->setVariable("TXT_TEST_PROLOG", $this->lng->txt("tst_your_answers"));
         $invited_user = &$this->object->getInvitedUsers($this->user->getId());
         $pagetitle = $this->object->getTitle() . " - " . $this->lng->txt("clientip") .
-            ": " . $invited_user[$this->user->getId()]["clientip"] . " - " .
-            $this->lng->txt("matriculation") . ": " .
-            $invited_user[$this->user->getId()]["matriculation"];
+            ": " . $invited_user[$this->user->getId()]["clientip"];
+        if (!$this->object->getAnonymity()) {
+            $pagetitle .= " - " . $this->lng->txt("matriculation") . ": " .
+                $invited_user[$this->user->getId()]["matriculation"];
+        }
         $this->tpl->setVariable("PAGETITLE", $pagetitle);
         $this->tpl->parseCurrentBlock();
     }
@@ -2136,7 +2143,7 @@ JS;
         $question = assQuestion::instantiateQuestion($question_id);
         $ass_settings = new ilSetting('assessment');
 
-        $process_locker_factory = new ilAssQuestionProcessLockerFactory($ass_settings, $this->db);
+        $process_locker_factory = new ilAssQuestionProcessLockerFactory($ass_settings, $this->db, ilLoggerFactory::getLogger('tst'));
         $process_locker_factory->setQuestionId($question->getId());
         $process_locker_factory->setUserId($this->user->getId());
         $process_locker_factory->setAssessmentLogEnabled(ilObjAssessmentFolder::_enabledAssessmentLogging());

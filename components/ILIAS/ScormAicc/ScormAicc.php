@@ -22,10 +22,8 @@ namespace ILIAS;
 
 use ILIAS\Component\Activities\Activity;
 use ILIAS\Data\Factory as DataFactory;
-use ILIAS\ScormAicc\Activities\GetSCORMCompletionStatusActivity;
-use ILIAS\ScormAicc\Activities\GetSCORMServiceInfoActivity;
-use ILIAS\ScormAicc\Activities\HasSCORMCertificateActivity;
-use ILIAS\ScormAicc\Activities\HelloSCORMActivity;
+use ILIAS\ScormAicc\Activities\ViewScormUserCertificateStatusActivity;
+use ILIAS\ScormAicc\Activities\ViewScormUserStatusActivity;
 use ILIAS\ScormAicc\Services\ScormService;
 
 class ScormAicc implements Component\Component
@@ -40,25 +38,16 @@ class ScormAicc implements Component\Component
         array | \ArrayAccess &$provide,
         array | \ArrayAccess &$pull,
         array | \ArrayAccess &$internal,
-    ): void {
+    ): void
+    {
         $internal[ScormService::class] = static fn(): ScormService => new ScormService();
 
-        $contribute[Activity::class] = static fn(): Activity => new HasSCORMCertificateActivity(
+        $contribute[Activity::class] = static fn(): Activity => new ViewScormUserCertificateStatusActivity(
             $pull[DataFactory::class],
             $internal[ScormService::class],
         );
 
-        $contribute[Activity::class] = static fn(): Activity => new GetSCORMCompletionStatusActivity(
-            $pull[DataFactory::class],
-            $internal[ScormService::class],
-        );
-
-        $contribute[Activity::class] = static fn(): Activity => new HelloSCORMActivity(
-            $pull[DataFactory::class],
-            $internal[ScormService::class],
-        );
-
-        $contribute[Activity::class] = static fn(): Activity => new GetSCORMServiceInfoActivity(
+        $contribute[Activity::class] = static fn(): Activity => new ViewScormUserStatusActivity(
             $pull[DataFactory::class],
             $internal[ScormService::class],
         );

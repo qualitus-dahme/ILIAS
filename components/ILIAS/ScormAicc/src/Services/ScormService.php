@@ -64,28 +64,6 @@ class ScormService
         return 'not_attempted';
     }
 
-    public function hello(): string
-    {
-        return 'Hello from ScormAicc.';
-    }
-
-    /**
-     * @return array{component: string, status: string, implemented_activities: string}
-     */
-    public function getServiceInfo(): array
-    {
-        return [
-            'component' => 'ILIAS\\ScormAicc',
-            'status' => 'ok',
-            'implemented_activities' => implode(', ', [
-                'HasSCORMCertificateActivity',
-                'GetSCORMCompletionStatusActivity',
-                'HelloSCORMActivity',
-                'GetSCORMServiceInfoActivity',
-            ]),
-        ];
-    }
-
     private function getScormObjectIdByRefId(int $ref_id): int
     {
         if ($ref_id <= 0) {

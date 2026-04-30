@@ -30,15 +30,15 @@ use ILIAS\Data\Text\SimpleDocumentMarkdown;
 use ILIAS\ScormAicc\Services\ScormService;
 use ILIAS\UI\Component\Input\Control\Form\FormInput;
 use InvalidArgumentException;
-use OutOfBoundsException;
-use RuntimeException;
+use Throwable;
 
-class GetSCORMCompletionStatusActivity extends ActivityImpl
+class ViewScormUserStatusActivity extends ActivityImpl
 {
     public function __construct(
         private readonly DataFactory $data_factory,
         private readonly ScormService $scorm_service,
-    ) {
+    )
+    {
     }
 
     #[\Override]
@@ -51,7 +51,7 @@ class GetSCORMCompletionStatusActivity extends ActivityImpl
     public function getDescription(): SimpleDocumentMarkdown
     {
         return $this->markdown(
-            'Returns the completion status of a SCORM learning module for a given user.'
+            'Shows the SCORM learning progress status of a user for a SCORM learning module.'
         );
     }
 
@@ -60,37 +60,41 @@ class GetSCORMCompletionStatusActivity extends ActivityImpl
     {
         global $DIC;
 
-        return $DIC->ui()->factory()
-            ->input()
-            ->field()
-            ->group(
-                [
-                    'ref_id' => $DIC->ui()->factory()
-                        ->input()
-                        ->field()
-                        ->numeric(
-                            'SCORM module ref_id',
-                            'Reference id of the SCORM learning module.'
-                        ),
-                    'usr_id' => $DIC->ui()->factory()
-                        ->input()
-                        ->field()
-                        ->numeric(
-                            'User id',
-                            'User id for which the SCORM completion status shall be checked.'
-                        ),
-                ],
-                'Get SCORM completion status'
-            );
+        $field = $DIC->ui()->factory()->input()->field();
+        $refinery = $DIC->refinery();
+
+        return $field->group(
+            [
+                $field->numeric(
+                    'SCORM module ref_id',
+                    'Reference id of the SCORM learning module.'
+                )
+                    ->withDedicatedName('ref_id')
+                    ->withAdditionalTransformation(
+                        $refinery->int()->greaterThan(0)
+                    ),
+                $field->numeric(
+                    'User id',
+                    'User id for which the SCORM learning progress status shall be shown.'
+                )
+                    ->withDedicatedName('usr_id')
+                    ->withAdditionalTransformation(
+                        $refinery->int()->greaterThan(0)
+                    ),
+            ],
+            'SCORM/user-relation'
+        )->withAdditionalTransformation(
+            $refinery->to()->toNew(ScormUserRelation::class)
+        );
     }
 
     #[\Override]
     public function getOutputDescription(DescriptionFactory $f): Description
     {
         return $f->object(
-            $this->markdown('Result of the SCORM completion status lookup.'),
+            $this->markdown('SCORM learning progress status for a user and a SCORM learning module.'),
             [
-                'status' => $f->string(
+                'completion_status' => $f->string(
                     $this->markdown(
                         'Completion status of the SCORM learning module for the given user.'
                     )
@@ -102,16 +106,30 @@ class GetSCORMCompletionStatusActivity extends ActivityImpl
     #[\Override]
     public function isAllowedToPerform(int $usr_id, mixed $parameters): bool
     {
+        if (!$parameters instanceof ScormUserRelation) {
+            return false;
+        }
+
+        /*
+         * TODO: Replace this temporary implementation with the access check used
+         * by the SCORM GUI or the underlying service layer.
+         */
         return true;
     }
 
     #[\Override]
     public function perform(mixed $parameters): mixed
     {
+        if (!$parameters instanceof ScormUserRelation) {
+            throw new InvalidArgumentException(
+                ScormUserRelation::class . ' expected.'
+            );
+        }
+
         return [
-            'status' => $this->scorm_service->getSCORMCompletionStatus(
-                $parameters['ref_id'],
-                $parameters['usr_id']
+            'completion_status' => $this->scorm_service->getSCORMCompletionStatus(
+                $parameters->ref_id,
+                $parameters->usr_id
             ),
         ];
     }
@@ -120,55 +138,28 @@ class GetSCORMCompletionStatusActivity extends ActivityImpl
     public function maybePerformAs(int $usr_id, array $raw_parameters): Result
     {
         try {
-            $parameters = $this->normalizeParameters($raw_parameters);
+            $parameters = $this->readParameters($raw_parameters);
 
             if (!$this->isAllowedToPerform($usr_id, $parameters)) {
                 return $this->data_factory->error('Failed due to permissions.');
             }
 
             return $this->data_factory->ok($this->perform($parameters));
-        } catch (InvalidArgumentException | OutOfBoundsException | RuntimeException $e) {
+        } catch (Throwable $e) {
             return $this->data_factory->error($e->getMessage());
         }
     }
 
-    /**
-     * @return array{ref_id: int, usr_id: int}
-     */
-    private function normalizeParameters(array $raw_parameters): array
+    private function readParameters(array $raw_parameters): ScormUserRelation
     {
-        return [
-            'ref_id' => $this->readPositiveInt($raw_parameters, 'ref_id'),
-            'usr_id' => $this->readPositiveInt($raw_parameters, 'usr_id'),
-        ];
-    }
-
-    private function readPositiveInt(array $raw_parameters, string $key): int
-    {
-        if (!array_key_exists($key, $raw_parameters)) {
-            throw new InvalidArgumentException('Missing parameter: ' . $key);
-        }
-
-        $value = $raw_parameters[$key];
-
-        if (is_int($value)) {
-            if ($value <= 0) {
-                throw new InvalidArgumentException('Parameter must be greater than 0: ' . $key);
-            }
-
-            return $value;
-        }
-
-        if (is_string($value) && ctype_digit($value)) {
-            $int_value = (int) $value;
-            if ($int_value <= 0) {
-                throw new InvalidArgumentException('Parameter must be greater than 0: ' . $key);
-            }
-
-            return $int_value;
-        }
-
-        throw new InvalidArgumentException('Invalid integer parameter: ' . $key);
+        /*
+         * TODO: Replace this method with the standard ActivityImpl implementation
+         * once maybePerformAs validates raw parameters through getInputDescription().
+         */
+        return new ScormUserRelation(
+            (int) ($raw_parameters['ref_id'] ?? 0),
+            (int) ($raw_parameters['usr_id'] ?? 0)
+        );
     }
 
     private function markdown(string $text): SimpleDocumentMarkdown

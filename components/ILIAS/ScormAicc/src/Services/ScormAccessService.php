@@ -21,12 +21,12 @@ declare(strict_types=1);
 namespace ILIAS\ScormAicc\Services;
 
 use ILIAS\ScormAicc\Activities\ScormUserRelation;
-use Throwable;
 
 class ScormAccessService
 {
     public function __construct(
         private readonly ScormObjectResolver $scorm_object_resolver,
+        private readonly ScormAccessChecker $scorm_access_checker,
     )
     {
     }
@@ -89,11 +89,11 @@ class ScormAccessService
                 'obj_id' => null,
                 'type' => null,
                 'deleted' => null,
-                'database_provider' => null,
+                'object_provider' => 'ilObject',
                 'error' => null,
             ],
             'permissions' => [
-                'access_provider' => $this->getAccessProviderName(),
+                'access_provider' => $this->scorm_access_checker->getProviderName(),
                 'visible' => false,
                 'read' => false,
                 'read_learning_progress' => false,
@@ -121,11 +121,11 @@ class ScormAccessService
         }
 
         $permissions = [
-            'access_provider' => $this->getAccessProviderName(),
-            'visible' => $this->checkAccessOfUser($acting_usr_id, 'visible', $relation->ref_id),
-            'read' => $this->checkAccessOfUser($acting_usr_id, 'read', $relation->ref_id),
-            'read_learning_progress' => $this->checkAccessOfUser($acting_usr_id, 'read_learning_progress', $relation->ref_id),
-            'edit_learning_progress' => $this->checkAccessOfUser($acting_usr_id, 'edit_learning_progress', $relation->ref_id),
+            'access_provider' => $this->scorm_access_checker->getProviderName(),
+            'visible' => $this->scorm_access_checker->checkAccessOfUser($acting_usr_id, 'visible', $relation->ref_id),
+            'read' => $this->scorm_access_checker->checkAccessOfUser($acting_usr_id, 'read', $relation->ref_id),
+            'read_learning_progress' => $this->scorm_access_checker->checkAccessOfUser($acting_usr_id, 'read_learning_progress', $relation->ref_id),
+            'edit_learning_progress' => $this->scorm_access_checker->checkAccessOfUser($acting_usr_id, 'edit_learning_progress', $relation->ref_id),
         ];
 
         $report['permissions'] = $permissions;
@@ -173,53 +173,5 @@ class ScormAccessService
         }
 
         return true;
-    }
-
-    private function checkAccessOfUser(int $usr_id, string $permission, int $ref_id): bool
-    {
-        global $DIC;
-        global $ilAccess;
-
-        if (is_object($DIC) && method_exists($DIC, 'access')) {
-            try {
-                return $DIC->access()->checkAccessOfUser(
-                    $usr_id,
-                    $permission,
-                    '',
-                    $ref_id
-                );
-            } catch (Throwable) {
-            }
-        }
-
-        if (is_object($ilAccess) && method_exists($ilAccess, 'checkAccessOfUser')) {
-            try {
-                return $ilAccess->checkAccessOfUser(
-                    $usr_id,
-                    $permission,
-                    '',
-                    $ref_id
-                );
-            } catch (Throwable) {
-            }
-        }
-
-        return false;
-    }
-
-    private function getAccessProviderName(): string
-    {
-        global $DIC;
-        global $ilAccess;
-
-        if (is_object($DIC) && method_exists($DIC, 'access')) {
-            return '$DIC->access()';
-        }
-
-        if (is_object($ilAccess)) {
-            return '$ilAccess';
-        }
-
-        return 'none';
     }
 }

@@ -30,6 +30,7 @@ use ILIAS\Data\Text\SimpleDocumentMarkdown;
 use ILIAS\ScormAicc\Services\ScormAccessService;
 use ILIAS\ScormAicc\Services\ScormService;
 use ILIAS\UI\Component\Input\Control\Form\FormInput;
+use ILIAS\UI\Factory as UIFactory;
 use InvalidArgumentException;
 use Throwable;
 
@@ -37,6 +38,7 @@ class ViewScormUserStatusActivity extends ActivityImpl
 {
     public function __construct(
         private readonly DataFactory $data_factory,
+        private readonly UIFactory $ui_factory,
         private readonly ScormService $scorm_service,
         private readonly ScormAccessService $scorm_access_service,
     )
@@ -60,33 +62,20 @@ class ViewScormUserStatusActivity extends ActivityImpl
     #[\Override]
     public function getInputDescription(): FormInput
     {
-        global $DIC;
-
-        $field = $DIC->ui()->factory()->input()->field();
-        $refinery = $DIC->refinery();
+        $field = $this->ui_factory->input()->field();
 
         return $field->group(
             [
-                $field->numeric(
+                'ref_id' => $field->numeric(
                     'SCORM module ref_id',
                     'Reference id of the SCORM learning module.'
-                )
-                    ->withDedicatedName('ref_id')
-                    ->withAdditionalTransformation(
-                        $refinery->int()->greaterThan(0)
-                    ),
-                $field->numeric(
+                )->withDedicatedName('ref_id'),
+                'usr_id' => $field->numeric(
                     'User id',
                     'User id for which the SCORM learning progress status shall be shown.'
-                )
-                    ->withDedicatedName('usr_id')
-                    ->withAdditionalTransformation(
-                        $refinery->int()->greaterThan(0)
-                    ),
+                )->withDedicatedName('usr_id'),
             ],
             'SCORM/user-relation'
-        )->withAdditionalTransformation(
-            $refinery->to()->toNew(ScormUserRelation::class)
         );
     }
 

@@ -27,6 +27,7 @@ use ILIAS\Data\Description\Factory as DescriptionFactory;
 use ILIAS\Data\Factory as DataFactory;
 use ILIAS\Data\Result;
 use ILIAS\Data\Text\SimpleDocumentMarkdown;
+use ILIAS\ScormAicc\Services\ScormAccessService;
 use ILIAS\ScormAicc\Services\ScormService;
 use ILIAS\UI\Component\Input\Control\Form\FormInput;
 use InvalidArgumentException;
@@ -37,6 +38,7 @@ class ViewScormUserStatusActivity extends ActivityImpl
     public function __construct(
         private readonly DataFactory $data_factory,
         private readonly ScormService $scorm_service,
+        private readonly ScormAccessService $scorm_access_service,
     )
     {
     }
@@ -94,9 +96,19 @@ class ViewScormUserStatusActivity extends ActivityImpl
         return $f->object(
             $this->markdown('SCORM learning progress status for a user and a SCORM learning module.'),
             [
+                'completion_status_available' => $f->bool(
+                    $this->markdown(
+                        'True if a SCORM learning progress status can be returned in this installation.'
+                    )
+                ),
                 'completion_status' => $f->string(
                     $this->markdown(
-                        'Completion status of the SCORM learning module for the given user.'
+                        'Completion status of the SCORM learning module for the given user. Possible values are completed, failed, in_progress, not_attempted and unavailable.'
+                    )
+                ),
+                'reason' => $f->string(
+                    $this->markdown(
+                        'Empty when the completion status is available. Contains a machine-readable reason otherwise.'
                     )
                 ),
             ]
@@ -110,11 +122,10 @@ class ViewScormUserStatusActivity extends ActivityImpl
             return false;
         }
 
-        /*
-         * TODO: Replace this temporary implementation with the access check used
-         * by the SCORM GUI or the underlying service layer.
-         */
-        return true;
+        return $this->scorm_access_service->canViewUserStatus(
+            $usr_id,
+            $parameters
+        );
     }
 
     #[\Override]
@@ -126,12 +137,10 @@ class ViewScormUserStatusActivity extends ActivityImpl
             );
         }
 
-        return [
-            'completion_status' => $this->scorm_service->getSCORMCompletionStatus(
-                $parameters->ref_id,
-                $parameters->usr_id
-            ),
-        ];
+        return $this->scorm_service->getSCORMCompletionStatusResult(
+            $parameters->ref_id,
+            $parameters->usr_id
+        );
     }
 
     #[\Override]

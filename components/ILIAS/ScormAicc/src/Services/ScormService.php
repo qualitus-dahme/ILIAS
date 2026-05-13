@@ -22,33 +22,67 @@ namespace ILIAS\ScormAicc\Services;
 
 use ilCertificateUserCertificateAccessValidator;
 use ilLPStatus;
-use ilObject;
 use ilObjUserTracking;
-use InvalidArgumentException;
-use OutOfBoundsException;
 use RuntimeException;
 
 class ScormService
 {
+    public function __construct(
+        private readonly ScormObjectResolver $scorm_object_resolver,
+    )
+    {
+    }
+
     public function hasSCORMCertificate(int $ref_id, int $usr_id): bool
     {
-        $obj_id = $this->getScormObjectIdByRefId($ref_id);
+        $obj_id = $this->scorm_object_resolver->getScormObjectIdByRefId($ref_id);
 
         $validator = new ilCertificateUserCertificateAccessValidator();
 
         return $validator->validate($usr_id, $obj_id);
     }
 
-    public function getSCORMCompletionStatus(int $ref_id, int $usr_id): string
+    /**
+     * @return array{
+     *     completion_status_available: bool,
+     *     completion_status: string,
+     *     reason: string
+     * }
+     */
+    public function getSCORMCompletionStatusResult(int $ref_id, int $usr_id): array
     {
-        $obj_id = $this->getScormObjectIdByRefId($ref_id);
+        $obj_id = $this->scorm_object_resolver->getScormObjectIdByRefId($ref_id);
 
         if (!ilObjUserTracking::_enabledLearningProgress()) {
+            return [
+                'completion_status_available' => false,
+                'completion_status' => 'unavailable',
+                'reason' => 'learning_progress_disabled',
+            ];
+        }
+
+        return [
+            'completion_status_available' => true,
+            'completion_status' => $this->mapLearningProgressStatus(
+                ilLPStatus::_lookupStatus($obj_id, $usr_id)
+            ),
+            'reason' => '',
+        ];
+    }
+
+    public function getSCORMCompletionStatus(int $ref_id, int $usr_id): string
+    {
+        $result = $this->getSCORMCompletionStatusResult($ref_id, $usr_id);
+
+        if ($result['completion_status_available'] !== true) {
             throw new RuntimeException('Learning progress not enabled in this installation. Aborting!');
         }
 
-        $status = ilLPStatus::_lookupStatus($obj_id, $usr_id);
+        return $result['completion_status'];
+    }
 
+    private function mapLearningProgressStatus(int $status): string
+    {
         if ($status === ilLPStatus::LP_STATUS_COMPLETED_NUM) {
             return 'completed';
         }
@@ -62,23 +96,5 @@ class ScormService
         }
 
         return 'not_attempted';
-    }
-
-    private function getScormObjectIdByRefId(int $ref_id): int
-    {
-        if ($ref_id <= 0) {
-            throw new InvalidArgumentException('No ref_id given. Aborting!');
-        }
-
-        $obj_id = (int) ilObject::_lookupObjectId($ref_id);
-        if ($obj_id <= 0) {
-            throw new OutOfBoundsException('No scorm module found for id: ' . $ref_id);
-        }
-
-        if (ilObject::_isInTrash($ref_id)) {
-            throw new OutOfBoundsException('SCORM learning module with ref id ' . $ref_id . ' has been deleted.');
-        }
-
-        return $obj_id;
     }
 }

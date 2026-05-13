@@ -24,6 +24,8 @@ use ILIAS\Component\Activities\Activity;
 use ILIAS\Data\Factory as DataFactory;
 use ILIAS\ScormAicc\Activities\ViewScormUserCertificateStatusActivity;
 use ILIAS\ScormAicc\Activities\ViewScormUserStatusActivity;
+use ILIAS\ScormAicc\Services\ScormAccessService;
+use ILIAS\ScormAicc\Services\ScormObjectResolver;
 use ILIAS\ScormAicc\Services\ScormService;
 
 class ScormAicc implements Component\Component
@@ -40,16 +42,26 @@ class ScormAicc implements Component\Component
         array | \ArrayAccess &$internal,
     ): void
     {
-        $internal[ScormService::class] = static fn(): ScormService => new ScormService();
+        $internal[ScormObjectResolver::class] = static fn(): ScormObjectResolver => new ScormObjectResolver();
+
+        $internal[ScormService::class] = static fn(): ScormService => new ScormService(
+            $internal[ScormObjectResolver::class],
+        );
+
+        $internal[ScormAccessService::class] = static fn(): ScormAccessService => new ScormAccessService(
+            $internal[ScormObjectResolver::class],
+        );
 
         $contribute[Activity::class] = static fn(): Activity => new ViewScormUserCertificateStatusActivity(
             $pull[DataFactory::class],
             $internal[ScormService::class],
+            $internal[ScormAccessService::class],
         );
 
         $contribute[Activity::class] = static fn(): Activity => new ViewScormUserStatusActivity(
             $pull[DataFactory::class],
             $internal[ScormService::class],
+            $internal[ScormAccessService::class],
         );
 
         $contribute[Component\Resource\PublicAsset::class] = static fn() => new class () implements Component\Resource\PublicAsset {

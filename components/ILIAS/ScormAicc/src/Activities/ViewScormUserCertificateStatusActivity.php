@@ -27,6 +27,7 @@ use ILIAS\Data\Description\Factory as DescriptionFactory;
 use ILIAS\Data\Factory as DataFactory;
 use ILIAS\Data\Result;
 use ILIAS\Data\Text\SimpleDocumentMarkdown;
+use ILIAS\ScormAicc\Services\ScormAccessService;
 use ILIAS\ScormAicc\Services\ScormService;
 use ILIAS\UI\Component\Input\Control\Form\FormInput;
 use InvalidArgumentException;
@@ -37,6 +38,7 @@ class ViewScormUserCertificateStatusActivity extends ActivityImpl
     public function __construct(
         private readonly DataFactory $data_factory,
         private readonly ScormService $scorm_service,
+        private readonly ScormAccessService $scorm_access_service,
     )
     {
     }
@@ -110,11 +112,10 @@ class ViewScormUserCertificateStatusActivity extends ActivityImpl
             return false;
         }
 
-        /*
-         * TODO: Replace this temporary implementation with the access check used
-         * by the SCORM GUI or the underlying service layer.
-         */
-        return true;
+        return $this->scorm_access_service->canViewUserCertificateStatus(
+            $usr_id,
+            $parameters
+        );
     }
 
     #[\Override]

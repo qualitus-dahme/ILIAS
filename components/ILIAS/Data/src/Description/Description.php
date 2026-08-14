@@ -55,7 +55,7 @@ abstract class Description
 
     public function matches(mixed $data): bool
     {
-        if ($this->getPrimitiveRepresentation($data) instanceof \Generator) {
+        if ($this->getPrimitiveRepresentation($data) instanceof \Closure) {
             return false;
         }
 

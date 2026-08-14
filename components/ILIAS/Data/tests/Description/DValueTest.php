@@ -52,6 +52,19 @@ class DDValueTest extends TestCase
         }
     }
 
+    /**
+     * @dataProvider casesProvider
+     */
+    public function testMatches(ValueType $type, $value, $is_match): void
+    {
+        $desc = new DValue(
+            $this->createMock(\ILIAS\Data\Text\SimpleDocumentMarkdown::class),
+            $type
+        );
+
+        $this->assertSame($is_match, $desc->matches($value));
+    }
+
     public static function casesProvider(): array
     {
         return [

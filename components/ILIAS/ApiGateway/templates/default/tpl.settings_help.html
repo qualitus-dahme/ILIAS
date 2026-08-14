@@ -1,0 +1,187 @@
+<div class="container">
+    <div class="row">
+        <main class="col-md-12 col-lg-9">
+            <div class="panel panel-primary il-panel-configuration panel-flex">
+                <div class="panel-heading ilHeader">
+                    <div class="panel-title">
+                        <h2>Configuration</h2>
+                    </div>
+                    <div class="panel-controls"></div>
+                </div>
+                <div class="panel-body">
+                    <p>The webservice settings can be configured from the administration dashboard. Here is a breakdown
+                        of
+                        what each
+                        setting does.</p>
+
+                    <h2 id="secret-key">Secret Key</h2>
+
+                    <p>This is a private key used to sign and verify the authenticity of access and refresh tokens. It
+                        ensures that
+                        tokens were issued by this ILIAS instance and have not been tampered with.</p>
+
+                    <ul>
+                        <li><strong>Usage:</strong> Used for signing and verifying tokens. <strong>Do NOT share it with anyone.</strong>
+                        </li>
+                        <li><strong>On Fresh Installation:</strong> The field will be blank.</li>
+                        <li><strong>Generating a Key:</strong> If the field is left blank and the settings are saved, a
+                            new,
+                            cryptographically secure random key will be generated.</li>
+                        <li><strong>System Impact:</strong> Changing this key will immediately invalidate
+                            <strong>all</strong>
+                            previously issued access and refresh tokens. All users and applications will be forced to
+                            re-authenticate to get new tokens. This action is irreversible.
+                        </li>
+                    </ul>
+
+                    <h2 id="signing-algorithm">Signing Algorithm</h2>
+
+                    <p>This setting determines the cryptographic algorithm used to create the digital signature for the
+                        JSON
+                        Web
+                        Tokens (JWTs) that serve as access and refresh tokens.</p>
+                    <ul>
+                        <li><strong>What it is:</strong> A standard method for creating a secure signature.</li>
+                        <li><strong>How it&#39;s used:</strong> When a token is issued, this algorithm uses the
+                            <strong>Secret
+                                Key</strong> to create a unique signature for the token&#39;s content. When the token is
+                            later used
+                            to access the API, the system uses the same key and algorithm to verify that the signature
+                            is
+                            still
+                            valid, proving the token is authentic.
+                        </li>
+                        <li><strong>System Impact:</strong> A more complex algorithm (e.g., HS512 vs. HS256) provides
+                            higher
+                            security against brute-force attacks but requires slightly more server CPU resources to sign
+                            and
+                            verify
+                            tokens. The impact on performance is usually negligible for most systems.</li>
+                    </ul>
+
+                    <h2 id="hashing-algorithm">Hashing Algorithm</h2>
+
+                    <p>This setting determines the algorithm used to securely store refresh tokens in the database.</p>
+                    <ul>
+                        <li><strong>What it is:</strong> A one-way function that turns a token into a fixed-size string
+                            of
+                            characters, called a hash.</li>
+                        <li><strong>How it&#39;s used:</strong> Instead of storing the actual refresh token in the
+                            database
+                            (which
+                            would be a security risk if the database was compromised), we store its hash. When a user
+                            tries
+                            to use a
+                            refresh token, we hash it and compare it to the stored hash. This allows us to verify the
+                            token
+                            without
+                            ever storing the token itself.</li>
+                        <li><strong>System Impact:</strong> A stronger algorithm (e.g., SHA-512 vs. SHA-256) produces a
+                            longer hash,
+                            offering better security. This requires slightly more storage space in the database per
+                            token
+                            and a tiny
+                            bit more CPU to compute the hash, but the security benefits generally outweigh the cost.
+                        </li>
+                    </ul>
+
+                    <h2 id="access-token-expiry">Access Token Expiry</h2>
+
+                    <p>This is the lifespan of an access token, in seconds. An access token is what applications use to
+                        make
+                        API
+                        calls on behalf of a user.</p>
+                    <ul>
+                        <li><strong>How it&#39;s used:</strong> After this time has passed, the access token can no
+                            longer
+                            be used
+                            to access protected API endpoints. The application must then use a refresh token to get a
+                            new
+                            access
+                            token.</li>
+                        <li><strong>Default:</strong> 86400 seconds.</li>
+                        <li><strong>Example:</strong> With the default value, an access token issued at 10:00 AM on
+                            Monday
+                            will
+                            expire at 10:00 AM on Tuesday (86,400 seconds = 24 hours = 1 day).</li>
+                        <li>
+                            <strong>System Impact:</strong>
+                            <ul>
+                                <li><strong>Shorter expiry (e.g., 900 seconds / 15 minutes):</strong> More secure. If a
+                                    token is
+                                    stolen, it&#39;s only useful for a short time. However, this forces applications to
+                                    refresh
+                                    tokens more often, causing more API calls to the refresh endpoint.</li>
+                                <li><strong>Longer expiry (e.g., 86400 seconds / 1 day):</strong> Less secure, as a
+                                    stolen
+                                    token is
+                                    valid for longer. It is more convenient for simple applications as they don&#39;t
+                                    need
+                                    to handle
+                                    token refreshing as frequently.</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h2 id="refresh-token-expiry">Refresh Token Expiry</h2>
+
+                    <p>This is the lifespan of a refresh token, in seconds. A refresh token&#39;s only purpose is to get
+                        a
+                        new
+                        access token when the old one expires.</p>
+                    <ul>
+                        <li><strong>How it&#39;s used:</strong> It allows a user to stay logged in for a longer period
+                            without
+                            having to enter their password again. As long as the refresh token is valid, the application
+                            can
+                            obtain
+                            new access tokens.</li>
+                        <li><strong>Default:</strong> 604800 seconds.</li>
+                        <li><strong>Example:</strong> With the default value, a refresh token issued on the 1st of the
+                            month
+                            will be
+                            valid until the 8th of the month (604,800 seconds = 7 days = 1 week).</li>
+                        <li>
+                            <strong>System Impact:</strong>
+                            <ul>
+                                <li><strong>Shorter expiry (e.g., 1 day):</strong> More secure. If a user&#39;s refresh
+                                    token is
+                                    compromised, the attacker only has a day to use it. This forces users to log in with
+                                    their
+                                    password more frequently.</li>
+                                <li><strong>Longer expiry (e.g., 30 days):</strong> More convenient for users, as they
+                                    can
+                                    stay
+                                    logged in for a month. However, it increases the security risk if a refresh token is
+                                    stolen.
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div><!-- .panel-body -->
+            </div><!-- .panel -->
+        </main>
+        <aside class="col-md-12 col-lg-3">
+            <div class="panel panel-primary il-panel-links panel-flex">
+                <div class="panel-heading ilHeader">
+                    <div class="panel-title">
+                        <h2>Links</h2>
+                    </div>
+
+                    <div class="panel-controls"></div>
+                </div>
+                <div class="panel-body">
+                    <ul>
+                        <li><a href="https://github.com/ILIAS-eLearning/ILIAS/tree/trunk/components/ILIAS/ApiGateway/README.md"
+                                target="_blank" rel="noopener noreferrer">Documentation</a></li>
+                        <li><a href="https://mantis.ilias.de/search.php?project_id=1&category_id=SOAP%20%26%20Webservices&status=10&sticky=on&sort=last_updated&dir=DESC&hide_status=90&match_type=0"
+                                target="_blank" rel="noopener noreferrer">Support</a></li>
+                        <li><a href="https://docu.ilias.de/go/grp/16532" target="_blank" rel="noopener noreferrer">SIG Webservice - REST and more</a></li>
+                        <li><a href="https://www.minervis.com" target="_blank" rel="noopener noreferrer">Maintainer</a></li>
+                    </ul>
+
+                </div><!-- .panel-body -->
+            </div><!-- .panel -->
+        </aside>
+    </div><!-- .row -->
+</div><!-- .container -->

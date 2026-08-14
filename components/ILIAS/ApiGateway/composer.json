@@ -1,0 +1,54 @@
+{
+    "name": "ilias/webservices",
+    "description": "ILIAS Webservices",
+    "license": "GPL-3.0",
+    "authors": [],
+    "require": {
+        "php": ">=8.3 <8.5",
+        "psr/http-message": "^2.0",
+        "psr/http-server-middleware": "^1.0",
+        "firebase/php-jwt": "^7.0",
+        "slim/slim": "^4.15",
+        "psr/log": "^3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.5",
+        "phpstan/phpstan": "^2.1",
+        "vimeo/psalm": "^6.13",
+        "psalm/plugin-phpunit": "^0.19.5"
+    },
+    "scripts": {
+        "check:static": [
+            "composer run phpstan $@",
+            "composer run psalm $@"
+        ],
+        "check:static:staged": [
+            "composer run phpstan -- $(git diff --name-only --cached | sed 's/^components\\/ILIAS\\/ApiGateway\\///' | tr '\\n' ' ')",
+            "composer run psalm -- $(git diff --name-only --cached | sed 's/^components\\/ILIAS\\/ApiGateway\\///' | tr '\\n' ' ')"
+        ],
+        "psalm": "./vendor/bin/psalm --show-info=true",
+        "phpunit": "./vendor/bin/phpunit $@ --colors=never --configuration phpunit.xml",
+        "phpunit:coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit tests/ --colors=never  --configuration phpunit.xml --coverage-html ../../../public/coverage/",
+        "phpstan": "./vendor/bin/phpstan analyse -l 9"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "vendor-dir": "vendor"
+    },
+    "autoload": {
+        "psr-4": {
+            "ILIAS\\ApiGateway\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        },
+		"classmap": [
+			"../../../components"
+		],
+		"exclude-from-classmap": [
+			"./examples/ignored"
+		]
+    }
+}

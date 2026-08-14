@@ -1,0 +1,14 @@
+{
+    "maintenance_model": "Classic",
+    "first_maintainer": "ahamouda(115389)",
+    "second_maintainer": "sagun(112949)",
+    "implicit_maintainers": [],
+    "coordinator": [
+        "ILIASBase(52412)"
+    ],
+    "tester": "",
+    "testcase_writer": "",
+    "path": "components/ILIAS/ApiGateway",
+    "belong_to_component": "None",
+    "used_in_components": []
+}

@@ -1,0 +1,53 @@
+/**
+* This file is part of ILIAS, a powerful learning management system
+* published by ILIAS open source e-Learning e.V.
+*
+* ILIAS is licensed with the GPL-3.0,
+* see https://www.gnu.org/licenses/gpl-3.0.en.html
+* You should have received a copy of said license along with the
+* source code, too.
+*
+* If this is not the case or you just want to try ILIAS, you'll find
+* us at:
+* https://www.ilias.de
+* https://github.com/ILIAS-eLearning
+*
+********************************************************************
+*/
+/**
+* ILIAS language file
+*
+* @module		language file German
+* @modulegroup	apig
+* @author       Ahmed Hamouda <ahmed.hamouda@minervis.com>
+* @version		$Id$
+*/
+// The language file starts beyond the HTML-comment below. DO NOT modify this line!
+// To edit your language file with a spreadsheet (i.e. Excel or StarCalc) remove all lines
+// from the first line to the HTML-comment. After editing paste the lines in place again.
+// NOTICE: Character coding of all ILIAS lang files is UTF-8! Please set your editor
+// to the corresponding mode!
+// Language file names refer to ISO 639, see: http://www.oasis-open.org/cover/iso639a.html
+<!-- language file start -->
+common#:#obj_apig#:#Webservices
+common#:#obj_apig_desc#:#Konfiguration der API Webservices
+webservices#:#Webservices
+webservices_description#:#Konfiguration der API Webservices
+settings_general#:#Allgemein
+settings_docs#:#Dokumentation
+general_settings#:#Allgemeine Einstellungen
+rest_settings#:#REST Einstellungen
+auth_secret_key_label#:#Geheimschlüssel
+auth_secret_key_info#:#Wenn das Feld leer gelassen wird, wird ein neuer zufälliger Geheimschlüssel generiert
+auth_algo_encryption_label#:#Verschlüsselungs-Algo
+auth_algo_encryption_info#:#Algorithmus zur Erstellung der JWT-Signatur
+auth_algo_hash_label#:#Hashing-Algo
+auth_algo_hash_info#:#Algorithmus zum sicheren Speichern von Refresh Tokens
+auth_token_expiry_access_label#:#Ablaufzeit des Access Tokens
+auth_token_expiry_access_info#:#Lebensdauer eines Access Tokens in Sekunden
+auth_token_expiry_refresh_label#:#Ablaufzeit des Refresh Tokens
+auth_token_expiry_refresh_info#:#Lebensdauer eines Refresh Tokens in Sekunden
+rest_ws_enabled_label#:#Webservice aktivieren
+rest_ws_enabled_info#:#Ob der Webservice aktiviert ist oder nicht
+rest_docs_enabled_label#:#Dokumentation aktivieren
+rest_docs_enabled_info#:#Gästen Zugriff auf die automatisch generierte Dokumentation gewähren

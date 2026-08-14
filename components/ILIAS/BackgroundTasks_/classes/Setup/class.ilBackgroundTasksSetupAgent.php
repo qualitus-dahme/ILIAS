@@ -69,9 +69,15 @@ class ilBackgroundTasksSetupAgent implements Agent
     {
         if ($config !== null) {
             /** @noinspection PhpParamsInspection */
-            return new ilBackgroundTasksConfigStoredObjective($config);
+            return new ObjectiveCollection(
+                'Component BackgroundTasks',
+                true,
+                new ilBackgroundTasksConfigStoredObjective($config),
+                new ilDatabaseUpdateStepsExecutedObjective(new ilBackgroundTasksDB80())
+            );
         }
-        return new NullObjective();
+
+        return new ilDatabaseUpdateStepsExecutedObjective(new ilBackgroundTasksDB80());
     }
 
     /**

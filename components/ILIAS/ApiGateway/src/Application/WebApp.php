@@ -29,6 +29,7 @@ use ILIAS\HTTP\Response\ResponseFactory;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 use Slim\App as SlimApp;
 use Slim\ResponseEmitter;
 
@@ -66,14 +67,51 @@ final readonly class WebApp
             return;
         }
 
-        $this->registerMiddlewares();
-        $this->registerRoutes();
-
         global $DIC;
 
         $request = $DIC ? $DIC['http']?->raw()?->request() : null;
 
+        if (!$request instanceof Request) {
+            throw new RuntimeException('No HTTP request available.');
+        }
+
+        $this->configureApplicationBasePath($request);
+        $this->registerMiddlewares();
+        $this->registerRoutes();
+
         $this->application->run($request);
+    }
+
+    private function configureApplicationBasePath(Request $request): void
+    {
+        $script_name = $request->getServerParams()['SCRIPT_NAME'] ?? null;
+
+        if (!is_string($script_name) || $script_name === '') {
+            throw new RuntimeException('Unable to determine REST front controller path.');
+        }
+
+        $front_controller_base_path = rtrim(dirname($script_name), '/');
+        $route_base_path = $this->getBasePath();
+
+        if (!str_ends_with($front_controller_base_path, $route_base_path)) {
+            throw new RuntimeException(
+                sprintf(
+                    'REST front controller path "%s" does not end with configured base path "%s".',
+                    $front_controller_base_path,
+                    $route_base_path,
+                )
+            );
+        }
+
+        $application_base_path = substr(
+            $front_controller_base_path,
+            0,
+            -strlen($route_base_path)
+        );
+
+        if ($application_base_path !== '') {
+            $this->application->setBasePath($application_base_path);
+        }
     }
 
     private function registerMiddlewares(): void
@@ -107,7 +145,6 @@ final readonly class WebApp
 
     private function registerRoutes(): void
     {
-        // group instead of using $this->app->setBasePath()
         $this->application->group(
             $this->getBasePath(),
             function (\Slim\Routing\RouteCollectorProxy $group): void {

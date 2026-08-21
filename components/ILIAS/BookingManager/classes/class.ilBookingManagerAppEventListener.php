@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of ILIAS, a powerful learning management system
  * published by ILIAS open source e-Learning e.V.
@@ -15,17 +14,15 @@
  * https://github.com/ILIAS-eLearning
  *
  *********************************************************************/
-
 declare(strict_types=1);
-
 class ilBookingManagerAppEventListener
 {
     /**
      * Handle an event in a listener.
      *
-     * @param	string	$a_component	component, e.g. "Modules/Forum" or "Services/User"
-     * @param	string	$a_event		event e.g. "createUser", "updateUser", "deleteUser", ...
-     * @param	array	$a_parameter	parameter array (assoc), array("name" => ..., "phone_office" => ...)
+     * @param\tstring\t$a_component\tcomponent, e.g. "Modules/Forum" or "Services/User"
+     * @param\tstring\t$a_event\t\tevent e.g. "createUser", "updateUser", "deleteUser", ...
+     * @param\tarray\t$a_parameter\tparameter array (assoc), array("name" => ..., "phone_office" => ...)
      */
     public static function handleEvent(
         string $a_component,
@@ -33,7 +30,6 @@ class ilBookingManagerAppEventListener
         array $a_parameter
     ): void {
         global $DIC;
-
         switch ($a_component) {
             case "Services/User":
                 switch ($a_event) {
@@ -45,8 +41,17 @@ class ilBookingManagerAppEventListener
             case "components/ILIAS/ILIASObject":
                 switch ($a_event) {
                     case "toTrash":
-                    case "delete":
-                        $DIC->bookingManager()->internal()->domain()->objectEvent()->handleDeletion([$a_parameter["ref_id"]]);
+                        $DIC->bookingManager()->internal()->domain()->objectEvent()->handleDeletion([(int) $a_parameter["ref_id"]]);
+                        break;
+                    case "beforeDeletion":
+                        $object = $a_parameter["object"] ?? null;
+                        if (
+                            $object instanceof ilObjBookingPool
+                            && $object->getRefId() > 0
+                            && !ilObject::_isInTrash($object->getRefId())
+                        ) {
+                            $DIC->bookingManager()->internal()->domain()->objectEvent()->handleDeletion([$object->getRefId()]);
+                        }
                         break;
                 }
                 break;

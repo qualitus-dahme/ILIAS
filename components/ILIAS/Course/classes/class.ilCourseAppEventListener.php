@@ -87,10 +87,15 @@ class ilCourseAppEventListener
         // #16694
         $refs = ilObject::_getAllReferences($a_obj_id);
         $ref_id = array_pop($refs);
+        if (!is_int($ref_id) || $ref_id <= 0) {
+            $this->getLogger()->debug('Skipping waiting list auto fill because course has no repository reference: ' . $a_obj_id);
+            return;
+        }
 
         $course = ilObjectFactory::getInstanceByRefId($ref_id, false);
         if (!$course instanceof ilObjCourse) {
             $this->getLogger()->warning('Cannot handle event deassign user since passed obj_id is not of type course: ' . $a_obj_id);
+            return;
         }
         $course->handleAutoFill();
     }

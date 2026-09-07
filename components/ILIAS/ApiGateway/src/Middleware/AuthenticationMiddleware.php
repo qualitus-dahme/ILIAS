@@ -55,6 +55,10 @@ final readonly class AuthenticationMiddleware implements MiddlewareInterface
 
         $authenticatedUser = $this->authenticationService->validateToken($token);
 
+        $legacyUser = new \ilObjUser($authenticatedUser->getId());
+        $GLOBALS['ilUser'] = $legacyUser;
+        $GLOBALS['DIC']['ilUser'] = $legacyUser;
+
         // Add the fully populated user object to the request attributes for downstream use.
         $request = $request->withAttribute('authenticated_user', $authenticatedUser);
 

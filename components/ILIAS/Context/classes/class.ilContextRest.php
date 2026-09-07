@@ -30,7 +30,7 @@ class ilContextRest implements ilContextTemplate
 
     public static function hasUser(): bool
     {
-        return false;
+        return true;
     }
 
     public static function usesHTTP(): bool
